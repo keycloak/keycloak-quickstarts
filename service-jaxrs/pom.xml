@@ -1,0 +1,36 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.keycloak.quickstart</groupId>
+    <artifactId>keycloak-quickstart-service-jax-rs</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <name>Keycloak Quickstart Service JAX-RS</name>
+    <description/>
+
+    <packaging>war</packaging>
+
+    <properties>
+        <version.resteasy>3.0.12.Final</version.resteasy>
+        <version.wildfly.plugin>1.0.1.Final</version.wildfly.plugin>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>jaxrs-api</artifactId>
+            <version>${version.resteasy}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+            <plugins>
+                <plugin>
+                    <groupId>org.wildfly.plugins</groupId>
+                    <artifactId>wildfly-maven-plugin</artifactId>
+                    <version>${version.wildfly.plugin}</version>
+                </plugin>
+            </plugins>
+    </build>
+</project>
