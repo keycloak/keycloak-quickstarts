@@ -21,31 +21,30 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Keycloak Example App</title>
 
         <link rel="stylesheet" type="text/css" href="styles.css"/>
     </head>
-    <body>
+    <body style="display: block">
         <jsp:useBean id="controller" class="org.keycloak.quickstart.appjee.Controller" scope="request"/>
-        <c:set var="isLogout" value="<%=controller.isLogout(request)%>"/>
-        <c:if test="${isLogout}"><% request.logout(); %></c:if>
+        <% controller.handleLogout(request); %>
         
-        <c:set var="isUser" value="<%=controller.isUser(request)%>"/>
+        <c:set var="isLoggedIn" value="<%=controller.isLoggedIn(request)%>"/>
         
-        <c:if test="${isUser}">
+        <c:if test="${isLoggedIn}">
             <c:set var="accountUri" value="<%=controller.getAccountUri(request)%>"/>
         </c:if>
         
         <div class="wrapper">
-            <c:if test="${!isUser}">
-                <div id="not-authenticated" class="menu">
+            <c:if test="${!isLoggedIn}">
+                <div id="not-authenticated" style="display: block" class="menu">
                     <button onclick="location.href = 'protected.jsp'" type="button">Login</button>
                 </div>
             </c:if>
 
-            <c:if test="${isUser}">
-                <div id="authenticated" class="menu">
+            <c:if test="${isLoggedIn}">
+                <div id="authenticated" style="display: block" class="menu">
                     <button onclick="location.href = 'index.jsp?action=logout'">Logout</button>
                     <button onclick="location.href = '${accountUri}'" type="button">Account</button>
                 </div>
