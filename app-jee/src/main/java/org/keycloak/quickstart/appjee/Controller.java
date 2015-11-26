@@ -16,6 +16,7 @@
  */
 package org.keycloak.quickstart.appjee;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import org.keycloak.KeycloakSecurityContext;
 import org.keycloak.common.util.KeycloakUriBuilder;
@@ -28,20 +29,17 @@ import org.keycloak.constants.ServiceUrlConstants;
  */
 public class Controller {
 
-    public boolean isUser(HttpServletRequest req) {
-        return req.isUserInRole("user");
+    public boolean isLoggedIn(HttpServletRequest req) {
+        return getSession(req) != null;
     }
 
-    public boolean isAdmin(HttpServletRequest req) {
-        return req.isUserInRole("admin");
+    public void handleLogout(HttpServletRequest req) throws ServletException {
+        if (isLogoutAction(req)) {
+            req.logout();
+        }
     }
 
-    private String getAction(HttpServletRequest req) {
-        if (req.getParameter("action") == null) return "";
-        return req.getParameter("action");
-    }
-
-    public boolean isLogout(HttpServletRequest req) {
+    public boolean isLogoutAction(HttpServletRequest req) {
         return getAction(req).equals("logout");
     }
 
@@ -56,17 +54,22 @@ public class Controller {
     public String getMessage(HttpServletRequest req) {
         String action = getAction(req);
         if (action.equals("")) return "";
-        if (isLogout(req)) return "";
+        if (isLogoutAction(req)) return "";
 
-        return callService(action);
-    }
-
-    private String callService(String action) {
-        //TODO: implement
-        return action;
+        try {
+            String message = ServiceClient.callService(req, getSession(req), action);
+            return "MESSAGE: " + message.toUpperCase();
+        } catch (ServiceClient.Failure f) {
+            return "<span class='error'>" + f.getStatus() + " " + f.getReason() + "</span>";
+        }
     }
 
     private KeycloakSecurityContext getSession(HttpServletRequest req) {
         return (KeycloakSecurityContext) req.getAttribute(KeycloakSecurityContext.class.getName());
+    }
+
+    private String getAction(HttpServletRequest req) {
+        if (req.getParameter("action") == null) return "";
+        return req.getParameter("action");
     }
 }

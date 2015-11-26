@@ -14,6 +14,7 @@
     <properties>
         <version.keycloak>1.6.0.Final</version.keycloak>
         <version.wildfly.plugin>1.0.1.Final</version.wildfly.plugin>
+        <version.httpclient>4.5.1</version.httpclient>
     </properties>
 
     <repositories>
@@ -43,7 +44,12 @@
             <scope>provided</scope>
             <version>${version.keycloak}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <scope>compile</scope>
+            <version>${version.httpclient}</version>
+        </dependency>
     </dependencies>
 
     <build>
