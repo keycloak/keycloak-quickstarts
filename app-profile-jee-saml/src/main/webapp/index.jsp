@@ -27,7 +27,6 @@
     </head>
     <body>
         <jsp:useBean id="controller" class="org.keycloak.quickstart.profilejee.Controller" scope="request"/>
-        <% controller.handleLogout(request); %>
         
         <c:set var="isLoggedIn" value="<%=controller.isLoggedIn(request)%>"/>
         <c:if test="${isLoggedIn}">

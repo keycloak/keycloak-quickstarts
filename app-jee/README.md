@@ -6,6 +6,7 @@ You need to create a client in Keycloak. The configuration options when creating
 * Access Type: confidential
 * Root URL: Root URL for where you're hosting the application (for example http://localhost:8080)
 * Valid Redirect URIs: /app-jee/*
-* Base URL: /app-jee/index.jsp
+* Base URL: /app-jee/
+* Admin URL: /app-jee/
 
 Then, build the WAR with Maven and install as per the Adapter configuration for your server as described in the Keycloak documentation.

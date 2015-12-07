@@ -36,7 +36,7 @@ import org.keycloak.util.JsonSerialization;
  */
 public class ServiceClient {
 
-    private static String SERVICE_URI_INIT_PARAM_NAME = "serviceUrl";
+    private static final String SERVICE_URI_INIT_PARAM_NAME = "serviceUrl";
 
     static class MessageBean {
         private String message;

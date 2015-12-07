@@ -1,0 +1,30 @@
+<keycloak-saml-adapter>
+    <SP entityID="app-profile-jee-saml"
+        sslPolicy="NONE"
+        nameIDPolicyFormat="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
+        logoutPage="/index.jsp"
+        forceAuthentication="false">
+        <PrincipalNameMapping policy="FROM_NAME_ID"/>
+        <RoleIdentifiers>
+            <Attribute name="Role"/>
+        </RoleIdentifiers>
+        <IDP entityID="idp">
+            <SingleSignOnService signRequest="false"
+                                 validateResponseSignature="false"
+                                 requestBinding="POST"
+                                 bindingUrl="http://localhost:8080/auth/realms/master/protocol/saml"
+                    />
+
+            <SingleLogoutService
+                    validateRequestSignature="false"
+                    validateResponseSignature="false"
+                    signRequest="false"
+                    signResponse="false"
+                    requestBinding="POST"
+                    responseBinding="POST"
+                    postBindingUrl="http://localhost:8080/auth/realms/master/protocol/saml"
+                    redirectBindingUrl="http://localhost:8080/auth/realms/master/protocol/saml"
+                    />
+        </IDP>
+     </SP>
+</keycloak-saml-adapter>
