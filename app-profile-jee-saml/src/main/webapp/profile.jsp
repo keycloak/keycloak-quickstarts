@@ -26,7 +26,6 @@
     </head>
     <body>
         <jsp:useBean id="controller" class="org.keycloak.quickstart.profilejee.Controller" scope="request"/>
-        <% controller.printAccount(request);%>
         <c:set var="accountUri" value="<%=controller.getAccountUri(request)%>"/>
         <c:set var="req" value="<%=request%>"/>
 

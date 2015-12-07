@@ -16,7 +16,6 @@
  */
 package org.keycloak.quickstart.profilejee;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.keycloak.adapters.saml.SamlDeploymentContext;
@@ -30,29 +29,6 @@ import org.keycloak.constants.ServiceUrlConstants;
  * @author Stan Silvert ssilvert@redhat.com (C) 2015 Red Hat Inc.
  */
 public class Controller {
-
-    public void printAccount(HttpServletRequest req) {
-        SamlSession session = getAccount(req);
-        System.out.println("friendly names=" + session.getPrincipal().getFriendlyNames());
-        System.out.println("attribute names=" + session.getPrincipal().getAttributeNames());
-        System.out.println("-------- attribs --------------");
-        for (String attr : session.getPrincipal().getAttributeNames()) {
-            System.out.println(attr + "=" + session.getPrincipal().getAttribute(attr));
-        }
-        System.out.println("------- session map ------------");
-        java.util.Enumeration<String> sessAttrs = req.getSession().getAttributeNames();
-        while (sessAttrs.hasMoreElements()) {
-            String attr = sessAttrs.nextElement();
-            System.out.println(attr + "=" + req.getSession().getAttribute(attr));
-        }
-
-        System.out.println("------- app map ----------");
-        java.util.Enumeration<String> appAttribs = req.getServletContext().getAttributeNames();
-        while (appAttribs.hasMoreElements()) {
-            String attr = appAttribs.nextElement();
-            System.out.println(attr + "=" + req.getServletContext().getAttribute(attr));
-        }
-    }
 
     public String getFirstName(HttpServletRequest req) {
         return getFriendlyAttrib(req, "givenName");
@@ -86,7 +62,6 @@ public class Controller {
 
     public String getAccountUri(HttpServletRequest req) {
         String realm = findRealmName(req);
-        System.out.println(">>>> reamName=" + realm);
         return KeycloakUriBuilder.fromUri("/auth").path(ServiceUrlConstants.ACCOUNT_SERVICE_PATH)
                 .queryParam("referrer", "app-profile-jee-saml").build(realm).toString();
     }
