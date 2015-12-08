@@ -1,0 +1,122 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <name>Keycloak Quickstart Parent</name>
+    <description>Keycloak Quickstart Parent</description>
+    <groupId>org.keycloak.quickstart</groupId>
+    <artifactId>keycloak-quickstart-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <properties>
+        <version.resteasy>3.0.12.Final</version.resteasy>
+        <version.wildfly.plugin>1.0.1.Final</version.wildfly.plugin>
+        <version.keycloak>1.6.0.Final</version.keycloak>
+        <version.httpclient>4.5.1</version.httpclient>
+        <version.jboss.servlet-api>1.0.2.Final</version.jboss.servlet-api>
+    </properties>
+
+    <url>http://keycloak.org</url>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:git://github.com/keycloak/keycloak-examples.git</connection>
+        <developerConnection>scm:git:git@github.com:keycloak/keycloak-examples.git</developerConnection>
+        <url>https://github.com/keycloak/keycloak-examples/tree/master</url>
+    </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>jboss-releases-repository</id>
+            <name>JBoss Releases Repository</name>
+            <url>https://repository.jboss.org/nexus/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
+    <developers>
+    </developers>
+
+    <contributors>
+    </contributors>
+
+    <modules>
+        <module>service-jaxrs</module>
+        <module>app-jee</module>
+        <module>app-profile-jee</module>
+        <module>app-profile-jee-saml</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.jboss.resteasy</groupId>
+                <artifactId>jaxrs-api</artifactId>
+                <version>${version.resteasy}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.spec.javax.servlet</groupId>
+                <artifactId>jboss-servlet-api_3.0_spec</artifactId>
+                <version>${version.jboss.servlet-api}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.keycloak</groupId>
+                <artifactId>keycloak-core</artifactId>
+                <version>${version.keycloak}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.keycloak</groupId>
+                <artifactId>keycloak-adapter-core</artifactId>
+                <version>${version.keycloak}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.keycloak</groupId>
+                <artifactId>keycloak-saml-adapter-core</artifactId>
+                <version>${version.keycloak}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.keycloak</groupId>
+                <artifactId>keycloak-adapter-spi</artifactId>
+                <version>${version.keycloak}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${version.httpclient}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <repositories>
+        <repository>
+            <id>jboss</id>
+            <url>http://repository.jboss.org/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
+
+    <build>
+        <pluginManagement>
+            <plugins>                
+                <plugin>
+                    <groupId>org.wildfly.plugins</groupId>
+                    <artifactId>wildfly-maven-plugin</artifactId>
+                    <version>${version.wildfly.plugin}</version>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
+                </plugin>   
+            </plugins>             
+        </pluginManagement>
+    </build>
+
+    <profiles>
+        
+    </profiles>
+</project>
