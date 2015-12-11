@@ -14,7 +14,7 @@ To install and run all examples:
  
 The Examples realm you imported has two users, *secure-user* and *admin-user*.  Both use "password" as the password.
 
-You can run each example with the folling URLs:
+You can run each example with the following URLs:
 
 * <http://localhost:8080/app-html5/>
 * <http://localhost:8080/app-profile-html5/>
