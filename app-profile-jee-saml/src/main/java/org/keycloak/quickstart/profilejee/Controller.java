@@ -61,8 +61,9 @@ public class Controller {
     }
 
     public String getAccountUri(HttpServletRequest req) {
+        String serverPath = findKeycloakServerPath(req);
         String realm = findRealmName(req);
-        return KeycloakUriBuilder.fromUri("/auth").path(ServiceUrlConstants.ACCOUNT_SERVICE_PATH)
+        return KeycloakUriBuilder.fromUri(serverPath).path(ServiceUrlConstants.ACCOUNT_SERVICE_PATH)
                 .queryParam("referrer", "app-profile-jee-saml").build(realm).toString();
     }
 
@@ -70,11 +71,21 @@ public class Controller {
     //       figure out a better way to do it with the SAML adapter.  It parses
     //       the URL specified in keycloak-saml.xml
     private String findRealmName(HttpServletRequest req) {
-        SamlDeploymentContext ctx = (SamlDeploymentContext)req.getServletContext().getAttribute(SamlDeploymentContext.class.getName());
-        String bindingUrl = ctx.resolveDeployment(null).getIDP().getSingleSignOnService().getRequestBindingUrl();
+        String bindingUrl = getBindingUrl(req);
         // bindingUrl looks like http://localhost:8080/auth/realms/master/protocol/saml
         int beginIndex = bindingUrl.indexOf("/realms/") + "/realms/".length();
         return bindingUrl.substring(beginIndex, bindingUrl.indexOf('/', beginIndex));
+    }
+
+    private String findKeycloakServerPath(HttpServletRequest req) {
+        String bindingUrl = getBindingUrl(req);
+        // bindingUrl looks like http://localhost:8080/auth/realms/master/protocol/saml
+        return bindingUrl.substring(0, bindingUrl.indexOf("/auth")) + "/auth";
+    }
+
+    private String getBindingUrl(HttpServletRequest req) {
+        SamlDeploymentContext ctx = (SamlDeploymentContext)req.getServletContext().getAttribute(SamlDeploymentContext.class.getName());
+        return ctx.resolveDeployment(null).getIDP().getSingleSignOnService().getRequestBindingUrl();
     }
 
 }
