@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Keycloak Example App</title>
+
+    <link rel="stylesheet" type="text/css" href="styles.css"/>
+
+    <script src="keycloak.js"></script>
+    <script src="app.js"></script>
+</head>
+
+<body style="display: none;">
+    <div class="wrapper">
+        <div id="not-authenticated" class="menu">
+            <button onclick="keycloak.login()">Login</button>
+        </div>
+
+        <div id="authenticated" class="menu">
+            <button onclick="keycloak.logout()">Logout</button>
+            <button onclick="keycloak.accountManagement()">Account</button>
+        </div>
+
+        <div class="content">
+            <button onclick="request('public')">Public</button>
+            <button onclick="request('secured')">Secured</button>
+            <button onclick="request('admin')">Admin</button>
+
+            <div class="message" id="message"></div>
+        </div>
+    </div>
+</body>
+
+</html>
