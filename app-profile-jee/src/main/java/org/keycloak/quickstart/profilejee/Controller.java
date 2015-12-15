@@ -20,6 +20,8 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import org.keycloak.KeycloakSecurityContext;
+import org.keycloak.adapters.AdapterDeploymentContext;
+import org.keycloak.adapters.KeycloakDeployment;
 import org.keycloak.common.util.KeycloakUriBuilder;
 import org.keycloak.constants.ServiceUrlConstants;
 import org.keycloak.representations.IDToken;
@@ -52,10 +54,17 @@ public class Controller {
 
     public String getAccountUri(HttpServletRequest req) {
         KeycloakSecurityContext session = getSession(req);
+        String baseUrl = getAuthServerBaseUrl(req);
         String realm = session.getRealm();
-        return KeycloakUriBuilder.fromUri("/auth").path(ServiceUrlConstants.ACCOUNT_SERVICE_PATH)
+        return KeycloakUriBuilder.fromUri(baseUrl).path(ServiceUrlConstants.ACCOUNT_SERVICE_PATH)
                 .queryParam("referrer", "app-profile-jee").build(realm).toString();
 
+    }
+
+    private String getAuthServerBaseUrl(HttpServletRequest req) {
+        AdapterDeploymentContext deploymentContext = (AdapterDeploymentContext) req.getServletContext().getAttribute(AdapterDeploymentContext.class.getName());
+        KeycloakDeployment deployment = deploymentContext.resolveDeployment(null);
+        return deployment.getAuthServerBaseUrl();
     }
 
     public String getTokenString(HttpServletRequest req) throws IOException {

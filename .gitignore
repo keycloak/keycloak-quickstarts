@@ -45,3 +45,5 @@ catalog.xml
 #########
 target
 
+/app-html5-war/nbproject/
+/war-app-html5/nbproject/

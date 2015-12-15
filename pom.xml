@@ -49,9 +49,9 @@
 
     <modules>
         <module>service-jaxrs</module>
-        <module>app-html5</module>
+        <module>war-app-html5</module>
         <module>app-jee</module>
-        <module>app-profile-html5</module>
+        <module>war-app-profile-html5</module>
         <module>app-profile-jee</module>
         <module>app-profile-jee-saml</module>
     </modules>
@@ -76,6 +76,11 @@
             <dependency>
                 <groupId>org.keycloak</groupId>
                 <artifactId>keycloak-adapter-core</artifactId>
+                <version>${version.keycloak}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.keycloak</groupId>
+                <artifactId>keycloak-adapter-spi</artifactId>
                 <version>${version.keycloak}</version>
             </dependency>
             <dependency>
