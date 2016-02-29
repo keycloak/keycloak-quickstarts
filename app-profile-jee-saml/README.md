@@ -19,7 +19,7 @@ Settings
 * Root URL: <blank>
 * Valid Redirect URIs: http://localhost:8080/app-profile-jee-saml/*
 * Base URL: http://localhost:8080/app-profile-jee-saml/
-* Master SAML Processing URL: http://localhost:8080/app-profile-jee-saml/
+* Master SAML Processing URL: http://localhost:8080/app-profile-jee-saml/saml
 
 Mappers
 ------------
