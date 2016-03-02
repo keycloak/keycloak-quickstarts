@@ -18,7 +18,9 @@ package org.keycloak.quickstart.profilejee;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 import org.keycloak.adapters.saml.SamlDeploymentContext;
+import org.keycloak.adapters.saml.SamlPrincipal;
 import org.keycloak.adapters.saml.SamlSession;
 import org.keycloak.common.util.KeycloakUriBuilder;
 import org.keycloak.constants.ServiceUrlConstants;
@@ -47,13 +49,13 @@ public class Controller {
     }
 
     private String getFriendlyAttrib(HttpServletRequest req, String attribName) {
-        SamlSession session = getAccount(req);
-        return session.getPrincipal().getFriendlyAttribute(attribName);
+    	SamlPrincipal principal = getAccount(req);
+        return principal.getFriendlyAttribute(attribName);
     }
 
-    private SamlSession getAccount(HttpServletRequest req) {
-        HttpSession session = req.getSession();
-        return (SamlSession)session.getAttribute(SamlSession.class.getName());
+    private SamlPrincipal getAccount(HttpServletRequest req) {
+    	SamlPrincipal principal = (SamlPrincipal)req.getUserPrincipal();
+        return principal;
     }
 
     public boolean isLoggedIn(HttpServletRequest req) {
