@@ -5,12 +5,12 @@
     <parent>
         <groupId>org.keycloak.quickstart</groupId>
         <artifactId>keycloak-quickstart-parent</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>0.3-openshift</version>
     </parent>
 
     <groupId>org.keycloak.quickstart</groupId>
     <artifactId>keycloak-quickstart-service-jax-rs</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.3-openshift</version>
 
     <name>Keycloak Quickstart Service JAX-RS</name>
     <description/>
