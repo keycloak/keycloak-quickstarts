@@ -5,12 +5,12 @@
     <parent>
         <groupId>org.keycloak.quickstart</groupId>
         <artifactId>keycloak-quickstart-parent</artifactId>
-        <version>0.3-openshift</version>
+        <version>0.4-openshift</version>
     </parent>
     
     <groupId>org.keycloak.quickstart</groupId>
     <artifactId>keycloak-quickstart-app-profile-jee</artifactId>
-    <version>0.3-openshift</version>
+    <version>0.4-openshift</version>
 
     <name>Keycloak Quickstart App Profile JEE</name>
     <description/>
