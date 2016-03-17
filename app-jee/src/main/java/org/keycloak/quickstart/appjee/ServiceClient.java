@@ -163,8 +163,10 @@ public class ServiceClient {
             } finally {
                 is.close();
             }
+        } catch (Failure f) {
+            throw f;
         } catch (Exception e) {
-            throw new Failure(403, "Forbidden to access selected resource");
+            throw new RuntimeException(e);
         } finally {
         	if (client != null)
              client.getConnectionManager().shutdown();
