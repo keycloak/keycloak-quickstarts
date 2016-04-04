@@ -31,15 +31,6 @@
         </auth-constraint>
     </security-constraint>
 
-    <security-constraint>
-        <web-resource-collection>
-            <url-pattern>/saml</url-pattern>
-        </web-resource-collection>
-        <auth-constraint>
-            <role-name>*</role-name>
-        </auth-constraint>
-    </security-constraint>
-
     <login-config>
         <auth-method>KEYCLOAK-SAML</auth-method>
     </login-config>
