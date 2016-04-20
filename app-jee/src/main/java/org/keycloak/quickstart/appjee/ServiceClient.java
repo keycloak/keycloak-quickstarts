@@ -41,7 +41,6 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.ssl.TrustStrategy;
 import org.keycloak.KeycloakSecurityContext;
-import org.keycloak.adapters.AdapterUtils;
 import org.keycloak.util.JsonSerialization;
 
 /**
@@ -100,6 +99,8 @@ public class ServiceClient {
 	            e.printStackTrace();
 	        }
         }
+        
+        System.out.println("!!!!! ip " + ip);
 
         return "http://" + ip + ":8080/service";
     }
