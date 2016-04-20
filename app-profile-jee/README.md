@@ -1,3 +1,16 @@
+# app-profile-jee: 
+
+Author: Stan Silvert  
+Level: Beginner  
+Technologies: Java  
+Summary:   
+Prerequisites:  
+Target Product: RH-SSO  
+Source: <https://github.com/keycloak/rh-sso-quickstarts>  
+
+What is it?
+-----------
+
 You need to create a client in Keycloak. The configuration options when creating the client should be:
 
 * Client ID: You choose

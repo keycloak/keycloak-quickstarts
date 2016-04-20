@@ -1,4 +1,15 @@
-# keycloak-examples
+# RH-SSO Quickstarts
+
+Author: Stan Silvert  
+Level: Beginner  
+Technologies: Java  
+Summary:   
+Prerequisites:  
+Target Product: RH-SSO  
+Source: <https://github.com/keycloak/rh-sso-quickstarts>  
+
+What is it?
+-----------
 
 With the exception of app-html5 and app-profile-html5, all examples are deployed as a WAR.  These examples assume that a Keycloak server is running on localhost:8180 and a WildFly server is running on localhost:8080.
 
