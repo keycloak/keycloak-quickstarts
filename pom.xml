@@ -30,7 +30,6 @@
     <name>JBoss RH-SSO Quickstart: Parent</name>
     <description>JBoss RH-SSO Quickstart Parent</description>
 
-    <!--TODO -->
     <url>http://keycloak.org</url>
 
     <licenses>
@@ -48,7 +47,6 @@
         </repository>
     </repositories>
 
-     <!--TODO -->
     <distributionManagement>
         <repository>
             <id>jboss-releases-repository</id>
