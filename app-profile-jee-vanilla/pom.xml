@@ -18,18 +18,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.jboss.quickstart.rh-sso</groupId>
-        <artifactId>jboss-quickstart-parent</artifactId>
-        <version>7.0.0.ER10</version>
-    </parent>
-    
     <groupId>org.jboss.quickstart.rh-sso</groupId>
-    <artifactId>jboss-war-app-profile-html5</artifactId>
+    <artifactId>jboss-app-profile-jee-vanilla</artifactId>
     <version>7.0.0.ER10</version>
     <packaging>war</packaging>
-    <name>JBoss RH-SSO Quickstart: war-app-profile-html5</name>
-    <description>JBoss RH-SSO Quickstart HTML5 profile application</description>
+    <name>JBoss RH-SSO Quickstart: app-profile-jee</name>
+    <description>JBoss RH-SSO Quickstart Java EE vanilla profile application</description>
 
     <licenses>
         <license>
@@ -40,30 +34,33 @@
     </licenses>
 
     <repositories>
+        <!-- for org.jboss.web:jbossweb -->
+        <repository>
+            <id>jboss</id>
+            <url>http://repository.jboss.org/nexus/content/groups/public/</url>
+        </repository>
     </repositories>
 
     <properties>
         <version.jboss.rh-sso.bom>7.0.0.ER10</version.jboss.rh-sso.bom>
     </properties>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.jboss.bom.rh-sso</groupId>
-                <artifactId>rh-sso-bom</artifactId>
-                <version>${version.jboss.rh-sso.bom}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.jboss.spec.javax.servlet</groupId>
+            <artifactId>jboss-servlet-api_3.0_spec</artifactId>
+            <version>1.0.2.Final</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
     <build>
-        <finalName>${project.artifactId}</finalName>
+        <finalName>vanilla</finalName>
         <plugins>
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
+                <version>1.0.1.Final</version>
                 <configuration>
                     <skip>false</skip>
                 </configuration>
