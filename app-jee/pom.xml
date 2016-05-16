@@ -21,12 +21,11 @@
     <parent>
         <groupId>org.jboss.quickstart.rh-sso</groupId>
         <artifactId>jboss-quickstart-parent</artifactId>
-        <version>7.0.0.ER10</version>
+        <version>7.0.0.ER11</version>
     </parent>
     
     <groupId>org.jboss.quickstart.rh-sso</groupId>
     <artifactId>jboss-app-jee</artifactId>
-    <version>7.0.0.ER10</version>
     <packaging>war</packaging>
     <name>JBoss RH-SSO Quickstart: app-jee</name>
     <description>JBoss RH-SSO Quickstart Java EE application</description>
@@ -41,22 +40,6 @@
 
     <repositories>
     </repositories>
-
-    <properties>
-        <version.jboss.rh-sso.bom>7.0.0.ER10</version.jboss.rh-sso.bom>
-    </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.jboss.bom.rh-sso</groupId>
-                <artifactId>rh-sso-bom</artifactId>
-                <version>${version.jboss.rh-sso.bom}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <dependencies>
         <dependency>

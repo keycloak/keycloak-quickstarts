@@ -25,7 +25,7 @@
     </parent>
     <groupId>org.jboss.quickstart.rh-sso</groupId>
     <artifactId>jboss-quickstart-parent</artifactId>
-    <version>7.0.0.ER10</version>
+    <version>7.0.0.ER11</version>
     <packaging>pom</packaging>
     <name>JBoss RH-SSO Quickstart: Parent</name>
     <description>JBoss RH-SSO Quickstart Parent</description>
@@ -56,7 +56,7 @@
     </distributionManagement>
 
     <properties>
-        <version.jboss.rh-sso.bom>7.0.0.ER10</version.jboss.rh-sso.bom>
+        <version.jboss.rh-sso.bom>7.0.0.ER11</version.jboss.rh-sso.bom>
         <version.wildfly.maven.plugin>1.0.1.Final</version.wildfly.maven.plugin>
     </properties>
  

@@ -18,9 +18,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.jboss.quickstart.rh-sso</groupId>
+        <artifactId>jboss-quickstart-parent</artifactId>
+        <version>7.0.0.ER11</version>
+    </parent>
+
     <groupId>org.jboss.quickstart.rh-sso</groupId>
     <artifactId>jboss-app-profile-jee-vanilla</artifactId>
-    <version>7.0.0.ER10</version>
     <packaging>war</packaging>
     <name>JBoss RH-SSO Quickstart: app-profile-jee</name>
     <description>JBoss RH-SSO Quickstart Java EE vanilla profile application</description>
@@ -41,15 +46,10 @@
         </repository>
     </repositories>
 
-    <properties>
-        <version.jboss.rh-sso.bom>7.0.0.ER10</version.jboss.rh-sso.bom>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.jboss.spec.javax.servlet</groupId>
             <artifactId>jboss-servlet-api_3.0_spec</artifactId>
-            <version>1.0.2.Final</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
