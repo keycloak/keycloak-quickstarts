@@ -1,6 +1,6 @@
 # app-profile-jee: 
 
-Author: Bill Burke
+Author: Bill Burke  
 Level: Beginner  
 Technologies: Java  
 Summary:   

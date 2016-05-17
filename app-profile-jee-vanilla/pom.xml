@@ -27,7 +27,7 @@
     <groupId>org.jboss.quickstart.rh-sso</groupId>
     <artifactId>jboss-app-profile-jee-vanilla</artifactId>
     <packaging>war</packaging>
-    <name>JBoss RH-SSO Quickstart: app-profile-jee</name>
+    <name>JBoss RH-SSO Quickstart: app-profile-jee-vanilla</name>
     <description>JBoss RH-SSO Quickstart Java EE vanilla profile application</description>
 
     <licenses>
@@ -55,12 +55,11 @@
     </dependencies>
 
     <build>
-        <finalName>vanilla</finalName>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
-                <version>1.0.1.Final</version>
                 <configuration>
                     <skip>false</skip>
                 </configuration>

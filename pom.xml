@@ -47,26 +47,18 @@
         </repository>
     </repositories>
 
-    <distributionManagement>
-        <repository>
-            <id>jboss-releases-repository</id>
-            <name>JBoss Releases Repository</name>
-            <url>https://repository.jboss.org/nexus/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
-
     <properties>
         <version.jboss.rh-sso.bom>7.0.0.ER11</version.jboss.rh-sso.bom>
         <version.wildfly.maven.plugin>1.0.1.Final</version.wildfly.maven.plugin>
     </properties>
  
     <modules>
-        <module>service-jaxrs</module>
-        <module>war-app-html5</module>
         <module>app-jee</module>
-        <module>war-app-profile-html5</module>
         <module>app-profile-jee</module>
         <module>app-profile-jee-saml</module>
+        <module>service-jaxrs</module>
+        <module>war-app-html5</module>
+        <module>war-app-profile-html5</module>
     </modules>
 
     <dependencyManagement>
