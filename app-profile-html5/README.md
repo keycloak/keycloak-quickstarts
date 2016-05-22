@@ -2,14 +2,17 @@
 
 Author: Stan Silvert  
 Level: Beginner  
-Technologies: Java  
-Summary:   
-Prerequisites:  
+Technologies: JavaScript, HTML5  
+Summary: Simple HTML5 application allowing login/logout and displaying full name of the user obtained from the token.  
 Target Product: RH-SSO  
 Source: <https://github.com/keycloak/rh-sso-quickstarts>  
 
 What is it?
 -----------
+Simple HTML5 application allowing login/logout and displaying full name of the user obtained from the token.
+
+Settings
+--------
 
 You need to create a client in Keycloak and download the installation file. The configuration options when creating the client should be:
 
