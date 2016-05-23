@@ -53,12 +53,12 @@
     </properties>
  
     <modules>
-        <module>app-jee</module>
-        <module>app-profile-jee</module>
-        <module>app-profile-jee-saml</module>
         <module>service-jaxrs</module>
         <module>war-app-html5</module>
+        <module>app-jee</module>
         <module>war-app-profile-html5</module>
+        <module>app-profile-jee</module>
+        <module>app-profile-jee-saml</module>
     </modules>
 
     <dependencyManagement>
