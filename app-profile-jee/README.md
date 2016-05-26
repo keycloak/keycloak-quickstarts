@@ -15,7 +15,7 @@ Simple Java EE application allowing login/logout and displaying full name of the
 Settings
 --------
 
-You need to create a client in Keycloak. The configuration options when creating the client should be:
+You need to create a client in RH-SSO. The configuration options when creating the client should be:
 
 * Client ID: You choose
 * Access Type: confidential
@@ -24,7 +24,7 @@ You need to create a client in Keycloak. The configuration options when creating
 * Base URL: /app-profile-jee/
 * Admin URL: /app-profile-jee/
 
-Then, build the WAR with Maven and install as per the Adapter configuration for your server as described in the Keycloak documentation.
+Then, build the WAR with Maven and install as per the Adapter configuration for your server as described in the RH-SSO documentation.
 
 System requirements
 -------------------

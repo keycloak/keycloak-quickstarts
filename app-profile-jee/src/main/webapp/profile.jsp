@@ -21,7 +21,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-        <title>Keycloak Example App</title>
+        <title>RH-SSO Example App</title>
         <link rel="stylesheet" type="text/css" href="styles.css"/>
     </head>
     <body>

@@ -53,12 +53,14 @@
     </properties>
  
     <modules>
+        <module>service-utils</module>
         <module>service-jaxrs</module>
         <module>war-app-html5</module>
         <module>app-jee</module>
         <module>war-app-profile-html5</module>
         <module>app-profile-jee</module>
         <module>app-profile-jee-saml</module>
+        <module>app-profile-jee-vanilla</module>
     </modules>
 
     <dependencyManagement>
@@ -69,6 +71,11 @@
                 <version>${version.jboss.rh-sso.bom}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.quickstart.rh-sso</groupId>
+                <artifactId>jboss-quickstart-service-utils</artifactId>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -75,7 +75,7 @@
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}</finalName>
+        <finalName>app-profile-jee-saml</finalName>
         <plugins>
             <plugin>
                 <groupId>org.jboss.as.plugins</groupId>

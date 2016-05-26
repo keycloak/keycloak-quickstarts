@@ -65,7 +65,7 @@
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}</finalName>
+        <finalName>app-profile-jee</finalName>
         <plugins>
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>

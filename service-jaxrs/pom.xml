@@ -54,7 +54,7 @@
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}</finalName>
+        <finalName>service-jaxrs</finalName>
         <plugins>
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>

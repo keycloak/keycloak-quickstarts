@@ -15,7 +15,7 @@ Simple HTML5 WAR-based application allowing login/logout and displaying full nam
 Settings
 --------
 
-You need to create a client in Keycloak and download the installation file. The configuration options when creating the client should be:
+You need to create a client in RH-SSO and download the installation file. The configuration options when creating the client should be:
 
 * Client ID: You choose
 * Access Type: public
