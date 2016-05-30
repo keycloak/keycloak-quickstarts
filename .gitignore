@@ -1,3 +1,6 @@
+keycloak.json
+keycloak-saml.xml
+
 # Intellij
 ###################
 .idea

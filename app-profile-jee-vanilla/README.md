@@ -1,4 +1,4 @@
-# app-profile-jee: 
+# app-profile-jee-vanilla: Simple Java servlet application 
 
 Author: Bill Burke  
 Level: Beginner  
@@ -33,9 +33,11 @@ Build and Deploy the Quickstarts
 2. Open a command prompt and navigate to the root directory of this quickstart.
 3. Type this command to build and deploy the archive:
 
-mvn clean install wildfly:deploy
+   ````
+   mvn clean install wildfly:deploy
+   ````
 
-4. This will deploy target/jboss-QUICKSTART_NAME.war to the running instance of the server.
+4. This will deploy target/app-profile-jee-vanilla.war to the running instance of the server.
 
 Access the application
 ----------------------
@@ -48,4 +50,6 @@ Undeploy the Archive
 * Make sure you have started the JBoss EAP server as described above.
 * Open a command prompt and navigate to the root directory of this quickstart.
 
-mvn wildfly:undeploy
+   ````
+   mvn wildfly:undeploy
+   ````

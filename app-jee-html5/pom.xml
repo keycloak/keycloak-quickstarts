@@ -23,12 +23,12 @@
         <artifactId>rh-sso-quickstart-parent</artifactId>
         <version>7.0.0.ER11</version>
     </parent>
-
+    
     <groupId>org.jboss.quickstart.rh-sso</groupId>
-    <artifactId>rh-sso-app-profile-jee-vanilla</artifactId>
+    <artifactId>rh-sso-app-jee-html5</artifactId>
     <packaging>war</packaging>
-    <name>JBoss RH-SSO Quickstart: app-profile-jee-vanilla</name>
-    <description>JBoss RH-SSO Quickstart Java EE vanilla profile application</description>
+    <name>JBoss RH-SSO Quickstart: app-jee-html5</name>
+    <description>HTML5 Service Invocation Application packaged as a WAR</description>
 
     <licenses>
         <license>
@@ -38,32 +38,7 @@
         </license>
     </licenses>
 
-    <repositories>
-        <!-- for org.jboss.web:jbossweb -->
-        <repository>
-            <id>jboss</id>
-            <url>http://repository.jboss.org/nexus/content/groups/public/</url>
-        </repository>
-    </repositories>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.jboss.spec.javax.servlet</groupId>
-            <artifactId>jboss-servlet-api_3.1_spec</artifactId>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
-
     <build>
-        <finalName>app-profile-jee-vanilla</finalName>
-        <plugins>
-            <plugin>
-                <groupId>org.wildfly.plugins</groupId>
-                <artifactId>wildfly-maven-plugin</artifactId>
-                <configuration>
-                    <skip>false</skip>
-                </configuration>
-            </plugin>
-        </plugins>
+        <finalName>app</finalName>
     </build>
 </project>
