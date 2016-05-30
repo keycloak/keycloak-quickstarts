@@ -23,12 +23,11 @@
         <artifactId>rh-sso-quickstart-parent</artifactId>
         <version>7.0.0.ER11</version>
     </parent>
-
-    <groupId>org.jboss.quickstart.rh-sso</groupId>
-    <artifactId>rh-sso-app-profile-jee-vanilla</artifactId>
+    
+    <artifactId>rh-sso-app-jee-jsp</artifactId>
     <packaging>war</packaging>
-    <name>JBoss RH-SSO Quickstart: app-profile-jee-vanilla</name>
-    <description>JBoss RH-SSO Quickstart Java EE vanilla profile application</description>
+    <name>JBoss RH-SSO Quickstart: app-jee-jsp</name>
+    <description>JSP Service Invocation Application</description>
 
     <licenses>
         <license>
@@ -38,24 +37,40 @@
         </license>
     </licenses>
 
-    <repositories>
-        <!-- for org.jboss.web:jbossweb -->
-        <repository>
-            <id>jboss</id>
-            <url>http://repository.jboss.org/nexus/content/groups/public/</url>
-        </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
             <groupId>org.jboss.spec.javax.servlet</groupId>
             <artifactId>jboss-servlet-api_3.1_spec</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-adapter-core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-adapter-spi</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.quickstart.rh-sso</groupId>
+            <artifactId>rh-sso-common</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
-        <finalName>app-profile-jee-vanilla</finalName>
+        <finalName>app</finalName>
         <plugins>
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>

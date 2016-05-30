@@ -23,11 +23,12 @@
         <artifactId>jboss-parent</artifactId>
         <version>20</version>
     </parent>
+
     <groupId>org.jboss.quickstart.rh-sso</groupId>
-    <artifactId>jboss-quickstart-parent</artifactId>
+    <artifactId>rh-sso-quickstart-parent</artifactId>
     <version>7.0.0.ER11</version>
     <packaging>pom</packaging>
-    <name>JBoss RH-SSO Quickstart: Parent</name>
+    <name>JBoss RH-SSO Quickstart: parent</name>
     <description>JBoss RH-SSO Quickstart Parent</description>
 
     <url>http://keycloak.org</url>
@@ -50,17 +51,18 @@
     <properties>
         <version.jboss.rh-sso.bom>7.0.0.ER11</version.jboss.rh-sso.bom>
         <version.wildfly.maven.plugin>1.0.1.Final</version.wildfly.maven.plugin>
+        <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
+        <version.war.maven.plugin>2.6</version.war.maven.plugin>
     </properties>
  
     <modules>
-        <module>service-utils</module>
-        <module>service-jaxrs</module>
-        <module>war-app-html5</module>
-        <module>app-jee</module>
-        <module>war-app-profile-html5</module>
-        <module>app-profile-jee</module>
-        <module>app-profile-jee-saml</module>
-        <module>app-profile-jee-vanilla</module>
+        <module>app-jee-html5</module>
+        <module>app-jee-jsp</module>
+        <module>app-profile-jee-html5</module>
+        <module>app-profile-jee-jsp</module>
+        <module>app-profile-saml-jee-jsp</module>
+        <module>common</module>
+        <module>service-jee-jaxrs</module>
     </modules>
 
     <dependencyManagement>
@@ -74,7 +76,7 @@
             </dependency>
             <dependency>
                 <groupId>org.jboss.quickstart.rh-sso</groupId>
-                <artifactId>jboss-quickstart-service-utils</artifactId>
+                <artifactId>rh-sso-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
@@ -87,11 +89,21 @@
                     <groupId>org.wildfly.plugins</groupId>
                     <artifactId>wildfly-maven-plugin</artifactId>
                     <version>${version.wildfly.maven.plugin}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.jboss.as.plugins</groupId>
+                    <artifactId>jboss-as-maven-plugin</artifactId>
+                    <version>${version.jboss.maven.plugin}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>${version.war.maven.plugin}</version>
                     <configuration>
-                        <skip>true</skip>
+                        <failOnMissingWebXml>false</failOnMissingWebXml>
                     </configuration>
-                </plugin>   
-            </plugins>             
+                </plugin>
+            </plugins>
         </pluginManagement>
     </build>
 </project>
