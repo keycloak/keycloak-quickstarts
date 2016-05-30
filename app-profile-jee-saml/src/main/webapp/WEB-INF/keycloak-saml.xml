@@ -12,7 +12,7 @@
             <SingleSignOnService signRequest="false"
                                  validateResponseSignature="false"
                                  requestBinding="POST"
-                                 bindingUrl="http://localhost:8080/auth/realms/master/protocol/saml"
+                                 bindingUrl="http://localhost:8180/auth/realms/Examples/protocol/saml"
                     />
 
             <SingleLogoutService
@@ -22,8 +22,8 @@
                     signResponse="false"
                     requestBinding="POST"
                     responseBinding="POST"
-                    postBindingUrl="http://localhost:8080/auth/realms/master/protocol/saml"
-                    redirectBindingUrl="http://localhost:8080/auth/realms/master/protocol/saml"
+                    postBindingUrl="http://localhost:8180/auth/realms/Examples/protocol/saml"
+                    redirectBindingUrl="http://localhost:8180/auth/realms/Examples/protocol/saml"
                     />
         </IDP>
      </SP>

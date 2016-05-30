@@ -67,10 +67,14 @@
             <artifactId>httpclient</artifactId>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.jboss.quickstart.rh-sso</groupId>
+            <artifactId>jboss-quickstart-service-utils</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}</finalName>
+        <finalName>app-jee</finalName>
         <plugins>
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>

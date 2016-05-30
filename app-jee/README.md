@@ -17,7 +17,7 @@ Settings
 
 The example assumes you have the example services running. If the services are not hosted on ``http://localhost:8080/service`` you need to edit ``web.xml`` and replace the value of ``serviceUrl``.
 
-You need to create a client in Keycloak. The configuration options when creating the client should be:
+You need to create a client in RH-SSO. The configuration options when creating the client should be:
 
 * Client ID: You choose
 * Access Type: confidential
@@ -26,7 +26,7 @@ You need to create a client in Keycloak. The configuration options when creating
 * Base URL: /app-jee/
 * Admin URL: /app-jee/
 
-Then, build the WAR with Maven and install as per the Adapter configuration for your server as described in the Keycloak documentation.
+Then, build the WAR with Maven and install as per the Adapter configuration for your server as described in the RH-SSO documentation.
 
 System requirements
 -------------------
