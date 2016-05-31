@@ -41,7 +41,7 @@
     </repositories>
 
     <build>
-        <finalName>app-profile</finalName>
+        <finalName>app-profile-html5</finalName>
         <plugins>
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>

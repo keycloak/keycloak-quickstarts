@@ -37,7 +37,7 @@ The following steps shows how to create the client required for this quickstart:
 * Add the following values:
   * Client ID: You choose (for example `app-profile-jsp`)
   * Client Protocol: `openid-connect`
-  * Root URL: URL to the application (for example `http://localhost:8080/app-profile`)
+  * Root URL: URL to the application (for example `http://localhost:8080/app-profile-jsp`)
 * Click `Save`
 
 If you deploy the application somewhere else change the hostname and port of the URLs accordingly.

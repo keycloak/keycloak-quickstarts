@@ -40,7 +40,7 @@ The following steps show how to create the client required for this quickstart:
 * Add the following values:
   * Client ID: You choose (for example `app-jsp`)
   * Client Protocol: `openid-connect`
-  * Root URL: URL to the application (for example `http://localhost:8080/app`)
+  * Root URL: URL to the application (for example `http://localhost:8080/app-jsp`)
 * Click `Save`
 
 If you deploy the application somewhere else change the hostname and port of the URLs accordingly.
@@ -69,7 +69,7 @@ Build and Deploy the Quickstart
 Access the Quickstart
 ----------------------
 
-You can access the application with the following URL: <http://localhost:8080/app>.
+You can access the application with the following URL: <http://localhost:8080/app-jsp>.
 
 The application provides buttons that allows invoking the different endpoints on the service:
 

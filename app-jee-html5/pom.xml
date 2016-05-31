@@ -39,6 +39,6 @@
     </licenses>
 
     <build>
-        <finalName>app</finalName>
+        <finalName>app-html5</finalName>
     </build>
 </project>

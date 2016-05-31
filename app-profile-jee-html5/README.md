@@ -40,7 +40,7 @@ The following steps show how to create the client required for this quickstart:
 * Add the following values:
   * Client ID: You choose (for example `app-profile-html5`)
   * Client Protocol: `openid-connect`
-  * Root URL: URL to the application (for example `http://localhost:8080/app-profile`)
+  * Root URL: URL to the application (for example `http://localhost:8080/app-profile-html5`)
 * Click `Save`
 
 Once saved you need to change the `Access Type` to `public` and click save.
@@ -71,7 +71,7 @@ Build and Deploy the Quickstart
 Access the Quickstart
 ---------------------
 
-You can access the application with the following URL: <http://localhost:8080/app-profile>.
+You can access the application with the following URL: <http://localhost:8080/app-profile-html5>.
 
 
 Undeploy the Quickstart

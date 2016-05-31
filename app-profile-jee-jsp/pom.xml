@@ -64,6 +64,6 @@
     </dependencies>
 
     <build>
-        <finalName>app-profile</finalName>
+        <finalName>app-profile-jsp</finalName>
     </build>
 </project>
