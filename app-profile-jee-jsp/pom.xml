@@ -27,7 +27,7 @@
     <artifactId>rh-sso-app-profile-jee-jsp</artifactId>
     <packaging>war</packaging>
     <name>JBoss RH-SSO Quickstart: app-profile-jee-jsp</name>
-    <description>JSP Profile Application packaged as a WAR</description>
+    <description>JSP Profile Application</description>
 
     <licenses>
         <license>
