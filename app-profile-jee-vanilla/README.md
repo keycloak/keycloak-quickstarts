@@ -1,55 +1,114 @@
-# app-profile-jee-vanilla: Simple Java servlet application 
+app-profile-jee-jsp: JSP Profile Application
+================================================
 
-Author: Bill Burke  
-Level: Beginner  
-Technologies: Java, Servlets  
-Summary: Simple Java Servlet application allowing login.   
-Target Product: RH-SSO  
-Source: <https://github.com/keycloak/rh-sso-quickstarts>  
+Level: Beginner
+Technologies: JavaEE
+Summary: JSP Profile Application with Basic Authentication
+Target Product: RH-SSO, JBoss EAP
+Source: <https://github.com/keycloak/rh-sso-quickstarts>
+
 
 What is it?
 -----------
 
-This is a simple Java Servlet application.  It is used by the Getting Started Tutorials, Securing a JBoss Servlet Application chapter.
+The `app-profile-jee-vanilla` quickstart demonstrates how to change a JavaEE application that is secured with basic
+authentication without any changes to the WAR itself. Changing the authentication method and injecting the
+configuration is done automatically by the RH-SSO client adapter subsystem.
 
-System requirements
--------------------
 
-All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later. See Configure Maven for JBoss EAP 7 to make sure you are configured correctly for testing the quickstarts.
+System Requirements
+------------
 
-Start the JBoss EAP Server
---------------------------
+If you are deploying the application as a WAR you need to have JBoss EAP 6.4 or 7 running.
 
-1. Open a command prompt and navigate to the root of the JBoss EAP directory.
-2. The following shows the command line to start the server:
+All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
 
-For Linux:   EAP7_HOME/bin/standalone.sh
-For Windows: EAP7_HOME\bin\standalone.bat
 
-Build and Deploy the Quickstarts
---------------------------------
+Build and Deploy the Quickstart
+-------------------------------
 
-1. Make sure you have started the JBoss EAP server as described above.
-2. Open a command prompt and navigate to the root directory of this quickstart.
-3. Type this command to build and deploy the archive:
+Unlike most other quickstarts for this quickstart you should first deploy the application so you can see that
+it's secured with basic authentication. Afterwards you will configure the client adapter subsystem to secure the
+application and re-deploy the application to see the application is now secured with Keycloak without having to do
+any changes to the application itself.
+
+1. Open a terminal and navigate to the root directory of this quickstart.
+
+2. The following shows the command to deploy the quickstart:
 
    ````
-   mvn clean install wildfly:deploy
+   For JBoss EAP 7:   mvn install wildfly:deploy
+   For JBoss EAP 6.4: mvn install jboss-as:deploy
    ````
 
-4. This will deploy target/app-profile-jee-vanilla.war to the running instance of the server.
 
-Access the application
+Access the Quickstart
 ----------------------
 
-You can run example with the following URL: <http://localhost:8080/vanilla>
+You can access the application with the following URL: <http://localhost:8080/app-profile-vanilla>. If you click on the
+login button the browser will display a prompt for authentication required. This is used for basic authentication where
+a username and password is collected by the browser and sent to the web application with the authorization header.
 
-Undeploy the Archive
+At the moment you are not able to authenticate unless you have configured your JBoss EAP server with a realm and users
+for basic authentication.
+
+The next step is to configure the RH-SSO client adapter subsystem to configure the application to use RH-SSO for
+authentication instead.
+
+
+Configure Client Adapter Subsystem
+----------------------------------
+
+Before configuring the adapter subsystem you need to create a client in RH-SSO.
+
+The following steps shows how to create the client required for this quickstart:
+
+* Open the RH-SSO admin console
+* Select `Clients` from the menu
+* Click `Create`
+* Add the following values:
+  * Client ID: You choose (for example `app-profile-vanilla`)
+  * Client Protocol: `openid-connect`
+  * Root URL: URL to the application (for example `http://localhost:8080/vanilla`)
+* Click `Save`
+
+If you deploy the application somewhere else change the hostname and port of the URLs accordingly.
+
+As an alternative you can create the client by importing the file [client-import.json](config/client-import.json).
+
+Next step is to configure the client adapter subsystem. To do this click use the following steps:
+
+* Click on `Installation` in the tab for the client you created
+* Select `Keycloak OIDC JBoss Subsystem XML`
+* Copy the XML snippet to the clipboard
+* Open `EAP_HOME/standalone/standalone.xml` in an editor
+* Move the file `keycloak.json` to the `config/` directory in the root of the quickstart
+* Locate the element `<subsystem xmlns="urn:jboss:domain:keycloak:1.1"/>` and add the snippet above as a child element. For example:
+  ````
+  <subsystem xmlns="urn:jboss:domain:keycloak:1.1">
+      <secure-deployment name="WAR MODULE NAME.war">
+      <realm>master</realm>
+      <realm-public-key>MIIBIj...</realm-public-key>
+      <auth-server-url>http://localhost:8180/auth</auth-server-url>
+      <ssl-required>EXTERNAL</ssl-required>
+      <resource>app-profile-vanilla</resource>
+      <credential name="secret">57826...</credential>
+  </secure-deployment>
+  ````
+* Replace `WAR MODULE NAME.war` with `vanilla.war`
+
+Now restart the JBoss EAP server. After the server is restarted open <http://localhost:8080/app-profile-vanilla> and try
+to login again. This time you will be redirected to RH-SSO to authenticate.
+
+
+Undeploy the Quickstart
 --------------------
 
-* Make sure you have started the JBoss EAP server as described above.
-* Open a command prompt and navigate to the root directory of this quickstart.
+1. Open a terminal and navigate to the root of the RH-SSO server directory.
+
+2. The following shows the command to undeploy the quickstart:
 
    ````
-   mvn wildfly:undeploy
+   For JBoss EAP 7:   mvn install wildfly:undeploy
+   For JBoss EAP 6.4: mvn install jboss-as:undeploy
    ````

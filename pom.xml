@@ -60,6 +60,7 @@
         <module>app-jee-jsp</module>
         <module>app-profile-jee-html5</module>
         <module>app-profile-jee-jsp</module>
+        <module>app-profile-jee-vanilla</module>
         <module>app-profile-saml-jee-jsp</module>
         <module>common</module>
         <module>service-jee-jaxrs</module>

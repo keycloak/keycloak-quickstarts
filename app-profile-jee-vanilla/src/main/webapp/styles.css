@@ -31,7 +31,6 @@ button {
 
     border: 2px solid #ccc;
     color: #fff;
-    -webkit-border-radius: 30px;
 
     text-transform: uppercase;
 
@@ -63,7 +62,6 @@ hr {
     background-color: #eee;
     border: 1px solid #ccc;
     padding: 10px;
-    -webkit-border-radius: 10px;
 
     -webkit-box-shadow: 2px 2px 10px 0px rgba(0,0,0,0.5);
     -moz-box-shadow: 2px 2px 10px 0px rgba(0,0,0,0.5);
@@ -75,12 +73,10 @@ hr {
     background-color: #fff;
     border: 1px solid #ccc;
     font-size: 40px;
-    -webkit-border-radius: 10px;
 }
 
-#token .content .message {
+#token-content {
     font-size: 20px;
-    overflow: scroll;
     padding: 5px;
     white-space: pre;
     text-transform: none;
@@ -99,7 +95,7 @@ hr {
 }
 
 table {
-   width: 100%; 
+    width: 100%;
 }
 
 tr.even {
