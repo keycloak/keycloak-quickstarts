@@ -18,6 +18,8 @@ Prior to running the quickstarts you should read this entire document and have c
 Afterwards you should read the README file for the quickstart you would like to deploy. See [examples](#examples) for
 a list of the available quickstarts.
 
+If you run into any problems please refer to the [troubleshooting](#troubleshooting) section.
+
 
 Use of RHSSO_HOME and EAP_HOME Variables
 -----------------------------------------
@@ -231,3 +233,13 @@ Examples
 * [app-profile-jee-jsp](app-profile-jee-jsp/README.md) - JSP application that displays user profile and token details.
 * [app-profile-saml-jee-jsp](app-profile-saml-jee-jsp/README.md) - JSP application that uses SAML and displays user profile.
 * [service-jee-jaxrs](service-jee-jaxrs/README.md) - JAX-RS Service with public and protected endpoints.
+
+
+Troubleshooting
+---------------
+
+| Problem | Probable Cause | Possible Solution |
+|---------|----------------|-------------------|
+| **Some required files are missing / Some Enforcer rules have failed** | Client adapter config is missing | Add client adapter installation file to `config` directory as specified in quickstart README.md |
+| **Unknown authentication mechanism KEYCLOAK** | OpenID Connect client adapter missing | Install OpenID Connect adapter as specified in the [Start and Configure the JBoss EAP Server](#jboss-eap) section |
+| **Unknown authentication mechanism KEYCLOAK-SAML** | SAML client adapter missing | Install SAML adapter as specified in the [Start and Configure the JBoss EAP Server](#jboss-eap) section |
