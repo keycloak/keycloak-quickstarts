@@ -37,7 +37,7 @@ The following steps shows how to create the client required for this quickstart:
 * Add the following values:
   * Client ID: You choose (for example `app-profile-jsp`)
   * Client Protocol: `openid-connect`
-  * Root URL: URL to the application (for example `http://localhost:8080/app-profile`)
+  * Root URL: URL to the application (for example `http://localhost:8080/app-profile-jsp`)
 * Click `Save`
 
 If you deploy the application somewhere else change the hostname and port of the URLs accordingly.
@@ -47,7 +47,10 @@ Finally you need to configure the adapter, this is done by retrieving the adapte
 * Click on `Installation` in the tab for the client you created
 * Select `Keycloak OIDC JSON`
 * Click `Download`
-* Move the file `keycloak.json` to the `src/main/webapp/WEB-INF/` directory in the root of the quickstart
+* Move the file `keycloak.json` to the `config/` directory in the root of the quickstart
+
+As an alternative you can create the client by importing the file [client-import.json](config/client-import.json) and
+copying [config/keycloak-example.json](config/keycloak-example.json) to `config/keycloak.json`.
 
 
 Build and Deploy the Quickstart
@@ -59,7 +62,7 @@ Build and Deploy the Quickstart
 
    ````
    For JBoss EAP 7:   mvn install wildfly:deploy
-   For JBoss EAP 6.4: mvn install jboss:deploy
+   For JBoss EAP 6.4: mvn install jboss-as:deploy
    ````
 
 
@@ -78,5 +81,5 @@ Undeploy the Quickstart
 
    ````
    For JBoss EAP 7:   mvn install wildfly:undeploy
-   For JBoss EAP 6.4: mvn install jboss:undeploy
+   For JBoss EAP 6.4: mvn install jboss-as:undeploy
    ````

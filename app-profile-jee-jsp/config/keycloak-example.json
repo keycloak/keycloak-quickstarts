@@ -1,0 +1,9 @@
+{
+  "realm": "master",
+  "auth-server-url": "http://localhost:8180/auth",
+  "ssl-required": "external",
+  "resource": "app-profile-jsp",
+  "credentials": {
+    "secret": "578262e1-9181-4721-baec-7cc913331c1f"
+  }
+}

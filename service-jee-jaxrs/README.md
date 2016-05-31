@@ -41,7 +41,7 @@ The following steps shows how to create the client required for this quickstart:
 * Select `Clients` from the menu
 * Click `Create`
 * Add the following values:
-  * Client ID: You choose (for example `service`)
+  * Client ID: You choose (for example `service-jaxrs`)
   * Client Protocol: `openid-connect`
 * Click `Save`
 
@@ -74,7 +74,7 @@ Build and Deploy the Quickstart
 
    ````
    For JBoss EAP 7:   mvn install wildfly:deploy
-   For JBoss EAP 6.4: mvn install jboss:deploy
+   For JBoss EAP 6.4: mvn install jboss-as:deploy
    ````
 
 
@@ -103,5 +103,5 @@ Undeploy the Quickstart
 
    ````
    For JBoss EAP 7:   mvn install wildfly:undeploy
-   For JBoss EAP 6.4: mvn install jboss:undeploy
+   For JBoss EAP 6.4: mvn install jboss-as:undeploy
    ````

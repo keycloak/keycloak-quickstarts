@@ -55,7 +55,7 @@ Finally you need to configure the adapter, this is done by retrieving the adapte
 * Click on `Installation` in the tab for the client you created
 * Select `Keycloak SAML Adapter keycloak-saml.xml`
 * Click `Download`
-* Move the file `keycloak-saml.xml` to the `src/main/webapp/WEB-INF/` directory in the root of the quickstart
+* Move the file `keycloak-saml.xml` to the `config/` directory in the root of the quickstart
 
 
 Build and Deploy the Quickstart
@@ -67,7 +67,7 @@ Build and Deploy the Quickstart
 
 ````
 For JBoss EAP 7:   mvn install wildfly:deploy
-For JBoss EAP 6.4: mvn install jboss:deploy
+For JBoss EAP 6.4: mvn install jboss-as:deploy
 ````
 
 
@@ -86,5 +86,5 @@ Undeploy the Quickstart
 
 ````
 For JBoss EAP 7:   mvn install wildfly:undeploy
-For JBoss EAP 6.4: mvn install jboss:undeploy
+For JBoss EAP 6.4: mvn install jboss-as:undeploy
 ````
