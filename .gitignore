@@ -1,5 +1,5 @@
-keycloak.json
-keycloak-saml.xml
+**/config/keycloak.json
+**/config/keycloak-saml.xml
 
 # Intellij
 ###################

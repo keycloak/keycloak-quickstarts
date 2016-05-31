@@ -1,0 +1,5 @@
+{
+    "clientId": "service-jaxrs",
+    "enabled": true,
+    "bearerOnly": true
+}

@@ -45,7 +45,7 @@ There are two approaches to direct Maven to use the JBoss RH-SSO Maven Repositor
 * You can modify the Maven settings.
 * You can configure the project's POM file.
 
-=== Configure the Maven Settings
+### Configure the Maven Settings
 
 1. Open the settings.xml for the type of configuration you have chosen.
    1. Global Settings - If you are configuring the global settings, open the M2_HOME/conf/settings.xml file.
@@ -81,7 +81,7 @@ There are two approaches to direct Maven to use the JBoss RH-SSO Maven Repositor
    <activeProfile>rh-sso-repository</activeProfile>
    ````
 
-=== Configure the quickstart parent POM
+### Configure the quickstart parent POM
 
 1. Open the pom.xml file from the root directory of the quickstarts
 
@@ -171,6 +171,8 @@ Next create a user:
 * Click `Role Mappings`
 * Select `user` under `Available Roles` and click `Add selected`
 
+As an alternative to manually creating the role and user you can use the partial import feature in the admin console and import
+the file [config/partial-import.json](config/partial-import.json) into your realm.
 
 <a id="jboss-eap"></a>Start and Configure the JBoss EAP Server
 --------------------------------------------------------------

@@ -52,7 +52,10 @@ Finally you need to configure the javascript adapter, this is done by retrieving
 * Click on `Installation` in the tab for the client you created
 * Select `Keycloak OIDC JSON`
 * Click `Download`
-* Move the file `keycloak.json` to the `src/main/webapp/` directory in the root of the quickstart
+* Move the file `keycloak.json` to the `config/` directory in the root of the quickstart
+
+As an alternative you can create the client by importing the file [client-import.json](config/client-import.json) and
+copying [config/keycloak-example.json](config/keycloak-example.json) to `config/keycloak.json`.
 
 
 Build and Deploy the Quickstart
@@ -64,7 +67,7 @@ Build and Deploy the Quickstart
 
    ````
    For JBoss EAP 7:   mvn install wildfly:deploy
-   For JBoss EAP 6.4: mvn install jboss:deploy
+   For JBoss EAP 6.4: mvn install jboss-as:deploy
    ````
 
 
@@ -83,5 +86,5 @@ Undeploy the Quickstart
 
    ````
    For JBoss EAP 7:   mvn install wildfly:undeploy
-   For JBoss EAP 6.4: mvn install jboss:undeploy
+   For JBoss EAP 6.4: mvn install jboss-as:undeploy
    ````

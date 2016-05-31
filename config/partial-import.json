@@ -1,0 +1,20 @@
+{
+  "roles": {
+    "realm" : [{
+        "name": "user"
+     }]
+  },
+
+  "users": [{
+    "username" : "user",
+    "enabled": true,
+    "credentials" : [{ 
+      "type" : "password",
+      "value" : "password" 
+    }],
+    "realmRoles": ["user"],
+    "clientRoles": {
+      "account": ["view-profile", "manage-account"]
+    }
+  }]
+}
