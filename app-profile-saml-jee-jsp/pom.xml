@@ -90,7 +90,7 @@
                             <rules>
                                 <requireFilesExist>
                                     <files>
-                                        <file>${basedir}/config/keycloak.json</file>
+                                        <file>${basedir}/config/keycloak-saml.xml</file>
                                     </files>
                                 </requireFilesExist>
                             </rules>
@@ -110,6 +110,7 @@
                             <includes>
                                 <include>keycloak-saml.xml</include>
                             </includes>
+                            <targetPath>WEB-INF</targetPath>
                         </resource>
                     </webResources>
                 </configuration>

@@ -240,6 +240,6 @@ Troubleshooting
 
 | Problem | Probable Cause | Possible Solution |
 |---------|----------------|-------------------|
-| **Some required files are missing / Some Enforcer rules have failed** | Client adapter config is missing | Add client adapter installation file to `config` directory as specified in quickstart README.md |
-| **Unknown authentication mechanism KEYCLOAK** | OpenID Connect client adapter missing | Install OpenID Connect adapter as specified in the [Start and Configure the JBoss EAP Server](#jboss-eap) section |
-| **Unknown authentication mechanism KEYCLOAK-SAML** | SAML client adapter missing | Install SAML adapter as specified in the [Start and Configure the JBoss EAP Server](#jboss-eap) section |
+| Some required files are missing / Some Enforcer rules have failed | Client adapter config is missing | Add client adapter installation file to `config` directory as specified in quickstart README.md |
+| Unknown authentication mechanism KEYCLOAK | OpenID Connect client adapter missing | Install OpenID Connect adapter as specified in the [Start and Configure the JBoss EAP Server](#jboss-eap) section |
+| Unknown authentication mechanism KEYCLOAK-SAML | SAML client adapter missing | Install SAML adapter as specified in the [Start and Configure the JBoss EAP Server](#jboss-eap) section |
