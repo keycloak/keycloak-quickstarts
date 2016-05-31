@@ -101,6 +101,7 @@
                             <includes>
                                 <include>keycloak.json</include>
                             </includes>
+                            <targetPath>WEB-INF</targetPath>
                         </resource>
                     </webResources>
                 </configuration>

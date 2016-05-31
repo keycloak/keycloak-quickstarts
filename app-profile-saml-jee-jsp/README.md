@@ -55,7 +55,11 @@ Finally you need to configure the adapter, this is done by retrieving the adapte
 * Click on `Installation` in the tab for the client you created
 * Select `Keycloak SAML Adapter keycloak-saml.xml`
 * Click `Download`
+* Edit `keycloak-saml.xml` and replace `SPECIFY YOUR LOGOUT PAGE!` with `/index.jsp`
 * Move the file `keycloak-saml.xml` to the `config/` directory in the root of the quickstart
+
+As an alternative you can create the client by importing the file [client-import.json](config/client-import.json) and
+copying [config/keycloak-saml-example.xml](config/keycloak-saml-example.xml) to `config/keycloak-saml-example.xml`.
 
 
 Build and Deploy the Quickstart
