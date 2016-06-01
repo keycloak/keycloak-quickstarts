@@ -62,7 +62,6 @@
         <module>app-profile-jee-jsp</module>
         <module>app-profile-jee-vanilla</module>
         <module>app-profile-saml-jee-jsp</module>
-        <module>common</module>
         <module>service-jee-jaxrs</module>
     </modules>
 
@@ -74,11 +73,6 @@
                 <version>${version.jboss.rh-sso.bom}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.quickstart.rh-sso</groupId>
-                <artifactId>rh-sso-common</artifactId>
-                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

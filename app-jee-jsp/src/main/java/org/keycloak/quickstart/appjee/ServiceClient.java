@@ -23,7 +23,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.keycloak.KeycloakSecurityContext;
-import org.keycloak.quickstart.util.ServiceLocator;
 import org.keycloak.util.JsonSerialization;
 
 import javax.servlet.http.HttpServletRequest;

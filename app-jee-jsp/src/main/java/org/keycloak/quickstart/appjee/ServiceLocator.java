@@ -1,4 +1,4 @@
-package org.keycloak.quickstart.util;
+package org.keycloak.quickstart.appjee;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.MalformedURLException;
