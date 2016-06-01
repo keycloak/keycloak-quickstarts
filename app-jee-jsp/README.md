@@ -43,6 +43,8 @@ The following steps show how to create the client required for this quickstart:
   * Root URL: URL to the application (for example `http://localhost:8080/app-jsp`)
 * Click `Save`
 
+Once saved you need to change the Access Type to `confidential` and click `Save`.
+
 If you deploy the application somewhere else change the hostname and port of the URLs accordingly.
 
 Finally you need to configure the adapter, this is done by retrieving the adapter configuration file:
@@ -59,8 +61,14 @@ Build and Deploy the Quickstart
 --------------------------------
 
 1. Open a terminal and navigate to the root directory of this quickstart.
+2. Build the required dependency module first
 
-2. The following shows the command to deploy the quickstart:
+   ````
+   For Linux:   mvn install -f ../pom.xml -pl common 
+   For Windows: mvn install -f ..\pom.xml -pl common 
+   ````
+
+3. The following shows the command to deploy the quickstart:
 
    ````
    For JBoss EAP 7:   mvn install wildfly:deploy
@@ -90,6 +98,6 @@ Undeploy the Quickstart
 2. The following shows the command to undeploy the quickstart:
 
    ````
-   For JBoss EAP 7:   mvn install wildfly:undeploy
-   For JBoss EAP 6.4: mvn install jboss-as:undeploy
+   For JBoss EAP 7:   mvn wildfly:undeploy
+   For JBoss EAP 6.4: mvn jboss-as:undeploy
    ````

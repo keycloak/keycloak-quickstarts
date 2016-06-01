@@ -52,7 +52,7 @@ Finally you need to configure the adapter, this is done by retrieving the adapte
 * Click on `Installation` in the tab for the client you created
 * Select `Keycloak OIDC JSON`
 * Click `Download`
-* Move the file `keycloak.json` to the `src/main/webapp/WEB-INF/` directory in the root of the quickstart
+* Move the file `keycloak.json` to the `config/` directory in the root of the quickstart
 
 You may also want to enable CORS for the service if you want to allow invocations from HTML5 applications deployed to a
 different host. To do this edit `keycloak.json` and add:
@@ -87,7 +87,7 @@ The endpoints for the service are:
 * secured - <http://localhost:8080/service/secured>
 * admin - <http://localhost:8080/service/admin>
 
-You can open the public endpoint directly in the browser to test the service. The two other endpoints requires
+You can open the public endpoint directly in the browser to test the service. The two other endpoints require
 invoking with a bearer token. To invoke these endpoints use one of the example quickstarts:
 
 * [app-jee-html5](../app-jee-html5/README.md) - HTML5 application that invokes the example service. Requires service example to be deployed.

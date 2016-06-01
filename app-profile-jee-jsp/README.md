@@ -40,6 +40,8 @@ The following steps shows how to create the client required for this quickstart:
   * Root URL: URL to the application (for example `http://localhost:8080/app-profile-jsp`)
 * Click `Save`
 
+Once saved you need to change the Access Type to `confidential` and click `Save`.
+
 If you deploy the application somewhere else change the hostname and port of the URLs accordingly.
 
 Finally you need to configure the adapter, this is done by retrieving the adapter configuration file:

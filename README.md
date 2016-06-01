@@ -40,7 +40,7 @@ All you need to build these projects is Java 8.0 (Java SDK 1.8) or later and Mav
 <a id="configure-maven"></a>Configure Maven
 -------------------------------------------
 
-Before you continue download the JBoss RH-SSO Maven Repository ZIP archive an extract it to your local filesystem.
+Before you continue download the JBoss RH-SSO Maven Repository ZIP archive and extract it to your local filesystem.
 
 There are two approaches to direct Maven to use the JBoss RH-SSO Maven Repository in your project:
 
@@ -49,11 +49,11 @@ There are two approaches to direct Maven to use the JBoss RH-SSO Maven Repositor
 
 ### Configure the Maven Settings
 
-1. Open the settings.xml for the type of configuration you have chosen.
-   1. Global Settings - If you are configuring the global settings, open the M2_HOME/conf/settings.xml file.
-   2. User Settings - If you are configuring user specific settings and you do not yet have a USER_HOME/.m2/settings.xml file, copy the settings.xml file from the M2_HOME/conf/ directory into the USER_HOME/.m2/ directory.
+1. Open the *settings.xml* for the type of configuration you have chosen.
+   1. Global Settings - If you are configuring the global settings, open the *M2_HOME/conf/settings.xml* file.
+   2. User Settings - If you are configuring user specific settings and you do not yet have a *USER_HOME/.m2/settings.xml* file, copy the settings.xml file from the *M2_HOME/conf/* directory into the *USER_HOME/.m2/* directory.
 
-2. Copy the following XML into the <profiles> element of the settings.xml file. Be sure to change the <url> to the actual repository location.
+2. Copy the following XML into the *\<profiles\>* element of the *settings.xml* file. Be sure to change the *\<url\>* to the actual repository location.
 
    ````
    <profile>
@@ -77,7 +77,7 @@ There are two approaches to direct Maven to use the JBoss RH-SSO Maven Repositor
     </profile>
    ````
 
-3. Copy the following XML into the <activeProfiles> element of the settings.xml file.
+3. Copy the following XML into the *\<activeProfiles\>* element of the *settings.xml* file.
 
    ````
    <activeProfile>rh-sso-repository</activeProfile>
@@ -85,9 +85,9 @@ There are two approaches to direct Maven to use the JBoss RH-SSO Maven Repositor
 
 ### Configure the quickstart parent POM
 
-1. Open the pom.xml file from the root directory of the quickstarts
+1. Open the *pom.xml* file from the root directory of the quickstarts
 
-2. Add the following repository configuration. If there is already a <repositories> configuration in the file, then add the <repository> element to it. Be sure to change the <url> to the actual repository location.
+2. Add the following repository configuration. If there is already a *\<repositories\>* configuration in the file, then add the *\<repository\>* element to it. Be sure to change the *\<url\>* to the actual repository location.
 
    ````
    <repositories>
@@ -115,7 +115,7 @@ There are two approaches to direct Maven to use the JBoss RH-SSO Maven Repositor
 By default the RH-SSO Server uses the same ports as the JBoss EAP Server. To run the quickstarts you can either run the
  RH-SSO Server on a separate host (machine, VM, Docker, etc..) or on different ports.
 
-To start the the RH-SSO server on a separate host:
+To start the RH-SSO server on a separate host:
 
 1. Open a terminal on the separate machine and navigate to the root of the RH-SSO server directory.
 
@@ -128,7 +128,7 @@ To start the the RH-SSO server on a separate host:
 
 3. The URL of the RH-SSO server will be http://&lt;HOSTNAME&gt;:8080 (replace &lt;HOSTNAME&gt; with the hostname of the separate host).
 
-To start the the RH-SSO server on different ports:
+To start the RH-SSO server on different ports:
 
 1. Open a terminal and navigate to the root of the RH-SSO server directory.
 
@@ -139,7 +139,7 @@ To start the the RH-SSO server on different ports:
    For Windows: RHSSO_HOME\bin\standalone.bat -Djboss.socket.binding.port-offset=100
    ````
 
-3. The URL of the RH-SSO server will be http://localhost:8180
+3. The URL of the RH-SSO server will be *http://localhost:8180*
 
 ### <a id="add-admin"></a>Add Admin User
 
@@ -176,50 +176,68 @@ Next create a user:
 As an alternative to manually creating the role and user you can use the partial import feature in the admin console and import
 the file [config/partial-import.json](config/partial-import.json) into your realm.
 
+One more step, add *user* role to admin user:
+
+* Select `Users` from the menu
+* Click `View all users`
+* Click `Edit` for admin user
+* Click `Role Mappings`
+* Select `user` under `Available Roles` and click `Add selected`
+
+
+
+
 <a id="jboss-eap"></a>Start and Configure the JBoss EAP Server
 --------------------------------------------------------------
 
-To start the JBoss EAP server:
+In order to install RH SSO adapters into JBoss EAP server we first have to install the RH-SSO adapter modules.
+
+For JBoss EAP 7 extract `RH-SSO-7.0.0.GA-eap7-adapter.zip` into EAP_HOME and for JBoss EAP 6.4 extract
+`RH-SSO-7.0.0.GA-eap6-adapter.zip` into EAP_HOME. 
+
+If you plan to try the SAML examples you also need the SAML JBoss EAP adapter. To do this for JBoss EAP 7 extract
+`RH-SSO-7.0.0.GA-saml-eap7-adapter.zip` into EAP_HOME and for JBoss EAP 6.4 extract
+`RH-SSO-7.0.0.GA-saml-eap6-adapter.zip` into EAP_HOME.
+
+
+The next step is to start JBoss EAP server:
 
 1. Open a terminal and navigate to the root of the JBoss EAP server directory.
-2. The following shows the command to start the JBoss EAP server:
+2. Use the following command to start the JBoss EAP server:
 
    ````
    For Linux:   EAP_HOME/bin/standalone.sh
    For Windows: EAP_HOME\bin\standalone.bat
    ````
 
-The next step is to install the RH-SSO EAP adapter.
+Then, before deploying any of the examples for the first time, you also need to configure RH SSO adapters.
 
-For JBoss EAP 7 extract `RH-SSO-7.0.0.GA-eap7-adapter.zip` into EAP_HOME and for JBoss EAP 6.4 extract
-`RH-SSO-7.0.0.GA-eap6-adapter.zip` into EAP_HOME. Once completed run the following command to install the adapter:
+The following installs RH SSO OIDC adapter:
 
 ````
 For Linux:
 
-  EAP_HOME/bin/jboss-cli.sh -c --file=adapter-install.cli
+  EAP_HOME/bin/jboss-cli.sh -c --file=EAP_HOME/bin/adapter-install.cli
   EAP_HOME/bin/jboss-cli.sh -c --command=:reload
 
 For Windows:
 
-  EAP_HOME\bin\jboss-cli.bat -c --file=adapter-install.cli
+  EAP_HOME\bin\jboss-cli.bat -c --file=EAP_HOME\bin\adapter-install.cli
   EAP_HOME\bin\jboss-cli.bat -c --command=:reload
 ````
 
-If you plan to try the SAML examples you also need the SAML JBoss EAP adapter. To do this for JBoss EAP 7 extract
-`RH-SSO-7.0.0.GA-saml-eap7-adapter.zip` into EAP_HOME and for JBoss EAP 6.4 extract
-`RH-SSO-7.0.0.GA-saml-eap6-adapter.zip` into EAP_HOME. Once completed run the following command to install the SAML
-adapter:
+
+If you plan to try the SAML examples you also need to install RH SSO SAML adapter:
 
 ````
 For Linux:
 
-  EAP_HOME/bin/jboss-cli.sh -c --file=adapter-install-saml.cli
+  EAP_HOME/bin/jboss-cli.sh -c --file=EAP_HOME/bin/adapter-install-saml.cli
   EAP_HOME/bin/jboss-cli.sh -c --command=:reload
 
 For Windows:
 
-  EAP_HOME\bin\jboss-cli.bat -c --file=adapter-install-saml.cli
+  EAP_HOME\bin\jboss-cli.bat -c --file=EAP_HOME\bin\adapter-install-saml.cli
   EAP_HOME\bin\jboss-cli.bat -c --command=:reload
 ````
 
@@ -246,3 +264,4 @@ Troubleshooting
 | Unknown authentication mechanism KEYCLOAK-SAML | SAML client adapter missing | Install SAML adapter as specified in the [Start and Configure the JBoss EAP Server](#jboss-eap) section |
 | Failed to invoke service: 404 Not Found | Service not deployed, or service URL not correct | Deploy service or change the URL for the service as specified in the quickstart README
 | Failed to invoke service: Request failed message with no error code | CORS not enabled | Most likely cause is that you've deployed the HTML5 application to a different host than the service, if so the solution is to add CORS support to the service. See the README for the service for how to enable. |
+| Page displays: Forbidden | Authenticated user is missing a role required to access the url | This can happen if you fail to add `user` role to admin user as instructed in [Create Roles and User](#add-roles-user). |

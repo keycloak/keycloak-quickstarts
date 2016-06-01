@@ -95,6 +95,6 @@ Undeploy the Quickstart
 2. The following shows the command to undeploy the quickstart:
 
    ````
-   For JBoss EAP 7:   mvn install wildfly:undeploy
-   For JBoss EAP 6.4: mvn install jboss-as:undeploy
+   For JBoss EAP 7:   mvn wildfly:undeploy
+   For JBoss EAP 6.4: mvn jboss-as:undeploy
    ````
