@@ -37,78 +37,6 @@ The applications these projects produce are designed to be run on Red Hat JBoss 
 All you need to build these projects is Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
 
 
-<a id="configure-maven"></a>Configure Maven
--------------------------------------------
-
-Before you continue download the JBoss RH-SSO Maven Repository ZIP archive and extract it to your local filesystem.
-
-There are two approaches to direct Maven to use the JBoss RH-SSO Maven Repository in your project:
-
-* You can modify the Maven settings.
-* You can configure the project's POM file.
-
-### Configure the Maven Settings
-
-1. Open the *settings.xml* for the type of configuration you have chosen.
-   1. Global Settings - If you are configuring the global settings, open the *M2_HOME/conf/settings.xml* file.
-   2. User Settings - If you are configuring user specific settings and you do not yet have a *USER_HOME/.m2/settings.xml* file, copy the settings.xml file from the *M2_HOME/conf/* directory into the *USER_HOME/.m2/* directory.
-
-2. Copy the following XML into the *\<profiles\>* element of the *settings.xml* file. Be sure to change the *\<url\>* to the actual repository location.
-
-   ````
-   <profile>
-     <id>rh-sso-repository</id>
-     <repositories>
-       <repository>
-         <id>rh-sso-repository</id>
-         <name>RH-SSO Maven Repository</name>
-         <url>file:///path/to/repo/rh-sso-7.0-maven-repository</url>
-         <layout>default</layout>
-         <releases>
-           <enabled>true</enabled>
-           <updatePolicy>never</updatePolicy>
-         </releases>
-         <snapshots>
-           <enabled>false</enabled>
-           <updatePolicy>never</updatePolicy>
-         </snapshots>
-       </repository>
-     </repositories>
-    </profile>
-   ````
-
-3. Copy the following XML into the *\<activeProfiles\>* element of the *settings.xml* file.
-
-   ````
-   <activeProfile>rh-sso-repository</activeProfile>
-   ````
-
-### Configure the quickstart parent POM
-
-1. Open the *pom.xml* file from the root directory of the quickstarts
-
-2. Add the following repository configuration. If there is already a *\<repositories\>* configuration in the file, then add the *\<repository\>* element to it. Be sure to change the *\<url\>* to the actual repository location.
-
-   ````
-   <repositories>
-      <repository>
-         <id>rh-sso-repository</id>
-         <name>RH-SSO Maven Repository</name>
-         <url>file:///path/to/repo/rh-sso-7.0-maven-repository/</url>
-         <layout>default</layout>
-         <releases>
-            <enabled>true</enabled>
-            <updatePolicy>never</updatePolicy>
-         </releases>
-         <snapshots>
-            <enabled>true</enabled>
-            <updatePolicy>never</updatePolicy>
-         </snapshots>
-      </repository>
-   </repositories>
-   ````
-
-
 <a id="rh-sso"></a>Start the RH-SSO Server
 ------------------------------------------
 
@@ -190,7 +118,7 @@ One more step, add *user* role to admin user:
 <a id="jboss-eap"></a>Start and Configure the JBoss EAP Server
 --------------------------------------------------------------
 
-In order to install RH SSO adapters into JBoss EAP server we first have to install the RH-SSO adapter modules.
+Before starting the JBoss EAP server start by extracting the RH-SSO client adapter into it.
 
 For JBoss EAP 7 extract `RH-SSO-7.0.0.GA-eap7-adapter.zip` into EAP_HOME and for JBoss EAP 6.4 extract
 `RH-SSO-7.0.0.GA-eap6-adapter.zip` into EAP_HOME. 
@@ -199,47 +127,39 @@ If you plan to try the SAML examples you also need the SAML JBoss EAP adapter. T
 `RH-SSO-7.0.0.GA-saml-eap7-adapter.zip` into EAP_HOME and for JBoss EAP 6.4 extract
 `RH-SSO-7.0.0.GA-saml-eap6-adapter.zip` into EAP_HOME.
 
-
 The next step is to start JBoss EAP server:
 
 1. Open a terminal and navigate to the root of the JBoss EAP server directory.
 2. Use the following command to start the JBoss EAP server:
-
    ````
    For Linux:   EAP_HOME/bin/standalone.sh
    For Windows: EAP_HOME\bin\standalone.bat
    ````
+3. To install the RH-SSO adapter run the following commands:
+   ````
+   For Linux:
 
-Then, before deploying any of the examples for the first time, you also need to configure RH SSO adapters.
+     EAP_HOME/bin/jboss-cli.sh -c --file=EAP_HOME/bin/adapter-install.cli
+     EAP_HOME/bin/jboss-cli.sh -c --command=:reload
 
-The following installs RH SSO OIDC adapter:
+   For Windows:
 
-````
-For Linux:
+    EAP_HOME\bin\jboss-cli.bat -c --file=EAP_HOME\bin\adapter-install.cli
+    EAP_HOME\bin\jboss-cli.bat -c --command=:reload
+   ````
+4. If you plan to try the SAML examples you also need to install RH SSO SAML adapter:
 
-  EAP_HOME/bin/jboss-cli.sh -c --file=EAP_HOME/bin/adapter-install.cli
-  EAP_HOME/bin/jboss-cli.sh -c --command=:reload
+   ````
+   For Linux:
 
-For Windows:
+     EAP_HOME/bin/jboss-cli.sh -c --file=EAP_HOME/bin/adapter-install-saml.cli
+     EAP_HOME/bin/jboss-cli.sh -c --command=:reload
 
-  EAP_HOME\bin\jboss-cli.bat -c --file=EAP_HOME\bin\adapter-install.cli
-  EAP_HOME\bin\jboss-cli.bat -c --command=:reload
-````
+   For Windows:
 
-
-If you plan to try the SAML examples you also need to install RH SSO SAML adapter:
-
-````
-For Linux:
-
-  EAP_HOME/bin/jboss-cli.sh -c --file=EAP_HOME/bin/adapter-install-saml.cli
-  EAP_HOME/bin/jboss-cli.sh -c --command=:reload
-
-For Windows:
-
-  EAP_HOME\bin\jboss-cli.bat -c --file=EAP_HOME\bin\adapter-install-saml.cli
-  EAP_HOME\bin\jboss-cli.bat -c --command=:reload
-````
+     EAP_HOME\bin\jboss-cli.bat -c --file=EAP_HOME\bin\adapter-install-saml.cli
+     EAP_HOME\bin\jboss-cli.bat -c --command=:reload
+   ````
 
 
 Examples

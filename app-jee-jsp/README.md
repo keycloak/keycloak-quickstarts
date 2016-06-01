@@ -61,14 +61,7 @@ Build and Deploy the Quickstart
 --------------------------------
 
 1. Open a terminal and navigate to the root directory of this quickstart.
-2. Build the required dependency module first
-
-   ````
-   For Linux:   mvn install -f ../pom.xml -pl common 
-   For Windows: mvn install -f ..\pom.xml -pl common 
-   ````
-
-3. The following shows the command to deploy the quickstart:
+2. The following shows the command to deploy the quickstart:
 
    ````
    For JBoss EAP 7:   mvn install wildfly:deploy

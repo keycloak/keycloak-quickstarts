@@ -43,6 +43,17 @@
 
     <repositories>
         <repository>
+            <id>jboss-enterprise-maven-repository</id>
+            <url>https://maven.repository.redhat.com/ga/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <!-- TODO remove when RH-SSO artifacts are available in https://maven.repository.redhat.com/ga/ -->
+        <repository>
             <id>jboss</id>
             <url>http://download.eng.bos.redhat.com/brewroot/repos/sso-7.0-build/latest/maven/</url>
         </repository>
@@ -62,7 +73,6 @@
         <module>app-profile-jee-jsp</module>
         <module>app-profile-jee-vanilla</module>
         <module>app-profile-saml-jee-jsp</module>
-        <module>common</module>
         <module>service-jee-jaxrs</module>
     </modules>
 
@@ -74,11 +84,6 @@
                 <version>${version.jboss.rh-sso.bom}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.quickstart.rh-sso</groupId>
-                <artifactId>rh-sso-common</artifactId>
-                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
