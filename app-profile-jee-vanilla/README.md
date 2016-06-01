@@ -78,7 +78,7 @@ If you deploy the application somewhere else change the hostname and port of the
 
 As an alternative you can create the client by importing the file [client-import.json](config/client-import.json).
 
-Next, configure the OIDC adapter via JBoss EAP server subsystem. To do this use the following steps:
+Next, configure the OIDC adapter via the RH-SSO client adapter subsystem. To do this use the following steps:
 
 * Click on `Installation` in the tab for the client you created
 * Select `Keycloak OIDC JBoss Subsystem XML`

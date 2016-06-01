@@ -190,7 +190,7 @@ One more step, add *user* role to admin user:
 <a id="jboss-eap"></a>Start and Configure the JBoss EAP Server
 --------------------------------------------------------------
 
-In order to install RH SSO adapters into JBoss EAP server we first have to install the RH-SSO adapter modules.
+Before starting the JBoss EAP server start by extracting the RH-SSO client adapter into it.
 
 For JBoss EAP 7 extract `RH-SSO-7.0.0.GA-eap7-adapter.zip` into EAP_HOME and for JBoss EAP 6.4 extract
 `RH-SSO-7.0.0.GA-eap6-adapter.zip` into EAP_HOME. 
@@ -199,47 +199,39 @@ If you plan to try the SAML examples you also need the SAML JBoss EAP adapter. T
 `RH-SSO-7.0.0.GA-saml-eap7-adapter.zip` into EAP_HOME and for JBoss EAP 6.4 extract
 `RH-SSO-7.0.0.GA-saml-eap6-adapter.zip` into EAP_HOME.
 
-
 The next step is to start JBoss EAP server:
 
 1. Open a terminal and navigate to the root of the JBoss EAP server directory.
 2. Use the following command to start the JBoss EAP server:
-
    ````
    For Linux:   EAP_HOME/bin/standalone.sh
    For Windows: EAP_HOME\bin\standalone.bat
    ````
+3. To install the RH-SSO adapter run the following commands:
+   ````
+   For Linux:
 
-Then, before deploying any of the examples for the first time, you also need to configure RH SSO adapters.
+     EAP_HOME/bin/jboss-cli.sh -c --file=EAP_HOME/bin/adapter-install.cli
+     EAP_HOME/bin/jboss-cli.sh -c --command=:reload
 
-The following installs RH SSO OIDC adapter:
+   For Windows:
 
-````
-For Linux:
+    EAP_HOME\bin\jboss-cli.bat -c --file=EAP_HOME\bin\adapter-install.cli
+    EAP_HOME\bin\jboss-cli.bat -c --command=:reload
+   ````
+4. If you plan to try the SAML examples you also need to install RH SSO SAML adapter:
 
-  EAP_HOME/bin/jboss-cli.sh -c --file=EAP_HOME/bin/adapter-install.cli
-  EAP_HOME/bin/jboss-cli.sh -c --command=:reload
+   ````
+   For Linux:
 
-For Windows:
+     EAP_HOME/bin/jboss-cli.sh -c --file=EAP_HOME/bin/adapter-install-saml.cli
+     EAP_HOME/bin/jboss-cli.sh -c --command=:reload
 
-  EAP_HOME\bin\jboss-cli.bat -c --file=EAP_HOME\bin\adapter-install.cli
-  EAP_HOME\bin\jboss-cli.bat -c --command=:reload
-````
+   For Windows:
 
-
-If you plan to try the SAML examples you also need to install RH SSO SAML adapter:
-
-````
-For Linux:
-
-  EAP_HOME/bin/jboss-cli.sh -c --file=EAP_HOME/bin/adapter-install-saml.cli
-  EAP_HOME/bin/jboss-cli.sh -c --command=:reload
-
-For Windows:
-
-  EAP_HOME\bin\jboss-cli.bat -c --file=EAP_HOME\bin\adapter-install-saml.cli
-  EAP_HOME\bin\jboss-cli.bat -c --command=:reload
-````
+     EAP_HOME\bin\jboss-cli.bat -c --file=EAP_HOME\bin\adapter-install-saml.cli
+     EAP_HOME\bin\jboss-cli.bat -c --command=:reload
+   ````
 
 
 Examples
