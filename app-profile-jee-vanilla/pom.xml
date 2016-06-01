@@ -18,14 +18,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.jboss.quickstart.rh-sso</groupId>
-        <artifactId>rh-sso-quickstart-parent</artifactId>
-        <version>7.0.0.ER11</version>
-    </parent>
-
     <groupId>org.jboss.quickstart.rh-sso</groupId>
     <artifactId>rh-sso-app-profile-jee-vanilla</artifactId>
+    <version>7.0.0.CR1</version>
     <packaging>war</packaging>
     <name>JBoss RH-SSO Quickstart: app-profile-jee-vanilla</name>
     <description>JSP Profile Application with Basic Authentication</description>
@@ -38,13 +33,52 @@
         </license>
     </licenses>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.jboss.spec.javax.servlet</groupId>
-            <artifactId>jboss-servlet-api_3.1_spec</artifactId>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
+    <properties>
+        <version.jboss.servlet-api_3.1>1.0.0.Final-redhat-1</version.jboss.servlet-api_3.1>
+        <version.jboss.servlet-api_3.0>1.0.2.Final-redhat-2</version.jboss.servlet-api_3.0>
+        <version.wildfly.maven.plugin>1.0.1.Final</version.wildfly.maven.plugin>
+        <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
+        <version.war.maven.plugin>2.6</version.war.maven.plugin>
+        <version.enforcer.maven.plugin>1.4.1</version.enforcer.maven.plugin>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>eap7</id>
+            <activation>
+                <property>
+                    <name>!eap6</name>
+                </property>
+            </activation>
+
+            <dependencies>
+                <dependency>
+                    <groupId>org.jboss.spec.javax.servlet</groupId>
+                    <artifactId>jboss-servlet-api_3.1_spec</artifactId>
+                    <version>${version.jboss.servlet-api_3.1}</version>
+                    <scope>provided</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>eap6</id>
+            <activation>
+                <property>
+                    <name>eap6</name>
+                </property>
+            </activation>
+
+            <dependencies>
+                <dependency>
+                    <groupId>org.jboss.spec.javax.servlet</groupId>
+                    <artifactId>jboss-servlet-api_3.0_spec</artifactId>
+                    <version>${version.jboss.servlet-api_3.0}</version>
+                    <scope>provided</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 
     <build>
         <finalName>vanilla</finalName>
@@ -52,6 +86,7 @@
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
+                <version>${version.wildfly.maven.plugin}</version>
                 <configuration>
                     <skip>false</skip>
                 </configuration>
@@ -60,6 +95,7 @@
             <plugin>
                 <groupId>org.jboss.as.plugins</groupId>
                 <artifactId>jboss-as-maven-plugin</artifactId>
+                <version>${version.jboss.maven.plugin}</version>
                 <configuration>
                     <skip>false</skip>
                 </configuration>

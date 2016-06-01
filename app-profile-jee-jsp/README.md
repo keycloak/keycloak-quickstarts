@@ -64,7 +64,7 @@ Build and Deploy the Quickstart
 
    ````
    For JBoss EAP 7:   mvn install wildfly:deploy
-   For JBoss EAP 6.4: mvn install jboss-as:deploy
+   For JBoss EAP 6.4: mvn install -Deap6 jboss-as:deploy
    ````
 
 

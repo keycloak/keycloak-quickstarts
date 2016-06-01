@@ -26,12 +26,10 @@
 
     <groupId>org.jboss.quickstart.rh-sso</groupId>
     <artifactId>rh-sso-quickstart-parent</artifactId>
-    <version>7.0.0.ER11</version>
+    <version>7.0.0.CR1</version>
     <packaging>pom</packaging>
     <name>JBoss RH-SSO Quickstart: parent</name>
     <description>JBoss RH-SSO Quickstart Parent</description>
-
-    <url>http://keycloak.org</url>
 
     <licenses>
         <license>
@@ -41,31 +39,12 @@
         </license>
     </licenses>
 
-    <repositories>
-        <repository>
-            <id>jboss-enterprise-maven-repository</id>
-            <url>https://maven.repository.redhat.com/ga/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <!-- TODO remove when RH-SSO artifacts are available in https://maven.repository.redhat.com/ga/ -->
-        <repository>
-            <id>jboss</id>
-            <url>http://download.eng.bos.redhat.com/brewroot/repos/sso-7.0-build/latest/maven/</url>
-        </repository>
-    </repositories>
-
     <properties>
-        <version.jboss.rh-sso.bom>7.0.0.ER11</version.jboss.rh-sso.bom>
         <version.wildfly.maven.plugin>1.0.1.Final</version.wildfly.maven.plugin>
         <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
         <version.war.maven.plugin>2.6</version.war.maven.plugin>
     </properties>
- 
+
     <modules>
         <module>app-jee-html5</module>
         <module>app-jee-jsp</module>
@@ -75,18 +54,6 @@
         <module>app-profile-saml-jee-jsp</module>
         <module>service-jee-jaxrs</module>
     </modules>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.jboss.bom.rh-sso</groupId>
-                <artifactId>rh-sso-bom</artifactId>
-                <version>${version.jboss.rh-sso.bom}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <build>
         <pluginManagement>
@@ -105,14 +72,6 @@
                     <version>${version.jboss.maven.plugin}</version>
                     <configuration>
                         <skip>true</skip>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-war-plugin</artifactId>
-                    <version>${version.war.maven.plugin}</version>
-                    <configuration>
-                        <failOnMissingWebXml>false</failOnMissingWebXml>
                     </configuration>
                 </plugin>
             </plugins>
