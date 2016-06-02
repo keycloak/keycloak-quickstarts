@@ -104,7 +104,7 @@ Next create a user:
 As an alternative to manually creating the role and user you can use the partial import feature in the admin console and import
 the file [config/partial-import.json](config/partial-import.json) into your realm.
 
-One more step, add *user* role to admin user:
+One more step, if you want to access the examples with the admin user you need to add the `user` role to admin user:
 
 * Select `Users` from the menu
 * Click `View all users`
