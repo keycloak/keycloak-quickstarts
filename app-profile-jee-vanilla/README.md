@@ -87,15 +87,18 @@ Next, configure the OIDC adapter via the RH-SSO client adapter subsystem. To do 
 * Locate the element `<subsystem xmlns="urn:jboss:domain:keycloak:1.1"/>` and add the above snippet as a child element. For example:
 
   ````
-  <subsystem xmlns="urn:jboss:domain:keycloak:1.1">
+  <subsystem xmlns="urn:jboss:domain:keycloak:...">
+      ...
       <secure-deployment name="WAR MODULE NAME.war">
-      <realm>master</realm>
-      <realm-public-key>MIIBIj...</realm-public-key>
-      <auth-server-url>http://localhost:8180/auth</auth-server-url>
-      <ssl-required>EXTERNAL</ssl-required>
-      <resource>app-profile-vanilla</resource>
-      <credential name="secret">57826...</credential>
-  </secure-deployment>
+          <realm>master</realm>
+          <realm-public-key>MIIBIj...</realm-public-key>
+          <auth-server-url>http://localhost:8180/auth</auth-server-url>
+          <ssl-required>EXTERNAL</ssl-required>
+          <resource>app-profile-vanilla</resource>
+          <credential name="secret">57826...</credential>
+      </secure-deployment>
+  </subsystem>
+
   ````
   
 * Replace `WAR MODULE NAME.war` with `vanilla.war`
