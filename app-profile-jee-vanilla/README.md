@@ -98,7 +98,6 @@ Next, configure the OIDC adapter via the RH-SSO client adapter subsystem. To do 
           <credential name="secret">57826...</credential>
       </secure-deployment>
   </subsystem>
-
   ````
   
 * Replace `WAR MODULE NAME.war` with `vanilla.war`
