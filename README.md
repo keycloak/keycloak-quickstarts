@@ -11,7 +11,6 @@ These quickstarts run on Red Hat JBoss Enterprise Application Platform 6.4 or 7.
 
 Prior to running the quickstarts you should read this entire document and have completed the following steps:
 
-* [Configure Maven](#configure-maven)
 * [Start and configure the RH-SSO Server](#rh-sso)
 * [Start and configure the JBoss EAP Server](#jboss-eap)
 
