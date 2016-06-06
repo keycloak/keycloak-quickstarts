@@ -66,7 +66,7 @@ public class Controller {
         String serverPath = findKeycloakServerPath(req);
         String realm = findRealmName(req);
         return KeycloakUriBuilder.fromUri(serverPath).path(ServiceUrlConstants.ACCOUNT_SERVICE_PATH)
-                .queryParam("referrer", "app-profile-jee-saml").build(realm).toString();
+                .queryParam("referrer", "app-profile-saml").build(realm).toString();
     }
 
     // HACK: This is a really bad way to find the realm name, but I can't
