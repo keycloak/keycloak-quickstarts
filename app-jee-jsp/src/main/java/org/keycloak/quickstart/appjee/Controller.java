@@ -50,7 +50,17 @@ public class Controller {
         String baseUrl = getAuthServerBaseUrl(req);
         String realm = session.getRealm();
         return KeycloakUriBuilder.fromUri(baseUrl).path(ServiceUrlConstants.ACCOUNT_SERVICE_PATH)
-                .queryParam("referrer", "app-jee").build(realm).toString();
+                .queryParam("referrer", "app-jsp")
+                .queryParam("referrer_uri", getReferrerUri(req)).build(realm).toString();
+    }
+
+    private String getReferrerUri(HttpServletRequest req) {
+        StringBuffer uri = req.getRequestURL();
+        String q = req.getQueryString();
+        if (q != null) {
+            uri.append("?").append(q);
+        }
+        return uri.toString();
     }
 
     private String getAuthServerBaseUrl(HttpServletRequest req) {
