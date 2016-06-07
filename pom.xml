@@ -28,8 +28,8 @@
     <artifactId>rh-sso-quickstart-parent</artifactId>
     <version>7.0.0.CR1</version>
     <packaging>pom</packaging>
-    <name>JBoss RH-SSO Quickstart: parent</name>
-    <description>JBoss RH-SSO Quickstart Parent</description>
+    <name>RH-SSO Quickstart: parent</name>
+    <description>Parent</description>
 
     <licenses>
         <license>

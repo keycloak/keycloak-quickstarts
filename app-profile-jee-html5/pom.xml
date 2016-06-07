@@ -22,7 +22,7 @@
     <artifactId>rh-sso-app-profile-jee-html5</artifactId>
     <version>7.0.0.CR1</version>
     <packaging>war</packaging>
-    <name>JBoss RH-SSO Quickstart: app-profile-jee-html5</name>
+    <name>RH-SSO Quickstart: app-profile-jee-html5</name>
     <description>HTML5 Profile Application packaged as a WAR</description>
 
     <licenses>

@@ -22,7 +22,7 @@
     <artifactId>rh-sso-app-jee-jsp</artifactId>
     <version>7.0.0.CR1</version>
     <packaging>war</packaging>
-    <name>JBoss RH-SSO Quickstart: app-jee-jsp</name>
+    <name>RH-SSO Quickstart: app-jee-jsp</name>
     <description>JSP Service Invocation Application</description>
 
     <licenses>
