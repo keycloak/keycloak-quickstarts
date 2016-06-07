@@ -22,7 +22,7 @@
     <artifactId>rh-sso-app-jee-html5</artifactId>
     <version>7.0.0.CR1</version>
     <packaging>war</packaging>
-    <name>JBoss RH-SSO Quickstart: app-jee-html5</name>
+    <name>RH-SSO Quickstart: app-jee-html5</name>
     <description>HTML5 Service Invocation Application packaged as a WAR</description>
 
     <licenses>

@@ -22,7 +22,7 @@
     <artifactId>rh-sso-service-jee-jaxrs</artifactId>
     <version>7.0.0.CR1</version>
     <packaging>war</packaging>
-    <name>JBoss RH-SSO Quickstart: service-jee-jaxrs</name>
+    <name>RH-SSO Quickstart: service-jee-jaxrs</name>
     <description>JAX-RS Service</description>
 
     <licenses>

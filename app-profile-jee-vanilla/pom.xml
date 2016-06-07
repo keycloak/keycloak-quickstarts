@@ -22,7 +22,7 @@
     <artifactId>rh-sso-app-profile-jee-vanilla</artifactId>
     <version>7.0.0.CR1</version>
     <packaging>war</packaging>
-    <name>JBoss RH-SSO Quickstart: app-profile-jee-vanilla</name>
+    <name>RH-SSO Quickstart: app-profile-jee-vanilla</name>
     <description>JSP Profile Application with Basic Authentication</description>
 
     <licenses>

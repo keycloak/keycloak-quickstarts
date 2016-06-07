@@ -22,7 +22,7 @@
     <artifactId>rh-sso-app-profile-jee-saml</artifactId>
     <version>7.0.0.CR1</version>
     <packaging>war</packaging>
-    <name>JBoss RH-SSO Quickstart: app-profile-jee-saml</name>
+    <name>RH-SSO Quickstart: app-profile-jee-saml</name>
     <description>SAML JSP Application</description>
 
     <licenses>
