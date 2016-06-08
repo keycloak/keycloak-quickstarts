@@ -72,66 +72,6 @@
         </dependency>
     </dependencies>
 
-    <profiles>
-        <profile>
-            <id>eap7</id>
-            <activation>
-                <property>
-                    <name>!eap6</name>
-                </property>
-            </activation>
-
-            <dependencyManagement>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.redhat.bom.rh-sso</groupId>
-                        <artifactId>rh-sso-eap7-bom</artifactId>
-                        <version>${version.rh-sso.bom}</version>
-                        <type>pom</type>
-                        <scope>import</scope>
-                    </dependency>
-                </dependencies>
-            </dependencyManagement>
-
-            <dependencies>
-                <dependency>
-                    <groupId>org.jboss.spec.javax.servlet</groupId>
-                    <artifactId>jboss-servlet-api_3.1_spec</artifactId>
-                    <scope>provided</scope>
-                </dependency>
-            </dependencies>
-        </profile>
-
-        <profile>
-            <id>eap6</id>
-            <activation>
-                <property>
-                    <name>eap6</name>
-                </property>
-            </activation>
-
-            <dependencyManagement>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.redhat.bom.rh-sso</groupId>
-                        <artifactId>rh-sso-eap6-bom</artifactId>
-                        <version>${version.rh-sso.bom}</version>
-                        <type>pom</type>
-                        <scope>import</scope>
-                    </dependency>
-                </dependencies>
-            </dependencyManagement>
-
-            <dependencies>
-                <dependency>
-                    <groupId>org.jboss.spec.javax.servlet</groupId>
-                    <artifactId>jboss-servlet-api_3.0_spec</artifactId>
-                    <scope>provided</scope>
-                </dependency>
-            </dependencies>
-        </profile>
-    </profiles>
-
     <build>
         <finalName>app-profile-jsp</finalName>
 
@@ -196,4 +136,64 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>eap7</id>
+            <activation>
+                <property>
+                    <name>!eap6</name>
+                </property>
+            </activation>
+
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.redhat.bom.rh-sso</groupId>
+                        <artifactId>rh-sso-eap7-bom</artifactId>
+                        <version>${version.rh-sso.bom}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+
+            <dependencies>
+                <dependency>
+                    <groupId>org.jboss.spec.javax.servlet</groupId>
+                    <artifactId>jboss-servlet-api_3.1_spec</artifactId>
+                    <scope>provided</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>eap6</id>
+            <activation>
+                <property>
+                    <name>eap6</name>
+                </property>
+            </activation>
+
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.redhat.bom.rh-sso</groupId>
+                        <artifactId>rh-sso-eap6-bom</artifactId>
+                        <version>${version.rh-sso.bom}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+
+            <dependencies>
+                <dependency>
+                    <groupId>org.jboss.spec.javax.servlet</groupId>
+                    <artifactId>jboss-servlet-api_3.0_spec</artifactId>
+                    <scope>provided</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 </project>
