@@ -20,7 +20,7 @@
 
     <groupId>com.redhat.rh-sso</groupId>
     <artifactId>rh-sso-app-jee-jsp</artifactId>
-    <version>7.0.0.CR1</version>
+    <version>7.0.0.CR2</version>
     <packaging>war</packaging>
     <name>RH-SSO Quickstart: app-jee-jsp</name>
     <description>JSP Service Invocation Application</description>
@@ -34,7 +34,7 @@
     </licenses>
 
     <properties>
-        <version.jboss.rh-sso.bom>7.0.0.CR1</version.jboss.rh-sso.bom>
+        <version.rh-sso.bom>7.0.0.CR2</version.rh-sso.bom>
         <version.wildfly.maven.plugin>1.0.1.Final</version.wildfly.maven.plugin>
         <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
         <version.war.maven.plugin>2.6</version.war.maven.plugin>
@@ -89,9 +89,9 @@
             <dependencyManagement>
                 <dependencies>
                     <dependency>
-                        <groupId>org.jboss.bom.rh-sso</groupId>
+                        <groupId>com.redhat.bom.rh-sso</groupId>
                         <artifactId>rh-sso-eap7-bom</artifactId>
-                        <version>${version.jboss.rh-sso.bom}</version>
+                        <version>${version.rh-sso.bom}</version>
                         <type>pom</type>
                         <scope>import</scope>
                     </dependency>
@@ -118,9 +118,9 @@
             <dependencyManagement>
                 <dependencies>
                     <dependency>
-                        <groupId>org.jboss.bom.rh-sso</groupId>
+                        <groupId>com.redhat.bom.rh-sso</groupId>
                         <artifactId>rh-sso-eap6-bom</artifactId>
-                        <version>${version.jboss.rh-sso.bom}</version>
+                        <version>${version.rh-sso.bom}</version>
                         <type>pom</type>
                         <scope>import</scope>
                     </dependency>
