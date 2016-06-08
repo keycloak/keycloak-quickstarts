@@ -33,14 +33,6 @@
         </license>
     </licenses>
 
-    <properties>
-        <version.rh-sso.bom>7.0.0.CR2</version.rh-sso.bom>
-        <version.wildfly.maven.plugin>1.0.1.Final</version.wildfly.maven.plugin>
-        <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
-        <version.war.maven.plugin>2.6</version.war.maven.plugin>
-        <version.enforcer.maven.plugin>1.4.1</version.enforcer.maven.plugin>
-    </properties>
-
     <repositories>
         <repository>
             <id>jboss-enterprise-maven-repository</id>
@@ -53,6 +45,14 @@
             </snapshots>
         </repository>
     </repositories>
+
+    <properties>
+        <version.rh-sso.bom>7.0.0.CR2</version.rh-sso.bom>
+        <version.wildfly.maven.plugin>1.0.1.Final</version.wildfly.maven.plugin>
+        <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
+        <version.war.maven.plugin>2.6</version.war.maven.plugin>
+        <version.enforcer.maven.plugin>1.4.1</version.enforcer.maven.plugin>
+    </properties>
 
     <dependencies>
         <dependency>

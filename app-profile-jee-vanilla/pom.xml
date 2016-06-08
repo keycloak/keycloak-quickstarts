@@ -33,6 +33,19 @@
         </license>
     </licenses>
 
+    <repositories>
+        <repository>
+            <id>jboss-enterprise-maven-repository</id>
+            <url>https://maven.repository.redhat.com/ga/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
     <properties>
         <version.jboss.servlet-api_3.1>1.0.0.Final-redhat-1</version.jboss.servlet-api_3.1>
         <version.jboss.servlet-api_3.0>1.0.2.Final-redhat-2</version.jboss.servlet-api_3.0>
