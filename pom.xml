@@ -26,7 +26,7 @@
 
     <groupId>com.redhat.rh-sso</groupId>
     <artifactId>rh-sso-quickstart-parent</artifactId>
-    <version>7.0.0.CR1</version>
+    <version>7.0.0.CR2</version>
     <packaging>pom</packaging>
     <name>RH-SSO Quickstart: parent</name>
     <description>Parent</description>
