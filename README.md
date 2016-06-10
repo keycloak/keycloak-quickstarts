@@ -36,11 +36,11 @@ The applications these projects produce are designed to be run on Red Hat JBoss 
 All you need to build these projects is Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
 
 
-Offline Maven Repository
+Maven Repository
 ------------------
 
-If you need to build quickstarts without internet access then you need the RH-SSO offline maven repository and the 
-EAP offline repository based on which EAP version you're using.
+If you need to build the quickstarts without access to the Red Hat repository then you need the RH-SSO maven repository and the 
+EAP repository based on the EAP version you're using.
 
 
 <a id="rh-sso"></a>Start the RH-SSO Server
