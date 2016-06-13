@@ -20,7 +20,7 @@
 
     <groupId>com.redhat.rh-sso</groupId>
     <artifactId>rh-sso-app-profile-jee-jsp</artifactId>
-    <version>7.0.0.CR2</version>
+    <version>7.0.0.GA</version>
     <packaging>war</packaging>
     <name>RH-SSO Quickstart: app-profile-jee-jsp</name>
     <description>JSP Profile Application</description>
@@ -47,7 +47,7 @@
     </repositories>
 
     <properties>
-        <version.rh-sso.bom>7.0.0.CR2</version.rh-sso.bom>
+        <version.rh-sso.bom>7.0.0.GA</version.rh-sso.bom>
         <version.wildfly.maven.plugin>1.0.1.Final</version.wildfly.maven.plugin>
         <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
         <version.war.maven.plugin>2.6</version.war.maven.plugin>
