@@ -20,7 +20,7 @@
 
     <groupId>com.redhat.rh-sso</groupId>
     <artifactId>rh-sso-app-jee-html5</artifactId>
-    <version>7.0.0.CR2</version>
+    <version>7.0.0.GA</version>
     <packaging>war</packaging>
     <name>RH-SSO Quickstart: app-jee-html5</name>
     <description>HTML5 Service Invocation Application packaged as a WAR</description>
