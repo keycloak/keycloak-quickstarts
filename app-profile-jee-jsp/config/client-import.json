@@ -1,0 +1,13 @@
+{
+    "clientId": "app-profile-jsp",
+    "rootUrl": "http://localhost:8080/app-profile-jsp",
+    "enabled": true,
+    "redirectUris": [
+        "http://localhost:8080/app-profile-jsp/*"
+    ],
+    "webOrigins": [
+        "http://localhost:8080"
+    ],
+    "publicClient": false,
+    "secret": "578262e1-9181-4721-baec-7cc913331c1f"
+}

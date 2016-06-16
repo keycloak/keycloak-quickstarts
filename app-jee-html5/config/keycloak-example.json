@@ -1,0 +1,6 @@
+{
+  "realm": "master",
+  "auth-server-url": "http://localhost:8180/auth",
+  "resource": "app-html5",
+  "public-client": true
+}

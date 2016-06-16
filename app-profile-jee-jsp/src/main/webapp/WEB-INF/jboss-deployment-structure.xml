@@ -1,0 +1,8 @@
+<jboss-deployment-structure>
+    <deployment>
+        <dependencies>
+            <module name="com.fasterxml.jackson.core.jackson-databind" />
+            <module name="com.fasterxml.jackson.core.jackson-annotations" />
+        </dependencies>
+    </deployment>
+</jboss-deployment-structure>
