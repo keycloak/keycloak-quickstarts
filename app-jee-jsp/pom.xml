@@ -83,39 +83,12 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-enforcer-plugin</artifactId>
-                <version>${version.enforcer.maven.plugin}</version>
-                <executions>
-                    <execution>
-                        <id>enforce-files-exist</id>
-                        <goals>
-                            <goal>enforce</goal>
-                        </goals>
-                        <configuration>
-                            <rules>
-                                <requireFilesExist>
-                                    <files>
-                                        <file>${basedir}/config/keycloak.json</file>
-                                    </files>
-                                </requireFilesExist>
-                            </rules>
-                            <fail>true</fail>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>${version.war.maven.plugin}</version>
                 <configuration>
                     <webResources>
                         <resource>
                             <directory>${basedir}/config</directory>
-                            <includes>
-                                <include>keycloak.json</include>
-                            </includes>
                             <targetPath>WEB-INF</targetPath>
                         </resource>
                     </webResources>
