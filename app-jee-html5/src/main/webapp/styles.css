@@ -23,7 +23,7 @@ body {
 button {
     font-family: sans-serif;
     font-size: 30px;
-    width: 200px;
+    width: 32%;
 
     background-color: #0085cf;
     background-image: linear-gradient(to bottom, #00a8e1 0%, #0085cf 100%);
