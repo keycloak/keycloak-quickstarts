@@ -23,12 +23,13 @@ public class ServiceLocator {
                 return new URL(uri);
             }
 
-            String host = new URL(req.getRequestURL().toString()).getHost();
-            if (host == null) {
-                host = "localhost";
-            }
+            URL requestUrl = new URL(req.getRequestURL().toString());
 
-            uri = "http://" + host + ":8080/service";
+            String host = requestUrl.getHost();
+            String schema = requestUrl.getProtocol();
+            String port = requestUrl.getPort() != -1 ? (":" + requestUrl.getPort()) : "";
+
+            uri = schema + "://" + host + port + "/service";
             return new URL(uri);
 
         } catch (MalformedURLException e) {
