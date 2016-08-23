@@ -27,9 +27,9 @@ public class ServiceLocator {
 
             String host = requestUrl.getHost();
             String schema = requestUrl.getProtocol();
-            String port = requestUrl.getPort() != -1 ? String.valueOf(requestUrl.getPort()) : "8080";
+            String port = requestUrl.getPort() != -1 ? (":" + requestUrl.getPort()) : "";
 
-            uri = schema + "://" + host + ":" + port + "/service";
+            uri = schema + "://" + host + port + "/service";
             return new URL(uri);
 
         } catch (MalformedURLException e) {
