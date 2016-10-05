@@ -90,8 +90,7 @@ Next, configure the OIDC adapter via the RH-SSO client adapter subsystem. To do 
   <subsystem xmlns="urn:jboss:domain:keycloak:...">
       ...
       <secure-deployment name="WAR MODULE NAME.war">
-          <realm>master</realm>
-          <realm-public-key>MIIBIj...</realm-public-key>
+          <realm>master</realm>          
           <auth-server-url>http://localhost:8180/auth</auth-server-url>
           <ssl-required>EXTERNAL</ssl-required>
           <resource>app-profile-vanilla</resource>
