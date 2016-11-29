@@ -126,12 +126,12 @@ One more step, if you want to access the examples with the admin user you need t
 
 Before starting the JBoss EAP server start by extracting the RH-SSO client adapter into it.
 
-For JBoss EAP 7 extract `RH-SSO-7.0.0.GA-eap7-adapter.zip` into EAP_HOME and for JBoss EAP 6.4 extract
-`RH-SSO-7.0.0.GA-eap6-adapter.zip` into EAP_HOME. 
+For JBoss EAP 7 extract `RH-SSO-7.1.0.Beta-eap7-adapter.zip` into EAP_HOME and for JBoss EAP 6.4 extract
+`RH-SSO-7.1.0.Beta-eap6-adapter.zip` into EAP_HOME. 
 
 If you plan to try the SAML examples you also need the SAML JBoss EAP adapter. To do this for JBoss EAP 7 extract
-`RH-SSO-7.0.0.GA-saml-eap7-adapter.zip` into EAP_HOME and for JBoss EAP 6.4 extract
-`RH-SSO-7.0.0.GA-saml-eap6-adapter.zip` into EAP_HOME.
+`RH-SSO-7.1.0.Beta-saml-eap7-adapter.zip` into EAP_HOME and for JBoss EAP 6.4 extract
+`RH-SSO-7.1.0.Beta-saml-eap6-adapter.zip` into EAP_HOME.
 
 The next step is to start JBoss EAP server:
 
