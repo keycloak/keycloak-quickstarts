@@ -19,11 +19,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.redhat.rh-sso</groupId>
-    <artifactId>rh-sso-app-jee-jsp</artifactId>
-    <version>7.1.0.Beta</version>
+    <groupId>org.keycloak.quickstarts</groupId>
+    <artifactId>keycloak-app-jee-jsp</artifactId>
+    <version>2.5.1.Final-SNAPSHOT</version>
     <packaging>war</packaging>
-    <name>RH-SSO Quickstart: app-jee-jsp</name>
+    <name>Keycloak Quickstart: app-jee-jsp</name>
     <description>JSP Service Invocation Application</description>
 
     <licenses>
@@ -34,26 +34,31 @@
         </license>
     </licenses>
 
-    <repositories>
-        <repository>
-            <id>jboss-enterprise-maven-repository</id>
-            <url>https://maven.repository.redhat.com/earlyaccess/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-
     <properties>
-        <version.rh-sso.bom>7.1.0.Beta</version.rh-sso.bom>
         <version.wildfly.maven.plugin>1.0.1.Final</version.wildfly.maven.plugin>
         <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
         <version.war.maven.plugin>2.6</version.war.maven.plugin>
         <version.enforcer.maven.plugin>1.4.1</version.enforcer.maven.plugin>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+                    <dependency>
+                        <groupId>org.keycloak.bom</groupId>
+                        <artifactId>keycloak-adapter-bom</artifactId>
+                        <version>2.5.1.Final-SNAPSHOT</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+        <dependency>
+            <groupId>org.wildfly.bom</groupId>
+            <artifactId>wildfly-javaee7</artifactId>
+            <scope>import</scope>
+            <type>pom</type>
+            <version>10.0.0.Final</version>
+        </dependency>
+    </dependencies>
+            </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -76,6 +81,11 @@
             <artifactId>httpclient</artifactId>
             <scope>compile</scope>
         </dependency>
+            <dependency>
+                <groupId>org.jboss.spec.javax.servlet</groupId>
+                <artifactId>jboss-servlet-api_3.1_spec</artifactId>
+            <scope>provided</scope>
+            </dependency>
     </dependencies>
 
     <build>
@@ -102,63 +112,6 @@
     </build>
 
     <profiles>
-        <profile>
-            <id>eap7</id>
-            <activation>
-                <property>
-                    <name>!eap6</name>
-                </property>
-            </activation>
-
-            <dependencyManagement>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.redhat.bom.rh-sso</groupId>
-                        <artifactId>rh-sso-eap7-bom</artifactId>
-                        <version>${version.rh-sso.bom}</version>
-                        <type>pom</type>
-                        <scope>import</scope>
-                    </dependency>
-                </dependencies>
-            </dependencyManagement>
-
-            <dependencies>
-                <dependency>
-                    <groupId>org.jboss.spec.javax.servlet</groupId>
-                    <artifactId>jboss-servlet-api_3.1_spec</artifactId>
-                    <scope>provided</scope>
-                </dependency>
-            </dependencies>
-        </profile>
-
-        <profile>
-            <id>eap6</id>
-            <activation>
-                <property>
-                    <name>eap6</name>
-                </property>
-            </activation>
-
-            <dependencyManagement>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.redhat.bom.rh-sso</groupId>
-                        <artifactId>rh-sso-eap6-bom</artifactId>
-                        <version>${version.rh-sso.bom}</version>
-                        <type>pom</type>
-                        <scope>import</scope>
-                    </dependency>
-                </dependencies>
-            </dependencyManagement>
-
-            <dependencies>
-                <dependency>
-                    <groupId>org.jboss.spec.javax.servlet</groupId>
-                    <artifactId>jboss-servlet-api_3.0_spec</artifactId>
-                    <scope>provided</scope>
-                </dependency>
-            </dependencies>
-        </profile>
         <profile>
             <id>json</id>
             <activation>
