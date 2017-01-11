@@ -1,19 +1,20 @@
 /*
- * JBoss, Home of Professional Open Source
- * Copyright 2016, Red Hat, Inc. and/or its affiliates, and individual
- * contributors by the @authors tag. See the copyright.txt in the
- * distribution for a full listing of individual contributors.
+ * Copyright 2016 Red Hat, Inc. and/or its affiliates
+ * and other contributors as indicated by the @author tags.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 (function( window, undefined ) {
 
     var Keycloak = function (config) {
@@ -24,20 +25,29 @@
         var kc = this;
         var adapter;
         var refreshQueue = [];
+        var callbackStorage;
 
         var loginIframe = {
             enable: true,
-            callbackMap: [],
+            callbackList: [],
             interval: 5
         };
 
         kc.init = function (initOptions) {
             kc.authenticated = false;
 
-            if (window.Cordova) {
+            callbackStorage = createCallbackStorage();
+
+            if (initOptions && initOptions.adapter === 'cordova') {
                 adapter = loadAdapter('cordova');
-            } else {
+            } else if (initOptions && initOptions.adapter === 'default') {
                 adapter = loadAdapter();
+            } else {
+                if (window.Cordova) {
+                    adapter = loadAdapter('cordova');
+                } else {
+                    adapter = loadAdapter();
+                }
             }
 
             if (initOptions) {
@@ -52,6 +62,39 @@
                 if (initOptions.onLoad === 'login-required') {
                     kc.loginRequired = true;
                 }
+
+                if (initOptions.responseMode) {
+                    if (initOptions.responseMode === 'query' || initOptions.responseMode === 'fragment') {
+                        kc.responseMode = initOptions.responseMode;
+                    } else {
+                        throw 'Invalid value for responseMode';
+                    }
+                }
+
+                if (initOptions.flow) {
+                    switch (initOptions.flow) {
+                        case 'standard':
+                            kc.responseType = 'code';
+                            break;
+                        case 'implicit':
+                            kc.responseType = 'id_token token';
+                            break;
+                        case 'hybrid':
+                            kc.responseType = 'code id_token token';
+                            break;
+                        default:
+                            throw 'Invalid value for flow';
+                    }
+                    kc.flow = initOptions.flow;
+                }
+            }
+
+            if (!kc.responseMode) {
+                kc.responseMode = 'fragment';
+            }
+            if (!kc.responseType) {
+                kc.responseType = 'code';
+                kc.flow = 'standard';
             }
 
             var promise = createPromise();
@@ -60,8 +103,8 @@
             initPromise.promise.success(function() {
                 kc.onReady && kc.onReady(kc.authenticated);
                 promise.setSuccess(kc.authenticated);
-            }).error(function() {
-                promise.setError();
+            }).error(function(errorData) {
+                promise.setError(errorData);
             });
 
             var configPromise = loadConfig(config);
@@ -116,18 +159,34 @@
                         if (loginIframe.enable) {
                             setupCheckLoginIframe().success(function() {
                                 checkLoginIframe().success(function () {
+                                    kc.onAuthSuccess && kc.onAuthSuccess();
                                     initPromise.setSuccess();
                                 }).error(function () {
+                                    kc.onAuthError && kc.onAuthError();
                                     if (initOptions.onLoad) {
                                         onLoad();
+                                    } else {
+                                        initPromise.setError();
                                     }
                                 });
                             });
                         } else {
-                            initPromise.setSuccess();
+                            kc.updateToken(-1).success(function() {
+                                kc.onAuthSuccess && kc.onAuthSuccess();
+                                initPromise.setSuccess();
+                            }).error(function() {
+                                kc.onAuthError && kc.onAuthError();
+                                if (initOptions.onLoad) {
+                                    onLoad();
+                                } else {
+                                    initPromise.setError();
+                                }
+                            });
                         }
                     } else if (initOptions.onLoad) {
                         onLoad();
+                    } else {
+                        initPromise.setSuccess();
                     }
                 } else {
                     initPromise.setSuccess();
@@ -148,44 +207,57 @@
 
         kc.createLoginUrl = function(options) {
             var state = createUUID();
+            var nonce = createUUID();
 
             var redirectUri = adapter.redirectUri(options);
-            if (options && options.prompt) {
-                redirectUri += (redirectUri.indexOf('?') == -1 ? '?' : '&') + 'prompt=' + options.prompt;
+
+            var callbackState = {
+                state: state,
+                nonce: nonce,
+                redirectUri: encodeURIComponent(redirectUri),
             }
 
-            sessionStorage.oauthState = JSON.stringify({ state: state, redirectUri: encodeURIComponent(redirectUri) });
+            if (options && options.prompt) {
+                callbackState.prompt = options.prompt;
+            }
+
+            callbackStorage.add(callbackState);
 
             var action = 'auth';
             if (options && options.action == 'register') {
                 action = 'registrations';
             }
 
+            var scope = (options && options.scope) ? "openid " + options.scope : "openid";
+
             var url = getRealmUrl()
                 + '/protocol/openid-connect/' + action
                 + '?client_id=' + encodeURIComponent(kc.clientId)
                 + '&redirect_uri=' + encodeURIComponent(redirectUri)
                 + '&state=' + encodeURIComponent(state)
-                + '&response_type=code';
+                + '&nonce=' + encodeURIComponent(nonce)
+                + '&response_mode=' + encodeURIComponent(kc.responseMode)
+                + '&response_type=' + encodeURIComponent(kc.responseType)
+                + '&scope=' + encodeURIComponent(scope);
 
             if (options && options.prompt) {
-                url += '&prompt=' + options.prompt;
+                url += '&prompt=' + encodeURIComponent(options.prompt);
+            }
+
+            if (options && options.maxAge) {
+                url += '&max_age=' + encodeURIComponent(options.maxAge);
             }
 
             if (options && options.loginHint) {
-                url += '&login_hint=' + options.loginHint;
+                url += '&login_hint=' + encodeURIComponent(options.loginHint);
             }
 
             if (options && options.idpHint) {
-                url += '&kc_idp_hint=' + options.idpHint;
-            }
-
-            if (options && options.scope) {
-                url += '&scope=' + options.scope;
+                url += '&kc_idp_hint=' + encodeURIComponent(options.idpHint);
             }
 
             if (options && options.locale) {
-                url += '&ui_locales=' + options.locale;
+                url += '&ui_locales=' + encodeURIComponent(options.locale);
             }
 
             return url;
@@ -198,7 +270,7 @@
         kc.createLogoutUrl = function(options) {
             var url = getRealmUrl()
                 + '/protocol/openid-connect/logout'
-                + '?redirect_uri=' + encodeURIComponent(adapter.redirectUri(options));
+                + '?redirect_uri=' + encodeURIComponent(adapter.redirectUri(options, false));
 
             return url;
         }
@@ -293,15 +365,14 @@
         }
 
         kc.isTokenExpired = function(minValidity) {
-            if (!kc.tokenParsed || !kc.refreshToken) {
+            if (!kc.tokenParsed || (!kc.refreshToken && kc.flow != 'implicit' )) {
                 throw 'Not authenticated';
             }
 
-            var expiresIn = kc.tokenParsed['exp'] - (new Date().getTime() / 1000) + kc.timeSkew;
+            var expiresIn = kc.tokenParsed['exp'] - Math.ceil(new Date().getTime() / 1000) + kc.timeSkew;
             if (minValidity) {
                 expiresIn -= minValidity;
             }
-
             return expiresIn < 0;
         }
 
@@ -316,7 +387,20 @@
             minValidity = minValidity || 5;
 
             var exec = function() {
-                if (!kc.isTokenExpired(minValidity)) {
+                var refreshToken = false;
+                if (kc.timeSkew == -1) {
+                    console.info('Skew ' + kc.timeSkew);
+                    refreshToken = true;
+                    console.info('[KEYCLOAK] Refreshing token: time skew not set');
+                } else if (minValidity == -1) {
+                    refreshToken = true;
+                    console.info('[KEYCLOAK] Refreshing token: forced refresh');
+                } else if (kc.isTokenExpired(minValidity)) {
+                    refreshToken = true;
+                    console.info('[KEYCLOAK] Refreshing token: token expired');
+                }
+
+                if (!refreshToken) {
                     promise.setSuccess(false);
                 } else {
                     var params = 'grant_type=refresh_token&' + 'refresh_token=' + kc.refreshToken;
@@ -328,6 +412,7 @@
                         var req = new XMLHttpRequest();
                         req.open('POST', url, true);
                         req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                        req.withCredentials = true;
 
                         if (kc.clientId && kc.clientSecret) {
                             req.setRequestHeader('Authorization', 'Basic ' + btoa(kc.clientId + ':' + kc.clientSecret));
@@ -340,18 +425,21 @@
                         req.onreadystatechange = function () {
                             if (req.readyState == 4) {
                                 if (req.status == 200) {
+                                    console.info('[KEYCLOAK] Token refreshed');
+
                                     timeLocal = (timeLocal + new Date().getTime()) / 2;
 
                                     var tokenResponse = JSON.parse(req.responseText);
-                                    setToken(tokenResponse['access_token'], tokenResponse['refresh_token'], tokenResponse['id_token']);
 
-                                    kc.timeSkew = Math.floor(timeLocal / 1000) - kc.tokenParsed.iat;
+                                    setToken(tokenResponse['access_token'], tokenResponse['refresh_token'], tokenResponse['id_token'], timeLocal);
 
                                     kc.onAuthRefreshSuccess && kc.onAuthRefreshSuccess();
                                     for (var p = refreshQueue.pop(); p != null; p = refreshQueue.pop()) {
                                         p.setSuccess(true);
                                     }
                                 } else {
+                                    console.warn('[KEYCLOAK] Failed to refresh token');
+
                                     kc.onAuthRefreshError && kc.onAuthRefreshError();
                                     for (var p = refreshQueue.pop(); p != null; p = refreshQueue.pop()) {
                                         p.setError(true);
@@ -410,7 +498,22 @@
             var error = oauth.error;
             var prompt = oauth.prompt;
 
-            if (code) {
+            var timeLocal = new Date().getTime();
+
+            if (error) {
+                if (prompt != 'none') {
+                    var errorData = { error: error, error_description: oauth.error_description };
+                    kc.onAuthError && kc.onAuthError(errorData);
+                    promise && promise.setError(errorData);
+                } else {
+                    promise && promise.setSuccess();
+                }
+                return;
+            } else if ((kc.flow != 'standard') && (oauth.access_token || oauth.id_token)) {
+                authSuccess(oauth.access_token, null, oauth.id_token, true);
+            }
+
+            if ((kc.flow != 'implicit') && code) {
                 var params = 'code=' + code + '&grant_type=authorization_code';
                 var url = getRealmUrl() + '/protocol/openid-connect/token';
 
@@ -428,20 +531,12 @@
 
                 req.withCredentials = true;
 
-                var timeLocal = new Date().getTime();
-
                 req.onreadystatechange = function() {
                     if (req.readyState == 4) {
                         if (req.status == 200) {
-                            timeLocal = (timeLocal + new Date().getTime()) / 2;
 
                             var tokenResponse = JSON.parse(req.responseText);
-                            setToken(tokenResponse['access_token'], tokenResponse['refresh_token'], tokenResponse['id_token']);
-
-                            kc.timeSkew = Math.floor(timeLocal / 1000) - kc.tokenParsed.iat;
-
-                            kc.onAuthSuccess && kc.onAuthSuccess();
-                            promise && promise.setSuccess();
+                            authSuccess(tokenResponse['access_token'], tokenResponse['refresh_token'], tokenResponse['id_token'], kc.flow === 'standard');
                         } else {
                             kc.onAuthError && kc.onAuthError();
                             promise && promise.setError();
@@ -450,14 +545,28 @@
                 };
 
                 req.send(params);
-            } else if (error) {
-                if (prompt != 'none') {
-                    kc.onAuthError && kc.onAuthError();
+            }
+
+            function authSuccess(accessToken, refreshToken, idToken, fulfillPromise) {
+                timeLocal = (timeLocal + new Date().getTime()) / 2;
+
+                setToken(accessToken, refreshToken, idToken, timeLocal);
+
+                if ((kc.tokenParsed && kc.tokenParsed.nonce != oauth.storedNonce) ||
+                    (kc.refreshTokenParsed && kc.refreshTokenParsed.nonce != oauth.storedNonce) ||
+                    (kc.idTokenParsed && kc.idTokenParsed.nonce != oauth.storedNonce)) {
+
+                    console.info('[KEYCLOAK] Invalid nonce, clearing token');
+                    kc.clearToken();
                     promise && promise.setError();
                 } else {
-                    promise && promise.setSuccess();
+                    if (fulfillPromise) {
+                        kc.onAuthSuccess && kc.onAuthSuccess();
+                        promise && promise.setSuccess();
+                    }
                 }
             }
+
         }
 
         function loadConfig(url) {
@@ -523,7 +632,12 @@
             return promise.promise;
         }
 
-        function setToken(token, refreshToken, idToken) {
+        function setToken(token, refreshToken, idToken, timeLocal) {
+            if (kc.tokenTimeoutHandle) {
+                clearTimeout(kc.tokenTimeoutHandle);
+                kc.tokenTimeoutHandle = null;
+            }
+
             if (token) {
                 kc.token = token;
                 kc.tokenParsed = decodeToken(token);
@@ -536,6 +650,27 @@
                 kc.subject = kc.tokenParsed.sub;
                 kc.realmAccess = kc.tokenParsed.realm_access;
                 kc.resourceAccess = kc.tokenParsed.resource_access;
+
+                if (timeLocal) {
+                    kc.timeSkew = Math.floor(timeLocal / 1000) - kc.tokenParsed.iat;
+                    console.info('[KEYCLOAK] Estimated time difference between browser and server is ' + kc.timeSkew + ' seconds');
+                } else {
+                    kc.timeSkew = -1;
+                }
+
+                if (kc.onTokenExpired) {
+                    if (kc.timeSkew == -1) {
+                        kc.onTokenExpired();
+                    } else {
+                        var expiresIn = (kc.tokenParsed['exp'] - (new Date().getTime() / 1000) + kc.timeSkew) * 1000;
+                        if (expiresIn <= 0) {
+                            kc.onTokenExpired();
+                        } else {
+                            kc.tokenTimeoutHandle = setTimeout(kc.onTokenExpired, expiresIn);
+                        }
+                    }
+                }
+
             } else {
                 delete kc.token;
                 delete kc.tokenParsed;
@@ -613,53 +748,19 @@
         }
 
         function parseCallback(url) {
-            if (url.indexOf('?') != -1) {
-                var oauth = {};
+            var oauth = new CallbackParser(url, kc.responseMode).parseUri();
+            var oauthState = callbackStorage.get(oauth.state);
 
-                oauth.newUrl = url.split('?')[0];
-                var paramString = url.split('?')[1];
-                var fragIndex = paramString.indexOf('#');
-                if (fragIndex != -1) {
-                    paramString = paramString.substring(0, fragIndex);
-                }
-                var params = paramString.split('&');
-                for (var i = 0; i < params.length; i++) {
-                    var p = params[i].split('=');
-                    switch (decodeURIComponent(p[0])) {
-                        case 'code':
-                            oauth.code = p[1];
-                            break;
-                        case 'error':
-                            oauth.error = p[1];
-                            break;
-                        case 'state':
-                            oauth.state = decodeURIComponent(p[1]);
-                            break;
-                        case 'redirect_fragment':
-                            oauth.fragment = decodeURIComponent(p[1]);
-                            break;
-                        case 'prompt':
-                            oauth.prompt = p[1];
-                            break;
-                        default:
-                            oauth.newUrl += (oauth.newUrl.indexOf('?') == -1 ? '?' : '&') + p[0] + '=' + p[1];
-                            break;
-                    }
+            if (oauthState && (oauth.code || oauth.error || oauth.access_token || oauth.id_token)) {
+                oauth.redirectUri = oauthState.redirectUri;
+                oauth.storedNonce = oauthState.nonce;
+                oauth.prompt = oauthState.prompt;
+
+                if (oauth.fragment) {
+                    oauth.newUrl += '#' + oauth.fragment;
                 }
 
-                var sessionState = sessionStorage.oauthState && JSON.parse(sessionStorage.oauthState);
-
-                if (sessionState && (oauth.code || oauth.error) && oauth.state && oauth.state == sessionState.state) {
-                    delete sessionStorage.oauthState;
-
-                    oauth.redirectUri = sessionState.redirectUri;
-
-                    if (oauth.fragment) {
-                        oauth.newUrl += '#' + oauth.fragment;
-                    }
-
-                    return oauth;
-                }
+                return oauth;
             }
         }
 
@@ -731,7 +832,7 @@
                 setTimeout(check, loginIframe.interval * 1000);
             }
 
-            var src = getRealmUrl() + '/protocol/openid-connect/login-status-iframe.html?client_id=' + encodeURIComponent(kc.clientId) + '&origin=' + getOrigin();
+            var src = getRealmUrl() + '/protocol/openid-connect/login-status-iframe.html';
             iframe.setAttribute('src', src );
             iframe.style.display = 'none';
             document.body.appendChild(iframe);
@@ -740,17 +841,22 @@
                 if (event.origin !== loginIframe.iframeOrigin) {
                     return;
                 }
-                var data = JSON.parse(event.data);
-                var promise = loginIframe.callbackMap[data.callbackId];
-                delete loginIframe.callbackMap[data.callbackId];
 
-                if ((!kc.sessionId || kc.sessionId == data.session) && data.loggedIn) {
-                    promise.setSuccess();
-                } else {
+                if (event.data != "unchanged") {
                     kc.clearToken();
-                    promise.setError();
+                }
+
+                for (var i = loginIframe.callbackList.length - 1; i >= 0; --i) {
+                    var promise = loginIframe.callbackList[i];
+                    if (event.data == "unchanged") {
+                        promise.setSuccess();
+                    } else {
+                        promise.setError();
+                    }
+                    loginIframe.callbackList.splice(i, 1);
                 }
             };
+
             window.addEventListener('message', messageCallback, false);
 
             var check = function() {
@@ -766,12 +872,13 @@
         function checkLoginIframe() {
             var promise = createPromise();
 
-            if (loginIframe.iframe && loginIframe.iframeOrigin) {
-                var msg = {};
-                msg.callbackId = createCallbackId();
-                loginIframe.callbackMap[msg.callbackId] = promise;
+            if (loginIframe.iframe && loginIframe.iframeOrigin ) {
+                var msg = kc.clientId + ' ' + kc.sessionId;
+                loginIframe.callbackList.push(promise);
                 var origin = loginIframe.iframeOrigin;
-                loginIframe.iframe.contentWindow.postMessage(JSON.stringify(msg), origin);
+                if (loginIframe.callbackList.length == 1) {
+                    loginIframe.iframe.contentWindow.postMessage(msg, origin);
+                }
             } else {
                 promise.setSuccess();
             }
@@ -802,14 +909,18 @@
                         return createPromise().promise;
                     },
 
-                    redirectUri: function(options) {
+                    redirectUri: function(options, encodeHash) {
+                        if (arguments.length == 1) {
+                            encodeHash = true;
+                        }
+
                         if (options && options.redirectUri) {
                             return options.redirectUri;
                         } else if (kc.redirectUri) {
                             return kc.redirectUri;
                         } else {
                             var redirectUri = location.href;
-                            if (location.hash) {
+                            if (location.hash && encodeHash) {
                                 redirectUri = redirectUri.substring(0, location.href.indexOf('#'));
                                 redirectUri += (redirectUri.indexOf('?') == -1 ? '?' : '&') + 'redirect_fragment=' + encodeURIComponent(location.hash.substring(1));
                             }
@@ -834,28 +945,28 @@
                         var loginUrl = kc.createLoginUrl(options);
                         var ref = window.open(loginUrl, '_blank', o);
 
-                        var callback;
-                        var error;
+                        var completed = false;
 
                         ref.addEventListener('loadstart', function(event) {
                             if (event.url.indexOf('http://localhost') == 0) {
-                                callback = parseCallback(event.url);
+                                var callback = parseCallback(event.url);
+                                processCallback(callback, promise);
                                 ref.close();
+                                completed = true;
                             }
                         });
 
                         ref.addEventListener('loaderror', function(event) {
-                            if (event.url.indexOf('http://localhost') != 0) {
-                                error = true;
-                                ref.close();
-                            }
-                        });
-
-                        ref.addEventListener('exit', function(event) {
-                            if (error || !callback) {
-                                promise.setError();
-                            } else {
-                                processCallback(callback, promise);
+                            if (!completed) {
+                                if (event.url.indexOf('http://localhost') == 0) {
+                                    var callback = parseCallback(event.url);
+                                    processCallback(callback, promise);
+                                    ref.close();
+                                    completed = true;
+                                } else {
+                                    promise.setError();
+                                    ref.close();
+                                }
                             }
                         });
 
@@ -877,7 +988,9 @@
                         });
 
                         ref.addEventListener('loaderror', function(event) {
-                            if (event.url.indexOf('http://localhost') != 0) {
+                            if (event.url.indexOf('http://localhost') == 0) {
+                                ref.close();
+                            } else {
                                 error = true;
                                 ref.close();
                             }
@@ -923,6 +1036,218 @@
 
             throw 'invalid adapter type: ' + type;
         }
+
+        var LocalStorage = function() {
+            if (!(this instanceof LocalStorage)) {
+                return new LocalStorage();
+            }
+
+            localStorage.setItem('kc-test', 'test');
+            localStorage.removeItem('kc-test');
+
+            var cs = this;
+
+            function clearExpired() {
+                var time = new Date().getTime();
+                for (var i = 0; i < localStorage.length; i++)  {
+                    var key = localStorage.key(i);
+                    if (key && key.indexOf('kc-callback-') == 0) {
+                        var value = localStorage.getItem(key);
+                        if (value) {
+                            try {
+                                var expires = JSON.parse(value).expires;
+                                if (!expires || expires < time) {
+                                    localStorage.removeItem(key);
+                                }
+                            } catch (err) {
+                                localStorage.removeItem(key);
+                            }
+                        }
+                    }
+                }
+            }
+
+            cs.get = function(state) {
+                if (!state) {
+                    return;
+                }
+
+                var key = 'kc-callback-' + state;
+                var value = localStorage.getItem(key);
+                if (value) {
+                    localStorage.removeItem(key);
+                    value = JSON.parse(value);
+                }
+
+                clearExpired();
+                return value;
+            };
+
+            cs.add = function(state) {
+                clearExpired();
+
+                var key = 'kc-callback-' + state.state;
+                state.expires = new Date().getTime() + (60 * 60 * 1000);
+                localStorage.setItem(key, JSON.stringify(state));
+            };
+        };
+
+        var CookieStorage = function() {
+            if (!(this instanceof CookieStorage)) {
+                return new CookieStorage();
+            }
+
+            var cs = this;
+
+            cs.get = function(state) {
+                if (!state) {
+                    return;
+                }
+
+                var value = getCookie('kc-callback-' + state);
+                setCookie('kc-callback-' + state, '', cookieExpiration(-100));
+                if (value) {
+                    return JSON.parse(value);
+                }
+            };
+
+            cs.add = function(state) {
+                setCookie('kc-callback-' + state.state, JSON.stringify(state), cookieExpiration(60));
+            };
+
+            cs.removeItem = function(key) {
+                setCookie(key, '', cookieExpiration(-100));
+            };
+
+            var cookieExpiration = function (minutes) {
+                var exp = new Date();
+                exp.setTime(exp.getTime() + (minutes*60*1000));
+                return exp;
+            };
+
+            var getCookie = function (key) {
+                var name = key + '=';
+                var ca = document.cookie.split(';');
+                for (var i = 0; i < ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) == ' ') {
+                        c = c.substring(1);
+                    }
+                    if (c.indexOf(name) == 0) {
+                        return c.substring(name.length, c.length);
+                    }
+                }
+                return '';
+            };
+
+            var setCookie = function (key, value, expirationDate) {
+                var cookie = key + '=' + value + '; '
+                    + 'expires=' + expirationDate.toUTCString() + '; ';
+                document.cookie = cookie;
+            }
+        };
+
+        function createCallbackStorage() {
+            try {
+                return new LocalStorage();
+            } catch (err) {
+            }
+
+            return new CookieStorage();
+        }
+
+        var CallbackParser = function(uriToParse, responseMode) {
+            if (!(this instanceof CallbackParser)) {
+                return new CallbackParser(uriToParse, responseMode);
+            }
+            var parser = this;
+
+            var initialParse = function() {
+                var baseUri = null;
+                var queryString = null;
+                var fragmentString = null;
+
+                var questionMarkIndex = uriToParse.indexOf("?");
+                var fragmentIndex = uriToParse.indexOf("#", questionMarkIndex + 1);
+                if (questionMarkIndex == -1 && fragmentIndex == -1) {
+                    baseUri = uriToParse;
+                } else if (questionMarkIndex != -1) {
+                    baseUri = uriToParse.substring(0, questionMarkIndex);
+                    queryString = uriToParse.substring(questionMarkIndex + 1);
+                    if (fragmentIndex != -1) {
+                        fragmentIndex = queryString.indexOf("#");
+                        fragmentString = queryString.substring(fragmentIndex + 1);
+                        queryString = queryString.substring(0, fragmentIndex);
+                    }
+                } else {
+                    baseUri = uriToParse.substring(0, fragmentIndex);
+                    fragmentString = uriToParse.substring(fragmentIndex + 1);
+                }
+
+                return { baseUri: baseUri, queryString: queryString, fragmentString: fragmentString };
+            }
+
+            var parseParams = function(paramString) {
+                var result = {};
+                var params = paramString.split('&');
+                for (var i = 0; i < params.length; i++) {
+                    var p = params[i].split('=');
+                    var paramName = decodeURIComponent(p[0]);
+                    var paramValue = decodeURIComponent(p[1]);
+                    result[paramName] = paramValue;
+                }
+                return result;
+            }
+
+            var handleQueryParam = function(paramName, paramValue, oauth) {
+                var supportedOAuthParams = [ 'code', 'state', 'error', 'error_description' ];
+
+                for (var i = 0 ; i< supportedOAuthParams.length ; i++) {
+                    if (paramName === supportedOAuthParams[i]) {
+                        oauth[paramName] = paramValue;
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+
+            parser.parseUri = function() {
+                var parsedUri = initialParse();
+
+                var queryParams = {};
+                if (parsedUri.queryString) {
+                    queryParams = parseParams(parsedUri.queryString);
+                }
+
+                var oauth = { newUrl: parsedUri.baseUri };
+                for (var param in queryParams) {
+                    switch (param) {
+                        case 'redirect_fragment':
+                            oauth.fragment = queryParams[param];
+                            break;
+                        default:
+                            if (responseMode != 'query' || !handleQueryParam(param, queryParams[param], oauth)) {
+                                oauth.newUrl += (oauth.newUrl.indexOf('?') == -1 ? '?' : '&') + param + '=' + queryParams[param];
+                            }
+                            break;
+                    }
+                }
+
+                if (responseMode === 'fragment') {
+                    var fragmentParams = {};
+                    if (parsedUri.fragmentString) {
+                        fragmentParams = parseParams(parsedUri.fragmentString);
+                    }
+                    for (var param in fragmentParams) {
+                        oauth[param] = fragmentParams[param];
+                    }
+                }
+
+                return oauth;
+            }
+        }
+
     }
 
     if ( typeof module === "object" && module && typeof module.exports === "object" ) {
