@@ -4,14 +4,14 @@ service-jee-jaxrs: JAX-RS Service
 Level: Beginner
 Technologies: JavaEE
 Summary: JAX-RS Service
-Target Product: RH-SSO, JBoss EAP
-Source: <https://github.com/keycloak/rh-sso-quickstarts>
+Target Product: Keycloak, WildFly
+Source: <https://github.com/keycloak/keycloak-quickstarts>
 
 
 What is it?
 -----------
 
-The `service-jee-jaxrs` quickstart demonstrates how to write a RESTful service with JAX-RS that is secured with RH-SSO.
+The `service-jee-jaxrs` quickstart demonstrates how to write a RESTful service with JAX-RS that is secured with Keycloak.
 
 There are 3 endpoints exposed by the service:
 
@@ -25,19 +25,19 @@ The endpoints are very simple and will only return a simple message stating what
 System Requirements
 -------------------
 
-You need to have JBoss EAP 6.4 or 7 running.
+You need to have WildFly 8, 9 or 10 running.
 
 All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
 
 
-Configuration in RH-SSO
+Configuration in Keycloak
 -----------------------
 
-Prior to running the quickstart you need to create a client in RH-SSO and download the installation file.
+Prior to running the quickstart you need to create a client in Keycloak and download the installation file.
 
 The following steps shows how to create the client required for this quickstart:
 
-* Open the RH-SSO admin console
+* Open the Keycloak admin console
 * Select `Clients` from the menu
 * Click `Create`
 * Add the following values:
@@ -73,15 +73,15 @@ Build and Deploy the Quickstart
 2. The following shows the command to deploy the quickstart:
 
    ````
-   For JBoss EAP 7:   mvn install wildfly:deploy
-   For JBoss EAP 6.4: mvn install -Deap6 jboss-as:deploy
+   For WildFly 9 or 10:   mvn install wildfly:deploy
+   For WildFly 8: mvn install jboss-as:deploy
    ````
 
 If you prefer to secure WARs via Keycloak subsystem:
 
    ````
-   For JBoss EAP 7:   mvn install -Dsubsystem wildfly:deploy
-   For JBoss EAP 6.4: mvn install -Dsubsystem -Deap6 jboss-as:deploy
+   For WildFly 9 or 10:   mvn install -Dsubsystem wildfly:deploy
+   For WildFly 8: mvn install -Dsubsystem jboss-as:deploy
    ````
 
 Access the Quickstart
@@ -108,6 +108,6 @@ Undeploy the Quickstart
 2. The following shows the command to undeploy the quickstart:
 
    ````
-   For JBoss EAP 7:   mvn install wildfly:undeploy
-   For JBoss EAP 6.4: mvn install jboss-as:undeploy
+   For WildFly 9 or 10:   mvn install wildfly:undeploy
+   For WildFly 8: mvn install jboss-as:undeploy
    ````
