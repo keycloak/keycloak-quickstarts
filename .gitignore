@@ -50,3 +50,7 @@ target
 
 /app-html5-war/nbproject/
 /war-app-html5/nbproject/
+
+# Node.js #
+###########
+node_modules
