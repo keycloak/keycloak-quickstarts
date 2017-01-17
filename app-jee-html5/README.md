@@ -4,14 +4,14 @@ app-jee-html5: HTML5 Service Invocation Application
 Level: Beginner  
 Technologies: HTML5, JavaScript  
 Summary: HTML5 Service Invocation Application packaged as a WAR  
-Target Product: RH-SSO, JBoss EAP  
-Source: <https://github.com/keycloak/rh-sso-quickstarts>
+Target Product: Keycloak, WildFly  
+Source: <https://github.com/keycloak/keycloak-quickstarts>
 
 What is it?
 -----------
 
 The `app-jee-html5` quickstart demonstrates how to write an application with HTML5 and JavaScript that authenticates
-using RH-SSO. Once authenticated the application shows how to invoke a service secured with RH-SSO.
+using Keycloak. Once authenticated the application shows how to invoke a service secured with Keycloak.
 
 For simplicity of deploying the application it is packaged as a WAR archive and can be deployed to JBoss EAP.
 As the example only contains static html pages the files in `src/main/webapp` can also be hosted on any web server.
@@ -24,19 +24,19 @@ The quickstart requires that you have the [example services](../service-jee-jaxr
 services are located at `http://localhost:8080/service`. If the services are running elsewhere you need to edit
 `app.js` and replace the value of `serviceUrl`.
 
-If you are deploying the application as a WAR you need to have JBoss EAP 6.4 or 7 running.
+If you are deploying the application as a WAR you need to have WildFly 8,9 or 10 running.
 
 All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
 
 
-Configuration in RH-SSO
+Configuration in Keycloak
 -----------------------
 
-Prior to running the quickstart you need to create a client in RH-SSO and download the installation file.
+Prior to running the quickstart you need to create a client in Keycloak and download the installation file.
 
 The following steps show how to create the client required for this quickstart:
 
-* Open the RH-SSO admin console
+* Open the Keycloak admin console
 * Select `Clients` from the menu
 * Click `Create`
 * Add the following values:
@@ -68,8 +68,8 @@ Build and Deploy the Quickstart
 2. The following shows the command to deploy the quickstart:
 
    ````
-   For JBoss EAP 7:   mvn install wildfly:deploy
-   For JBoss EAP 6.4: mvn install jboss-as:deploy
+   For WildFly 9 or 10:   mvn install wildfly:deploy
+   For WildFly 8: mvn install jboss-as:deploy
    ````
 
 
@@ -95,6 +95,6 @@ Undeploy the Quickstart
 2. The following shows the command to undeploy the quickstart:
 
    ````
-   For JBoss EAP 7:   mvn wildfly:undeploy
-   For JBoss EAP 6.4: mvn jboss-as:undeploy
+   For WildFly 9 or 10:   mvn wildfly:undeploy
+   For WildFly 8: mvn jboss-as:undeploy
    ````
