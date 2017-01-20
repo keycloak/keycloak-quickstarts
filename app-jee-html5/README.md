@@ -24,7 +24,7 @@ The quickstart requires that you have the [example services](../service-jee-jaxr
 services are located at `http://localhost:8080/service`. If the services are running elsewhere you need to edit
 `app.js` and replace the value of `serviceUrl`.
 
-If you are deploying the application as a WAR you need to have WildFly 8,9 or 10 running.
+If you are deploying the application as a WAR you need to have WildFly 10 running.
 
 All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
 
@@ -68,8 +68,8 @@ Build and Deploy the Quickstart
 2. The following shows the command to deploy the quickstart:
 
    ````
-   For WildFly 9 or 10:   mvn install wildfly:deploy
-   For WildFly 8: mvn install jboss-as:deploy
+   mvn install wildfly:deploy
+
    ````
 
 
@@ -95,6 +95,6 @@ Undeploy the Quickstart
 2. The following shows the command to undeploy the quickstart:
 
    ````
-   For WildFly 9 or 10:   mvn wildfly:undeploy
-   For WildFly 8: mvn jboss-as:undeploy
+   mvn wildfly:undeploy
+
    ````

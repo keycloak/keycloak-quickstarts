@@ -7,7 +7,7 @@ that can be used as a reference for your own project.
 Introduction
 ------------
 
-These quickstarts run on WildFly Application Server 8,9 or 10.
+These quickstarts run on WildFly Application Server 10.
 
 Prior to running the quickstarts you should read this entire document and have completed the following steps:
 
@@ -31,16 +31,9 @@ to replace it with the actual path to your installations.
 System Requirements
 -------------------
 
-The applications these projects produce are designed to be run onWildFly Application Server 8,9 or 10.
+The applications these projects produce are designed to be run onWildFly Application Server 10.
 
 All you need to build these projects is Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
-
-
-Maven Repository
-------------------
-
-If you need to build the quickstarts without access to the Red Hat repository then you need the Keycloak maven repository and the
-EAP repository based on the EAP version you're using.
 
 
 <a id="Keycloak"></a>Start the Keycloak Server
@@ -121,7 +114,7 @@ One more step, if you want to access the examples with the admin user you need t
 
 
 
-<a id="jboss-eap"></a>Start and Configure the WildFly Server
+<a id="wildfly"></a>Start and Configure the WildFly Server
 --------------------------------------------------------------
 
 Before starting the WildFly Server start by extracting the Keycloak client adapter into it.

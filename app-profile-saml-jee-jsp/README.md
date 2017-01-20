@@ -18,7 +18,7 @@ authenticates using Keycloak over the SAML protocol. Once authenticated the appl
 System Requirements
 -------------------
 
-If you are deploying the application as a WAR you need to have WildFly 8,9 or 10 running.
+If you are deploying the application as a WAR you need to have WildFly 10 running.
 
 All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
 
@@ -72,15 +72,14 @@ Build and Deploy the Quickstart
 2. The following shows the command to deploy the quickstart:
 
    ````
-   For WildFly 9 or 10:   mvn install wildfly:deploy
-   For WildFly 8: mvn install jboss-as:deploy
+   mvn install wildfly:deploy
    ````
 
 If you prefer to secure WARs via Keycloak SAML subsystem:
 
    ````
-   For WildFly 9 or 10:   mvn install -Dsubsystem wildfly:deploy
-   For WildFly 8: mvn install -Dsubsystem jboss-as:deploy
+   mvn install -Dsubsystem wildfly:deploy
+
    ````
 
 Access the Quickstart
@@ -97,6 +96,5 @@ Undeploy the Quickstart
 2. The following shows the command to undeploy the quickstart:
 
 ````
-For WildFly 9 or 10:   mvn install wildfly:undeploy
-For WildFly 8: mvn install jboss-as:undeploy
+mvn install wildfly:undeploy
 ````
