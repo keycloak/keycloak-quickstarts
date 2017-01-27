@@ -20,7 +20,7 @@
 
     <groupId>org.keycloak.quickstarts</groupId>
     <artifactId>keycloak-quickstart-parent</artifactId>
-    <version>2.5.1.Final-SNAPSHOT</version>
+    <version>3.0.0.CR1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Keycloak Quickstart: parent</name>
     <description>Parent</description>
