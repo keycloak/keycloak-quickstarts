@@ -37,29 +37,28 @@ import java.io.IOException;
 
 
 @RunWith(Arquillian.class)
-public class ArquillianTest extends KeycloakUtilities {
-
+public class ArquillianTest {
 
     @Deployment(testable = false)
     public static Archive<?> createTestArchive() {
          return ShrinkWrap.create(WebArchive.class,  "test-demo.war")
                 .addPackages(true, Filters.exclude(".*Test.*"),Application.class.getPackage())
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-                .addAsWebInfResource(new StringAsset(createClient(generateClientRepresentation())), "keycloak.json")
+                .addAsWebInfResource(new StringAsset(KeycloakUtilities.createClient(generateClientRepresentation())), "keycloak.json")
                 .setWebXML(new File("src/main/webapp", "WEB-INF/web.xml"));
 
     }
 
     @BeforeClass
     public static void setup() {
-        appName = "test-demo";
-        baseUrl = "http://localhost:8080/test-demo";
+        KeycloakUtilities.appName = "test-demo";
+        KeycloakUtilities.baseUrl = "http://localhost:8080/test-demo";
     }
 
     @Test()
     public void testSecuredEndpoint()  {
         try {
-            Assert.assertTrue(returnsForbidden("/secured"));
+            Assert.assertTrue(KeycloakUtilities.returnsForbidden("/secured"));
         } catch (IOException e) {
             Assert.fail();
         }
@@ -68,7 +67,7 @@ public class ArquillianTest extends KeycloakUtilities {
     @Test()
     public void testAdminEndpoint()  {
         try {
-            Assert.assertTrue(returnsForbidden("/admin"));
+            Assert.assertTrue(KeycloakUtilities.returnsForbidden("/admin"));
         } catch (IOException e) {
             Assert.fail();
         }
@@ -77,8 +76,8 @@ public class ArquillianTest extends KeycloakUtilities {
     @Test()
     public void testPublicEndpoint()  {
         try {
-            Assert.assertFalse(returnsForbidden("/public"));
-            System.out.println(getToken("testuser","password","test-realm", "test-dga"));
+            Assert.assertFalse(KeycloakUtilities.returnsForbidden("/public"));
+            System.out.println(KeycloakUtilities.getToken("testuser","password","test-realm", "test-dga"));
         } catch (IOException e) {
             Assert.fail();
         }
@@ -87,7 +86,7 @@ public class ArquillianTest extends KeycloakUtilities {
     @Test()
     public void testSecuredEndpointWithAuth()  {
         try {
-            Assert.assertTrue(testGetWithAuth("/secured",getToken("testuser","password","test-realm", "test-dga")));
+            Assert.assertTrue(KeycloakUtilities.testGetWithAuth("/secured", KeycloakUtilities.getToken("testuser","password","test-realm", "test-dga")));
         } catch (IOException e) {
             Assert.fail();
         }
@@ -96,7 +95,7 @@ public class ArquillianTest extends KeycloakUtilities {
     @Test()
     public void testAdminEndpointWithAuthButNoRole()  {
         try {
-            Assert.assertFalse(testGetWithAuth("/admin",getToken("testuser","password","test-realm", "test-dga")));
+            Assert.assertFalse(KeycloakUtilities.testGetWithAuth("/admin", KeycloakUtilities.getToken("testuser","password","test-realm", "test-dga")));
         } catch (IOException e) {
             Assert.fail();
         }
@@ -105,7 +104,7 @@ public class ArquillianTest extends KeycloakUtilities {
     @Test()
     public void testAdminEndpointWithAuthAndRole()  {
         try {
-            Assert.assertTrue(testGetWithAuth("/admin",getToken("admin","password","test-realm", "test-dga")));
+            Assert.assertTrue(KeycloakUtilities.testGetWithAuth("/admin", KeycloakUtilities.getToken("admin","password","test-realm", "test-dga")));
         } catch (IOException e) {
             Assert.fail();
         }
@@ -114,14 +113,14 @@ public class ArquillianTest extends KeycloakUtilities {
     public static ClientRepresentation generateClientRepresentation() {
         ClientRepresentation clientRepresentation = new ClientRepresentation();
         clientRepresentation.setClientId("test-demo");
-        //clientRepresentation.setBaseUrl(getBaseUrl());
+        clientRepresentation.setBaseUrl(KeycloakUtilities.baseUrl);
         clientRepresentation.setBearerOnly(true);
         return clientRepresentation;
     }
 
     @AfterClass
     public static void cleanUp() {
-        deleteClient(appName);
+        KeycloakUtilities.deleteClient(KeycloakUtilities.appName);
     }
 
 }

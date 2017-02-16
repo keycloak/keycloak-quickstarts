@@ -32,18 +32,19 @@ import org.keycloak.representations.idm.ClientRepresentation;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 
 
 
-public abstract class KeycloakUtilities {
 
-    static class TypedList extends ArrayList<String> {
-    };
+public class KeycloakUtilities {
 
-    protected static String baseUrl;
+    public static String baseUrl;
 
-    protected static String appName;
+    public static String keycloakBaseUrl = "http://localhost:8180/auth";
+
+    public static String testRealm = "test-realm";
+
+    public static String appName;
 
     protected static String clientConfiguration;
 
@@ -51,7 +52,7 @@ public abstract class KeycloakUtilities {
 
     public static String createClient(ClientRepresentation clientRepresentation) {
         ClientRegistration reg = ClientRegistration.create()
-                .url("http://localhost:8180/auth", "test-realm")
+                .url(keycloakBaseUrl, testRealm)
                 .build();
 
         //for now we asssume the realm we are testing against as a white list policy for client registration
@@ -74,7 +75,7 @@ public abstract class KeycloakUtilities {
 
     public static void deleteClient(String clientId) {
         ClientRegistration reg = ClientRegistration.create()
-                .url("http://localhost:8180/auth", "test-realm")
+                .url(keycloakBaseUrl, testRealm)
                 .build();
         try {
             reg.auth(Auth.token(registrationAccessCode));
@@ -85,7 +86,7 @@ public abstract class KeycloakUtilities {
     }
 
 
-    public boolean testGetWithAuth(String endpoint, String token) throws IOException {
+    public static boolean testGetWithAuth(String endpoint, String token) throws IOException {
         CloseableHttpClient client = HttpClientBuilder.create().build();
         ;
         try {
@@ -109,7 +110,7 @@ public abstract class KeycloakUtilities {
         }
     }
 
-    public boolean returnsForbidden(String endpoint) throws IOException {
+    public static boolean returnsForbidden(String endpoint) throws IOException {
         CloseableHttpClient client = HttpClientBuilder.create().build();
         try {
             HttpGet get = new HttpGet(baseUrl + endpoint);
@@ -125,9 +126,9 @@ public abstract class KeycloakUtilities {
         }
     }
 
-    public String getToken(String username, String password, String realm, String clientID) {
+    public static String getToken(String username, String password, String realm, String clientID) {
         Keycloak keycloak = Keycloak.getInstance(
-                "http://localhost:8180/auth",
+                keycloakBaseUrl,
                 realm,
                 username,
                 password,
