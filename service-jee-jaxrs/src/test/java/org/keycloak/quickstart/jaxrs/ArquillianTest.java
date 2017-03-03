@@ -30,6 +30,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.keycloak.helper.TestsHelper;
 import org.keycloak.representations.idm.ClientRepresentation;
 
 import java.io.File;
@@ -40,25 +41,31 @@ import java.io.IOException;
 public class ArquillianTest {
 
     @Deployment(testable = false)
-    public static Archive<?> createTestArchive() {
+    public static Archive<?> createTestArchive() throws IOException{
+        TestsHelper.appName = "test-demo";
+        TestsHelper.baseUrl = "http://localhost:8080/test-demo";
+        TestsHelper.ImportTestRealm("admin","admin");
+        TestsHelper.createTestUser("admin","admin",TestsHelper.testRealm);
+        TestsHelper.createDirectGrantClient();
+
+
          return ShrinkWrap.create(WebArchive.class,  "test-demo.war")
                 .addPackages(true, Filters.exclude(".*Test.*"),Application.class.getPackage())
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-                .addAsWebInfResource(new StringAsset(KeycloakUtilities.createClient(generateClientRepresentation())), "keycloak.json")
+                .addAsWebInfResource(new StringAsset(TestsHelper.createClient(generateClientRepresentation())), "keycloak.json")
                 .setWebXML(new File("src/main/webapp", "WEB-INF/web.xml"));
 
     }
 
     @BeforeClass
-    public static void setup() {
-        KeycloakUtilities.appName = "test-demo";
-        KeycloakUtilities.baseUrl = "http://localhost:8080/test-demo";
+    public static void setup() throws IOException {
+
     }
 
     @Test()
     public void testSecuredEndpoint()  {
         try {
-            Assert.assertTrue(KeycloakUtilities.returnsForbidden("/secured"));
+            Assert.assertTrue(TestsHelper.returnsForbidden("/secured"));
         } catch (IOException e) {
             Assert.fail();
         }
@@ -67,7 +74,7 @@ public class ArquillianTest {
     @Test()
     public void testAdminEndpoint()  {
         try {
-            Assert.assertTrue(KeycloakUtilities.returnsForbidden("/admin"));
+            Assert.assertTrue(TestsHelper.returnsForbidden("/admin"));
         } catch (IOException e) {
             Assert.fail();
         }
@@ -76,8 +83,7 @@ public class ArquillianTest {
     @Test()
     public void testPublicEndpoint()  {
         try {
-            Assert.assertFalse(KeycloakUtilities.returnsForbidden("/public"));
-            System.out.println(KeycloakUtilities.getToken("testuser","password","test-realm", "test-dga"));
+            Assert.assertFalse(TestsHelper.returnsForbidden("/public"));
         } catch (IOException e) {
             Assert.fail();
         }
@@ -86,7 +92,7 @@ public class ArquillianTest {
     @Test()
     public void testSecuredEndpointWithAuth()  {
         try {
-            Assert.assertTrue(KeycloakUtilities.testGetWithAuth("/secured", KeycloakUtilities.getToken("testuser","password","test-realm", "test-dga")));
+            Assert.assertTrue(TestsHelper.testGetWithAuth("/secured", TestsHelper.getToken("testuser","password",TestsHelper.testRealm)));
         } catch (IOException e) {
             Assert.fail();
         }
@@ -95,7 +101,7 @@ public class ArquillianTest {
     @Test()
     public void testAdminEndpointWithAuthButNoRole()  {
         try {
-            Assert.assertFalse(KeycloakUtilities.testGetWithAuth("/admin", KeycloakUtilities.getToken("testuser","password","test-realm", "test-dga")));
+            Assert.assertFalse(TestsHelper.testGetWithAuth("/admin", TestsHelper.getToken("testuser","password",TestsHelper.testRealm)));
         } catch (IOException e) {
             Assert.fail();
         }
@@ -104,7 +110,7 @@ public class ArquillianTest {
     @Test()
     public void testAdminEndpointWithAuthAndRole()  {
         try {
-            Assert.assertTrue(KeycloakUtilities.testGetWithAuth("/admin", KeycloakUtilities.getToken("admin","password","test-realm", "test-dga")));
+            Assert.assertTrue(TestsHelper.testGetWithAuth("/admin", TestsHelper.getToken("admin","password",TestsHelper.testRealm)));
         } catch (IOException e) {
             Assert.fail();
         }
@@ -113,14 +119,15 @@ public class ArquillianTest {
     public static ClientRepresentation generateClientRepresentation() {
         ClientRepresentation clientRepresentation = new ClientRepresentation();
         clientRepresentation.setClientId("test-demo");
-        clientRepresentation.setBaseUrl(KeycloakUtilities.baseUrl);
+        clientRepresentation.setBaseUrl(TestsHelper.baseUrl);
         clientRepresentation.setBearerOnly(true);
         return clientRepresentation;
     }
 
     @AfterClass
     public static void cleanUp() {
-        KeycloakUtilities.deleteClient(KeycloakUtilities.appName);
+        //TestsHelper.deleteClient(TestsHelper.appName);
+        //TestsHelper.deleteRealm(TestsHelper.appName);
     }
 
 }
