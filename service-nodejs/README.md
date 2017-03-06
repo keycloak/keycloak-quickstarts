@@ -4,14 +4,14 @@ service-nodejs: Node.js Service
 Level: Beginner
 Technologies: Node.js
 Summary: Node.js Service
-Target Product: RH-SSO, JBoss EAP
+Target Product: Keycloak, WildFly
 Source: <https://github.com/keycloak/rh-sso-quickstarts>
 
 
 What is it?
 -----------
 
-The `service-nodejs` quickstart demonstrates how to write a RESTful service with Node.js that is secured with RH-SSO.
+The `service-nodejs` quickstart demonstrates how to write a RESTful service with Node.js that is secured with Keycloak.
 
 There are 3 endpoints exposed by the service:
 
@@ -27,14 +27,20 @@ System Requirements
 
 All you need to build this project is Node.js 4.0.0 or later.
 
-Configuration in RH-SSO
+Configuration in Keycloak
 -----------------------
 
-Prior to running the quickstart you need to create a client in RH-SSO and download the installation file.
+Prior to running the quickstart you need to import the *quickstart* realm.Clicking on the below link will bring you to the create realm page in the Admin UI.
+
+[http://localhost:8180/auth/admin/master/console/#/create/realm](http://localhost:8180/auth/admin/master/console/#/create/realm)
+
+Import the quickstart-realm.json file that is in the *keycloak-quickstarts/* directory.
+
+Next thing you have to do is create a client in Keycloak and download the installation file.
 
 The following steps shows how to create the client required for this quickstart:
 
-* Open the RH-SSO admin console
+* Open the Keycloak admin console
 * Select `Clients` from the menu
 * Click `Create`
 * Add the following values:

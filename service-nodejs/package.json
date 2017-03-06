@@ -13,6 +13,21 @@
     "cors": "^2.8.1"
   },
   "devDependencies": {
-    "nsp": "^2.6.2"
+    "keycloak-request-token": "^0.1.0",
+    "keycloak-client-registration":"^0.1.0",
+    "coveralls": "^2.11.9",
+    "eslint": "^3.3.1",
+    "eslint-config-semistandard": "^7.0.0-beta.0",
+    "eslint-config-standard": "^6.0.0",
+    "eslint-plugin-promise": "^3.3.0",
+    "eslint-plugin-react": "^6.1.2",
+    "eslint-plugin-standard": "^2.0.0",
+    "ink-docstrap": "^1.1.4",
+    "istanbul": "^0.4.3",
+    "jsdoc": "^3.4.0",
+    "jshint": "^2.9.1",
+    "nsp": "^2.3.0",
+    "tape": "^4.5.1",
+    "roi": "^0.15.0"
   }
 }
