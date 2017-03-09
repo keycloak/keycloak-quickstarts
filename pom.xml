@@ -34,7 +34,7 @@
     </licenses>
 
     <properties>
-        <version.wildfly.maven.plugin>10.1.0.Final</version.wildfly.maven.plugin>
+        <version.wildfly.maven.plugin>1.0.1.Final</version.wildfly.maven.plugin>
         <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
         <version.war.maven.plugin>2.6</version.war.maven.plugin>
         <version.wildfly>10.1.0.Final</version.wildfly>
