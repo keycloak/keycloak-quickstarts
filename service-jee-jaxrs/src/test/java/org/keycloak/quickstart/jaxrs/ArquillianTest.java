@@ -44,6 +44,7 @@ public class ArquillianTest {
     public static Archive<?> createTestArchive() throws IOException{
         TestsHelper.appName = "test-demo";
         TestsHelper.baseUrl = "http://localhost:8080/test-demo";
+        //TestsHelper.keycloakBaseUrl  = "set keycloak server docker IP"
         TestsHelper.ImportTestRealm("admin","admin","/quickstart-realm.json");
         TestsHelper.createDirectGrantClient();
          return ShrinkWrap.create(WebArchive.class,  "test-demo.war")

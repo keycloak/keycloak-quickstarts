@@ -34,10 +34,30 @@
     </licenses>
 
     <properties>
-        <version.wildfly.maven.plugin>1.0.1.Final</version.wildfly.maven.plugin>
+        <version.wildfly.maven.plugin>10.1.0.Final</version.wildfly.maven.plugin>
         <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
         <version.war.maven.plugin>2.6</version.war.maven.plugin>
+        <version.wildfly>10.1.0.Final</version.wildfly>
     </properties>
+
+  <dependencyManagement>
+      <dependencies>
+          <dependency>
+              <groupId>org.keycloak.bom</groupId>
+              <artifactId>keycloak-adapter-bom</artifactId>
+              <version>3.0.0.CR1-SNAPSHOT</version>
+              <type>pom</type>
+              <scope>import</scope>
+          </dependency>
+          <dependency>
+              <groupId>org.wildfly.bom</groupId>
+              <artifactId>wildfly-javaee7</artifactId>
+              <scope>import</scope>
+              <type>pom</type>
+              <version>10.0.1.Final</version>
+          </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <modules>
         <module>app-jee-html5</module>
@@ -71,4 +91,105 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <profiles>
+      <profile>
+     <!-- Run with: mvn clean test -Pwildfly-managed-->
+     <id>wildfly-managed</id>
+     <dependencies>
+         <dependency>
+             <groupId>org.wildfly.arquillian</groupId>
+             <artifactId>wildfly-arquillian-container-managed</artifactId>
+             <version>2.0.2.Final</version>
+             <scope>test</scope>
+         </dependency>
+         <dependency>
+             <groupId>org.jboss.arquillian.junit</groupId>
+             <artifactId>arquillian-junit-container</artifactId>
+             <version>1.1.11.Final</version>
+             <scope>test</scope>
+         </dependency>
+         <dependency>
+             <groupId>junit</groupId>
+             <artifactId>junit</artifactId>
+             <version>4.12</version>
+             <scope>test</scope>
+         </dependency>
+         <dependency>
+             <groupId>org.keycloak</groupId>
+             <artifactId>keycloak-test-helper</artifactId>
+             <version>3.0.0.CR1-SNAPSHOT</version>
+             <scope>test</scope>
+         </dependency>
+
+     </dependencies>
+     <build>
+         <testResources>
+             <testResource>
+                 <directory>src/test/resources</directory>
+                 <filtering>true</filtering>
+             </testResource>
+         </testResources>
+         <plugins>
+             <plugin>
+                 <artifactId>maven-surefire-plugin</artifactId>
+                 <version>2.17</version>
+                 <configuration>
+                     <redirectTestOutputToFile>false</redirectTestOutputToFile>
+                 </configuration>
+             </plugin>
+
+             <plugin>
+                 <artifactId>maven-dependency-plugin</artifactId>
+                 <executions>
+                     <execution>
+                         <id>unpack-wildfly-and-oidc-adapter</id>
+                         <phase>process-test-classes</phase>
+                         <goals>
+                             <goal>unpack</goal>
+                         </goals>
+                         <configuration>
+                             <artifactItems>
+                                 <artifactItem>
+                                     <groupId>org.wildfly</groupId>
+                                     <artifactId>wildfly-dist</artifactId>
+                                     <version>${version.wildfly}</version>
+                                     <type>zip</type>
+                                     <outputDirectory>target</outputDirectory>
+                                 </artifactItem>
+                                 <artifactItem>
+                                     <groupId>org.keycloak</groupId>
+                                     <artifactId>keycloak-wildfly-adapter-dist</artifactId>
+                                     <version>3.0.0.CR1-SNAPSHOT</version>																						<type>zip</type>
+                                     <outputDirectory>target/wildfly-${version.wildfly}</outputDirectory>
+                                 </artifactItem>
+                             </artifactItems>
+                         </configuration>
+                     </execution>
+                 </executions>
+             </plugin>
+             <plugin>
+                 <groupId>org.codehaus.mojo</groupId>
+                 <artifactId>exec-maven-plugin</artifactId>
+                 <executions>
+                     <execution>
+                         <id>install-adapters</id>
+                         <phase>process-test-classes</phase>
+                         <goals>
+                             <goal>exec</goal>
+                         </goals>
+                         <configuration>
+                             <executable>./jboss-cli.sh</executable>
+                             <workingDirectory>target/wildfly-${version.wildfly}/bin</workingDirectory>
+                             <arguments>
+                                 <argument>--file=adapter-install-offline.cli</argument>
+                             </arguments>
+                         </configuration>
+                     </execution>
+                 </executions>
+             </plugin>
+         </plugins>
+     </build>
+ </profile>
+ </profiles>
 </project>
