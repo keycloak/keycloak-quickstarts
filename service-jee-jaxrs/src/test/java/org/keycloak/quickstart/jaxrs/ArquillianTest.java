@@ -44,11 +44,8 @@ public class ArquillianTest {
     public static Archive<?> createTestArchive() throws IOException{
         TestsHelper.appName = "test-demo";
         TestsHelper.baseUrl = "http://localhost:8080/test-demo";
-        TestsHelper.ImportTestRealm("admin","admin");
-        TestsHelper.createTestUser("admin","admin",TestsHelper.testRealm);
+        TestsHelper.ImportTestRealm("admin","admin","/quickstart-realm.json");
         TestsHelper.createDirectGrantClient();
-
-
          return ShrinkWrap.create(WebArchive.class,  "test-demo.war")
                 .addPackages(true, Filters.exclude(".*Test.*"),Application.class.getPackage())
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
@@ -92,7 +89,7 @@ public class ArquillianTest {
     @Test()
     public void testSecuredEndpointWithAuth()  {
         try {
-            Assert.assertTrue(TestsHelper.testGetWithAuth("/secured", TestsHelper.getToken("testuser","password",TestsHelper.testRealm)));
+            Assert.assertTrue(TestsHelper.testGetWithAuth("/secured", TestsHelper.getToken("alice","password",TestsHelper.testRealm)));
         } catch (IOException e) {
             Assert.fail();
         }
@@ -101,7 +98,7 @@ public class ArquillianTest {
     @Test()
     public void testAdminEndpointWithAuthButNoRole()  {
         try {
-            Assert.assertFalse(TestsHelper.testGetWithAuth("/admin", TestsHelper.getToken("testuser","password",TestsHelper.testRealm)));
+            Assert.assertFalse(TestsHelper.testGetWithAuth("/admin", TestsHelper.getToken("alice","password",TestsHelper.testRealm)));
         } catch (IOException e) {
             Assert.fail();
         }
@@ -110,7 +107,7 @@ public class ArquillianTest {
     @Test()
     public void testAdminEndpointWithAuthAndRole()  {
         try {
-            Assert.assertTrue(TestsHelper.testGetWithAuth("/admin", TestsHelper.getToken("admin","password",TestsHelper.testRealm)));
+            Assert.assertTrue(TestsHelper.testGetWithAuth("/admin", TestsHelper.getToken("test-admin","password",TestsHelper.testRealm)));
         } catch (IOException e) {
             Assert.fail();
         }
@@ -125,9 +122,8 @@ public class ArquillianTest {
     }
 
     @AfterClass
-    public static void cleanUp() {
-        //TestsHelper.deleteClient(TestsHelper.appName);
-        //TestsHelper.deleteRealm(TestsHelper.appName);
+    public static void cleanUp() throws IOException{
+        TestsHelper.deleteRealm("admin","admin",TestsHelper.testRealm);
     }
 
 }
