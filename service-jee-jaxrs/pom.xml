@@ -101,6 +101,8 @@
                                         <requireFilesExist>
                                             <files>
                                                 <file>${basedir}/config/keycloak.json</file>
+                                                <file>${basedir}/src/test/resources/quickstart-realm.json</file>
+
                                             </files>
                                         </requireFilesExist>
                                     </rules>
