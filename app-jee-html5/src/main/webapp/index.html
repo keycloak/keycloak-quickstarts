@@ -26,21 +26,21 @@
     <script src="app.js"></script>
 </head>
 
-<body style="display: none;">
+<body>
     <div class="wrapper">
         <div id="not-authenticated" class="menu">
-            <button onclick="keycloak.login()">Login</button>
+            <button name="loginBtn" onclick="keycloak.login()">Login</button>
         </div>
 
         <div id="authenticated" class="menu">
-            <button onclick="keycloak.logout()">Logout</button>
-            <button onclick="keycloak.accountManagement()">Account</button>
+            <button name="logoutBtn" onclick="keycloak.logout()">Logout</button>
+            <button name="accountBtn" onclick="keycloak.accountManagement()">Account</button>
         </div>
 
         <div class="content">
-            <button onclick="request('public')">Invoke Public</button>
-            <button onclick="request('secured')">Invoke Secured</button>
-            <button onclick="request('admin')">Invoke Admin</button>
+            <button name="publicBtn" onclick="request('public')">Invoke Public</button>
+            <button name="securedBtn" onclick="request('secured')">Invoke Secured</button>
+            <button name="adminBtn" onclick="request('admin')">Invoke Admin</button>
 
             <div class="message" id="message"></div>
         </div>

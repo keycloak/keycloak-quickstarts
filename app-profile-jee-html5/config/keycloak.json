@@ -1,0 +1,6 @@
+{
+  "realm": "master",
+  "auth-server-url": "http://127.0.0.1:8180/auth",
+  "resource": "app-profile-html5",
+  "public-client": true
+}

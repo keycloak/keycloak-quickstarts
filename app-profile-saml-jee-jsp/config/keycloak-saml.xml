@@ -1,0 +1,40 @@
+<keycloak-saml-adapter>
+    <SP entityID="app-profile-saml"
+        sslPolicy="EXTERNAL"
+        logoutPage="/index.jsp">
+        <Keys>
+            <Key signing="true">
+                <PrivateKeyPem>
+                    MIIEogIBAAKCAQEAimkMCig7fJLPXuQs+hA81k4O5x6JWjvFbNn5D+K7mzte5dVyEqIW0bdoeVFJMo+7Rj/eUa7EPIT2+g+rqnpsp4yB0gN00+Jy+uZBfLipgcgWQCecUnuRB5pqwO9u5wK2cbKWPR1szhSyf/tE9rZnzl5ie32ggxryvY5SuXyVrTp2i8nCGfkiYXLb8DJhUufJhX4FiMVuf8tBfpLbidd4TNi0z9GdbdM9KBHURaLGKk2d6Y1ij1hpBFlYLfKl1IuVS2SIjm7qRH1I0El4gj7Qa7k0UnsM2Lf05HRo2PpWVrWSlaiHetWhsuGIoXNQhfdOWeMUEN60D+1/VDU2GGJkewIDAQABAoIBABtiKRWhXBOLYCef8R4QNFkZ3GzxZ69IgAjHHzV7YC6YEnBaSFVTaDxZkvvdjyPHt/9wB2YVs5FdpRdYHlh+HB0R+WU5ddWtyZ3GDFLGnhKlKXHL5GuVMt5UOKavODvQF5RrBrpUpgAnrCER71T4RZVYqxdPhYAqxrel/svf0CUTT3RhfrksPvNwAnJRuX5VaXx/XLlY1wtG5Z9SZBHgQx9iUlYJx+65h2d/ZEhb5E6K4rmI5NO3isj0V3V7iKNrBdOoO61WO2FCDXqNdwqKlZ1VKzZu4gCddk7h97SMGpK93FquNJPTZi5g1I5uIuacdRTHT3Nktq2FrWXuVaHzf3ECgYEAwztLvQjX0Ch6mLPt4uwWDBo4OXCpeY4SvabTyGp07Dz6BC5toi0gqbtFiYNi7lw6L7bBbrfco0lRgt/pZbTG5VpyX+oO67aFDikejAWZdJhhh3rYikgQ09TpTrxVb84IkIrQV/ZsRB1iRg80aH4JLUdejNxPSHJO1tQjbJvcDTcCgYEAtX4K5Aq2x8jEBb8MTmIaNCkxUYJ/iZ0jjIaZN8MYXn/8qrM8nNPC16PJ93G66eHBvpZkhs25AhkHbiBeWDFi+Drn03mmn8EUA5hNNRDFvFXp2TwM9fVlo9Z6WPdpLDachReMbEnZ/CHbSbGV3zXeBjI3/v9oApLA6l+x1xCK5N0CgYBEjfzRe1p1ENHD72K4TViMlWRq3yHTukzgZcV2WdOG5P6SG0+KJDiVAVqwp/9EXgRcntsbqtqCSAukXkYR3cH95Z3GCmWE5cmhKFU+q/Sv2ZZdwYhqPlYSXHA0orOJmBqvzt7MFI79+Cd7HHm1u5QzXx1Xb0Ez2lfO3h02VSCXTwKBgA7/o5bE6+YGyWxQJYw0v0WgQdsilbehrNZoKTFahiEJIrBYr6GmPmvjtUUluPSrG3/MnfIl/iwWNW78bc+MBUnOVGo9m2+IXUcOxxKjmDPARdsWA1wwM34es222xJJK0RSOpaQtVj5n7d9hNamEohyQ+d+w67+KsTatQd0sGM5hAoGACuQTDOgaNxTPc7nMR8XLWp6Qt5R701+O1BUh0O4FxhIb69MWTroavmDmIY9qz6jbhJOfhyNSu1urj0xE0KK8Ul2M//B7hqNJGWLsZ74HWR3avZZ7IrQCO/tWfqzjcgMdfjFUS8C689vEBCKDhG54EcjXQH3Eyd5yUrC8l9Br/3E=
+                </PrivateKeyPem>
+                <CertificatePem>
+                    MIICrzCCAZcCBgFVFfSKAjANBgkqhkiG9w0BAQsFADAbMRkwFwYDVQQDDBBhcHAtcHJvZmlsZS1zYW1sMB4XDTE2MDYwMzExMDgxNVoXDTI2MDYwMzExMDk1NVowGzEZMBcGA1UEAwwQYXBwLXByb2ZpbGUtc2FtbDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAIppDAooO3ySz17kLPoQPNZODuceiVo7xWzZ+Q/iu5s7XuXVchKiFtG3aHlRSTKPu0Y/3lGuxDyE9voPq6p6bKeMgdIDdNPicvrmQXy4qYHIFkAnnFJ7kQeaasDvbucCtnGylj0dbM4Usn/7RPa2Z85eYnt9oIMa8r2OUrl8la06dovJwhn5ImFy2/AyYVLnyYV+BYjFbn/LQX6S24nXeEzYtM/RnW3TPSgR1EWixipNnemNYo9YaQRZWC3ypdSLlUtkiI5u6kR9SNBJeII+0Gu5NFJ7DNi39OR0aNj6Vla1kpWoh3rVobLhiKFzUIX3TlnjFBDetA/tf1Q1NhhiZHsCAwEAATANBgkqhkiG9w0BAQsFAAOCAQEANYGFp9V0iOZgqK6HDBeEuM2S92hPvWHHOaPiU1fFN8tZLEuOz9ejB8XxKOuOC1iAOYzDKr+e6TWaS0PJgcJqyh9DRs5zxdcT6mcrAso9XyL33jSY2vZHMos+0m4ciSwNR+P73azNcuu3qZZNlixn30pgiajnHp2/E3kAE+uT8sPw8OGThW1RYFi3hcwQK0G7U4r0GdpPzDUaWD/6J9AJZQ+kxyk79bcZRGftWsgd4A/3CVRUDutz6BNTJzGOEHWxNcbRWiqPqi5XyJd/jVRXPAAN+3CWICp/KDMsWQwG1OQbEhRRh0AscSMhrRpf3c8wY05giqliJbFZG14Af5lJpg==
+                </CertificatePem>
+            </Key>
+        </Keys>
+        <IDP entityID="idp"
+             signatureAlgorithm="RSA_SHA256"
+             signatureCanonicalizationMethod="http://www.w3.org/2001/10/xml-exc-c14n#">
+            <SingleSignOnService signRequest="true"
+                                 validateResponseSignature="true"
+                                 validateAssertionSignature="false"
+                                 requestBinding="POST"
+                                 bindingUrl="http://localhost:8180/auth/realms/master/protocol/saml"/>
+            <SingleLogoutService signRequest="true"
+                                 signResponse="true"
+                                 validateRequestSignature="true"
+                                 validateResponseSignature="true"
+                                 requestBinding="POST"
+                                 responseBinding="POST"
+                                 postBindingUrl="http://localhost:8180/auth/realms/master/protocol/saml"
+                                 redirectBindingUrl="http://localhost:8180/auth/realms/master/protocol/saml"/>
+            <Keys>
+                <Key signing="true">
+                    <CertificatePem>
+                        REPLACE WITH REALM CERTIFICATE
+                    </CertificatePem>
+                </Key>
+            </Keys>
+        </IDP>
+    </SP>
+</keycloak-saml-adapter>

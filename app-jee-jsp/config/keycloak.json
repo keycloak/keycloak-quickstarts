@@ -1,0 +1,26 @@
+{
+  "realm" : "master",
+  "auth-server-url" : "http://127.0.0.1:8180/auth",
+  "ssl-required" : "external",
+  "resource" : "app-jsp",
+  "public-client" : false,
+  "credentials" : {
+    "secret" : "d2f4cf11-3be3-44cb-9011-dfa89595bd86"
+  },
+  "use-resource-role-mappings" : false,
+  "enable-cors" : false,
+  "cors-max-age" : -1,
+  "expose-token" : false,
+  "bearer-only" : false,
+  "autodetect-bearer-only" : false,
+  "connection-pool-size" : 20,
+  "allow-any-hostname" : false,
+  "disable-trust-manager" : false,
+  "always-refresh-token" : false,
+  "register-node-at-startup" : false,
+  "register-node-period" : -1,
+  "token-minimum-time-to-live" : 0,
+  "min-time-between-jwks-requests" : 10,
+  "public-key-cache-ttl" : 86400,
+  "enable-basic-auth" : false
+}
