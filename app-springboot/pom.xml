@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>org.keycloak.quickstarts</groupId>
+        <artifactId>keycloak-quickstart-parent</artifactId>
+        <version>3.1.0.CR1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.keycloak.quickstarts</groupId>
-    <version>3.0.0.CR1-SNAPSHOT</version>
     <artifactId>app-springboot</artifactId>
     <name>Spring Boot Keycloak Sample</name>
     <description>Spring Boot Keycloak Sample</description>
@@ -15,7 +19,7 @@
             <dependency>
                 <groupId>org.keycloak.bom</groupId>
                 <artifactId>keycloak-adapter-bom</artifactId>
-                <version>3.0.0.CR1-SNAPSHOT</version>
+                <version>3.1.0.CR1-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -63,7 +67,7 @@
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-spring-security-adapter</artifactId>
             <!-- to remove after I will be added to the bom -->
-            <version>3.0.0.CR1-SNAPSHOT</version>
+            <version>3.1.0.CR1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>net.rossillo.mvc.cache</groupId>

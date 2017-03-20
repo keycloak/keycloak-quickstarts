@@ -19,13 +19,11 @@
     <parent>
         <groupId>org.keycloak.quickstarts</groupId>
         <artifactId>keycloak-quickstart-parent</artifactId>
-        <version>3.0.0.CR1-SNAPSHOT</version>
+        <version>3.1.0.CR1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.keycloak.quickstarts</groupId>
     <artifactId>keycloak-service-jee-jaxrs</artifactId>
-    <version>3.0.0.CR1-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Keycloak Quickstart: service-jee-jaxrs</name>
     <description>JAX-RS Service</description>
