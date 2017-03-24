@@ -55,7 +55,6 @@
             <version>${version.client.registration}</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
     <build>

@@ -120,7 +120,8 @@ public final class WaitUtils {
         waitUntilElementIsNotPresent(driver, By.className("modal-backdrop"));
     }
 
-    public static void waitTextToBePresent(WebDriver driver, By locator, String value) {
-        new WebDriverWait(driver, 10).until(ExpectedConditions.textToBePresentInElementLocated(locator, value));
+    public static Boolean waitTextToBePresent(WebDriver driver, By locator, String value) {
+        WebDriverWait wait = new WebDriverWait(driver, 5);
+        return wait.until(ExpectedConditions.textToBePresentInElementLocated(locator, value));
     }
 }
