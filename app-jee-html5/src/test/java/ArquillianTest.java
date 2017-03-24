@@ -108,6 +108,7 @@ public class ArquillianTest {
             indexPage.clickAdmin();
             waitTextToBePresent(webDriver, By.id("message"), "User: admin");
             assertTrue(indexPage.getMessage().contains("admin"));
+            indexPage.clickLogout();
         } catch (Exception e) {
             fail("Should display logged in user");
         }

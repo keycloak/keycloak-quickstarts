@@ -20,6 +20,9 @@ public class IndexPage {
     @FindBy(name = "loginBtn")
     private WebElement loginButton;
 
+    @FindBy(name = "logoutBtn")
+    private WebElement logoutButton;
+
     @FindBy(name = "adminBtn")
     private WebElement adminButton;
 
@@ -32,8 +35,14 @@ public class IndexPage {
     @FindBy(id = "message")
     private WebElement message;
 
+
+
     public void clickLogin() {
         loginButton.click();
+    }
+
+    public void clickLogout() {
+        logoutButton.click();
     }
 
     public void clickAdmin() {
