@@ -9,7 +9,9 @@ import org.jboss.arquillian.graphene.page.Page;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.Archive;
+import org.jboss.shrinkwrap.api.Filters;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,6 +19,7 @@ import org.junit.runner.RunWith;
 import org.keycloak.quickstart.page.IndexPage;
 import org.keycloak.quickstart.page.LoginPage;
 import org.keycloak.quickstart.page.ProfilePage;
+import org.keycloak.quickstart.profilejee.Controller;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -29,7 +32,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.keycloak.quickstart.utils.WaitUtils.waitForPageToLoad;
 import static org.keycloak.quickstart.utils.WaitUtils.waitTextToBePresent;
 
 /**
@@ -56,22 +58,23 @@ public class ArquillianTest {
                 new File("../service-jee-jaxrs/target/service.war"));
     }
 
-    @Deployment(name = "app-profile-html5", order = 2, testable = false)
+    @Deployment(name = "app-profile-jsp", order = 2, testable = false)
     public static Archive<?> createTestArchive2() throws IOException {
-        return ShrinkWrap.create(WebArchive.class, "app-profile-html5.war")
-                .addAsWebResource(new File(WEBAPP_SRC, "app.js"))
-                .addAsWebResource(new File(WEBAPP_SRC, "index.html"))
-                .addAsWebResource(new File(WEBAPP_SRC, "keycloak.js"))
+        return ShrinkWrap.create(WebArchive.class, "app-profile-jsp.war")
+                .addPackages(true, Filters.exclude(".*Test.*"), Controller.class.getPackage())
+                .addAsWebResource(new File(WEBAPP_SRC, "index.jsp"))
+                .addAsWebResource(new File(WEBAPP_SRC, "profile.jsp"))
                 .addAsWebResource(new File(WEBAPP_SRC, "styles.css"))
-                .addAsWebResource(new File("config", "keycloak.json"));
-
+                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
+                .addAsWebInfResource(new File("config", "keycloak.json"))
+                .setWebXML(new File("src/main/webapp", "WEB-INF/web.xml"));
     }
 
     @Drone
     private WebDriver webDriver;
 
     @ArquillianResource
-    @OperateOnDeployment("app-profile-html5")
+    @OperateOnDeployment("app-profile-jsp")
     private URL contextRoot;
 
     @Before
@@ -83,9 +86,7 @@ public class ArquillianTest {
     public void testLogin() throws InterruptedException {
         try {
             indexPage.clickLogin();
-            waitForPageToLoad(webDriver);
             loginPage.login("admin", "admin");
-            waitForPageToLoad(webDriver);
             assertTrue(waitTextToBePresent(webDriver, By.id("username"), "admin"));
             profilePage.clickLogout();
         } catch (Exception e) {
@@ -97,13 +98,11 @@ public class ArquillianTest {
     public void testProfileMenu() {
         try {
             indexPage.clickLogin();
-            waitForPageToLoad(webDriver);
             loginPage.login("admin", "admin");
-            waitForPageToLoad(webDriver);
             profilePage.clickToken();
             JsonObject json = profilePage.getTokenContent();
             assertNotNull("JSON content should not be empty", json);
-            assertEquals(json.get("aud").getAsString(), "app-profile-html5");
+            assertEquals(json.get("aud").getAsString(), "app-profile-jsp");
             assertFalse(json.get("session_state").isJsonNull());
             webDriver.navigate().to(contextRoot);
             profilePage.clickLogout();
@@ -116,9 +115,7 @@ public class ArquillianTest {
     public void testAccessAccountManagement() {
         try {
             indexPage.clickLogin();
-            waitForPageToLoad(webDriver);
             loginPage.login("admin", "admin");
-            waitForPageToLoad(webDriver);
             profilePage.clickAccount();
             assertEquals("Keycloak Account Management", webDriver.getTitle());
             webDriver.navigate().to(contextRoot);

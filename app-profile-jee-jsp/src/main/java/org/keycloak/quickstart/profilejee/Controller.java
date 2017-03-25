@@ -16,10 +16,6 @@
  */
 package org.keycloak.quickstart.profilejee;
 
-import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -30,6 +26,10 @@ import org.keycloak.common.util.KeycloakUriBuilder;
 import org.keycloak.constants.ServiceUrlConstants;
 import org.keycloak.representations.AccessToken;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+
 /**
  * Controller simplifies access to the server environment from the JSP.
  *
@@ -38,6 +38,7 @@ import org.keycloak.representations.AccessToken;
 public class Controller {
 
     private static final ObjectMapper mapper = new ObjectMapper();
+
     static {
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
         mapper.setSerializationInclusion(Include.NON_NULL);
