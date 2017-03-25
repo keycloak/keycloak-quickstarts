@@ -34,6 +34,7 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.not;
 import static org.openqa.selenium.support.ui.ExpectedConditions.urlContains;
 
 /**
+ *
  * @author Petr Mensik
  * @author tkyjovsk
  * @author Vaclav Muzikar <vmuzikar@redhat.com>
@@ -101,9 +102,9 @@ public final class WaitUtils {
             // in progress
             wait.until(javaScriptThrowsNoExceptions(
                     "if (document.readyState !== 'complete' "
-                            + "|| (typeof angular !== 'undefined' && angular.element(document.body).injector().get('$http').pendingRequests.length !== 0)) {"
-                            + "throw \"Not ready\";"
-                            + "}"));
+                    + "|| (typeof angular !== 'undefined' && angular.element(document.body).injector().get('$http').pendingRequests.length !== 0)) {"
+                    + "throw \"Not ready\";"
+                    + "}"));
         } catch (TimeoutException e) {
             // Sometimes, for no obvious reason, the browser/JS doesn't set document.readyState to 'complete' correctly
             // but that's no reason to let the test fail; after the timeout the page is surely fully loaded

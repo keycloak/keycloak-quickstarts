@@ -1,3 +1,5 @@
+package org.keycloak.quickstart;
+
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
@@ -6,11 +8,18 @@ import org.jboss.arquillian.graphene.page.Page;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.Archive;
+import org.jboss.shrinkwrap.api.Filters;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.asset.EmptyAsset;
+import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.keycloak.helper.TestsHelper;
+import org.keycloak.quickstart.appjee.Controller;
 import org.keycloak.quickstart.page.IndexPage;
 import org.keycloak.quickstart.page.LoginPage;
 import org.openqa.selenium.By;
@@ -21,6 +30,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.keycloak.quickstart.page.IndexPage.MESSAGE_PUBLIC;
@@ -43,28 +53,33 @@ public class ArquillianTest {
     @Page
     private LoginPage loginPage;
 
-    @Deployment(name = "service-jee-jaxrs", order = 1, testable = false)
+    @Deployment(name= "service-jee-jaxrs", order = 1, testable = false)
     public static Archive<?> createTestArchive1() throws IOException {
         return ShrinkWrap.createFromZipFile(WebArchive.class,
                 new File("../service-jee-jaxrs/target/service.war"));
     }
 
-    @Deployment(name = "app-html5", order = 2, testable = false)
+    @Deployment(name= "app-jsp", order = 2, testable = false)
     public static Archive<?> createTestArchive2() throws IOException {
-        return ShrinkWrap.create(WebArchive.class, "app-html5.war")
-                .addAsWebResource(new File(WEBAPP_SRC, "app.js"))
-                .addAsWebResource(new File(WEBAPP_SRC, "index.html"))
-                .addAsWebResource(new File(WEBAPP_SRC, "keycloak.js"))
-                .addAsWebResource(new File(WEBAPP_SRC, "styles.css"))
-                .addAsWebResource(new File("config", "keycloak.json"));
+        File[] files = Maven.resolver().loadPomFromFile("pom.xml")
+                    .importRuntimeDependencies().resolve().withTransitivity().asFile();
 
+        return ShrinkWrap.create(WebArchive.class,  "app-jsp.war")
+                .addPackages(true, Filters.exclude(".*Test.*"), Controller.class.getPackage())
+                .addAsLibraries(files)
+                .addAsWebResource(new File(WEBAPP_SRC, "index.jsp"))
+                .addAsWebResource(new File(WEBAPP_SRC, "protected.jsp"))
+                .addAsWebResource(new File(WEBAPP_SRC, "styles.css"))
+                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
+                .addAsWebInfResource(new File("config", "keycloak.json"))
+                .setWebXML(new File("src/main/webapp", "WEB-INF/web.xml"));
     }
 
     @Drone
     private WebDriver webDriver;
 
     @ArquillianResource
-    @OperateOnDeployment("app-html5")
+    @OperateOnDeployment("app-jsp")
     private URL contextRoot;
 
     @Before
@@ -106,9 +121,7 @@ public class ArquillianTest {
     public void testAdminWithAuthAndRole() throws MalformedURLException, InterruptedException {
         try {
             indexPage.clickLogin();
-            waitForPageToLoad(webDriver);
             loginPage.login("admin", "admin");
-            waitForPageToLoad(webDriver);
             indexPage.clickAdmin();
             assertTrue(waitTextToBePresent(webDriver, By.id("message"), "Message: admin"));
             indexPage.clickLogout();
@@ -121,9 +134,7 @@ public class ArquillianTest {
     public void testUserWithAuthAndRole() throws MalformedURLException, InterruptedException {
         try {
             indexPage.clickLogin();
-            waitForPageToLoad(webDriver);
             loginPage.login("user", "user");
-            waitForPageToLoad(webDriver);
             indexPage.clickSecured();
             assertTrue(waitTextToBePresent(webDriver, By.id("message"), "Message: secured"));
             indexPage.clickLogout();
