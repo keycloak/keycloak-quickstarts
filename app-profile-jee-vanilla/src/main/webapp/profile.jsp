@@ -29,7 +29,7 @@ limitations under the License.
 
 <div class="wrapper" id="profile">
     <div class="menu">
-        <button onclick="location.href = 'index.jsp?logout=true'" type="button">Logout</button>
+        <button name="logoutBtn" onclick="location.href = 'index.jsp?logout=true'" type="button">Logout</button>
     </div>
 
     <div class="content">
@@ -37,7 +37,6 @@ limitations under the License.
             <table cellpadding="0" cellspacing="0">
                 <tr>
                     <td class="label" colspan="2">You are logged in!</td>
-
                 </tr>
                 <tr>
                     <td class="label">Principal</td>
