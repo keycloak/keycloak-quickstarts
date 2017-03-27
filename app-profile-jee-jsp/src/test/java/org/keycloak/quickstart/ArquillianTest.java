@@ -85,7 +85,6 @@ public class ArquillianTest {
             indexPage.clickLogin();
             loginPage.login("admin", "admin");
             assertEquals(profilePage.getUsername(), "admin");
-//            assertTrue(waitTextToBePresent(webDriver, By.id("username"), "admin"));
             profilePage.clickLogout();
         } catch (Exception e) {
             fail("Should display logged in user");
