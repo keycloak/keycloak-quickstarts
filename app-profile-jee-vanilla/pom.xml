@@ -15,7 +15,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
         <groupId>org.keycloak.quickstarts</groupId>
         <artifactId>keycloak-quickstart-parent</artifactId>
@@ -44,22 +45,41 @@
 
     <dependencyManagement>
         <dependencies>
-          <dependency>
-            <groupId>org.wildfly.bom</groupId>
-            <artifactId>wildfly-javaee7</artifactId>
-            <scope>import</scope>
-            <type>pom</type>
-            <version>10.0.0.Final</version>
-          </dependency>
+            <dependency>
+                <groupId>org.wildfly.bom</groupId>
+                <artifactId>wildfly-javaee7</artifactId>
+                <scope>import</scope>
+                <type>pom</type>
+                <version>10.0.0.Final</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
-       <dependency>
-         <groupId>org.jboss.spec.javax.servlet</groupId>
-         <artifactId>jboss-servlet-api_3.1_spec</artifactId>
-         <scope>provided</scope>
-       </dependency>
+        <dependency>
+            <groupId>org.jboss.spec.javax.servlet</groupId>
+            <artifactId>jboss-servlet-api_3.1_spec</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.graphene</groupId>
+            <artifactId>graphene-webdriver</artifactId>
+            <version>${version.graphene.webdriver}</version>
+            <type>pom</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${version.commons.io}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-client-registration-api</artifactId>
+            <version>${version.client.registration}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

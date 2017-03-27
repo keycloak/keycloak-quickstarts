@@ -1,6 +1,5 @@
 package org.keycloak.quickstart;
 
-import com.google.gson.JsonObject;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
@@ -26,8 +25,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
@@ -55,15 +52,14 @@ public class ArquillianTest {
                 new File("../service-jee-jaxrs/target/service.war"));
     }
 
-    @Deployment(name = "app-profile-jsp", order = 2, testable = false)
+    @Deployment(name = "app-profile-vanilla", order = 2, testable = false)
     public static Archive<?> createTestArchive2() throws IOException {
-        return ShrinkWrap.create(WebArchive.class, "app-profile-jsp.war")
+        return ShrinkWrap.create(WebArchive.class, "app-profile-vanilla.war")
                 .addPackages(true, Filters.exclude(".*Test.*"), Controller.class.getPackage())
                 .addAsWebResource(new File(WEBAPP_SRC, "index.jsp"))
                 .addAsWebResource(new File(WEBAPP_SRC, "profile.jsp"))
                 .addAsWebResource(new File(WEBAPP_SRC, "styles.css"))
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-                .addAsWebInfResource(new File("config", "keycloak.json"))
                 .setWebXML(new File("src/main/webapp", "WEB-INF/web.xml"));
     }
 
@@ -71,7 +67,7 @@ public class ArquillianTest {
     private WebDriver webDriver;
 
     @ArquillianResource
-    @OperateOnDeployment("app-profile-jsp")
+    @OperateOnDeployment("app-profile-vanilla")
     private URL contextRoot;
 
     @Before
@@ -84,44 +80,10 @@ public class ArquillianTest {
         try {
             indexPage.clickLogin();
             loginPage.login("admin", "admin");
-            assertEquals(profilePage.getUsername(), "admin");
-//            assertTrue(waitTextToBePresent(webDriver, By.id("username"), "admin"));
+            assertNotNull(profilePage.getUsername());
             profilePage.clickLogout();
         } catch (Exception e) {
             fail("Should display logged in user");
         }
     }
-
-    @Test
-    public void testProfileMenu() {
-        try {
-            indexPage.clickLogin();
-            loginPage.login("admin", "admin");
-            profilePage.clickToken();
-            JsonObject json = profilePage.getTokenContent();
-            assertNotNull("JSON content should not be empty", json);
-            assertEquals(json.get("aud").getAsString(), "app-profile-jsp");
-            assertFalse(json.get("session_state").isJsonNull());
-            webDriver.navigate().to(contextRoot);
-            profilePage.clickLogout();
-        } catch (Exception e) {
-            fail("Should display logged in user");
-        }
-    }
-
-    @Test
-    public void testAccessAccountManagement() {
-        try {
-            indexPage.clickLogin();
-            loginPage.login("admin", "admin");
-            profilePage.clickAccount();
-            assertEquals("Keycloak Account Management", webDriver.getTitle());
-            webDriver.navigate().to(contextRoot);
-            profilePage.clickLogout();
-        } catch (Exception e) {
-            fail("Should display account management page");
-        }
-    }
-
-
 }

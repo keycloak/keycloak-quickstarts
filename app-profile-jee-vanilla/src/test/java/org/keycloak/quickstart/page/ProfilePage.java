@@ -28,10 +28,6 @@ public class ProfilePage {
     @FindBy(id = "username")
     private WebElement username;
 
-    public String getUsername() {
-        return username.getText();
-    }
-
     public void clickProfile() {
         profileButton.click();
     }
@@ -46,6 +42,10 @@ public class ProfilePage {
 
     public void clickAccount() {
         accountButton.click();
+    }
+
+    public String getUsername() {
+        return username.getText();
     }
 
     public JsonObject getTokenContent() throws Exception {
