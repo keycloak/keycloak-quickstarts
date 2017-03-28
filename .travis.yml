@@ -3,6 +3,15 @@ language: java
 jdk:
   - oraclejdk8
 
+env:
+  global:
+    - MAVEN_SKIP_RC=true
+    - MAVEN_OPTS="-Xms512m -Xmx2048m"
+
+before_install:
+- git clone https://github.com/keycloak/keycloak.git && cd keycloak
+- mvn clean install --no-snapshot-updates -Pdistribution -DskipTests=true -B -V
+
 branches:
   only:
   - master
