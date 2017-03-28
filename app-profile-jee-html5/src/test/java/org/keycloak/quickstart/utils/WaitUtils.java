@@ -1,4 +1,4 @@
-package org.keycloak.quickstart.utils;/*
+/*
  * Copyright 2016 Red Hat, Inc. and/or its affiliates
  * and other contributors as indicated by the @author tags.
  *
@@ -14,6 +14,8 @@ package org.keycloak.quickstart.utils;/*
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package org.keycloak.quickstart.utils;
 
 import org.jboss.arquillian.graphene.wait.ElementBuilder;
 import org.openqa.selenium.By;
