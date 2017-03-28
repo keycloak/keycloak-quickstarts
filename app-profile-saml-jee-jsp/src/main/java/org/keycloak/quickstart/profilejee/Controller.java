@@ -16,14 +16,12 @@
  */
 package org.keycloak.quickstart.profilejee;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.keycloak.adapters.saml.SamlDeploymentContext;
 import org.keycloak.adapters.saml.SamlPrincipal;
-import org.keycloak.adapters.saml.SamlSession;
 import org.keycloak.common.util.KeycloakUriBuilder;
 import org.keycloak.constants.ServiceUrlConstants;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Controller simplifies access to the server environment from the JSP.

@@ -188,6 +188,13 @@
                                      <type>zip</type>
                                      <outputDirectory>target/wildfly-${version.wildfly}</outputDirectory>
                                  </artifactItem>
+                                 <artifactItem>
+                                     <groupId>org.keycloak</groupId>
+                                     <artifactId>keycloak-saml-wildfly-adapter-dist</artifactId>
+                                     <version>3.1.0.CR1-SNAPSHOT</version>
+                                     <type>zip</type>
+                                     <outputDirectory>target/wildfly-${version.wildfly}</outputDirectory>
+                                 </artifactItem>
                              </artifactItems>
                          </configuration>
                      </execution>
