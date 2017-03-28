@@ -106,6 +106,12 @@
             <version>${version.client.registration}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.extension</groupId>
+            <artifactId>arquillian-phantom-driver</artifactId>
+            <version>${version.phantom.driver}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

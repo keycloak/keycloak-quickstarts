@@ -32,6 +32,6 @@
     </container>
 
     <extension qualifier="webdriver">
-        <property name="browser">${env.browser:firefox}</property>
+        <property name="browser">phantomjs</property>
     </extension>
 </arquillian>
