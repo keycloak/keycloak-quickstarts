@@ -41,6 +41,7 @@
         <version.enforcer.maven.plugin>1.4.1</version.enforcer.maven.plugin>
         <version.graphene.webdriver>2.1.0.Final</version.graphene.webdriver>
         <version.client.registration>3.1.0.CR1-SNAPSHOT</version.client.registration>
+        <version.phantom.driver>1.2.1.Final</version.phantom.driver>
     </properties>
 
     <dependencyManagement>
