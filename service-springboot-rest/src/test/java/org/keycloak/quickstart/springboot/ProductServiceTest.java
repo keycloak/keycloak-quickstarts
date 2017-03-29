@@ -1,5 +1,6 @@
 package org.keycloak.quickstart.springboot;
 
+
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -34,6 +35,7 @@ public class ProductServiceTest {
 
     @Test
     public void testUnauthenticatedSecuredEndpoint()  {
+
         try {
             Assert.assertTrue(TestsHelper.returnsForbidden("/products"));
         } catch (IOException e) {
@@ -43,7 +45,6 @@ public class ProductServiceTest {
 
     @Test
     public void testAuthenticatedSecuredEndpoint()  {
-
         try {
             Assert.assertTrue(TestsHelper.testGetWithAuth("/products", TestsHelper.getToken("alice","password",TestsHelper.testRealm)));
         } catch (IOException e) {
@@ -63,4 +64,5 @@ public class ProductServiceTest {
     public static void cleanUp() throws IOException{
         TestsHelper.deleteRealm("admin","admin",TestsHelper.testRealm);
     }
+
 }
