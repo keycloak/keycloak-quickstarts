@@ -21,6 +21,7 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.drone.api.annotation.Drone;
+import org.jboss.arquillian.graphene.Graphene;
 import org.jboss.arquillian.graphene.page.Page;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
@@ -35,6 +36,7 @@ import org.keycloak.quickstart.page.LoginPage;
 import org.keycloak.quickstart.page.ProfilePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,8 +47,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.keycloak.quickstart.utils.WaitUtils.waitForPageToLoad;
-import static org.keycloak.quickstart.utils.WaitUtils.waitTextToBePresent;
 
 /**
  * @author <a href="mailto:bruno@abstractj.org">Bruno Oliveira</a>
@@ -99,10 +99,8 @@ public class ArquillianTest {
     public void testLogin() throws InterruptedException {
         try {
             indexPage.clickLogin();
-            waitForPageToLoad(webDriver);
             loginPage.login("admin", "admin");
-            waitForPageToLoad(webDriver);
-            assertTrue(waitTextToBePresent(webDriver, By.id("username"), "admin"));
+            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.id("username"), "admin")));
             profilePage.clickLogout();
         } catch (Exception e) {
             fail("Should display logged in user");
@@ -113,9 +111,7 @@ public class ArquillianTest {
     public void testProfileMenu() {
         try {
             indexPage.clickLogin();
-            waitForPageToLoad(webDriver);
             loginPage.login("admin", "admin");
-            waitForPageToLoad(webDriver);
             profilePage.clickToken();
             JsonObject json = profilePage.getTokenContent();
             assertNotNull("JSON content should not be empty", json);
@@ -132,9 +128,7 @@ public class ArquillianTest {
     public void testAccessAccountManagement() {
         try {
             indexPage.clickLogin();
-            waitForPageToLoad(webDriver);
             loginPage.login("admin", "admin");
-            waitForPageToLoad(webDriver);
             profilePage.clickAccount();
             assertEquals("Keycloak Account Management", webDriver.getTitle());
             webDriver.navigate().to(contextRoot);

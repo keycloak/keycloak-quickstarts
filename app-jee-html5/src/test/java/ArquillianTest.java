@@ -19,6 +19,7 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.drone.api.annotation.Drone;
+import org.jboss.arquillian.graphene.Graphene;
 import org.jboss.arquillian.graphene.page.Page;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
@@ -32,6 +33,7 @@ import org.keycloak.quickstart.page.IndexPage;
 import org.keycloak.quickstart.page.LoginPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,10 +42,10 @@ import java.net.URL;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.keycloak.quickstart.page.IndexPage.MESSAGE_ADMIN;
 import static org.keycloak.quickstart.page.IndexPage.MESSAGE_PUBLIC;
+import static org.keycloak.quickstart.page.IndexPage.MESSAGE_SECURED;
 import static org.keycloak.quickstart.page.IndexPage.UNAUTHORIZED;
-import static org.keycloak.quickstart.utils.WaitUtils.waitForPageToLoad;
-import static org.keycloak.quickstart.utils.WaitUtils.waitTextToBePresent;
 
 /**
  * @author <a href="mailto:bruno@abstractj.org">Bruno Oliveira</a>
@@ -93,7 +95,7 @@ public class ArquillianTest {
     public void testSecuredResource() throws InterruptedException {
         try {
             indexPage.clickSecured();
-            assertTrue(waitTextToBePresent(webDriver, By.className("error"), UNAUTHORIZED));
+            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.className("error"), UNAUTHORIZED)));
         } catch (Exception e) {
             fail("Should display an error message");
         }
@@ -103,7 +105,7 @@ public class ArquillianTest {
     public void testAdminResource() {
         try {
             indexPage.clickAdmin();
-            assertTrue(waitTextToBePresent(webDriver, By.className("error"), UNAUTHORIZED));
+            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.className("error"), UNAUTHORIZED)));
         } catch (Exception e) {
             fail("Should display an error message");
         }
@@ -113,7 +115,7 @@ public class ArquillianTest {
     public void testPublicResource() {
         try {
             indexPage.clickPublic();
-            waitTextToBePresent(webDriver, By.id("message"), MESSAGE_PUBLIC);
+            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.className("message"), MESSAGE_PUBLIC)));
         } catch (Exception e) {
             fail("Should display an error message");
         }
@@ -123,11 +125,9 @@ public class ArquillianTest {
     public void testAdminWithAuthAndRole() throws MalformedURLException, InterruptedException {
         try {
             indexPage.clickLogin();
-            waitForPageToLoad(webDriver);
             loginPage.login("admin", "admin");
-            waitForPageToLoad(webDriver);
             indexPage.clickAdmin();
-            assertTrue(waitTextToBePresent(webDriver, By.id("message"), "Message: admin"));
+            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.className("message"), MESSAGE_ADMIN)));
             indexPage.clickLogout();
         } catch (Exception e) {
             fail("Should display logged in user");
@@ -138,11 +138,9 @@ public class ArquillianTest {
     public void testUserWithAuthAndRole() throws MalformedURLException, InterruptedException {
         try {
             indexPage.clickLogin();
-            waitForPageToLoad(webDriver);
             loginPage.login("user", "user");
-            waitForPageToLoad(webDriver);
             indexPage.clickSecured();
-            assertTrue(waitTextToBePresent(webDriver, By.id("message"), "Message: secured"));
+            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.className("message"), MESSAGE_SECURED)));
             indexPage.clickLogout();
         } catch (Exception e) {
             fail("Should display logged in user");
