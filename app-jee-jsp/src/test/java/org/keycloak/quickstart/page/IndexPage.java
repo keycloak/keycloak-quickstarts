@@ -27,6 +27,8 @@ public class IndexPage {
 
     public static final String UNAUTHORIZED = "401 Unauthorized";
     public static final String MESSAGE_PUBLIC = "Message: public";
+    public static final String MESSAGE_ADMIN = "Message: admin";
+    public static final String MESSAGE_SECURED = "Message: secured";
 
     @FindBy(name = "loginBtn")
     private WebElement loginButton;
