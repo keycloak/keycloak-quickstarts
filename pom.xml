@@ -42,6 +42,7 @@
         <version.graphene.webdriver>2.1.0.Final</version.graphene.webdriver>
         <version.client.registration>3.1.0.CR1-SNAPSHOT</version.client.registration>
         <version.phantom.driver>1.2.1.Final</version.phantom.driver>
+        <arquillian-managed>true</arquillian-managed>
     </properties>
 
     <dependencyManagement>
@@ -130,7 +131,10 @@
      <!-- Run with: mvn clean test -Pwildfly-managed-->
      <id>wildfly-managed</id>
      <activation>
-        <activeByDefault>true</activeByDefault>
+       <property>
+         <name>arquillian-managed</name>
+         <value>true</value>
+        </property>
      </activation>
      <dependencies>
          <dependency>
