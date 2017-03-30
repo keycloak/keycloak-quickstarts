@@ -8,7 +8,7 @@
 <body>
 
 <header>
-     <a href="/logout">Logout</a>
+     <a href="/logout" id="logout">Logout</a>
 </header>
 
 <h1>Product Page</h1>
