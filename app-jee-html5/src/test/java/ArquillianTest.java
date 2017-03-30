@@ -26,11 +26,15 @@ import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.keycloak.helper.TestsHelper;
 import org.keycloak.quickstart.page.IndexPage;
 import org.keycloak.quickstart.page.LoginPage;
+import org.keycloak.representations.idm.ClientRepresentation;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -39,6 +43,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -55,6 +60,7 @@ import static org.keycloak.quickstart.page.IndexPage.UNAUTHORIZED;
 public class ArquillianTest {
 
     private static final String WEBAPP_SRC = "src/main/webapp";
+    public static final String APP_NAME = "app-html5";
 
     @Page
     private IndexPage indexPage;
@@ -89,6 +95,37 @@ public class ArquillianTest {
     @Before
     public void setup() {
         webDriver.navigate().to(contextRoot);
+    }
+
+    @BeforeClass
+    public static void init() throws IOException {
+        TestsHelper.ImportTestRealm("admin","admin","/quickstart-realm.json");
+        TestsHelper.createClient(createServiceApp());
+        TestsHelper.createClient(createHtml5App());
+    }
+    @AfterClass
+    public static void cleanUp() throws IOException{
+        TestsHelper.deleteRealm("admin","admin",TestsHelper.testRealm);
+    }
+
+    private static ClientRepresentation createHtml5App() {
+        ClientRepresentation clientRepresentation = new ClientRepresentation();
+        clientRepresentation.setClientId(APP_NAME);
+        clientRepresentation.setFullScopeAllowed(true);
+        clientRepresentation.setPublicClient(Boolean.TRUE);
+        clientRepresentation.setDirectAccessGrantsEnabled(true);
+        clientRepresentation.setRootUrl("http://127.0.0.1:8080/app-html5");
+        clientRepresentation.setRedirectUris(Collections.singletonList("http://127.0.0.1:8080/app-html5/*"));
+        clientRepresentation.setAdminUrl("http://127.0.0.1:8080/app-html5");
+        return clientRepresentation;
+    }
+
+    public static ClientRepresentation createServiceApp() {
+        ClientRepresentation clientRepresentation = new ClientRepresentation();
+        clientRepresentation.setClientId("service-jaxrs");
+        clientRepresentation.setBaseUrl(TestsHelper.baseUrl);
+        clientRepresentation.setBearerOnly(true);
+        return clientRepresentation;
     }
 
     @Test
