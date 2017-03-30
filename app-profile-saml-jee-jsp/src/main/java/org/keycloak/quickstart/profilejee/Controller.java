@@ -69,7 +69,7 @@ public class Controller {
 
     // HACK: This is a really bad way to find the realm name, but I can't
     //       figure out a better way to do it with the SAML adapter.  It parses
-    //       the URL specified in keycloak-saml.xml
+    //       the URL specified in keycloak-saml-example.xml
     private String findRealmName(HttpServletRequest req) {
         String bindingUrl = getBindingUrl(req);
         // bindingUrl looks like http://localhost:8080/auth/realms/master/protocol/saml

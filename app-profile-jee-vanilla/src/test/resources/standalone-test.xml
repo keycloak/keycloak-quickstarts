@@ -398,15 +398,17 @@
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:weld:3.0"/>
         <subsystem xmlns="urn:jboss:domain:keycloak:1.1">
-        <!-- Edit the file here -->
+        <!-- The following configuration must be edited -->
             <secure-deployment name="vanilla.war">
-                <realm>master</realm>
+                <realm>quickstart</realm>
                 <auth-server-url>http://localhost:8180/auth</auth-server-url>
                 <ssl-required>EXTERNAL</ssl-required>
-                <resource>app-profile-vanilla</resource>
-                <credential name="secret">5c97c5dd-73d0-44d1-b1b3-d33719e6c23a</credential>
+                <resource>vanilla</resource>
+                <credential name="secret">secret</credential>
             </secure-deployment>
         </subsystem>
+        <!-- Configuration ends here -->
+
     </profile>
 
     <interfaces>

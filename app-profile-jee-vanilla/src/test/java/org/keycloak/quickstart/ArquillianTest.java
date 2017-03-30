@@ -28,7 +28,9 @@ import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.Filters;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
+import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,6 +38,8 @@ import org.keycloak.quickstart.page.IndexPage;
 import org.keycloak.quickstart.page.LoginPage;
 import org.keycloak.quickstart.page.ProfilePage;
 import org.keycloak.quickstart.profilejee.Controller;
+import org.keycloak.test.TestsHelper;
+import org.keycloak.test.builders.ClientBuilder;
 import org.openqa.selenium.WebDriver;
 
 import java.io.File;
@@ -44,6 +48,11 @@ import java.net.URL;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
+import static org.keycloak.test.TestsHelper.createClient;
+import static org.keycloak.test.TestsHelper.deleteRealm;
+import static org.keycloak.test.TestsHelper.importTestRealm;
+import static org.keycloak.test.builders.ClientBuilder.AccessType.BEARER_ONLY;
+import static org.keycloak.test.builders.ClientBuilder.AccessType.CONFIDENTIAL;
 
 /**
  * @author <a href="mailto:bruno@abstractj.org">Bruno Oliveira</a>
@@ -53,6 +62,9 @@ import static org.junit.Assert.fail;
 public class ArquillianTest {
 
     private static final String WEBAPP_SRC = "src/main/webapp";
+    private static final String APP_NAME = "vanilla";
+    private static final String APP_SERVICE = "service-jaxrs";
+    private static final String ROOT_URL = "http://127.0.0.1:8080/vanilla";
 
     @Page
     private IndexPage indexPage;
@@ -63,15 +75,30 @@ public class ArquillianTest {
     @Page
     private ProfilePage profilePage;
 
-    @Deployment(name = "service-jee-jaxrs", order = 1, testable = false)
-    public static Archive<?> createTestArchive1() throws IOException {
-        return ShrinkWrap.createFromZipFile(WebArchive.class,
-                new File("../service-jee-jaxrs/target/service.war"));
+    static {
+        try {
+            importTestRealm("admin", "admin", "/quickstart-realm.json");
+            createClient(ClientBuilder.create(APP_NAME)
+                    .rootUrl(ROOT_URL)
+                    .secret("secret")
+                    .accessType(CONFIDENTIAL));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    @Deployment(name = "app-profile-vanilla", order = 2, testable = false)
+    @Deployment(name = APP_SERVICE, order = 1, testable = false)
+    public static Archive<?> createTestArchive1() throws IOException {
+        return ShrinkWrap.createFromZipFile(WebArchive.class,
+                new File("../service-jee-jaxrs/target/service.war"))
+                .addAsWebInfResource(
+                        new StringAsset(createClient(
+                                ClientBuilder.create(APP_SERVICE).accessType(BEARER_ONLY))), "keycloak.json");
+    }
+
+    @Deployment(name = APP_NAME, order = 2, testable = false)
     public static Archive<?> createTestArchive2() throws IOException {
-        return ShrinkWrap.create(WebArchive.class, "app-profile-vanilla.war")
+        return ShrinkWrap.create(WebArchive.class, "vanilla.war")
                 .addPackages(true, Filters.exclude(".*Test.*"), Controller.class.getPackage())
                 .addAsWebResource(new File(WEBAPP_SRC, "index.jsp"))
                 .addAsWebResource(new File(WEBAPP_SRC, "profile.jsp"))
@@ -84,8 +111,13 @@ public class ArquillianTest {
     private WebDriver webDriver;
 
     @ArquillianResource
-    @OperateOnDeployment("app-profile-vanilla")
+    @OperateOnDeployment(APP_NAME)
     private URL contextRoot;
+
+    @AfterClass
+    public static void cleanUp() throws IOException{
+        deleteRealm("admin","admin",TestsHelper.testRealm);
+    }
 
     @Before
     public void setup() {
@@ -96,7 +128,7 @@ public class ArquillianTest {
     public void testLogin() throws InterruptedException {
         try {
             indexPage.clickLogin();
-            loginPage.login("admin", "admin");
+            loginPage.login("test-admin", "password");
             assertNotNull(profilePage.getUsername());
             profilePage.clickLogout();
         } catch (Exception e) {

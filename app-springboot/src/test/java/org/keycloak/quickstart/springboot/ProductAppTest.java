@@ -9,13 +9,15 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.keycloak.helper.TestsHelper;
-import org.keycloak.representations.idm.ClientRepresentation;
+import org.keycloak.test.TestsHelper;
+import org.keycloak.test.builders.ClientBuilder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
-import java.util.Arrays;
+
+import static org.keycloak.test.builders.ClientBuilder.AccessType.BEARER_ONLY;
+import static org.keycloak.test.builders.ClientBuilder.AccessType.PUBLIC;
 
 /**
  * Created by sblanc on 3/28/17.
@@ -25,9 +27,7 @@ import java.util.Arrays;
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.DEFINED_PORT, classes = {ProductApplication.class})
 public class ProductAppTest {
 
-    //@Autowired
     private WebClient webClient = new WebClient(BrowserVersion.CHROME);
-
 
     @BeforeClass
     public static void setup() throws IOException {
@@ -35,11 +35,17 @@ public class ProductAppTest {
         //TestsHelper.keycloakBaseUrl  = "set keycloak server docker IP"
         TestsHelper.testRealm="quickstart";
         TestsHelper.initialAccessTokenCount = 3;
-        TestsHelper.ImportTestRealm("admin","admin","/quickstart-realm.json");
+        TestsHelper.importTestRealm("admin","admin","/quickstart-realm.json");
         TestsHelper.createDirectGrantClient();
-        TestsHelper.createClient(generateClientRepresentation());
-        TestsHelper.createClient(generateServiceClientRepresentation());
+        TestsHelper.createClient(ClientBuilder.create("test-demo").baseUrl(TestsHelper.baseUrl)
+                .rootUrl("http://localhost:8080").accessType(PUBLIC));
+        TestsHelper.createClient(ClientBuilder.create("product-service").accessType(BEARER_ONLY));
 
+    }
+
+    @AfterClass
+    public static void cleanUp() throws IOException{
+        TestsHelper.deleteRealm("admin","admin",TestsHelper.testRealm);
     }
 
     @Test
@@ -65,27 +71,5 @@ public class ProductAppTest {
         HtmlPage protectedPage = page.getElementByName("login").click();
         HtmlPage landingPage = protectedPage.getElementById("logout").click();
         Assert.assertTrue(landingPage.getTitleText().contains("Landing Page"));
-    }
-
-
-    private static ClientRepresentation generateClientRepresentation() {
-        ClientRepresentation clientRepresentation = new ClientRepresentation();
-        clientRepresentation.setClientId("test-demo");
-        clientRepresentation.setPublicClient(true);
-        clientRepresentation.setBaseUrl(TestsHelper.baseUrl);
-        clientRepresentation.setRedirectUris(Arrays.asList("http://localhost:8080/*"));
-        return clientRepresentation;
-    }
-
-    private static ClientRepresentation generateServiceClientRepresentation() {
-        ClientRepresentation clientRepresentation = new ClientRepresentation();
-        clientRepresentation.setClientId("product-service");
-        clientRepresentation.setBearerOnly(true);
-        return clientRepresentation;
-    }
-
-    @AfterClass
-    public static void cleanUp() throws IOException{
-        TestsHelper.deleteRealm("admin","admin",TestsHelper.testRealm);
     }
 }
