@@ -125,7 +125,7 @@ public class ArquillianTest {
     public void testAdminWithAuthAndRole() throws MalformedURLException, InterruptedException {
         try {
             indexPage.clickLogin();
-            loginPage.login("admin", "admin");
+            loginPage.login("test-admin", "password");
             indexPage.clickAdmin();
             assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.className("message"), MESSAGE_ADMIN)));
             indexPage.clickLogout();
@@ -138,7 +138,7 @@ public class ArquillianTest {
     public void testUserWithAuthAndRole() throws MalformedURLException, InterruptedException {
         try {
             indexPage.clickLogin();
-            loginPage.login("user", "user");
+            loginPage.login("alice", "password");
             indexPage.clickSecured();
             assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.className("message"), MESSAGE_SECURED)));
             indexPage.clickLogout();
