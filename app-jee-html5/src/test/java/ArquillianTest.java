@@ -34,7 +34,7 @@ import org.junit.runner.RunWith;
 import org.keycloak.helper.TestsHelper;
 import org.keycloak.quickstart.page.IndexPage;
 import org.keycloak.quickstart.page.LoginPage;
-import org.keycloak.representations.idm.ClientRepresentation;
+import org.keycloak.quickstart.util.ClientBuilder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -43,7 +43,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collections;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -100,32 +99,14 @@ public class ArquillianTest {
     @BeforeClass
     public static void init() throws IOException {
         TestsHelper.ImportTestRealm("admin","admin","/quickstart-realm.json");
-        TestsHelper.createClient(createServiceApp());
-        TestsHelper.createClient(createHtml5App());
+        TestsHelper.createClient(ClientBuilder.create("service-jaxrs").bearerOnly(true));
+        TestsHelper.createClient(ClientBuilder.create(APP_NAME)
+                .rootUrl("http://127.0.0.1:8080/app-html5")
+                .publicClient(true));
     }
     @AfterClass
     public static void cleanUp() throws IOException{
         TestsHelper.deleteRealm("admin","admin",TestsHelper.testRealm);
-    }
-
-    private static ClientRepresentation createHtml5App() {
-        ClientRepresentation clientRepresentation = new ClientRepresentation();
-        clientRepresentation.setClientId(APP_NAME);
-        clientRepresentation.setFullScopeAllowed(true);
-        clientRepresentation.setPublicClient(Boolean.TRUE);
-        clientRepresentation.setDirectAccessGrantsEnabled(true);
-        clientRepresentation.setRootUrl("http://127.0.0.1:8080/app-html5");
-        clientRepresentation.setRedirectUris(Collections.singletonList("http://127.0.0.1:8080/app-html5/*"));
-        clientRepresentation.setAdminUrl("http://127.0.0.1:8080/app-html5");
-        return clientRepresentation;
-    }
-
-    public static ClientRepresentation createServiceApp() {
-        ClientRepresentation clientRepresentation = new ClientRepresentation();
-        clientRepresentation.setClientId("service-jaxrs");
-        clientRepresentation.setBaseUrl(TestsHelper.baseUrl);
-        clientRepresentation.setBearerOnly(true);
-        return clientRepresentation;
     }
 
     @Test
