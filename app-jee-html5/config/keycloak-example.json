@@ -1,6 +1,7 @@
 {
-  "realm": "master",
+  "realm": "quickstart",
   "auth-server-url": "http://localhost:8180/auth",
+  "ssl-required": "external",
   "resource": "app-html5",
   "public-client": true
 }

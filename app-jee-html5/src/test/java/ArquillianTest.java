@@ -25,16 +25,16 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.keycloak.helper.TestsHelper;
 import org.keycloak.quickstart.page.IndexPage;
 import org.keycloak.quickstart.page.LoginPage;
-import org.keycloak.quickstart.util.ClientBuilder;
+import org.keycloak.test.TestsHelper;
+import org.keycloak.test.builders.ClientBuilder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -50,6 +50,11 @@ import static org.keycloak.quickstart.page.IndexPage.MESSAGE_ADMIN;
 import static org.keycloak.quickstart.page.IndexPage.MESSAGE_PUBLIC;
 import static org.keycloak.quickstart.page.IndexPage.MESSAGE_SECURED;
 import static org.keycloak.quickstart.page.IndexPage.UNAUTHORIZED;
+import static org.keycloak.test.TestsHelper.createClient;
+import static org.keycloak.test.TestsHelper.deleteRealm;
+import static org.keycloak.test.TestsHelper.importTestRealm;
+import static org.keycloak.test.builders.ClientBuilder.AccessType.BEARER_ONLY;
+import static org.keycloak.test.builders.ClientBuilder.AccessType.PUBLIC;
 
 /**
  * @author <a href="mailto:bruno@abstractj.org">Bruno Oliveira</a>
@@ -59,7 +64,9 @@ import static org.keycloak.quickstart.page.IndexPage.UNAUTHORIZED;
 public class ArquillianTest {
 
     private static final String WEBAPP_SRC = "src/main/webapp";
-    public static final String APP_NAME = "app-html5";
+    private static final String APP_NAME = "app-html5";
+    private static final String APP_SERVICE = "service-jaxrs";
+    private static final String ROOT_URL = "http://127.0.0.1:8080/app-html5";
 
     @Page
     private IndexPage indexPage;
@@ -67,46 +74,50 @@ public class ArquillianTest {
     @Page
     private LoginPage loginPage;
 
-    @Deployment(name = "service-jee-jaxrs", order = 1, testable = false)
-    public static Archive<?> createTestArchive1() throws IOException {
-        return ShrinkWrap.createFromZipFile(WebArchive.class,
-                new File("../service-jee-jaxrs/target/service.war"));
+    static {
+        try {
+            importTestRealm("admin", "admin", "/quickstart-realm.json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    @Deployment(name = "app-html5", order = 2, testable = false)
+    @Deployment(name = APP_SERVICE, order = 1, testable = false)
+    public static Archive<?> createTestArchive1() throws IOException {
+        return ShrinkWrap.createFromZipFile(WebArchive.class,
+                new File("../service-jee-jaxrs/target/service.war"))
+                .addAsWebInfResource(
+                        new StringAsset(createClient(
+                                ClientBuilder.create(APP_SERVICE).accessType(BEARER_ONLY))), "keycloak.json");
+    }
+
+    @Deployment(name = APP_NAME, order = 2, testable = false)
     public static Archive<?> createTestArchive2() throws IOException {
         return ShrinkWrap.create(WebArchive.class, "app-html5.war")
                 .addAsWebResource(new File(WEBAPP_SRC, "app.js"))
                 .addAsWebResource(new File(WEBAPP_SRC, "index.html"))
                 .addAsWebResource(new File(WEBAPP_SRC, "keycloak.js"))
                 .addAsWebResource(new File(WEBAPP_SRC, "styles.css"))
-                .addAsWebResource(new File("config", "keycloak.json"));
-
+                .addAsWebResource(new StringAsset(createClient(ClientBuilder.create(APP_NAME)
+                        .rootUrl(ROOT_URL)
+                        .accessType(PUBLIC))), "keycloak.json");
     }
 
     @Drone
     private WebDriver webDriver;
 
     @ArquillianResource
-    @OperateOnDeployment("app-html5")
+    @OperateOnDeployment(APP_NAME)
     private URL contextRoot;
+
+    @AfterClass
+    public static void cleanUp() throws IOException {
+        deleteRealm("admin", "admin", TestsHelper.testRealm);
+    }
 
     @Before
     public void setup() {
         webDriver.navigate().to(contextRoot);
-    }
-
-    @BeforeClass
-    public static void init() throws IOException {
-        TestsHelper.ImportTestRealm("admin","admin","/quickstart-realm.json");
-        TestsHelper.createClient(ClientBuilder.create("service-jaxrs").bearerOnly(true));
-        TestsHelper.createClient(ClientBuilder.create(APP_NAME)
-                .rootUrl("http://127.0.0.1:8080/app-html5")
-                .publicClient(true));
-    }
-    @AfterClass
-    public static void cleanUp() throws IOException{
-        TestsHelper.deleteRealm("admin","admin",TestsHelper.testRealm);
     }
 
     @Test

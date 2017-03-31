@@ -27,41 +27,53 @@ import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.keycloak.helper.TestsHelper;
-import org.keycloak.representations.idm.ClientRepresentation;
+import org.keycloak.test.TestsHelper;
+import org.keycloak.test.builders.ClientBuilder;
 
 import java.io.File;
 import java.io.IOException;
+
+import static org.keycloak.test.TestsHelper.createClient;
+import static org.keycloak.test.TestsHelper.createDirectGrantClient;
+import static org.keycloak.test.TestsHelper.importTestRealm;
+import static org.keycloak.test.builders.ClientBuilder.AccessType.BEARER_ONLY;
 
 
 @RunWith(Arquillian.class)
 public class ArquillianTest {
 
+    static {
+        try {
+            TestsHelper.appName = "test-demo";
+            TestsHelper.baseUrl = "http://localhost:8080/test-demo";
+            //TestsHelper.keycloakBaseUrl  = "set keycloak server docker IP"
+            importTestRealm("admin", "admin", "/quickstart-realm.json");
+            createDirectGrantClient();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Deployment(testable = false)
-    public static Archive<?> createTestArchive() throws IOException{
-        TestsHelper.appName = "test-demo";
-        TestsHelper.baseUrl = "http://localhost:8080/test-demo";
-        //TestsHelper.keycloakBaseUrl  = "set keycloak server docker IP"
-        TestsHelper.ImportTestRealm("admin","admin","/quickstart-realm.json");
-        TestsHelper.createDirectGrantClient();
-         return ShrinkWrap.create(WebArchive.class,  "test-demo.war")
-                .addPackages(true, Filters.exclude(".*Test.*"),Application.class.getPackage())
+    public static Archive<?> createTestArchive() throws IOException {
+        return ShrinkWrap.create(WebArchive.class, "test-demo.war")
+                .addPackages(true, Filters.exclude(".*Test.*"), Application.class.getPackage())
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-                .addAsWebInfResource(new StringAsset(TestsHelper.createClient(generateClientRepresentation())), "keycloak.json")
+                .addAsWebInfResource(new StringAsset(createClient(ClientBuilder.create("test-demo")
+                                .baseUrl(TestsHelper.baseUrl).accessType(BEARER_ONLY))), "keycloak.json")
                 .setWebXML(new File("src/main/webapp", "WEB-INF/web.xml"));
 
     }
 
-    @BeforeClass
-    public static void setup() throws IOException {
-
+    @AfterClass
+    public static void cleanUp() throws IOException {
+        TestsHelper.deleteRealm("admin", "admin", TestsHelper.testRealm);
     }
 
-    @Test()
-    public void testSecuredEndpoint()  {
+    @Test
+    public void testSecuredEndpoint() {
         try {
             Assert.assertTrue(TestsHelper.returnsForbidden("/secured"));
         } catch (IOException e) {
@@ -69,8 +81,8 @@ public class ArquillianTest {
         }
     }
 
-    @Test()
-    public void testAdminEndpoint()  {
+    @Test
+    public void testAdminEndpoint() {
         try {
             Assert.assertTrue(TestsHelper.returnsForbidden("/admin"));
         } catch (IOException e) {
@@ -78,8 +90,8 @@ public class ArquillianTest {
         }
     }
 
-    @Test()
-    public void testPublicEndpoint()  {
+    @Test
+    public void testPublicEndpoint() {
         try {
             Assert.assertFalse(TestsHelper.returnsForbidden("/public"));
         } catch (IOException e) {
@@ -87,44 +99,30 @@ public class ArquillianTest {
         }
     }
 
-    @Test()
-    public void testSecuredEndpointWithAuth()  {
+    @Test
+    public void testSecuredEndpointWithAuth() {
         try {
-            Assert.assertTrue(TestsHelper.testGetWithAuth("/secured", TestsHelper.getToken("alice","password",TestsHelper.testRealm)));
+            Assert.assertTrue(TestsHelper.testGetWithAuth("/secured", TestsHelper.getToken("alice", "password", TestsHelper.testRealm)));
         } catch (IOException e) {
             Assert.fail();
         }
     }
 
-    @Test()
-    public void testAdminEndpointWithAuthButNoRole()  {
+    @Test
+    public void testAdminEndpointWithAuthButNoRole() {
         try {
-            Assert.assertFalse(TestsHelper.testGetWithAuth("/admin", TestsHelper.getToken("alice","password",TestsHelper.testRealm)));
+            Assert.assertFalse(TestsHelper.testGetWithAuth("/admin", TestsHelper.getToken("alice", "password", TestsHelper.testRealm)));
         } catch (IOException e) {
             Assert.fail();
         }
     }
 
-    @Test()
-    public void testAdminEndpointWithAuthAndRole()  {
+    @Test
+    public void testAdminEndpointWithAuthAndRole() {
         try {
-            Assert.assertTrue(TestsHelper.testGetWithAuth("/admin", TestsHelper.getToken("test-admin","password",TestsHelper.testRealm)));
+            Assert.assertTrue(TestsHelper.testGetWithAuth("/admin", TestsHelper.getToken("test-admin", "password", TestsHelper.testRealm)));
         } catch (IOException e) {
             Assert.fail();
         }
     }
-
-    public static ClientRepresentation generateClientRepresentation() {
-        ClientRepresentation clientRepresentation = new ClientRepresentation();
-        clientRepresentation.setClientId("test-demo");
-        clientRepresentation.setBaseUrl(TestsHelper.baseUrl);
-        clientRepresentation.setBearerOnly(true);
-        return clientRepresentation;
-    }
-
-    @AfterClass
-    public static void cleanUp() throws IOException{
-        TestsHelper.deleteRealm("admin","admin",TestsHelper.testRealm);
-    }
-
 }
