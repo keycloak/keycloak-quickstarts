@@ -27,7 +27,7 @@ public class ProductServiceTest {
         TestsHelper.baseUrl = "http://localhost:8081";
         //TestsHelper.keycloakBaseUrl  = "set keycloak server docker IP"
         TestsHelper.testRealm="quickstart";
-        TestsHelper.ImportTestRealm("admin","admin","/quickstart-realm.json");
+        TestsHelper.importTestRealm("admin","admin","/quickstart-realm.json");
         TestsHelper.createDirectGrantClient();
         TestsHelper.createClient(generateClientRepresentation());
 
