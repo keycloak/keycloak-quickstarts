@@ -3,14 +3,27 @@ language: java
 jdk:
   - oraclejdk8
 
+cache:
+  directories:
+    - $HOME/.m2
+
+before_cache:
+  - rm -rf $HOME/.m2/repository/org/keycloak
+
 env:
   global:
     - MAVEN_SKIP_RC=true
     - MAVEN_OPTS="-Xms512m -Xmx2048m"
 
 before_install:
-- git clone https://github.com/keycloak/keycloak.git && cd keycloak
-- mvn clean install --no-snapshot-updates -Pdistribution -DskipTests=true -B -V
+  - git clone https://github.com/keycloak/keycloak.git && cd keycloak
+  - mvn clean install --no-snapshot-updates -Pdistribution -DskipTests=true -B -V -q
+  - ./scripts/start-server.sh
+install:
+  - mvn clean install -s settings-snapshots.xml
+after_install:
+  - ./scripts/stop-server.sh
+  - kill -9 `cat pid.txt`
 
 branches:
   only:
