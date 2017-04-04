@@ -36,7 +36,7 @@ public class ProductServiceController {
 	@Autowired
 	private ProductService productService;
         
-        private @Autowired HttpServletRequest request;
+    private @Autowired HttpServletRequest request;
 
 	@RequestMapping(value = "/products", method = RequestMethod.GET,  produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<String> handleCustomersRequest(Principal principal) {

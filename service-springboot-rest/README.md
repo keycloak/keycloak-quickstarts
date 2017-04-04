@@ -93,3 +93,12 @@ invoking with a bearer token. To invoke these endpoints use one of the example q
 * [app-springboot](../app-springboot/README.md) - SpringBoot application that invokes the example service. Requires service example to be deployed.
 * [app-jee-html5](../app-jee-html5/README.md) - HTML5 application that invokes the example service. Requires service example to be deployed.
 * [app-jee-jsp](../app-jee-jsp/README.md) - JSP application packaged that invokes the example service. Requires service example to be deployed.
+
+Integration test of the Quickstart
+----------------------------------
+
+1. Make sure you have an Keycloak server running with an admin user in the `master` realm or use the provided docker image
+2. Be sure to set the `TestHelper.keycloakBaseUrl` in the `createArchive` method (default URL is localhost:8180/auth).
+3. Set accordingly the correct url for the `keycloak.auth-server-url` in the test [application.properties](src/test/resources/application.properties).
+4. Run `mvn test`
+

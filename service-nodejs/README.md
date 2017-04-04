@@ -5,7 +5,7 @@ Level: Beginner
 Technologies: Node.js
 Summary: Node.js Service
 Target Product: Keycloak, WildFly
-Source: <https://github.com/keycloak/rh-sso-quickstarts>
+Source: <https://github.com/keycloak/keycloak-quickstarts>
 
 
 What is it?

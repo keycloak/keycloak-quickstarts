@@ -21,7 +21,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-        <title>RH-SSO SAML Example App</title>
+        <title>Keycloak SAML Example App</title>
         <link rel="stylesheet" type="text/css" href="styles.css"/>
     </head>
     <body>
@@ -31,8 +31,8 @@
 
         <div class="wrapper" id="profile">
             <div class="menu">
-                <button onclick="location.href = '?GLO=true'" type="button">Logout</button>
-                <button onclick="location.href = '${accountUri}'" type="button">Account</button>
+                <button name="logoutBtn" onclick="location.href = '?GLO=true'" type="button">Logout</button>
+                <button name="accountBtn" onclick="location.href = '${accountUri}'" type="button">Account</button>
             </div>
 
             <div class="content">

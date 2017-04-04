@@ -18,7 +18,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>RH-SSO Example App</title>
+    <title>Keycloak Example App</title>
 
     <link rel="stylesheet" type="text/css" href="styles.css"/>
 
@@ -30,7 +30,7 @@
 
 <div class="wrapper" id="welcome" style="display: none;">
     <div class="menu">
-        <button onclick="keycloak.login()">Login</button>
+        <button name="loginBtn" onclick="keycloak.login()">Login</button>
     </div>
 
     <div class="content">
@@ -40,10 +40,10 @@
 
 <div class="wrapper" id="profile" style="display: none;">
     <div class="menu">
-        <button onclick="showProfile()">Profile</button>
-        <button onclick="showToken()">Token</button>
-        <button onclick="keycloak.logout()">Logout</button>
-        <button onclick="keycloak.accountManagement()">Account</button>
+        <button name="profileBtn" onclick="showProfile()">Profile</button>
+        <button name="tokenBtn" onclick="showToken()">Token</button>
+        <button name="logoutBtn" onclick="keycloak.logout()">Logout</button>
+        <button name="accountBtn" onclick="keycloak.accountManagement()">Account</button>
     </div>
 
     <div class="content">
