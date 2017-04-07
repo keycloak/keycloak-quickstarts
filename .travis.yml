@@ -8,7 +8,7 @@ cache:
     - $HOME/.m2
 
 before_cache:
-  - rm -rf $HOME/.m2/repository/org/keycloak
+  - rm -rf $HOME/.m2/repository/org/keycloak/quickstarts
 
 env:
   global:
@@ -16,23 +16,19 @@ env:
     - MAVEN_OPTS="-Xms512m -Xmx2048m"
 
 before_install:
-  - git clone https://github.com/abstractj/keycloak.git && cd keycloak && git checkout refactor-test-helper
-  - mvn clean install -s ../settings-snapshots.xml --no-snapshot-updates -Pdistribution -DskipTests=true -B -V -e
+  - git clone https://github.com/keycloak/keycloak.git > /dev/null 2>&1 && cd keycloak
+  - mvn clean install -s ../settings-snapshots.xml --no-snapshot-updates -Pdistribution -DskipTests=true -B -V -q
+  - mkdir ../keycloak-server && tar xzf distribution/server-dist/target/keycloak-3.1.0.CR1-SNAPSHOT.tar.gz -C ../keycloak-server --strip-components 1
   - cd .. && scripts/start-server.sh
-  
+
 install:
   - mvn clean install -s settings-snapshots.xml -Pwildfly-managed -Denforcer.skip=true
 
 script:
-  - mvn -Pwildfly-managed -Denforcer.skip=true clean verify
+  - mvn -s settings-snapshots.xml -Pwildfly-managed -Denforcer.skip=true clean verify -q
 
 after_install:
   - ./scripts/stop-server.sh
   - kill -9 `cat pid.txt`
-
-branches:
-  only:
-  - master
-  - quickstarts-dev
 
 sudo: false
