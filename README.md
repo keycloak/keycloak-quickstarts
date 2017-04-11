@@ -73,6 +73,8 @@ To start the Keycloak server on different ports:
 Open the main page for the Keycloak server ([localhost:8180](http://localhost:8180) or http://&lt;HOSTNAME&gt;:8080). If
 this is a new installation of Keycloak server you will be instructed to create an initial admin user. To continue with
 the quickstarts you need to do this prior to continuing.
+By default, the integration tests for each quickstart, expect this initial admin user to have `admin` as username and `admin` as password. Of course, this is configurable in the Test classes.
+
 
 ### <a id="add-roles-user"></a>Create Roles and User
 
