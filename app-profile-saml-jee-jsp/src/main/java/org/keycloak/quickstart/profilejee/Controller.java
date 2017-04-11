@@ -16,14 +16,12 @@
  */
 package org.keycloak.quickstart.profilejee;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.keycloak.adapters.saml.SamlDeploymentContext;
 import org.keycloak.adapters.saml.SamlPrincipal;
-import org.keycloak.adapters.saml.SamlSession;
 import org.keycloak.common.util.KeycloakUriBuilder;
 import org.keycloak.constants.ServiceUrlConstants;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Controller simplifies access to the server environment from the JSP.
@@ -71,7 +69,7 @@ public class Controller {
 
     // HACK: This is a really bad way to find the realm name, but I can't
     //       figure out a better way to do it with the SAML adapter.  It parses
-    //       the URL specified in keycloak-saml.xml
+    //       the URL specified in keycloak-saml-example.xml
     private String findRealmName(HttpServletRequest req) {
         String bindingUrl = getBindingUrl(req);
         // bindingUrl looks like http://localhost:8080/auth/realms/master/protocol/saml

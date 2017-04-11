@@ -21,7 +21,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-        <title>RH-SSO Example App</title>
+        <title>Keycloak Example App</title>
 
         <link rel="stylesheet" type="text/css" href="styles.css"/>
     </head>
@@ -36,7 +36,7 @@
 
         <div class="wrapper" id="welcome">
             <div class="menu">
-                <button onclick="location.href = 'profile.jsp'" type="button">Login</button>
+                <button name="loginBtn" onclick="location.href = 'profile.jsp'" type="button">Login</button>
             </div>
 
             <div class="content">

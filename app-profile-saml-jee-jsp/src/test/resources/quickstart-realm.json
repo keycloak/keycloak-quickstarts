@@ -1,0 +1,254 @@
+{
+  "realm": "quickstart",
+  "enabled": true,
+  "accessTokenLifespan": 60,
+  "accessCodeLifespan": 60,
+  "accessCodeLifespanUserAction": 300,
+  "ssoSessionIdleTimeout": 600,
+  "ssoSessionMaxLifespan": 36000,
+  "sslRequired": "external",
+  "registrationAllowed": false,
+  "privateKey": "MIICXAIBAAKBgQCrVrCuTtArbgaZzL1hvh0xtL5mc7o0NqPVnYXkLvgcwiC3BjLGw1tGEGoJaXDuSaRllobm53JBhjx33UNv+5z/UMG4kytBWxheNVKnL6GgqlNabMaFfPLPCF8kAgKnsi79NMo+n6KnSY8YeUmec/p2vjO2NjsSAVcWEQMVhJ31LwIDAQABAoGAfmO8gVhyBxdqlxmIuglbz8bcjQbhXJLR2EoS8ngTXmN1bo2L90M0mUKSdc7qF10LgETBzqL8jYlQIbt+e6TH8fcEpKCjUlyq0Mf/vVbfZSNaVycY13nTzo27iPyWQHK5NLuJzn1xvxxrUeXI6A2WFpGEBLbHjwpx5WQG9A+2scECQQDvdn9NE75HPTVPxBqsEd2z10TKkl9CZxu10Qby3iQQmWLEJ9LNmy3acvKrE3gMiYNWb6xHPKiIqOR1as7L24aTAkEAtyvQOlCvr5kAjVqrEKXalj0Tzewjweuxc0pskvArTI2Oo070h65GpoIKLc9jf+UA69cRtquwP93aZKtW06U8dQJAF2Y44ks/mK5+eyDqik3koCI08qaC8HYq2wVl7G2QkJ6sbAaILtcvD92ToOvyGyeE0flvmDZxMYlvaZnaQ0lcSQJBAKZU6umJi3/xeEbkJqMfeLclD27XGEFoPeNrmdx0q10Azp4NfJAY+Z8KRyQCR2BEG+oNitBOZ+YXF9KCpH3cdmECQHEigJhYg+ykOvr1aiZUMFT72HU0jnmQe2FVekuG+LJUt2Tm7GtMjTFoGpf0JwrVuZN39fOYAlo+nTixgeW7X8Y=",
+  "publicKey": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCrVrCuTtArbgaZzL1hvh0xtL5mc7o0NqPVnYXkLvgcwiC3BjLGw1tGEGoJaXDuSaRllobm53JBhjx33UNv+5z/UMG4kytBWxheNVKnL6GgqlNabMaFfPLPCF8kAgKnsi79NMo+n6KnSY8YeUmec/p2vjO2NjsSAVcWEQMVhJ31LwIDAQAB",
+  "requiredCredentials": [
+    "password"
+  ],
+  "users": [
+    {
+      "username": "alice",
+      "enabled": true,
+      "email": "alice@keycloak.org",
+      "firstName": "Alice",
+      "lastName": "Liddel",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password"
+        }
+      ],
+      "realmRoles": [
+        "user",
+        "offline_access"
+      ],
+      "clientRoles": {
+        "account": [
+          "manage-account"
+        ]
+      }
+    },
+    {
+      "username": "test-admin",
+      "enabled": true,
+      "email": "test@admin.org",
+      "firstName": "Admin",
+      "lastName": "Test",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password"
+        }
+      ],
+      "realmRoles": [
+        "user",
+        "admin"
+      ],
+      "clientRoles": {
+        "realm-management": [
+          "realm-admin"
+        ],
+        "account": [
+          "manage-account"
+        ]
+      }
+    }
+  ],
+  "roles": {
+    "realm": [
+      {
+        "name": "user",
+        "description": "User privileges"
+      },
+      {
+        "name": "admin",
+        "description": "Administrator privileges"
+      }
+    ]
+  },
+  "clients": [ {
+      "id": "79a57573-3770-45cb-80cf-32878f1edadd",
+      "clientId": "app-profile-saml",
+      "adminUrl": "http://localhost:8080/app-profile-saml/saml",
+      "baseUrl": "http://localhost:8080/app-profile-saml/",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "redirectUris": [
+        "http://localhost:8080/app-profile-saml/*"
+      ],
+      "webOrigins": [],
+      "notBefore": 0,
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "publicClient": false,
+      "frontchannelLogout": true,
+      "protocol": "saml",
+      "attributes": {
+        "saml.assertion.signature": "false",
+        "saml.force.post.binding": "true",
+        "saml.multivalued.roles": "false",
+        "saml.encrypt": "false",
+        "saml.server.signature": "true",
+        "saml.server.signature.keyinfo.ext": "false",
+        "saml.signing.certificate": "MIICrzCCAZcCBgFbFRHPvjANBgkqhkiG9w0BAQsFADAbMRkwFwYDVQQDDBBhcHAtcHJvZmlsZS1zYW1sMB4XDTE3MDMyODEzMTcyMFoXDTI3MDMyODEzMTkwMFowGzEZMBcGA1UEAwwQYXBwLXByb2ZpbGUtc2FtbDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMgOV7fWkvNePfHpcWVBwYgPIEV15hKFwPJ/7XcMwZNKjDJ7ft4kTPoKvZ4JGZEAukBbjvOcJkF0gacRgjDgp9pOu9YzZhi4MJwDzxZEEkLu7z2SD+boJEuP8ZCARcqliFLjQ5k3VwpFoAZ9kMOZekf8odObmB6x/EcOpfZDEtOdfpDXRw2S1qw/bKpbjcqKSz7u1O9C+Zr+Dw8v07JbVbP4rYr/8Bfq7vFcB30gf8YEI9nn6zR7MwRzrB2u4H4CrsLLv2BmLPGkuAEtYEoFhnn8vI4t4Xf9oIeeWAsJLrwK3LCnr8KpJhO+jkLBu+3ELy6mHGn3PkUXfGrAOwVLPz0CAwEAATANBgkqhkiG9w0BAQsFAAOCAQEABQMerrVDcvqaN+d2Fps7qTglLv2kJKSE/6qyisNUry2oDxIX8xnFVPZJRd1np6lwwbBSUK7vf9I1OWOxLTuI8Qa2b+0bEBYrqb00O2L9V5UUEE5/M1BbHKt4EL1L/UXYipwFfD6g5t3w3yd5zDVj6Z7OFXeYpNZMmOF0eUWG9GKRg8lcHPHMm98s3hY0DE+YEJ2cg73MZyom7h2PEhUUt1YgIe63avml+1DBXs3TSUJTngGG7rJGdDV3ZEMV6e45S0aBM78G3Ll1GwM2kDp6sWOHon7YYXqjCohWQPIoypikVKavQj6LV8v9EjVJ3hvGfnNiYefxC1fkPfwJjrtzQw==",
+        "saml.signature.algorithm": "RSA_SHA256",
+        "saml_force_name_id_format": "true",
+        "saml.client.signature": "true",
+        "saml.authnstatement": "true",
+        "saml.signing.private.key": "MIIEogIBAAKCAQEAyA5Xt9aS81498elxZUHBiA8gRXXmEoXA8n/tdwzBk0qMMnt+3iRM+gq9ngkZkQC6QFuO85wmQXSBpxGCMOCn2k671jNmGLgwnAPPFkQSQu7vPZIP5ugkS4/xkIBFyqWIUuNDmTdXCkWgBn2Qw5l6R/yh05uYHrH8Rw6l9kMS051+kNdHDZLWrD9sqluNyopLPu7U70L5mv4PDy/TsltVs/itiv/wF+ru8VwHfSB/xgQj2efrNHszBHOsHa7gfgKuwsu/YGYs8aS4AS1gSgWGefy8ji3hd/2gh55YCwkuvArcsKevwqkmE76OQsG77cQvLqYcafc+RRd8asA7BUs/PQIDAQABAoIBAELnMQSk+L30zWiCdk6zn+I9lMBF/mxBWNaAW8zNckssyhfz3uixYSDZyLH6PxeUE7WEKRllJhILwXQ60bxA1UGXxQ+MXt9zcaYrS+0ZVLYXq+B+YV0KU2EFwXZev3hWxXFa2Xd631vrDuo8wdX4FMHQRdo7lbLmOQUWbAAgTEKCOIKxHtZYqb+J3BK4g347SzYvKpvqXhavIpVRQm5vLYPrge1gE83jo9ag2uAHCHpeToaH1Bohp7/tu6MWCnKiL9GBY5Me/PLmY5nADLaGspndYVCaxJbRQyfX0KlKqqlj2LBlVZS9ojhnyZLxymrvNmtqrcrMoJPE15jF4v/sc40CgYEA7w567TMXAJDF9QwaHZ4ZJeQL365mtRiiQQpLok2eVIqlr/C4i7SqCs5C8QoA9by9I2Usa5EFEgKsme+W98pkNy1ynkYKDuzo57PMkNzHmsqLaqCsfY/zqdodrSVLoA9+nI82TCR7YKcZDpgpMa35mVdYQzbZIYWxnCpkfRGd6yMCgYEA1jw5XKa7zBtE0QByNpGV1zUVkl2qJZcrp6fA4syp5VxhC0IpYg1Qu6ZL0lSvYLfGGQiURLAXQAv1EtkTRv1ol3l859DxFrI4GWuNhH1zE6kuomT4zwhQTa8dZsCmuP3WdJKsOUaDwFTOf0u2Ik7o/zzmOpjiYsdk5vjeVPVsgh8CgYALdRE1Lx6qG0YxkWvrAXnJFB3xkYVApraYEWtAkyHEgYShYxMlNvpzXCFfNhCHto0GFkJDwYaRr2kgU5hTtfKJpnb42PiAcKBVAowKYVp7s7ts19iMiAqwmFCVzNTMDhIOZNrAWXtETZ3o0igfRmxRChuj1QwhDCxQBMQeLmr4KwKBgE3M4Sf8hQbCgGNGPjQC+t+Er6jPyxKLq5bfHPVAThK1Uai9BjpNi5wZ8D8Z8fa1xoMg0nd/W3Iu5XlKy+1j6a/YtruY7XTIlAbnQCV1SW1Ca2UeNh05b7BGf+7o16Mmy9LZ0SGbsg0Ov08LN8GN1p+ahiGRk+U7dDFM/7Dqz9URAoGAZZTcUxCT5SdkI0alHDBevpOsn7r04sTpH7xhlZACMlUsL3Lo6ZfedSoEJGLqM2ZODFxRHMvaI5fhI7dToLDctkyic1oPi/wM/lVl+XlnrE/PgPCQIuLIN+BfLCVWuqQL9nfbmkerKUK+W0irZTNSg3QYFBMKEA03GXt0gtvGaYE=",
+        "saml_name_id_format": "username",
+        "saml.onetimeuse.condition": "false",
+        "saml_signature_canonicalization_method": "http://www.w3.org/2001/10/xml-exc-c14n#"
+      },
+      "fullScopeAllowed": true,
+      "nodeReRegistrationTimeout": -1,
+      "protocolMappers": [
+        {
+          "id": "3932ad95-05a2-4eec-b86a-9fbc7eeaab39",
+          "name": "full name",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-full-name-mapper",
+          "consentRequired": true,
+          "consentText": "${fullName}",
+          "config": {
+            "id.token.claim": "true",
+            "access.token.claim": "true"
+          }
+        },
+        {
+          "id": "2abce6ab-945d-407b-a0c1-5d8d31a4e530",
+          "name": "family name",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-property-mapper",
+          "consentRequired": true,
+          "consentText": "${familyName}",
+          "config": {
+            "userinfo.token.claim": "true",
+            "user.attribute": "lastName",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "family_name",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "faf8c4ac-e35a-4760-8206-48cc1563afc0",
+          "name": "role list",
+          "protocol": "saml",
+          "protocolMapper": "saml-role-list-mapper",
+          "consentRequired": false,
+          "config": {
+            "single": "false",
+            "attribute.nameformat": "Basic",
+            "attribute.name": "Role"
+          }
+        },
+        {
+          "id": "8edd6288-7f0b-4eb1-9e91-2635845b224d",
+          "name": "username",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-property-mapper",
+          "consentRequired": true,
+          "consentText": "${username}",
+          "config": {
+            "userinfo.token.claim": "true",
+            "user.attribute": "username",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "preferred_username",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "4a1b9b23-629d-4b27-bfe0-403798d971d1",
+          "name": "X500 surname",
+          "protocol": "saml",
+          "protocolMapper": "saml-user-property-mapper",
+          "consentRequired": true,
+          "consentText": "${familyName}",
+          "config": {
+            "attribute.nameformat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
+            "user.attribute": "lastName",
+            "friendly.name": "surname",
+            "attribute.name": "urn:oid:2.5.4.4"
+          }
+        },
+        {
+          "id": "576b5470-4ceb-4c95-8ba8-e2c0f26300af",
+          "name": "X500 email",
+          "protocol": "saml",
+          "protocolMapper": "saml-user-property-mapper",
+          "consentRequired": true,
+          "consentText": "${email}",
+          "config": {
+            "attribute.nameformat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
+            "user.attribute": "email",
+            "friendly.name": "email",
+            "attribute.name": "urn:oid:1.2.840.113549.1.9.1"
+          }
+        },
+        {
+          "id": "8f7311d8-b02d-4083-a785-badd07b2f44b",
+          "name": "X500 givenName",
+          "protocol": "saml",
+          "protocolMapper": "saml-user-property-mapper",
+          "consentRequired": true,
+          "consentText": "${givenName}",
+          "config": {
+            "attribute.nameformat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
+            "user.attribute": "firstName",
+            "friendly.name": "givenName",
+            "attribute.name": "urn:oid:2.5.4.42"
+          }
+        },
+        {
+          "id": "a00023a6-0dc1-46a5-a7c7-121b4c90d58a",
+          "name": "given name",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-property-mapper",
+          "consentRequired": true,
+          "consentText": "${givenName}",
+          "config": {
+            "userinfo.token.claim": "true",
+            "user.attribute": "firstName",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "given_name",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "90f4fe53-59f0-4c67-a171-167a678c3533",
+          "name": "email",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-property-mapper",
+          "consentRequired": true,
+          "consentText": "${email}",
+          "config": {
+            "userinfo.token.claim": "true",
+            "user.attribute": "email",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "email",
+            "jsonType.label": "String"
+          }
+        }
+      ],
+      "useTemplateConfig": false,
+      "useTemplateScope": false,
+      "useTemplateMappers": false
+    } ]
+}

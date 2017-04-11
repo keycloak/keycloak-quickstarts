@@ -1,0 +1,34 @@
+language: java
+
+jdk:
+  - oraclejdk8
+
+cache:
+  directories:
+    - $HOME/.m2
+
+before_cache:
+  - rm -rf $HOME/.m2/repository/org/keycloak
+
+env:
+  global:
+    - MAVEN_SKIP_RC=true
+    - MAVEN_OPTS="-Xms512m -Xmx2048m"
+
+before_install:
+  - git clone https://github.com/abstractj/keycloak.git && cd keycloak && git checkout refactor-test-helper
+  - mvn clean install -s ../settings-snapshots.xml --no-snapshot-updates -Pdistribution -DskipTests=true -B -V -e
+  - cd .. && scripts/start-server.sh
+install:
+  - mvn clean install -s settings-snapshots.xml -Pwildfly-managed -Denforcer.skip=true
+
+after_install:
+  - ./scripts/stop-server.sh
+  - kill -9 `cat pid.txt`
+
+branches:
+  only:
+  - master
+  - quickstarts-dev
+
+sudo: false
