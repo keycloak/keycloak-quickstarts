@@ -35,32 +35,6 @@
         </license>
     </licenses>
 
-    <properties>
-        <version.wildfly.maven.plugin>1.0.1.Final</version.wildfly.maven.plugin>
-        <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
-        <version.war.maven.plugin>2.6</version.war.maven.plugin>
-        <version.enforcer.maven.plugin>1.4.1</version.enforcer.maven.plugin>
-    </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-              <groupId>org.keycloak.bom</groupId>
-              <artifactId>keycloak-adapter-bom</artifactId>
-              <version>3.1.0.CR1-SNAPSHOT</version>
-              <type>pom</type>
-              <scope>import</scope>
-            </dependency>
-          <dependency>
-            <groupId>org.wildfly.bom</groupId>
-            <artifactId>wildfly-javaee7</artifactId>
-            <scope>import</scope>
-            <type>pom</type>
-            <version>10.0.0.Final</version>
-          </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <dependencies>
         <dependency>
             <groupId>org.keycloak</groupId>
@@ -92,13 +66,12 @@
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-client-registration-api</artifactId>
-            <version>${version.client.registration}</version>
+            <version>${version.keycloak}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jboss.arquillian.extension</groupId>
             <artifactId>arquillian-phantom-driver</artifactId>
-            <version>${version.phantom.driver}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -110,7 +83,6 @@
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
-                <version>${version.wildfly.maven.plugin}</version>
                 <configuration>
                     <skip>false</skip>
                 </configuration>
@@ -119,7 +91,6 @@
             <plugin>
                 <groupId>org.jboss.as.plugins</groupId>
                 <artifactId>jboss-as-maven-plugin</artifactId>
-                <version>${version.jboss.maven.plugin}</version>
                 <configuration>
                     <skip>false</skip>
                 </configuration>

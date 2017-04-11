@@ -35,14 +35,20 @@
     </licenses>
 
     <properties>
+        <version.wildfly>10.1.0.Final</version.wildfly>
+        <version.keycloak>${project.version}</version.keycloak>
+
         <version.wildfly.maven.plugin>1.0.1.Final</version.wildfly.maven.plugin>
         <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
         <version.war.maven.plugin>2.6</version.war.maven.plugin>
-        <version.wildfly>10.1.0.Final</version.wildfly>
         <version.enforcer.maven.plugin>1.4.1</version.enforcer.maven.plugin>
+        <version.surefire.plugin>2.19.1</version.surefire.plugin>
+        <version.exec.maven.plugin>1.6.0</version.exec.maven.plugin>
+
         <version.graphene.webdriver>2.1.0.Final</version.graphene.webdriver>
-        <version.client.registration>3.1.0.CR1-SNAPSHOT</version.client.registration>
-        <version.phantom.driver>1.2.1.Final</version.phantom.driver>
+        <version.wildfly.arquillian.container>2.0.2.Final</version.wildfly.arquillian.container>
+        <version.junit>4.12</version.junit>
+
         <arquillian-managed>true</arquillian-managed>
     </properties>
 
@@ -65,16 +71,16 @@
             <dependency>
                 <groupId>org.keycloak.bom</groupId>
                 <artifactId>keycloak-adapter-bom</artifactId>
-                <version>3.1.0.CR1-SNAPSHOT</version>
+                <version>${version.keycloak}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.wildfly.bom</groupId>
                 <artifactId>wildfly-javaee7</artifactId>
-                <scope>import</scope>
+                <version>${version.wildfly}</version>
                 <type>pom</type>
-                <version>10.0.1.Final</version>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -88,7 +94,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>${version.junit}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -142,13 +148,13 @@
                 <dependency>
                     <groupId>org.wildfly.arquillian</groupId>
                     <artifactId>wildfly-arquillian-container-managed</artifactId>
-                    <version>2.0.2.Final</version>
+                    <version>${version.wildfly.arquillian.container}</version>
                     <scope>test</scope>
                 </dependency>
                 <dependency>
                     <groupId>org.keycloak</groupId>
                     <artifactId>keycloak-test-helper</artifactId>
-                    <version>3.1.0.CR1-SNAPSHOT</version>
+                    <version>${version.keycloak}</version>
                     <scope>test</scope>
                 </dependency>
             </dependencies>
@@ -162,7 +168,7 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-surefire-plugin</artifactId>
-                        <version>2.19.1</version>
+                        <version>${version.surefire.plugin}</version>
                         <configuration>
                             <redirectTestOutputToFile>false</redirectTestOutputToFile>
                         </configuration>
@@ -189,14 +195,14 @@
                                         <artifactItem>
                                             <groupId>org.keycloak</groupId>
                                             <artifactId>keycloak-wildfly-adapter-dist</artifactId>
-                                            <version>3.1.0.CR1-SNAPSHOT</version>
+                                            <version>${version.keycloak}</version>
                                             <type>zip</type>
                                             <outputDirectory>target/wildfly-${version.wildfly}</outputDirectory>
                                         </artifactItem>
                                         <artifactItem>
                                             <groupId>org.keycloak</groupId>
                                             <artifactId>keycloak-saml-wildfly-adapter-dist</artifactId>
-                                            <version>3.1.0.CR1-SNAPSHOT</version>
+                                            <version>${version.keycloak}</version>
                                             <type>zip</type>
                                             <outputDirectory>target/wildfly-${version.wildfly}</outputDirectory>
                                         </artifactItem>
@@ -208,6 +214,7 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
+                        <version>${version.exec.maven.plugin}</version>
                         <executions>
                             <execution>
                                 <id>install-adapters</id>
