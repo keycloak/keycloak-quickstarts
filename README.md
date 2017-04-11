@@ -73,8 +73,6 @@ To start the Keycloak server on different ports:
 Open the main page for the Keycloak server ([localhost:8180](http://localhost:8180) or http://&lt;HOSTNAME&gt;:8080). If
 this is a new installation of Keycloak server you will be instructed to create an initial admin user. To continue with
 the quickstarts you need to do this prior to continuing.
-By default, the integration tests for each quickstart, expect this initial admin user to have `admin` as username and `admin` as password. Of course, this is configurable in the Test classes.
-
 
 ### <a id="add-roles-user"></a>Create Roles and User
 
@@ -161,6 +159,29 @@ The next step is to start WildFly server:
      WILDFLY_HOME\bin\jboss-cli.bat -c --file=WILDFLY_HOME\bin\adapter-install-saml.cli
      WILDFLY_HOME\bin\jboss-cli.bat -c --command=:reload
    ````
+
+Integration tests
+-----------------
+
+By default, the integration tests for each quickstart, expect this initial admin user to have `admin` as username and `admin` as password. This is configurable in each `ArquillianTest` class.
+
+```
+static {
+    try {
+        importTestRealm("admin", "admin", "/quickstart-realm.json");
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+```
+
+If you don't have access to admin's credentials, please import the `quickstart-realm.json` from `src/test/resources`.
+
+After that run integration tests:
+```
+mvn clean install -Pwildfly-managed -Denforcer.skip=true
+```
+
 
 
 Examples
