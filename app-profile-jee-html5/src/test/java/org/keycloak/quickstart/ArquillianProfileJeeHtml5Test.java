@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.keycloak.quickstart;
 
 import com.google.gson.JsonObject;
@@ -22,13 +21,12 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.drone.api.annotation.Drone;
+import org.jboss.arquillian.graphene.Graphene;
 import org.jboss.arquillian.graphene.page.Page;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.Archive;
-import org.jboss.shrinkwrap.api.Filters;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.AfterClass;
@@ -38,10 +36,11 @@ import org.junit.runner.RunWith;
 import org.keycloak.quickstart.page.IndexPage;
 import org.keycloak.quickstart.page.LoginPage;
 import org.keycloak.quickstart.page.ProfilePage;
-import org.keycloak.quickstart.profilejee.Controller;
 import org.keycloak.test.TestsHelper;
 import org.keycloak.test.builders.ClientBuilder;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,6 +49,7 @@ import java.net.URL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.keycloak.test.TestsHelper.createClient;
 import static org.keycloak.test.TestsHelper.deleteRealm;
@@ -62,12 +62,12 @@ import static org.keycloak.test.builders.ClientBuilder.AccessType.PUBLIC;
  */
 @RunWith(Arquillian.class)
 @RunAsClient
-public class ArquillianTest {
+public class ArquillianProfileJeeHtml5Test {
 
     private static final String WEBAPP_SRC = "src/main/webapp";
-    private static final String APP_NAME = "app-profile-jsp";
+    private static final String APP_NAME = "app-profile-html5";
     private static final String APP_SERVICE = "service-jaxrs";
-    private static final String ROOT_URL = "http://127.0.0.1:8080/app-profile-jsp";
+    private static final String ROOT_URL = "http://127.0.0.1:8080/app-profile-html5";
 
     @Page
     private IndexPage indexPage;
@@ -86,7 +86,7 @@ public class ArquillianTest {
         }
     }
 
-    @Deployment(name = APP_SERVICE, order = 1, testable = false)
+    @Deployment(name= APP_SERVICE, order = 1, testable = false)
     public static Archive<?> createTestArchive1() throws IOException {
         return ShrinkWrap.createFromZipFile(WebArchive.class,
                 new File("../service-jee-jaxrs/target/service.war"))
@@ -97,16 +97,14 @@ public class ArquillianTest {
 
     @Deployment(name = APP_NAME, order = 2, testable = false)
     public static Archive<?> createTestArchive2() throws IOException {
-        return ShrinkWrap.create(WebArchive.class, "app-profile-jsp.war")
-                .addPackages(true, Filters.exclude(".*Test.*"), Controller.class.getPackage())
-                .addAsWebResource(new File(WEBAPP_SRC, "index.jsp"))
-                .addAsWebResource(new File(WEBAPP_SRC, "profile.jsp"))
+        return ShrinkWrap.create(WebArchive.class, "app-profile-html5.war")
+                .addAsWebResource(new File(WEBAPP_SRC, "app.js"))
+                .addAsWebResource(new File(WEBAPP_SRC, "index.html"))
+                .addAsWebResource(new File(WEBAPP_SRC, "keycloak.js"))
                 .addAsWebResource(new File(WEBAPP_SRC, "styles.css"))
-                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-                .addAsWebInfResource(new StringAsset(createClient(ClientBuilder.create(APP_NAME)
+                .addAsWebResource(new StringAsset(createClient(ClientBuilder.create(APP_NAME)
                         .rootUrl(ROOT_URL)
-                        .accessType(PUBLIC))), "keycloak.json")
-                .setWebXML(new File("src/main/webapp", "WEB-INF/web.xml"));
+                        .accessType(PUBLIC))), "keycloak.json");
     }
 
     @Drone
@@ -117,8 +115,8 @@ public class ArquillianTest {
     private URL contextRoot;
 
     @AfterClass
-    public static void cleanUp() throws IOException {
-        deleteRealm("admin", "admin", TestsHelper.testRealm);
+    public static void cleanUp() throws IOException{
+        deleteRealm("admin","admin",TestsHelper.testRealm);
     }
 
     @Before
@@ -131,7 +129,7 @@ public class ArquillianTest {
         try {
             indexPage.clickLogin();
             loginPage.login("test-admin", "password");
-            assertEquals(profilePage.getUsername(), "test-admin");
+            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.id("username"), "admin")));
             profilePage.clickLogout();
         } catch (Exception e) {
             fail("Should display logged in user");

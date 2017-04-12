@@ -42,7 +42,7 @@ import static org.keycloak.test.builders.ClientBuilder.AccessType.BEARER_ONLY;
 
 
 @RunWith(Arquillian.class)
-public class ArquillianTest {
+public class ArquillianServiceJeeJaxrsTest {
 
     static {
         try {

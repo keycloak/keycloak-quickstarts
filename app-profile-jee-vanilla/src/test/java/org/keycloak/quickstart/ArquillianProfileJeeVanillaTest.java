@@ -59,7 +59,7 @@ import static org.keycloak.test.builders.ClientBuilder.AccessType.CONFIDENTIAL;
  */
 @RunWith(Arquillian.class)
 @RunAsClient
-public class ArquillianTest {
+public class ArquillianProfileJeeVanillaTest {
 
     private static final String WEBAPP_SRC = "src/main/webapp";
     private static final String APP_NAME = "vanilla";

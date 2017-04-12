@@ -26,17 +26,13 @@ import org.jboss.arquillian.graphene.page.Page;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.Archive;
-import org.jboss.shrinkwrap.api.Filters;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.keycloak.quickstart.appjee.Controller;
 import org.keycloak.quickstart.page.IndexPage;
 import org.keycloak.quickstart.page.LoginPage;
 import org.keycloak.test.TestsHelper;
@@ -67,12 +63,12 @@ import static org.keycloak.test.builders.ClientBuilder.AccessType.PUBLIC;
  */
 @RunWith(Arquillian.class)
 @RunAsClient
-public class ArquillianTest {
+public class ArquillianJeeHtml5Test {
 
     private static final String WEBAPP_SRC = "src/main/webapp";
-    private static final String APP_NAME = "app-jsp";
+    private static final String APP_NAME = "app-html5";
     private static final String APP_SERVICE = "service-jaxrs";
-    private static final String ROOT_URL = "http://127.0.0.1:8080/app-jsp";
+    private static final String ROOT_URL = "http://127.0.0.1:8080/app-html5";
 
     @Page
     private IndexPage indexPage;
@@ -88,7 +84,7 @@ public class ArquillianTest {
         }
     }
 
-    @Deployment(name= APP_SERVICE, order = 1, testable = false)
+    @Deployment(name = APP_SERVICE, order = 1, testable = false)
     public static Archive<?> createTestArchive1() throws IOException {
         return ShrinkWrap.createFromZipFile(WebArchive.class,
                 new File("../service-jee-jaxrs/target/service.war"))
@@ -97,22 +93,16 @@ public class ArquillianTest {
                                 ClientBuilder.create(APP_SERVICE).accessType(BEARER_ONLY))), "keycloak.json");
     }
 
-    @Deployment(name= APP_NAME, order = 2, testable = false)
+    @Deployment(name = APP_NAME, order = 2, testable = false)
     public static Archive<?> createTestArchive2() throws IOException {
-        File[] files = Maven.resolver().loadPomFromFile("pom.xml")
-                    .importRuntimeDependencies().resolve().withTransitivity().asFile();
-
-        return ShrinkWrap.create(WebArchive.class,  "app-jsp.war")
-                .addPackages(true, Filters.exclude(".*Test.*"), Controller.class.getPackage())
-                .addAsLibraries(files)
-                .addAsWebResource(new File(WEBAPP_SRC, "index.jsp"))
-                .addAsWebResource(new File(WEBAPP_SRC, "protected.jsp"))
+        return ShrinkWrap.create(WebArchive.class, "app-html5.war")
+                .addAsWebResource(new File(WEBAPP_SRC, "app.js"))
+                .addAsWebResource(new File(WEBAPP_SRC, "index.html"))
+                .addAsWebResource(new File(WEBAPP_SRC, "keycloak.js"))
                 .addAsWebResource(new File(WEBAPP_SRC, "styles.css"))
-                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-                .addAsWebInfResource(new StringAsset(createClient(ClientBuilder.create(APP_NAME)
+                .addAsWebResource(new StringAsset(createClient(ClientBuilder.create(APP_NAME)
                         .rootUrl(ROOT_URL)
-                        .accessType(PUBLIC))), "keycloak.json")
-                .setWebXML(new File("src/main/webapp", "WEB-INF/web.xml"));
+                        .accessType(PUBLIC))), "keycloak.json");
     }
 
     @Drone
@@ -123,8 +113,8 @@ public class ArquillianTest {
     private URL contextRoot;
 
     @AfterClass
-    public static void cleanUp() throws IOException{
-        deleteRealm("admin","admin",TestsHelper.testRealm);
+    public static void cleanUp() throws IOException {
+        deleteRealm("admin", "admin", TestsHelper.testRealm);
     }
 
     @Before
