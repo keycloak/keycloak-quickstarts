@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.keycloak.quickstarts</groupId>
         <artifactId>keycloak-quickstart-parent</artifactId>
-        <version>3.1.0.CR1-SNAPSHOT</version>
+        <version>3.0.0.Final</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -19,7 +19,7 @@
             <dependency>
                 <groupId>org.keycloak.bom</groupId>
                 <artifactId>keycloak-adapter-bom</artifactId>
-                <version>3.1.0.CR1-SNAPSHOT</version>
+                <version>3.0.0.Final</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -67,7 +67,7 @@
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-spring-security-adapter</artifactId>
             <!-- to remove after I will be added to the bom -->
-            <version>3.1.0.CR1-SNAPSHOT</version>
+            <version>3.0.0.Final</version>
         </dependency>
         <dependency>
             <groupId>net.rossillo.mvc.cache</groupId>
@@ -102,7 +102,7 @@
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-test-helper</artifactId>
-            <version>3.1.0.CR1-SNAPSHOT</version>
+            <version>3.0.0.Final</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

@@ -22,16 +22,16 @@ function waitForServer {
   done
 }
 
-#ARCHIVE="${KEYCLOAK}.tar.gz"
-#DIST="keycloak-server-dist"
-#URL="https://repo1.maven.org/maven2/org/keycloak/$DIST/${VERSION}/$DIST-${VERSION}.tar.gz"
+ARCHIVE="${KEYCLOAK}.tar.gz"
+DIST="keycloak-server-dist"
+URL="https://repo1.maven.org/maven2/org/keycloak/$DIST/${VERSION}/$DIST-${VERSION}.tar.gz"
 # Download keycloak server if we don't already have it
-#if [ ! -e $KEYCLOAK ]
-#then
-#  curl -o $ARCHIVE $URL
-#  tar xzf $ARCHIVE
-#  rm -f $ARCHIVE
-#fi
+if [ ! -e $KEYCLOAK ]
+then
+  curl -o $ARCHIVE $URL
+  tar xzf $ARCHIVE
+  rm -f $ARCHIVE
+fi
 
 $KEYCLOAK/bin/add-user-keycloak.sh -u admin -p admin
 # Start the server
