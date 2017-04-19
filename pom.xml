@@ -97,6 +97,12 @@
             <version>${version.junit}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-test-helper</artifactId>
+            <version>${version.keycloak}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <modules>
@@ -149,12 +155,6 @@
                     <groupId>org.wildfly.arquillian</groupId>
                     <artifactId>wildfly-arquillian-container-managed</artifactId>
                     <version>${version.wildfly.arquillian.container}</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.keycloak</groupId>
-                    <artifactId>keycloak-test-helper</artifactId>
-                    <version>${version.keycloak}</version>
                     <scope>test</scope>
                 </dependency>
             </dependencies>
