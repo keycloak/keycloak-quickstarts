@@ -76,7 +76,6 @@ public class ArquillianProfileSamlJeeJspTest {
     static {
         try {
             importTestRealm("admin", "admin", "/quickstart-realm.json");
-            createClient(ClientBuilder.create(APP_SERVICE).accessType(BEARER_ONLY));
         } catch (IOException e) {
             e.printStackTrace();
         }
