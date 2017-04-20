@@ -4,7 +4,7 @@ app-authz-jee-vanilla: JSP Application Using Fine-grained Authorization
 Level: Beginner  
 Technologies: JavaEE  
 Summary: JSP Application Using Fine-grained Authorization  
-Target Product: RH-SSO, JBoss EAP  
+Target Product: Keycloak, JBoss EAP  
 Source: <https://github.com/redhat-developer/redhat-sso-quickstarts>  
 
 
@@ -28,11 +28,11 @@ All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven
 Configure the Client Adapter
 ----------------------------------
 
-Before configuring the adapter you need to create a client in RH-SSO.
+Before configuring the adapter you need to create a client in Keycloak.
 
 The following steps show how to create the client required for this quickstart:
 
-* Open the RH-SSO admin console
+* Open the Keycloak admin console
 * Select `Clients` from the menu
 * Click `Create`
 * Add the following values:
@@ -106,7 +106,7 @@ For more information, please consult the Authorization Services documentation.
 Undeploy the Quickstart
 --------------------
 
-1. Open a terminal and navigate to the root of the RH-SSO server directory.
+1. Open a terminal and navigate to the root of the Keycloak server directory.
 
 2. The following shows the command to undeploy the quickstart:
 

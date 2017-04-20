@@ -4,7 +4,7 @@ user-storage-jpa: User Storage Provider with EJB and JPA
 Level: Beginner  
 Technologies: JavaEE, EJB, JPA  
 Summary: User Storage Provider with EJB and JPA  
-Target Product: RH-SSO  
+Target Product: Keycloak  
 Source: <https://github.com/redhat-developer/redhat-sso-quickstarts>  
 
 
@@ -12,16 +12,16 @@ What is it?
 -----------
 
 This is an example of the User Storage SPI implemented using EJB and JPA.  It shows you how you might use these components
-to integrate RH-SSO with an existing external custom user database.  The example integrates with a simple relational
+to integrate Keycloak with an existing external custom user database.  The example integrates with a simple relational
 database schema that has one user table that stores a username, email, phone number, and password for one particular user.
-Using the User Storage SPI this table is mapped to the RH-SSO user metamodel so that it can be consumed by the RH-SSO
+Using the User Storage SPI this table is mapped to the Keycloak user metamodel so that it can be consumed by the Keycloak
 runtime. Before using this example, you should probably read the User Storage SPI chapter of our server developer guide.
 
 
 System Requirements
 -------------------
 
-You need to have RH-SSO 7.1 running.
+You need to have Keycloak 7.1 running.
 
 All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
 
@@ -30,7 +30,7 @@ Build and Deploy the Quickstart
 -------------------------------
 
 You must first deploy the datasource it uses.
-Start up the RH-SSO server.  Then in the directory of this example type the following maven command:
+Start up the Keycloak server.  Then in the directory of this example type the following maven command:
 
    ````
    mvn -Padd-datasource install
@@ -41,7 +41,7 @@ already exists.
 
 If you open the pom.xml file you'll see that the add-datasource profile creates an XA datasource using the built
 in H2 database that comes with the server.  An XA datasource is required because you cannot use two non-xa datasources
-in the same transaction.  The RH-SSO database is non-xa.
+in the same transaction.  The Keycloak database is non-xa.
 
 Another thing to note is that the xa-datasource created is in-memory only.  If you reboot the server, any users you've
 added or changes you've made to users loaded by this provider will be wiped clean.
@@ -56,9 +56,9 @@ If you want to play with and modify the example, simply rerun the maven deploy c
 
 Enable the Provider for a Realm
 -------------------------------
-Login to the RH-SSO Admin Console and got to the User Federation tab.   You should now see your deployed provider in the add-provider list box.
+Login to the Keycloak Admin Console and got to the User Federation tab.   You should now see your deployed provider in the add-provider list box.
 Add the provider, save it.  This will now enable the provider for the 'master' realm.  Because this provider implements the UserRegistrationProvider interface, any new user you create in the
-admin console or on the registration pages of RH-SSO, will be created in the custom store used by the provider.  If you go
+admin console or on the registration pages of Keycloak, will be created in the custom store used by the provider.  If you go
 to the Users tab in the Admin Console and create a new user, you'll be able to see the provider in action.
 
 

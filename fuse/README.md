@@ -4,14 +4,14 @@ JBoss Fuse Applications
 Level: Beginner  
 Technologies: Servlet, Apache Camel, Apache CXF  
 Summary: JBoss Fuse Quickstarts  
-Target Product: RH-SSO, JBoss Fuse  
+Target Product: Keycloak, JBoss Fuse  
 Source: <https://github.com/redhat-developer/redhat-sso-quickstarts>  
 
 
 What is it?
 -----------
 
-This is set of quickstarts, which show various kinds of web applications and services deployed on JBoss Fuse, which are secured by RH-SSO. See the individual subdirectories
+This is set of quickstarts, which show various kinds of web applications and services deployed on JBoss Fuse, which are secured by Keycloak. See the individual subdirectories
 for the more detailed info about particular applications and needed steps to configure and deploy them. This README contains the basic configuration steps, which 
 are common for all JBoss Fuse quickstarts.
 
@@ -24,8 +24,8 @@ All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven
 Start and Configure the Wildfly
 -------------------------------
 
-It is assumed that you already did the basic steps from the [Base README](../README.md) from the section "Start the RH-SSO Server" .
-The individual submodules will contain more specific steps for RH-SSO server for individual Fuse quickstart applications. Usually it's about setup client 
+It is assumed that you already did the basic steps from the [Base README](../README.md) from the section "Start the Keycloak Server" .
+The individual submodules will contain more specific steps for Keycloak server for individual Fuse quickstart applications. Usually it's about setup client 
 and export `keycloak.json` file from it.
  
 Start and Configure the JBoss Fuse
@@ -42,7 +42,7 @@ cd jboss-fuse-6.3.0.redhat-224/bin/
 ````
 Wait until JBoss Fuse is started and Karaf terminal shows up.
 
-* Install the common set of RH-SSO features. First use this command to set the variable with the current RH-SSO version. The version can be seen
+* Install the common set of Keycloak features. First use this command to set the variable with the current Keycloak version. The version can be seen
 for example when you look at the [pom.xml](pom.xml) file of this quickstart and look at the content of element `<version>` .
 ````
 RHSSO_VERSION="<YOUR-RHSSO-VERSION-HERE>"

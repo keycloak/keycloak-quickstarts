@@ -4,7 +4,7 @@ app-authz-jee-servlet: Servlet Application Using Fine-grained Authorization
 Level: Beginner  
 Technologies: JavaEE  
 Summary: Servlet Application Using Fine-grained Authorization  
-Target Product: RH-SSO, JBoss EAP  
+Target Product: Keycloak, JBoss EAP  
 Source: <https://github.com/redhat-developer/redhat-sso-quickstarts>  
 
 
@@ -38,11 +38,11 @@ All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven
 Configure the Client Adapter
 ----------------------------------
 
-Before configuring the adapter you need to create a `realm` in RH-SSO with all the necessary configuration to deploy and run the quickstart.
+Before configuring the adapter you need to create a `realm` in Keycloak with all the necessary configuration to deploy and run the quickstart.
 
 The following steps show how to create the realm required for this quickstart:
 
-* Open the RH-SSO admin console
+* Open the Keycloak admin console
 * In the top left corner dropdown menu that is titled Master, click Add Realm. If you are logged in to the master realm this dropdown menu lists all the realms created.
 * For this quickstart we are not going to manually create the realm, but import all configuration from a JSON file. Click on `Select File` and import the [config/realm-import.json](config/realm-import.json).
 * Click `Create`
@@ -92,7 +92,7 @@ If you want to play around, try the following steps:
 
 * Add `user_premium` to `alice` and see if she is now able to access premium resources as well if the dynamic menu changes and display `Do user premium thing`
 * Grant to `alice` the necessary permission to access administrative resources.
-    * Open the RH-SSO admin console and make sure the `authz-servlet` realm is selected
+    * Open the Keycloak admin console and make sure the `authz-servlet` realm is selected
     * Click on `Clients` on the left-side menu and select `authz-servlet` client
     * Click on `Authorization` tab and then click the `Policies` tab
     * On the `Policies` tab, create a new `User-based Policy` by selecting `alice` user. Name this policy as `Only Alice Policy`
@@ -110,7 +110,7 @@ For more information, please consult the Authorization Services documentation.
 Undeploy the Quickstart
 --------------------
 
-1. Open a terminal and navigate to the root of the RH-SSO server directory.
+1. Open a terminal and navigate to the root of the Keycloak server directory.
 
 2. The following shows the command to undeploy the quickstart:
 
