@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    JBoss, Home of Professional Open Source
+    Copyright 2016, Red Hat, Inc. and/or its affiliates, and individual
+    contributors by the @authors tag. See the copyright.txt in the
+    distribution for a full listing of individual contributors.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.redhat.rh-sso</groupId>
+    <artifactId>rh-sso-fuse-app-war-jsp</artifactId>
+    <version>7.1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+    <name>RH-SSO Quickstart: WAR frontend application</name>
+    <description>JBoss Fuse WAR frontend application secured by RH-SSO</description>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <repositories>
+        <repository>
+            <id>jboss-enterprise-maven-repository</id>
+            <url>https://maven.repository.redhat.com/ga/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <properties>
+        <version.rh-sso.bom>7.1.0-SNAPSHOT</version.rh-sso.bom>
+        <maven.compiler.plugin.version>3.1</maven.compiler.plugin.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <felix.plugin.version>2.3.7</felix.plugin.version>
+        <version.war.maven.plugin>2.6</version.war.maven.plugin>
+        <version.enforcer.maven.plugin>1.4.1</version.enforcer.maven.plugin>
+
+        <keycloak.osgi.export>
+        </keycloak.osgi.export>
+        <keycloak.osgi.import>
+            org.apache.http.*;version="[4.4,5)",
+            javax.servlet.*;version="[2.5,4)",
+            org.keycloak.adapters.jetty,
+            org.keycloak.adapters,
+            org.keycloak.constants,
+            org.keycloak.util,
+            org.keycloak.*,
+            *;resolution:=optional,
+            org.ops4j.pax.web.service,
+            org.ops4j.pax.web.jsp,
+            org.apache.el,
+            org.apache.jasper.el,
+            org.apache.jasper.runtime,
+            org.apache.jasper.compiler,
+            org.apache.taglibs.standard.tag.rt.core,
+            javax.el,
+            javax.servlet,
+            javax.servlet.http,
+            javax.servlet.jsp,
+            javax.servlet.jsp.tagext,
+        </keycloak.osgi.import>
+        <keycloak.osgi.private>
+            org.keycloak.quickstart.*
+        </keycloak.osgi.private>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.redhat.bom.rh-sso</groupId>
+                <artifactId>rh-sso-fuse-bom</artifactId>
+                <version>${version.rh-sso.bom}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-adapter-spi</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-adapter-core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>app-war-jsp</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${version.enforcer.maven.plugin}</version>
+                <executions>
+                    <execution>
+                        <id>enforce-files-exist</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireFilesExist>
+                                    <files>
+                                        <file>${basedir}/src/main/webapp/WEB-INF/keycloak.json</file>
+                                    </files>
+                                </requireFilesExist>
+                            </rules>
+                            <fail>true</fail>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin.version}</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>${version.war.maven.plugin}</version>
+                <configuration>
+                    <archive>
+                        <manifestFile>${basedir}/target/classes/META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>${felix.plugin.version}</version>
+                <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <id>bundle-manifest</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>manifest</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <supportedProjectTypes>
+                        <supportedProjectType>war</supportedProjectType>
+                    </supportedProjectTypes>
+                    <instructions>
+                        <Webapp-Context>app-war-jsp</Webapp-Context>
+                        <Web-ContextPath>app-war-jsp</Web-ContextPath>
+                        <Embed-Directory>WEB-INF/lib</Embed-Directory>
+                        <Bundle-ClassPath>.,WEB-INF/classes</Bundle-ClassPath>
+                        <Bundle-Name>${project.name}</Bundle-Name>
+                        <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
+                        <Import-Package>${keycloak.osgi.import}</Import-Package>
+                        <Private-Package>${keycloak.osgi.private}</Private-Package>
+                        <Export-Package>${keycloak.osgi.export}</Export-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

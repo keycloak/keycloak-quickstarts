@@ -1,0 +1,15 @@
+{
+    "clientId": "app-authz-vanilla",
+    "rootUrl": "http://localhost:8080/app-authz-vanilla",
+    "enabled": true,
+    "redirectUris": [
+        "http://localhost:8080/app-authz-vanilla/*"
+    ],
+    "webOrigins": [
+        "http://localhost:8080"
+    ],
+    "publicClient": false,
+    "secret": "bce5816d-98c4-404f-a18d-bcc5cb005c79",
+    "serviceAccountsEnabled": true,
+    "authorizationServicesEnabled": true
+}

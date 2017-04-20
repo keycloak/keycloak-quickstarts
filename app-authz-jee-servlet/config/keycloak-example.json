@@ -1,0 +1,12 @@
+{
+  "realm": "authz-servlet",
+  "auth-server-url": "http://localhost:8180/auth",
+  "ssl-required": "external",
+  "resource": "authz-servlet",
+  "credentials": {
+    "secret": "secret"
+  },
+  "policy-enforcer": {
+    "on-deny-redirect-to" : "/authz-servlet/accessDenied.jsp"
+  }
+}

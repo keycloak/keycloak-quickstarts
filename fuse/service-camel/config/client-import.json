@@ -1,0 +1,6 @@
+{
+  "clientId": "fuse-service-camel",
+  "enabled": true,
+  "bearerOnly": true,
+  "adminUrl": "http://localhost:8383/service"
+}
