@@ -19,6 +19,7 @@
 nbactions.xml
 nb-configuration.xml
 catalog.xml
+nbproject
 
 # Compiled source #
 ###################
@@ -50,9 +51,8 @@ catalog.xml
 #########
 target
 
-/app-html5-war/nbproject/
-/war-app-html5/nbproject/
 
 # Node.js #
 ###########
 node_modules
+/app-angular2/src/main/webapp/node

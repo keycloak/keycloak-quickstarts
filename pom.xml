@@ -44,12 +44,14 @@
         <version.enforcer.maven.plugin>1.4.1</version.enforcer.maven.plugin>
         <version.surefire.plugin>2.19.1</version.surefire.plugin>
         <version.exec.maven.plugin>1.6.0</version.exec.maven.plugin>
+        <version.frontend.maven.plugin>1.4</version.frontend.maven.plugin>
 
         <version.graphene.webdriver>2.1.0.Final</version.graphene.webdriver>
         <version.wildfly.arquillian.container>2.0.2.Final</version.wildfly.arquillian.container>
         <version.junit>4.12</version.junit>
 
         <arquillian-managed>true</arquillian-managed>
+        <jboss-cli.executable>./jboss-cli.sh</jboss-cli.executable>
     </properties>
 
     <dependencyManagement>
@@ -113,6 +115,7 @@
         <module>app-profile-saml-jee-jsp</module>
         <!--<module>app-jee-html5</module>-->
         <module>app-jee-jsp</module>
+        <module>app-angular2</module>
         <!--<module>app-springboot</module>-->
         <!--<module>service-springboot-rest</module>-->
     </modules>
@@ -136,11 +139,27 @@
                         <skip>true</skip>
                     </configuration>
                 </plugin>
+                <plugin>
+                    <groupId>com.github.eirslett</groupId>
+                    <artifactId>frontend-maven-plugin</artifactId>
+                    <version>${version.frontend.maven.plugin}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
 
     <profiles>
+        <profile>
+            <id>jboss-cli-executable</id>
+            <properties>
+                <jboss-cli.executable>set nopause=true &amp; call ./jboss-cli.bat</jboss-cli.executable>
+            </properties>
+            <activation>
+                <os>
+                    <family>Windows</family>
+                </os>
+            </activation>
+        </profile>
         <profile>
             <!-- Run with: mvn clean test -Pwildfly-managed-->
             <id>wildfly-managed</id>
@@ -223,7 +242,7 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
-                                    <executable>./jboss-cli.sh</executable>
+                                    <executable>${jboss-cli.executable}</executable>
                                     <workingDirectory>target/wildfly-${version.wildfly}/bin</workingDirectory>
                                     <arguments>
                                         <argument>--file=adapter-install-offline.cli</argument>
