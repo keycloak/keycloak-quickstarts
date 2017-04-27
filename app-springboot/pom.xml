@@ -12,7 +12,7 @@
     <name>Spring Boot Keycloak Sample</name>
     <description>Spring Boot Keycloak Sample</description>
     <properties>
-        <springboot-version>1.4.2.RELEASE</springboot-version>
+        <springboot-version>1.5.3.RELEASE</springboot-version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -39,10 +39,6 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
@@ -53,21 +49,16 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+            <version>1.4.2.RELEASE</version>
+        </dependency>
 
         <!-- KeyCloak -->
         <dependency>
             <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-tomcat8-adapter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-spring-boot-adapter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-spring-security-adapter</artifactId>
-            <!-- to remove after I will be added to the bom -->
-            <version>3.1.0.Final</version>
+            <artifactId>keycloak-default-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>net.rossillo.mvc.cache</groupId>
