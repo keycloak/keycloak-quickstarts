@@ -111,7 +111,7 @@
         <module>app-profile-jee-jsp</module>
         <module>app-profile-jee-vanilla</module>
         <module>app-profile-saml-jee-jsp</module>
-        <module>app-jee-html5</module>
+        <!--<module>app-jee-html5</module>-->
         <module>app-jee-jsp</module>
         <!--<module>app-springboot</module>-->
         <!--<module>service-springboot-rest</module>-->
