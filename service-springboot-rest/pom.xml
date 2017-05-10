@@ -51,7 +51,7 @@
         <!-- KeyCloak -->
         <dependency>
             <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-default-spring-boot-starter</artifactId>
+            <artifactId>keycloak-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>org.keycloak</groupId>
