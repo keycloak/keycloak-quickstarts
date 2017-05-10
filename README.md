@@ -187,6 +187,7 @@ mvn clean install -Pwildfly-managed -Denforcer.skip=true
 Examples
 --------
 
+* [app-angular2](app-angular2/README.md) - Angular 2 application that invokes the example service. Requires service example to be deployed.
 * [app-jee-html5](app-jee-html5/README.md) - HTML5 application that invokes the example service. Requires service example to be deployed.
 * [app-jee-jsp](app-jee-jsp/README.md) - JSP application packaged that invokes the example service. Requires service example to be deployed.
 * [app-profile-jee-html5](app-profile-jee-html5/README.md) - HTML5 application that displays user profile and token details.

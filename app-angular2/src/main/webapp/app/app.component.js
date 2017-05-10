@@ -33,7 +33,7 @@ var AppComponent = (function () {
     function AppComponent(http, kc) {
         this.http = http;
         this.kc = kc;
-        this.serviceUrl = 'http://localhost:8080/service/';
+        this.serviceUrl = 'http://127.0.0.1:8080/service/';
         this.errorClass = '';
     }
     AppComponent.prototype.authenticated = function () {

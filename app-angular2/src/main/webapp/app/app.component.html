@@ -18,7 +18,7 @@
     <div class="menu">
         <button *ngIf="!authenticated()" name="loginBtn" (click)="login()">Login</button>
         <button *ngIf="authenticated()" name="logoutBtn" (click)="logout()">Logout</button>
-        <button name="accountBtn" (click)="account()">Account</button>
+        <button id="accountBtn" name="accountBtn" (click)="account()">Account</button>
     </div>
 
     <div class="content">
@@ -26,6 +26,6 @@
         <button name="securedBtn" (click)="request('secured')">Invoke Secured</button>
         <button name="adminBtn" (click)="request('admin')">Invoke Admin</button>
 
-        <div class="message" id="message"><span class="{{errorClass}}">{{message}}</span></div>
+        <div class="message"><span id="message" class="{{errorClass}}">{{message}}</span></div>
     </div>
 </div>
