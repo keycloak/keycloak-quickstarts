@@ -4,8 +4,8 @@ app-authz-jee-vanilla: JSP Application Using Fine-grained Authorization
 Level: Beginner  
 Technologies: JavaEE  
 Summary: JSP Application Using Fine-grained Authorization  
-Target Product: Keycloak, JBoss EAP  
-Source: <https://github.com/redhat-developer/redhat-sso-quickstarts>  
+Target Product: Keycloak, WildFly  
+Source: <https://github.com/keycloak/keycloak-quickstarts>  
 
 
 What is it?
@@ -21,7 +21,7 @@ You'll also learn how to use the `AuthorizationContext` object to obtain permiss
 System Requirements
 -------------------
 
-If you are deploying the application as a WAR you need to have JBoss EAP 6.4 or 7 running.
+If you are deploying the application as a WAR you need to have WildFly 10 running.
 
 All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
 
@@ -83,8 +83,7 @@ Build and Deploy the Quickstart
 2. The following shows the command to deploy the quickstart:
 
    ````
-   For JBoss EAP 7:   mvn install wildfly:deploy
-   For JBoss EAP 6.4: mvn install -Deap6 jboss-as:deploy
+   mvn install wildfly:deploy
    ````
 
 
@@ -111,6 +110,5 @@ Undeploy the Quickstart
 2. The following shows the command to undeploy the quickstart:
 
    ````
-   For JBoss EAP 7:   mvn wildfly:undeploy
-   For JBoss EAP 6.4: mvn jboss-as:undeploy
+   mvn wildfly:undeploy
    ````
