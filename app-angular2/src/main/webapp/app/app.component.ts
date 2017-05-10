@@ -29,7 +29,7 @@ import 'rxjs/add/operator/map';
 })
 export class AppComponent {
 
-  private serviceUrl: string = 'http://localhost:8080/service/';
+  private serviceUrl: string = 'http://127.0.0.1:8080/service/';
 
   public message: string;
   public errorClass: string = '';
