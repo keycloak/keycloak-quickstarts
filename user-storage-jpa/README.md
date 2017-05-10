@@ -5,7 +5,7 @@ Level: Beginner
 Technologies: JavaEE, EJB, JPA  
 Summary: User Storage Provider with EJB and JPA  
 Target Product: Keycloak  
-Source: <https://github.com/redhat-developer/redhat-sso-quickstarts>  
+Source: <https://github.com/keycloak/keycloak-quickstarts>  
 
 
 What is it?
@@ -21,7 +21,7 @@ runtime. Before using this example, you should probably read the User Storage SP
 System Requirements
 -------------------
 
-You need to have Keycloak 7.1 running.
+You need to have Keycloak 3.1.Final running.
 
 All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
 

@@ -17,13 +17,16 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <groupId>org.keycloak.quickstarts</groupId>
+        <artifactId>keycloak-quickstart-parent</artifactId>
+        <version>3.1.0.Final</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
     <modelVersion>4.0.0</modelVersion>
-
-    <groupId>com.redhat.rh-sso</groupId>
-    <artifactId>rh-sso-user-storage-jpa</artifactId>
-    <version>7.1.0-SNAPSHOT</version>
+    <artifactId>keycloak-user-storage-jpa</artifactId>
     <packaging>jar</packaging>
-    <name>RH-SSO Quickstart: user-storage-jpa</name>
+    <name>Keycloak Quickstart: user-storage-jpa</name>
     <description>User Storage Provider with EJB and JPA</description>
 
     <licenses>
@@ -46,54 +49,30 @@
             </snapshots>
         </repository>
     </repositories>
-    
+
     <properties>
-        <version.rh-sso.bom>7.1.0-SNAPSHOT</version.rh-sso.bom>
-        <version.wildfly.maven.plugin>1.1.0.Beta1</version.wildfly.maven.plugin>
         <version.compiler.maven.plugin>3.5.1</version.compiler.maven.plugin>
-        <version.hibernate.javax.persistence>1.0.0.Final</version.hibernate.javax.persistence>
-        <version.jboss-ejb-api>1.0.0.Final</version.jboss-ejb-api>
     </properties>
-    
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.redhat.bom.rh-sso</groupId>
-                <artifactId>rh-sso-spi-bom</artifactId>
-                <version>${version.rh-sso.bom}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-server-spi</artifactId>
+            <scope>provided</scope>
+            <version>3.1.0.Final</version>
+        </dependency>
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-core</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-server-spi</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.logging</groupId>
-            <artifactId>jboss-logging</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.1-api</artifactId>
-            <version>${version.hibernate.javax.persistence}</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.jboss.spec.javax.ejb</groupId>
             <artifactId>jboss-ejb-api_3.2_spec</artifactId>
-            <version>${version.jboss-ejb-api}</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 
