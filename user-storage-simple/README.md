@@ -5,7 +5,7 @@ Level: Beginner
 Technologies: JavaEE  
 Summary: User Storage SPI Simple Example  
 Target Product: Keycloak  
-Source: <https://github.com/redhat-developer/redhat-sso-quickstarts>  
+Source: <https://github.com/keycloak/keycloak-quickstarts>  
 
 
 What is it?
@@ -31,7 +31,7 @@ add new users in the admin console and they will be created within the property 
 System Requirements
 -------------------
 
-You need to have Keycloak 7.1 running.
+You need to have Keycloak 3.1.0.Final running.
 
 All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
 
