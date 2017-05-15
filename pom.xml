@@ -50,6 +50,7 @@
         <version.junit>4.12</version.junit>
 
         <arquillian-managed>true</arquillian-managed>
+        <jboss-cli.executable>./jboss-cli.sh</jboss-cli.executable>
     </properties>
 
     <dependencyManagement>
@@ -113,6 +114,7 @@
         <module>app-profile-saml-jee-jsp</module>
         <!--<module>app-jee-html5</module>-->
         <module>app-jee-jsp</module>
+        <module>app-angular2</module>
         <!--<module>app-springboot</module>-->
         <!--<module>service-springboot-rest</module>-->
     </modules>
@@ -141,6 +143,17 @@
     </build>
 
     <profiles>
+        <profile>
+            <id>jboss-cli-executable</id>
+            <properties>
+                <jboss-cli.executable>call ./jboss-cli.bat</jboss-cli.executable>
+            </properties>
+            <activation>
+                <os>
+                    <family>Windows</family>
+                </os>
+            </activation>
+        </profile>
         <profile>
             <!-- Run with: mvn clean test -Pwildfly-managed-->
             <id>wildfly-managed</id>
@@ -223,7 +236,7 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
-                                    <executable>./jboss-cli.sh</executable>
+                                    <executable>${jboss-cli.executable}</executable>
                                     <workingDirectory>target/wildfly-${version.wildfly}/bin</workingDirectory>
                                     <arguments>
                                         <argument>--file=adapter-install-offline.cli</argument>
