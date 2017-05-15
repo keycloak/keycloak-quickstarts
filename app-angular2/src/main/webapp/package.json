@@ -32,5 +32,8 @@
     "rimraf": "^2.5.4",
     "@types/node": "^6.0.46"
   },
-  "repository": {}
+  "repository": {
+      "type": "git",
+      "url" : "git://github.com/keycloak/keycloak-quickstarts.git"
+  }
 }
