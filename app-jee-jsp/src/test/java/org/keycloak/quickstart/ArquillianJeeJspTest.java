@@ -37,10 +37,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.keycloak.quickstart.appjee.Controller;
-import org.keycloak.quickstart.page.IndexPage;
-import org.keycloak.quickstart.page.LoginPage;
 import org.keycloak.test.TestsHelper;
 import org.keycloak.test.builders.ClientBuilder;
+import org.keycloak.test.page.IndexPage;
+import org.keycloak.test.page.LoginPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -52,15 +52,12 @@ import java.net.URL;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.keycloak.quickstart.page.IndexPage.MESSAGE_ADMIN;
-import static org.keycloak.quickstart.page.IndexPage.MESSAGE_PUBLIC;
-import static org.keycloak.quickstart.page.IndexPage.MESSAGE_SECURED;
-import static org.keycloak.quickstart.page.IndexPage.UNAUTHORIZED;
 import static org.keycloak.test.TestsHelper.createClient;
 import static org.keycloak.test.TestsHelper.deleteRealm;
 import static org.keycloak.test.TestsHelper.importTestRealm;
 import static org.keycloak.test.builders.ClientBuilder.AccessType.BEARER_ONLY;
 import static org.keycloak.test.builders.ClientBuilder.AccessType.PUBLIC;
+import static org.keycloak.test.page.IndexPage.UNAUTHORIZED;
 
 /**
  * @author <a href="mailto:bruno@abstractj.org">Bruno Oliveira</a>
@@ -83,7 +80,7 @@ public class ArquillianJeeJspTest {
     static {
         try {
             importTestRealm("admin", "admin", "/quickstart-realm.json");
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -156,7 +153,7 @@ public class ArquillianJeeJspTest {
     public void testPublicResource() {
         try {
             indexPage.clickPublic();
-            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.className("message"), MESSAGE_PUBLIC)));
+            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.className("message"), "Message: public")));
         } catch (Exception e) {
             fail("Should display an error message");
         }
@@ -168,7 +165,8 @@ public class ArquillianJeeJspTest {
             indexPage.clickLogin();
             loginPage.login("test-admin", "password");
             indexPage.clickAdmin();
-            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.className("message"), MESSAGE_ADMIN)));
+            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(
+                    By.className("message"), "Message: admin")));
             indexPage.clickLogout();
         } catch (Exception e) {
             fail("Should display logged in user");
@@ -181,7 +179,9 @@ public class ArquillianJeeJspTest {
             indexPage.clickLogin();
             loginPage.login("alice", "password");
             indexPage.clickSecured();
-            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.className("message"), MESSAGE_SECURED)));
+            System.out.println(webDriver.getPageSource());
+            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(
+                    By.className("message"), "Message: secured")));
             indexPage.clickLogout();
         } catch (Exception e) {
             fail("Should display logged in user");
