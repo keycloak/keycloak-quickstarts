@@ -126,6 +126,7 @@
 
         <!--<module>app-springboot</module>-->
         <!--<module>service-springboot-rest</module>-->
+        <module>app-authz-springboot</module>
     </modules>
 
     <build>
