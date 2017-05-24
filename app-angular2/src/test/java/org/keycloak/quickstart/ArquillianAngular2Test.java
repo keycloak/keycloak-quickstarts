@@ -26,17 +26,20 @@ import org.jboss.arquillian.graphene.page.Page;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.Archive;
+import org.jboss.shrinkwrap.api.Filters;
+import org.jboss.shrinkwrap.api.GenericArchive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.StringAsset;
+import org.jboss.shrinkwrap.api.importer.ExplodedImporter;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.keycloak.quickstart.page.IndexPage;
-import org.keycloak.quickstart.page.LoginPage;
 import org.keycloak.test.TestsHelper;
 import org.keycloak.test.builders.ClientBuilder;
+import org.keycloak.test.page.IndexPage;
+import org.keycloak.test.page.LoginPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -45,21 +48,15 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import org.jboss.shrinkwrap.api.Filters;
-import org.jboss.shrinkwrap.api.GenericArchive;
-import org.jboss.shrinkwrap.api.importer.ExplodedImporter;
 
-import static org.keycloak.quickstart.page.IndexPage.MESSAGE_ADMIN;
-import static org.keycloak.quickstart.page.IndexPage.MESSAGE_PUBLIC;
-import static org.keycloak.quickstart.page.IndexPage.MESSAGE_SECURED;
-import static org.keycloak.quickstart.page.IndexPage.UNAUTHORIZED;
-import static org.keycloak.test.TestsHelper.createClient;
-import static org.keycloak.test.TestsHelper.deleteRealm;
-import static org.keycloak.test.builders.ClientBuilder.AccessType.BEARER_ONLY;
-import static org.keycloak.test.builders.ClientBuilder.AccessType.PUBLIC;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.keycloak.test.TestsHelper.createClient;
+import static org.keycloak.test.TestsHelper.deleteRealm;
 import static org.keycloak.test.TestsHelper.importTestRealm;
+import static org.keycloak.test.builders.ClientBuilder.AccessType.BEARER_ONLY;
+import static org.keycloak.test.builders.ClientBuilder.AccessType.PUBLIC;
+import static org.keycloak.test.page.IndexPage.UNAUTHORIZED;
 
 /**
  * @author <a href="mailto:ssilvert@redhat.com">Stan Silvert</a>
@@ -82,7 +79,7 @@ public class ArquillianAngular2Test {
     static {
         try {
             importTestRealm("admin", "admin", "/quickstart-realm.json");
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -153,7 +150,7 @@ public class ArquillianAngular2Test {
     public void testPublicResource() {
         try {
             indexPage.clickPublic();
-            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.id("message"), MESSAGE_PUBLIC)));
+            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.id("message"), "Message: public")));
         } catch (Exception e) {
             debugTest(e);
             fail("Should display an error message");
@@ -167,7 +164,8 @@ public class ArquillianAngular2Test {
             loginPage.login("test-admin", "password");
             waitNg2Init();
             indexPage.clickAdmin();
-            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.className("message"), MESSAGE_ADMIN)));
+            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.className("message"),
+                    "Message: admin")));
             indexPage.clickLogout();
         } catch (Exception e) {
             debugTest(e);
@@ -182,7 +180,8 @@ public class ArquillianAngular2Test {
             loginPage.login("alice", "password");
             waitNg2Init();
             indexPage.clickSecured();
-            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.id("message"), MESSAGE_SECURED)));
+            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.id("message"),
+                    "Message: secured")));
             indexPage.clickLogout();
         } catch (Exception e) {
             debugTest(e);

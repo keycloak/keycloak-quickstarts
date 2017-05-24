@@ -34,9 +34,9 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.keycloak.quickstart.page.IndexPage;
-import org.keycloak.quickstart.page.LoginPage;
-import org.keycloak.quickstart.page.ProfilePage;
+import org.keycloak.test.page.IndexPage;
+import org.keycloak.test.page.LoginPage;
+import org.keycloak.test.page.ProfilePage;
 import org.keycloak.quickstart.profilejee.Controller;
 import org.keycloak.test.TestsHelper;
 import org.keycloak.test.builders.ClientBuilder;
@@ -76,7 +76,7 @@ public class ArquillianProfileSamlJeeJspTest {
     static {
         try {
             importTestRealm("admin", "admin", "/quickstart-realm.json");
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

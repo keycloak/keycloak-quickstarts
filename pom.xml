@@ -21,7 +21,7 @@
 
     <groupId>org.keycloak.quickstarts</groupId>
     <artifactId>keycloak-quickstart-parent</artifactId>
-    <version>3.1.0.Final</version>
+    <version>3.2.0.CR1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Keycloak Quickstart: parent</name>
     <description>Parent</description>
@@ -113,7 +113,7 @@
         <module>app-profile-jee-jsp</module>
         <module>app-profile-jee-vanilla</module>
         <module>app-profile-saml-jee-jsp</module>
-        <!--<module>app-jee-html5</module>-->
+        <module>app-jee-html5</module>
         <module>app-jee-jsp</module>
         <module>app-angular2</module>
         <!--<module>app-springboot</module>-->

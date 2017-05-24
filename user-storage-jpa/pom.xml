@@ -20,7 +20,7 @@
     <parent>
         <groupId>org.keycloak.quickstarts</groupId>
         <artifactId>keycloak-quickstart-parent</artifactId>
-        <version>3.1.0.Final</version>
+        <version>3.2.0.CR1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -59,7 +59,7 @@
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-server-spi</artifactId>
             <scope>provided</scope>
-            <version>3.1.0.Final</version>
+            <version>3.2.0.CR1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.keycloak</groupId>

@@ -51,7 +51,7 @@ public class ArquillianServiceJeeJaxrsTest {
             //TestsHelper.keycloakBaseUrl  = "set keycloak server docker IP"
             importTestRealm("admin", "admin", "/quickstart-realm.json");
             createDirectGrantClient();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

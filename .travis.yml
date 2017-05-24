@@ -16,13 +16,13 @@ env:
     - MAVEN_OPTS="-Xms512m -Xmx2048m"
 
 before_install:
-  - ./scripts/start-server.sh
+  - ./travis.sh
 
 install:
-  - mvn clean install -Pwildfly-managed -Denforcer.skip=true
+  - mvn -s maven-settings.xml clean install -Pwildfly-managed -Denforcer.skip=true
 
 script:
-  - mvn -Pwildfly-managed -Denforcer.skip=true clean verify -q
+  - mvn -s maven-settings.xml -Pwildfly-managed -Denforcer.skip=true clean verify -q
 
 after_install:
   - ./scripts/stop-server.sh

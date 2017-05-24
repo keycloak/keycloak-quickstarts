@@ -17,6 +17,7 @@
 package org.keycloak.quickstart;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
@@ -33,11 +34,11 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.keycloak.quickstart.page.IndexPage;
-import org.keycloak.quickstart.page.LoginPage;
-import org.keycloak.quickstart.page.ProfilePage;
+import org.keycloak.test.page.IndexPage;
+import org.keycloak.test.page.LoginPage;
 import org.keycloak.test.TestsHelper;
 import org.keycloak.test.builders.ClientBuilder;
+import org.keycloak.test.page.ProfilePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -81,7 +82,7 @@ public class ArquillianProfileJeeHtml5Test {
     static {
         try {
             importTestRealm("admin", "admin", "/quickstart-realm.json");
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -142,7 +143,7 @@ public class ArquillianProfileJeeHtml5Test {
             indexPage.clickLogin();
             loginPage.login("test-admin", "password");
             profilePage.clickToken();
-            JsonObject json = profilePage.getTokenContent();
+            JsonObject json = parse(profilePage.getTokenContent());
             assertNotNull("JSON content should not be empty", json);
             assertEquals(json.get("aud").getAsString(), APP_NAME);
             assertFalse(json.get("session_state").isJsonNull());
@@ -167,5 +168,8 @@ public class ArquillianProfileJeeHtml5Test {
         }
     }
 
+    private JsonObject parse(String json) {
+        return new JsonParser().parse(json).getAsJsonObject();
+    }
 
 }
