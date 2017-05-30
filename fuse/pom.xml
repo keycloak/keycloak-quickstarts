@@ -15,14 +15,26 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <groupId>org.keycloak.quickstarts</groupId>
+        <artifactId>keycloak-quickstart-parent</artifactId>
+        <version>3.2.0.CR1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.redhat.rh-sso</groupId>
-    <artifactId>rh-sso-fuse-parent</artifactId>
-    <version>7.1.0-SNAPSHOT</version>
+    <artifactId>keycloak-fuse-parent</artifactId>
+    <version>3.2.0.CR1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>RH-SSO Quickstart: Fuse quickstarts parent</name>
+    <properties>
+        <camel.version>2.17.0</camel.version>
+        <cxf.version>3.1.5</cxf.version>
+    </properties>
+
+    <name>Keycloak Quickstart: Fuse quickstarts parent</name>
     <description>Parent of the JBoss Fuse quickstarts</description>
 
     <licenses>
@@ -38,8 +50,99 @@
         <module>service-cxf-jaxrs</module>
         <module>app-war</module>
         <module>features</module>
+        <module>server</module>
     </modules>
 
-
-
+    <build>
+        <plugins>
+            <!-- Do not enforce for POM parent -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${version.enforcer.maven.plugin}</version>
+                <executions>
+                    <execution>
+                        <id>enforce-files-exist</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <profiles>
+        <profile>
+            <id>fuse-server</id>
+            <activation>
+                <property>
+                    <name>service.url</name>
+                    <value>http://localhost:8383/service</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-clis</id>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${env.JBOSS_FUSE_HOME}/bin</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>server/src/main/resources/</directory>
+                                            <includes>
+                                                <include>install-features.cli</include>
+                                                <include>update-config.cli</include>
+                                            </includes>
+                                            <filtering>true</filtering>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>copy-configs</id>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${env.JBOSS_FUSE_HOME}/etc</outputDirectory>
+                                    <overwrite>true</overwrite>
+                                    <resources>
+                                        <resource>
+                                            <directory>server/src/main/resources/</directory>
+                                            <includes>
+                                                <include>users.properties</include>
+                                            </includes>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>install-features</id>
+                                <phase>process-test-classes</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <executable>server/src/main/resources/install-features.sh</executable>
+                            <workingDirectory>${env.JBOSS_FUSE_HOME}/bin</workingDirectory>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

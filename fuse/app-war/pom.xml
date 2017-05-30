@@ -16,14 +16,19 @@
     limitations under the License.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>keycloak-fuse-parent</artifactId>
+        <groupId>org.keycloak.quickstarts</groupId>
+        <version>3.2.0.CR1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
 
-    <groupId>com.redhat.rh-sso</groupId>
-    <artifactId>rh-sso-fuse-app-war-jsp</artifactId>
-    <version>7.1.0-SNAPSHOT</version>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>keycloak-fuse-app-war-jsp</artifactId>
+    <version>3.2.0.CR1-SNAPSHOT</version>
     <packaging>war</packaging>
-    <name>RH-SSO Quickstart: WAR frontend application</name>
-    <description>JBoss Fuse WAR frontend application secured by RH-SSO</description>
+    <name>Keycloak Quickstart: WAR frontend application</name>
+    <description>JBoss Fuse WAR frontend application secured by Keycloak</description>
 
     <licenses>
         <license>
@@ -33,21 +38,7 @@
         </license>
     </licenses>
 
-    <repositories>
-        <repository>
-            <id>jboss-enterprise-maven-repository</id>
-            <url>https://maven.repository.redhat.com/ga/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-
     <properties>
-        <version.rh-sso.bom>7.1.0-SNAPSHOT</version.rh-sso.bom>
         <maven.compiler.plugin.version>3.1</maven.compiler.plugin.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -58,14 +49,14 @@
         <keycloak.osgi.export>
         </keycloak.osgi.export>
         <keycloak.osgi.import>
-            org.apache.http.*;version="[4.4,5)",
+            org.apache.http.*;version=${apache.httpcomponents.version},
             javax.servlet.*;version="[2.5,4)",
-            org.keycloak.adapters.jetty,
-            org.keycloak.adapters,
-            org.keycloak.constants,
-            org.keycloak.util,
-            org.keycloak.*,
-            *;resolution:=optional,
+            org.keycloak.adapters.jetty;version="${project.version}",
+            org.keycloak.adapters;version="${project.version}",
+            org.keycloak.constants;version="${project.version}",
+            org.keycloak.util;version="${project.version}",
+            org.keycloak.*;version="${project.version}",
+            *;resolution:=optional
             org.ops4j.pax.web.service,
             org.ops4j.pax.web.jsp,
             org.apache.el,
@@ -84,22 +75,10 @@
         </keycloak.osgi.private>
     </properties>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.redhat.bom.rh-sso</groupId>
-                <artifactId>rh-sso-fuse-bom</artifactId>
-                <version>${version.rh-sso.bom}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <dependencies>
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
+            <groupId>org.jboss.spec.javax.servlet</groupId>
+            <artifactId>jboss-servlet-api_3.0_spec</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>

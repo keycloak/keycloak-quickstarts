@@ -17,6 +17,12 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <artifactId>keycloak-parent</artifactId>
+        <groupId>org.keycloak</groupId>
+        <version>3.2.0.CR1-SNAPSHOT</version>
+    </parent>
+
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.keycloak.quickstarts</groupId>
@@ -116,6 +122,8 @@
         <module>app-jee-html5</module>
         <module>app-jee-jsp</module>
         <module>app-angular2</module>
+        <module>fuse</module>
+
         <!--<module>app-springboot</module>-->
         <!--<module>service-springboot-rest</module>-->
     </modules>

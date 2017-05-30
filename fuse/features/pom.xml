@@ -18,12 +18,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.redhat.rh-sso</groupId>
-    <artifactId>rh-sso-fuse-features</artifactId>
-    <version>7.1.0-SNAPSHOT</version>
+    <groupId>org.keycloak.quickstarts</groupId>
+    <artifactId>keycloak-fuse-features</artifactId>
+    <version>3.2.0.CR1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>RH-SSO Quickstart: Fuse Features</name>
-    <description>JBoss Fuse features to simplify install all RH-SSO Fuse quickstarts</description>
+    <name>Keycloak Quickstart: Fuse Features</name>
+    <description>JBoss Fuse features to simplify install all Keycloak Fuse quickstarts</description>
 
     <licenses>
         <license>
@@ -32,19 +32,6 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-
-    <repositories>
-        <repository>
-            <id>jboss-enterprise-maven-repository</id>
-            <url>https://maven.repository.redhat.com/ga/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
 
     <properties>
         <resources.plugin.version>2.7</resources.plugin.version>

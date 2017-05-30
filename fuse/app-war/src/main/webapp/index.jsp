@@ -16,7 +16,7 @@
 -->
 
 <%@page contentType="text/html" pageEncoding="ISO-8859-1"%>
-<%@ taglib prefix="c" 
+<%@ taglib prefix="c"
            uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
@@ -27,33 +27,34 @@
         <link rel="stylesheet" type="text/css" href="styles.css"/>
     </head>
     <body style="display: block">
-        <jsp:useBean id="controller" class="org.keycloak.quickstart.appjee.Controller" scope="request"/>
-        <% controller.handleLogout(request); %>
-        
+        <jsp:useBean id="controller" class="org.keycloak.quickstart.fuse.appjee.Controller" scope="request"/>
+        <% controller.handleLogout(request, response); %>
+
         <c:set var="isLoggedIn" value="<%=controller.isLoggedIn(request)%>"/>
-        
+        <c:set var="servletPath" value="<%=controller.getServletPath(request)%>"/>
+
         <c:if test="${isLoggedIn}">
             <c:set var="accountUri" value="<%=controller.getAccountUri(request)%>"/>
         </c:if>
-        
+
         <div class="wrapper">
             <c:if test="${!isLoggedIn}">
                 <div id="not-authenticated" style="display: block" class="menu">
-                    <button name="loginBtn" onclick="location.href = 'protected.jsp'" type="button">Login</button>
+                    <button onclick="location.href = 'protected'" type="button">Login</button>
                 </div>
             </c:if>
 
             <c:if test="${isLoggedIn}">
                 <div id="authenticated" style="display: block" class="menu">
-                    <button name="logoutBtn" onclick="location.href = 'index.jsp?action=logout'">Logout</button>
-                    <button name="accountBtn" onclick="location.href = '${accountUri}'" type="button">Account</button>
+                    <button onclick="location.href = '${servletPath}?action=logout'">Logout</button>
+                    <button onclick="location.href = '${accountUri}'" type="button">Account</button>
                 </div>
             </c:if>
 
             <div class="content">
-                <button name="publicBtn" onclick="location.href = 'index.jsp?action=public'">Invoke Public</button>
-                <button name="securedBtn" onclick="location.href = 'index.jsp?action=secured'">Invoke Secured</button>
-                <button name="adminBtn" onclick="location.href = 'index.jsp?action=admin'">Invoke Admin</button>
+                <button onclick="location.href = '${servletPath}?action=public'">Invoke Public</button>
+                <button onclick="location.href = '${servletPath}?action=secured'">Invoke Secured</button>
+                <button onclick="location.href = '${servletPath}?action=admin'">Invoke Admin</button>
 
                 <div class="message" id="message"><% out.print(controller.getMessage(request)); %></div>
             </div>

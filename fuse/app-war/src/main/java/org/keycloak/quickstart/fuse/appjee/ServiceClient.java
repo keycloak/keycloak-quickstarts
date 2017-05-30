@@ -1,20 +1,8 @@
-/*
- * Copyright 2016 Red Hat, Inc. and/or its affiliates
- * and other contributors as indicated by the @author tags.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-package org.keycloak.quickstart.appjee;
+package org.keycloak.quickstart.fuse.appjee;
+
+import java.io.InputStream;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -24,9 +12,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.keycloak.KeycloakSecurityContext;
 import org.keycloak.util.JsonSerialization;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.InputStream;
 
 /**
  * Client that calls the service.
@@ -50,10 +35,12 @@ public class ServiceClient {
     public static class Failure extends Exception {
         private int status;
         private String reason;
+        private String requestUri;
 
-        public Failure(int status, String reason) {
+        public Failure(int status, String reason, String requestUri) {
             this.status = status;
             this.reason = reason;
+            this.requestUri = requestUri;
         }
 
         public int getStatus() {
@@ -62,6 +49,10 @@ public class ServiceClient {
 
         public String getReason() {
             return reason;
+        }
+
+        public String getRequestUri() {
+            return requestUri;
         }
     }
 
@@ -76,8 +67,9 @@ public class ServiceClient {
     public static String callService(HttpServletRequest req, KeycloakSecurityContext session, String action) throws Failure {
         CloseableHttpClient client = null;
         try {
-        	client = createHttpClient();
-            HttpGet get = new HttpGet(getServiceUrl(req) + "/" + action);
+            client = createHttpClient();
+            String requestUri = getServiceUrl(req) + "/" + action;
+            HttpGet get = new HttpGet(requestUri);
             if (session != null) {
                 get.addHeader("Authorization", "Bearer " + session.getTokenString());
             }
@@ -86,7 +78,7 @@ public class ServiceClient {
 
             StatusLine status = response.getStatusLine();
             if (status.getStatusCode() != 200) {
-                throw new Failure(status.getStatusCode(), status.getReasonPhrase());
+                throw new Failure(status.getStatusCode(), status.getReasonPhrase(), requestUri);
             }
 
             HttpEntity entity = response.getEntity();

@@ -1,9 +1,9 @@
 {
-  "realm": "quickstart",
+  "realm": "master",
   "auth-server-url": "http://localhost:8180/auth",
   "ssl-required": "external",
   "resource": "fuse-app-jsp",
   "credentials": {
-    "secret": "5bad43ac-0dac-4272-a723-ab7a3cef49b9"
+    "secret": "bce5816d-98c4-404f-a18d-bcc5cb005c79"
   }
 }
