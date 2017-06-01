@@ -6,6 +6,8 @@
     AuthorizationContext authzContext = keycloakSecurityContext.getAuthorizationContext();
 %>
 
+<%@page contentType="text/html" pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
 <html>
 <body>
 <h2>Any authenticated user can access this page.</h2>

@@ -27,7 +27,7 @@
 %>
 <html>
 <body>
-<h2>Welcome !</h2>
+<h2>Welcome!</h2>
 <%@include file="include-logout.jsp"%>
 <h3>Your permissions are:</h3>
 

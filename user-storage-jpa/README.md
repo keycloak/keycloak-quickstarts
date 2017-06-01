@@ -61,6 +61,11 @@ Add the provider, save it.  This will now enable the provider for the 'master' r
 admin console or on the registration pages of Keycloak, will be created in the custom store used by the provider.  If you go
 to the Users tab in the Admin Console and create a new user, you'll be able to see the provider in action.
 
+Integration test of the Quickstart
+----------------------------------
+
+1. Make sure you have an Keycloak server running with an admin user in the `master` realm or use the provided docker image
+2. Run `mvn test -Pkeycloak-remote`
 
 More Information
 ----------------

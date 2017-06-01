@@ -20,7 +20,7 @@
 
 	<login-config>
 		<auth-method>KEYCLOAK</auth-method>
-		<realm-name>servlet-authz</realm-name>
+		<realm-name>quickstart-authz-servlet</realm-name>
 	</login-config>
 
 	<security-role>
