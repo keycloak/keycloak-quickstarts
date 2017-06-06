@@ -29,6 +29,12 @@ public class ConsolePage {
     @FindBy(xpath = "//button[text()[contains(.,'Delete')]]")
     private WebElement deleteConfirmationBtn;
 
+    @FindBy(id = "username")
+    private WebElement username;
+
+    @FindBy(linkText = "Sign Out")
+    private WebElement logoutLink;
+
     public void navigateToUserFederationMenu() {
         Graphene.waitGui().until(ExpectedConditions.elementToBeClickable(
                 By.partialLinkText("User Federation")));
@@ -37,6 +43,16 @@ public class ConsolePage {
 
     public void selectUserStorage() {
         userStorageOption.click();
+    }
+
+    public String getUser() {
+        Graphene.waitGui().until(ExpectedConditions.visibilityOfElementLocated(
+                By.id("username")));
+        return username.getAttribute("value");
+    }
+
+    public void logout() {
+        logoutLink.click();
     }
 
     public WebElement exampleFederationStorageLink() {

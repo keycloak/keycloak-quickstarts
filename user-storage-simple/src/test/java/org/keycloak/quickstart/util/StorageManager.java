@@ -39,7 +39,7 @@ public class StorageManager {
         }
     }
 
-    public static void destroy() {
+    public static void deleteStorage() {
         try {
             Files.delete(file);
         } catch (IOException e) {

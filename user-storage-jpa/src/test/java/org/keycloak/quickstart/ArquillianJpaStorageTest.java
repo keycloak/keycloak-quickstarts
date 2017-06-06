@@ -51,7 +51,7 @@ import static org.keycloak.test.TestsHelper.importTestRealm;
 @RunWith(Arquillian.class)
 public class ArquillianJpaStorageTest {
 
-    private static final String KEYCLOAK_ADMIN = "http://%s:%s/auth/admin";
+    private static final String KEYCLOAK_URL = "http://%s:%s/auth%s";
 
     @Page
     private LoginPage loginPage;
@@ -78,8 +78,7 @@ public class ArquillianJpaStorageTest {
 
     @Before
     public void setup() {
-        webDriver.navigate().to(format(KEYCLOAK_ADMIN,
-                contextRoot.getHost(), contextRoot.getPort()));
+        navigateTo("/admin");
     }
 
     @Test
@@ -89,14 +88,23 @@ public class ArquillianJpaStorageTest {
 
             consolePage.navigateToUserFederationMenu();
             consolePage.selectUserStorage();
-            consolePage.save().click();
+            consolePage.save();
             consolePage.navigateToUserFederationMenu();
 
             assertNotNull("Storage provider should be created", consolePage.exampleFederationStorageLink());
-
             consolePage.delete();
+
+            navigateTo("/realms/master/account");
+            assertEquals("Should display admin", "admin", consolePage.getUser());
+            consolePage.logout();
         } catch (Exception e) {
+            e.printStackTrace();
             fail("Should create a user federation storage");
         }
+    }
+
+    private void navigateTo(String path) {
+        webDriver.navigate().to(format(KEYCLOAK_URL,
+                contextRoot.getHost(), contextRoot.getPort(), path));
     }
 }

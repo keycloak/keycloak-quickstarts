@@ -179,7 +179,6 @@ public class ArquillianJeeJspTest {
             indexPage.clickLogin();
             loginPage.login("alice", "password");
             indexPage.clickSecured();
-            System.out.println(webDriver.getPageSource());
             assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(
                     By.className("message"), "Message: secured")));
             indexPage.clickLogout();

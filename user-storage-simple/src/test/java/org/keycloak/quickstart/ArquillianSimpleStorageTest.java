@@ -27,7 +27,6 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.keycloak.quickstart.page.ConsolePage;
@@ -45,14 +44,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.keycloak.quickstart.util.StorageManager.addUser;
 import static org.keycloak.quickstart.util.StorageManager.createStorage;
-import static org.keycloak.quickstart.util.StorageManager.destroy;
+import static org.keycloak.quickstart.util.StorageManager.deleteStorage;
 import static org.keycloak.quickstart.util.StorageManager.getPropertyFile;
 
 
 @RunWith(Arquillian.class)
 public class ArquillianSimpleStorageTest {
 
-    private static final String KEYCLOAK_ADMIN = "http://%s:%s/auth/admin";
+    private static final String KEYCLOAK_URL = "http://%s:%s/auth%s";
 
     @Page
     private LoginPage loginPage;
@@ -84,15 +83,14 @@ public class ArquillianSimpleStorageTest {
 
     @Before
     public void setup() {
-        navigateToRealmConsole();
+        navigateTo("/admin");
     }
 
-    private void navigateToRealmConsole() {
-        webDriver.navigate().to(format(KEYCLOAK_ADMIN,
-                contextRoot.getHost(), contextRoot.getPort()));
+    private void navigateTo(String path) {
+        webDriver.navigate().to(format(KEYCLOAK_URL,
+                contextRoot.getHost(), contextRoot.getPort(), path));
     }
 
-    @Ignore
     @Test
     public void testUserReadOnlyFederationStorage() throws MalformedURLException, InterruptedException {
         try {
@@ -100,16 +98,16 @@ public class ArquillianSimpleStorageTest {
             consolePage.createReadOnlyStorage();
             consolePage.navigateToUserFederationMenu();
             assertNotNull("Storage provider should be created", consolePage.readOnlyStorageLink());
+
+            navigateTo("/realms/master/account");
+            assertEquals("Should display admin", "admin", consolePage.getUser());
             consolePage.logout();
 
-            loginPage.login("tbrady", "superbowl");
-            assertEquals("Should display the user from storage provider", "Tbrady", consolePage.getUser());
+            navigateToAccount("tbrady", "superbowl");
+            assertEquals("Should display the user from storage provider", "tbrady", consolePage.getUser());
             consolePage.logout();
 
-            navigateToRealmConsole();
-            loginPage.login("admin", "admin");
-            consolePage.delete();
-            consolePage.logout();
+            removeProvider();
         } catch (Exception e) {
             fail("Should create a user federation storage");
         }
@@ -127,25 +125,37 @@ public class ArquillianSimpleStorageTest {
             consolePage.save();
 
             assertNotNull("Storage provider should be created", consolePage.writableStorageLink());
+            navigateTo("/realms/master/account");
+            assertEquals("Should display admin", "admin", consolePage.getUser());
             consolePage.logout();
 
-            loginPage.login("malcom", "butler");
-            assertEquals("Should display the user from storage provider", "Malcom", consolePage.getUser());
+            navigateToAccount("malcom", "butler");
+            assertEquals("Should display the user from storage provider", "malcom", consolePage.getUser());
             consolePage.logout();
 
             addUser("rob", "gronkowski");
-            navigateToRealmConsole();
-            loginPage.login("rob", "gronkowski");
-            assertEquals("Should display the user from storage provider", "Rob", consolePage.getUser());
+            navigateToAccount("rob", "gronkowski");
+            assertEquals("Should display the user from storage provider", "rob", consolePage.getUser());
             consolePage.logout();
 
-            navigateToRealmConsole();
-            loginPage.login("admin", "admin");
-            consolePage.delete();
-            consolePage.logout();
-            destroy();
+            removeProvider();
+            deleteStorage();
         } catch (Exception e) {
+            e.printStackTrace();
             fail("Should create a user federation storage");
         }
+    }
+
+    private void removeProvider() {
+        navigateTo("/admin");
+        loginPage.login("admin", "admin");
+        consolePage.delete();
+        navigateTo("/realms/master/account");
+        consolePage.logout();
+    }
+
+    private void navigateToAccount(String user, String password) {
+        loginPage.login(user, password);
+        navigateTo("/realms/master/account");
     }
 }

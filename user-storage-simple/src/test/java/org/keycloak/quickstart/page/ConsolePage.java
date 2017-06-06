@@ -7,6 +7,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author <a href="mailto:bruno@abstractj.org">Bruno Oliveira</a>
  */
@@ -36,10 +38,10 @@ public class ConsolePage {
     @FindBy(xpath = "//button[text()[contains(.,'Delete')]]")
     private WebElement deleteConfirmationBtn;
 
-    @FindBy(className = "dropdown-toggle")
-    private WebElement dropdown;
+    @FindBy(id = "username")
+    private WebElement username;
 
-    @FindBy(xpath = "//a[text() = 'Sign Out']")
+    @FindBy(linkText = "Sign Out")
     private WebElement logoutLink;
 
     @FindByJQuery("input[class*='form-control']:eq(3)")
@@ -60,16 +62,13 @@ public class ConsolePage {
     }
 
     public void logout() {
-        Graphene.waitGui().until(ExpectedConditions.elementToBeClickable(
-                By.className("dropdown-toggle")));
-        dropdown.click();
         logoutLink.click();
     }
 
     public String getUser() {
-        Graphene.waitGui().until(ExpectedConditions.elementToBeClickable(
-                By.className("dropdown-toggle")));
-        return dropdown.getText();
+        Graphene.waitGui().until(ExpectedConditions.visibilityOfElementLocated(
+                By.id("username")));
+        return username.getAttribute("value");
     }
 
     public WebElement readOnlyStorageLink() {

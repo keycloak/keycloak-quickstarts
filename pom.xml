@@ -123,14 +123,13 @@
         <module>app-jee-html5</module>
         <module>app-jee-jsp</module>
         <module>app-angular2</module>
-        <module>fuse</module>
         <module>app-authz-jee-servlet</module>
         <module>app-authz-jee-vanilla</module>
 
         <!--<module>app-springboot</module>-->
         <!--<module>app-springboot</module>-->
         <!--<module>service-springboot-rest</module>-->
-        <module>app-authz-springboot</module>
+        <!--<module>app-authz-springboot</module>-->
     </modules>
 
     <build>
@@ -344,11 +343,6 @@
         <!-- Arquillian WildFly remote profile -->
         <profile>
             <id>keycloak-remote</id>
-            <activation>
-                <property>
-                    <name>!wildfly-managed</name>
-                </property>
-            </activation>
             <dependencies>
                 <dependency>
                     <groupId>org.wildfly</groupId>

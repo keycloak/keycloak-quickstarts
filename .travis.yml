@@ -14,15 +14,23 @@ env:
   global:
     - MAVEN_SKIP_RC=true
     - MAVEN_OPTS="-Xms512m -Xmx2048m"
+  matrix:
+    - TESTS=group1
+    - TESTS=group2
+    - TESTS=group3
 
 before_install:
-  - ./travis.sh
+  - ./travis-server.sh
 
 install:
-  - mvn -s maven-settings.xml clean install -Pwildfly-managed -Denforcer.skip=true
+  - travis_wait 20 mvn -s maven-settings.xml clean install --no-snapshot-updates -DskipTests=true -Denforcer.skip=true -B -V -q
+  - mvn -s maven-settings.xml -Padd-datasource install -DskipTests=true -Denforcer.skip=true -f user-storage-jpa -q
+
+before_script:
+  - export MAVEN_SKIP_RC=true
 
 script:
-  - mvn -s maven-settings.xml -Pwildfly-managed -Denforcer.skip=true clean verify -q
+  - ./travis-run-tests.sh $TESTS
 
 after_install:
   - ./scripts/stop-server.sh
