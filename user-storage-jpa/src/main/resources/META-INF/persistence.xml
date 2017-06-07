@@ -7,7 +7,7 @@
     <persistence-unit name="user-storage-jpa-example" transaction-type="JTA">
         <jta-data-source>java:jboss/datasources/ExampleXADS</jta-data-source>
 
-        <class>org.keycloak.examples.storage.user.UserEntity</class>
+        <class>org.keycloak.quickstart.storage.user.UserEntity</class>
 
         <properties>
             <property name="hibernate.hbm2ddl.auto" value="update" />

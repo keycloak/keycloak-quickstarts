@@ -1,4 +1,9 @@
-<%@ page import="org.keycloak.KeycloakSecurityContext" %>
-<%@ page import="org.keycloak.common.util.KeycloakUriBuilder" %>
-<h2><a href="<%= KeycloakUriBuilder.fromUri(keycloakSecurityContext.getToken().getIssuer().substring(0, keycloakSecurityContext.getToken().getIssuer().indexOf("/realms"))).path(ServiceUrlConstants.TOKEN_SERVICE_LOGOUT_PATH)
-            .queryParam("redirect_uri", request.getScheme() + "://" + ("127.0.0.1".equals(request.getLocalName()) ? "localhost" : request.getLocalName()) + ":" + request.getLocalPort() + request.getContextPath()).build(keycloakSecurityContext.getToken().getIssuer().substring(keycloakSecurityContext.getToken().getIssuer().lastIndexOf('/') + 1)).toString()%>">Logout</a></h2>
+<jsp:useBean id="controller" class="org.keycloak.quickstart.Controller" scope="request"/>
+<% controller.handleLogout(request, response); %>
+
+<c:set var="isLoggedIn" value="<%=controller.isLoggedIn(request)%>"/>
+<c:if test="${isLoggedIn}">
+    <div id="authenticated" style="display: block" class="menu">
+        <button name="logoutBtn" onclick="location.href = '<%= request.getContextPath() %>/index.jsp?action=logout'">Logout</button>
+    </div>
+</c:if>

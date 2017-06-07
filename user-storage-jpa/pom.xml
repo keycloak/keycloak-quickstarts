@@ -36,7 +36,7 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-    
+
     <repositories>
         <repository>
             <id>jboss-enterprise-maven-repository</id>
@@ -52,27 +52,49 @@
 
     <properties>
         <version.compiler.maven.plugin>3.5.1</version.compiler.maven.plugin>
+        <version.hibernate.javax.persistence>1.0.0.Final</version.hibernate.javax.persistence>
+        <version.jboss-ejb-api>1.0.0.Final</version.jboss-ejb-api>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-server-spi</artifactId>
-            <scope>provided</scope>
-            <version>3.2.0.CR1-SNAPSHOT</version>
-        </dependency>
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-core</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-server-spi</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.logging</groupId>
+            <artifactId>jboss-logging</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.1-api</artifactId>
+            <version>${version.hibernate.javax.persistence}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.jboss.spec.javax.ejb</groupId>
             <artifactId>jboss-ejb-api_3.2_spec</artifactId>
+            <version>${version.jboss-ejb-api}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.graphene</groupId>
+            <artifactId>graphene-webdriver</artifactId>
+            <version>${version.graphene.webdriver}</version>
+            <type>pom</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.extension</groupId>
+            <artifactId>arquillian-phantom-driver</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -121,6 +143,7 @@
                                     <goal>add-resource</goal>
                                 </goals>
                                 <configuration>
+                                    <port>10090</port>
                                     <force/>
                                     <address>subsystem=datasources</address>
                                     <resources>

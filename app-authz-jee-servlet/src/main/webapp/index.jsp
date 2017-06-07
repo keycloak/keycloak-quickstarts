@@ -1,4 +1,4 @@
-<%@page import="org.keycloak.AuthorizationContext" %>
+<%@ page import="org.keycloak.AuthorizationContext" %>
 <%@ page import="org.keycloak.KeycloakSecurityContext" %>
 <%@ page import="org.keycloak.representations.idm.authorization.Permission" %>
 
@@ -7,6 +7,8 @@
     AuthorizationContext authzContext = keycloakSecurityContext.getAuthorizationContext();
 %>
 
+<%@page contentType="text/html" pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
 <html>
 <body>
     <%@include file="include-logout.jsp"%>

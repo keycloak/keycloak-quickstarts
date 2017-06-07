@@ -26,7 +26,7 @@
     <artifactId>keycloak-app-authz-jee-vanilla</artifactId>
     <packaging>war</packaging>
     <name>Keycloak Quickstart: app-authz-jee-vanilla</name>
-    <description>JSP Profile Application</description>
+    <description>app-authz-jee-vanilla</description>
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
@@ -50,6 +50,12 @@
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-adapter-spi</artifactId>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.jboss.spec.javax.servlet</groupId>
@@ -78,7 +84,6 @@
 
     <build>
         <finalName>app-authz-jee-vanilla</finalName>
-
         <plugins>
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>

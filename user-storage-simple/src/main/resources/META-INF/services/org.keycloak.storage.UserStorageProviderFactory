@@ -1,2 +1,2 @@
-org.keycloak.examples.userstorage.readonly.PropertyFileUserStorageProviderFactory
-org.keycloak.examples.userstorage.writeable.PropertyFileUserStorageProviderFactory
+org.keycloak.quickstart.readonly.PropertyFileUserStorageProviderFactory
+org.keycloak.quickstart.writeable.PropertyFileUserStorageProviderFactory
