@@ -4,14 +4,14 @@ app-jee-html5: HTML5 Service Invocation Application
 Level: Beginner  
 Technologies: HTML5, JavaScript  
 Summary: HTML5 Service Invocation Application packaged as a WAR  
-Target Product: Keycloak, WildFly  
+Target Product: <span>Keycloak</span>, <span>WildFly</span>  
 Source: <https://github.com/keycloak/keycloak-quickstarts>
 
 What is it?
 -----------
 
 The `app-jee-html5` quickstart demonstrates how to write an application with HTML5 and JavaScript that authenticates
-using Keycloak. Once authenticated the application shows how to invoke a service secured with Keycloak.
+using <span>Keycloak</span>. Once authenticated the application shows how to invoke a service secured with <span>Keycloak</span>.
 
 For simplicity of deploying the application it is packaged as a WAR archive and can be deployed to JBoss EAP.
 As the example only contains static html pages the files in `src/main/webapp` can also be hosted on any web server.
@@ -24,19 +24,19 @@ The quickstart requires that you have the [example services](../service-jee-jaxr
 services are located at `http://localhost:8080/service`. If the services are running elsewhere you need to edit
 `app.js` and replace the value of `serviceUrl`.
 
-If you are deploying the application as a WAR you need to have WildFly 10 running.
+If you are deploying the application as a WAR you need to have <span>WildFly 10</span> running.
 
 All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
 
 
-Configuration in Keycloak
+Configuration in <span>Keycloak</span>
 -----------------------
 
-Prior to running the quickstart you need to create a client in Keycloak and download the installation file.
+Prior to running the quickstart you need to create a client in <span>Keycloak</span> and download the installation file.
 
 The following steps show how to create the client required for this quickstart:
 
-* Open the Keycloak admin console
+* Open the <span>Keycloak</span> admin console
 * Select `Clients` from the menu
 * Click `Create`
 * Add the following values:

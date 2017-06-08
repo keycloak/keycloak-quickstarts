@@ -4,14 +4,14 @@ service-nodejs: Node.js Service
 Level: Beginner
 Technologies: Node.js
 Summary: Node.js Service
-Target Product: Keycloak, WildFly
+Target Product: <span>Keycloak</span>, <span>WildFly</span>
 Source: <https://github.com/keycloak/keycloak-quickstarts>
 
 
 What is it?
 -----------
 
-The `service-nodejs` quickstart demonstrates how to write a RESTful service with Node.js that is secured with Keycloak.
+The `service-nodejs` quickstart demonstrates how to write a RESTful service with Node.js that is secured with <span>Keycloak</span>.
 
 There are 3 endpoints exposed by the service:
 
@@ -27,7 +27,7 @@ System Requirements
 
 All you need to build this project is Node.js 4.0.0 or later.
 
-Configuration in Keycloak
+Configuration in <span>Keycloak</span>
 -----------------------
 
 Prior to running the quickstart you need to import the *quickstart* realm.Clicking on the below link will bring you to the create realm page in the Admin UI.
@@ -36,11 +36,11 @@ Prior to running the quickstart you need to import the *quickstart* realm.Clicki
 
 Import the quickstart-realm.json file that is in the *keycloak-quickstarts/* directory.
 
-Next thing you have to do is create a client in Keycloak and download the installation file.
+Next thing you have to do is create a client in <span>Keycloak</span> and download the installation file.
 
 The following steps shows how to create the client required for this quickstart:
 
-* Open the Keycloak admin console
+* Open the <span>Keycloak</span> admin console
 * Select `Clients` from the menu
 * Click `Create`
 * Add the following values:

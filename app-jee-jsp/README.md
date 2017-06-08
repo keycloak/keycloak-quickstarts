@@ -4,7 +4,7 @@ app-jee-jsp: JSP Service Invocation Application
 Level: Beginner
 Technologies: JavaEE
 Summary: JSP Service Invocation Application
-Target Product: Keycloak, WildFly
+Target Product: <span>Keycloak</span>, <span>WildFly</span>
 Source: <https://github.com/keycloak/keycloak-quickstarts>
 
 
@@ -12,7 +12,7 @@ What is it?
 -----------
 
 The `app-jee-jsp` quickstart demonstrates how to write an application with JavaEE that authenticates
-using Keycloak. Once authenticated the application shows how to invoke a service secured with Keycloak.
+using <span>Keycloak</span>. Once authenticated the application shows how to invoke a service secured with <span>Keycloak</span>.
 
 
 System Requirements
@@ -20,21 +20,21 @@ System Requirements
 
 The quickstart requires that you have the [example services](../service-jee-jaxrs/README.md) running. It assumes the
 services are located on the same host as the application. If the service is running elsewhere you need to set the URL
-of the service as an environment variable (SERVICE_URL) and restart WildFly.
+of the service as an environment variable (SERVICE_URL) and restart <span>WildFly</span>.
 
-If you are deploying the application as a WAR you need to have WildFly 10 running.
+If you are deploying the application as a WAR you need to have <span>WildFly 10</span> running.
 
 All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
 
 
-Configuration in Keycloak
+Configuration in <span>Keycloak</span>
 -----------------------
 
-Prior to running the quickstart you need to create a client in Keycloak and download the installation file.
+Prior to running the quickstart you need to create a client in <span>Keycloak</span> and download the installation file.
 
 The following steps show how to create the client required for this quickstart:
 
-* Open the Keycloak admin console
+* Open the <span>Keycloak</span> admin console
 * Select `Clients` from the menu
 * Click `Create`
 * Add the following values:
@@ -67,7 +67,7 @@ Build and Deploy the Quickstart
    mvn install wildfly:deploy
    ````
 
-If you prefer to secure WARs via Keycloak subsystem:
+If you prefer to secure WARs via <span>Keycloak</span> subsystem:
 
    ````
    mvn install -Dsubsystem wildfly:deploy
