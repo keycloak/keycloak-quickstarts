@@ -48,6 +48,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -120,6 +121,7 @@ public class ArquillianAngular2Test {
 
     @Before
     public void setup() {
+        webDriver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
         webDriver.navigate().to(contextRoot);
         waitNg2Init();
     }
