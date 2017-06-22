@@ -34,17 +34,21 @@ import org.keycloak.quickstart.storage.user.EjbExampleUserStorageProviderFactory
 import org.keycloak.quickstart.storage.user.UserAdapter;
 import org.keycloak.quickstart.storage.user.UserEntity;
 import org.keycloak.test.page.LoginPage;
+import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.WebDriver;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 import static java.lang.String.format;
+import org.jboss.arquillian.graphene.Graphene;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
-
 
 @RunWith(Arquillian.class)
 public class ArquillianJpaStorageTest {
@@ -76,12 +80,14 @@ public class ArquillianJpaStorageTest {
 
     @Before
     public void setup() {
+        webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
         navigateTo("/admin");
     }
 
     @Test
     public void testUserFederationStorageCreation() throws MalformedURLException, InterruptedException {
         try {
+            waitTillElementPresent(By.id("username"));
             loginPage.login("admin", "admin");
 
             consolePage.navigateToUserFederationMenu();
@@ -101,6 +107,10 @@ public class ArquillianJpaStorageTest {
         }
     }
 
+    private void waitTillElementPresent(By locator) {
+        Graphene.waitGui().withTimeout(30, TimeUnit.SECONDS).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+    }
+    
     private void navigateTo(String path) {
         webDriver.navigate().to(format(KEYCLOAK_URL,
                 contextRoot.getHost(), contextRoot.getPort(), path));

@@ -36,13 +36,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.keycloak.quickstart.page.AuthzPage;
 import org.keycloak.test.page.LoginPage;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -110,6 +110,7 @@ public class ArquillianJeeAuthzTest {
 
     @Before
     public void setup() {
+        webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
         webDriver.navigate().to(contextRoot);
     }
 

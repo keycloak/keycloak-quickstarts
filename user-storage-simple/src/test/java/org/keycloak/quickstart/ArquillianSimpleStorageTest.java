@@ -39,6 +39,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import static java.lang.String.format;
+import java.util.concurrent.TimeUnit;
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -87,6 +88,7 @@ public class ArquillianSimpleStorageTest {
     }
 
     private void navigateTo(String path) {
+        webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
         webDriver.navigate().to(format(KEYCLOAK_URL,
                 contextRoot.getHost(), contextRoot.getPort(), path));
     }

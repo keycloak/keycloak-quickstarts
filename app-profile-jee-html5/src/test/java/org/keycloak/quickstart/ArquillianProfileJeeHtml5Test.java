@@ -46,6 +46,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -122,6 +123,7 @@ public class ArquillianProfileJeeHtml5Test {
 
     @Before
     public void setup() {
+        webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
         webDriver.navigate().to(contextRoot);
     }
 
@@ -149,6 +151,8 @@ public class ArquillianProfileJeeHtml5Test {
             assertEquals(json.get("aud").getAsString(), APP_NAME);
             assertFalse(json.get("session_state").isJsonNull());
             webDriver.navigate().to(contextRoot);
+            
+            waitTillElementIsClickable(By.name("logoutBtn"));
             profilePage.clickLogout();
         } catch (Exception e) {
             debugTest(e);
@@ -164,11 +168,16 @@ public class ArquillianProfileJeeHtml5Test {
             profilePage.clickAccount();
             assertEquals("Keycloak Account Management", webDriver.getTitle());
             webDriver.navigate().to(contextRoot);
+            waitTillElementIsClickable(By.name("logoutBtn"));
             profilePage.clickLogout();
         } catch (Exception e) {
             debugTest(e);
             fail("Should display account management page");
         }
+    }
+    
+    private void waitTillElementIsClickable(By locator) {
+        Graphene.waitGui().withTimeout(30, TimeUnit.SECONDS).until(ExpectedConditions.elementToBeClickable(locator));
     }
 
     private JsonObject parse(String json) {

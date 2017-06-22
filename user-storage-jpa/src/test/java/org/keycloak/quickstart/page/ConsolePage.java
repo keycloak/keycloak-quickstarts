@@ -1,5 +1,6 @@
 package org.keycloak.quickstart.page;
 
+import java.util.concurrent.TimeUnit;
 import org.jboss.arquillian.graphene.Graphene;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -36,17 +37,19 @@ public class ConsolePage {
     private WebElement logoutLink;
 
     public void navigateToUserFederationMenu() {
-        Graphene.waitGui().until(ExpectedConditions.elementToBeClickable(
+        Graphene.waitGui().withTimeout(30, TimeUnit.SECONDS).until(ExpectedConditions.elementToBeClickable(
                 By.partialLinkText("User Federation")));
         userFederationLink.click();
     }
 
     public void selectUserStorage() {
+        Graphene.waitGui().withTimeout(30, TimeUnit.SECONDS).until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//select/option[normalize-space(text())='example-user-storage-jpa']")));
         userStorageOption.click();
     }
 
     public String getUser() {
-        Graphene.waitGui().until(ExpectedConditions.visibilityOfElementLocated(
+        Graphene.waitGui().withTimeout(30, TimeUnit.SECONDS).until(ExpectedConditions.visibilityOfElementLocated(
                 By.id("username")));
         return username.getAttribute("value");
     }
