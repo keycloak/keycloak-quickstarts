@@ -125,6 +125,7 @@ public class ArquillianJeeAuthzTest {
             indexPage.clickLogout();
 
         } catch (Exception e) {
+            debugTest(e);
             fail("Should display the main page");
         }
     }
@@ -141,6 +142,7 @@ public class ArquillianJeeAuthzTest {
             indexPage.clickLogout();
 
         } catch (Exception e) {
+            debugTest(e);
             fail("Should display the main page");
         }
     }
@@ -157,6 +159,7 @@ public class ArquillianJeeAuthzTest {
             indexPage.clickLogout();
 
         } catch (Exception e) {
+            debugTest(e);
             fail("Should display the main page");
         }
     }
@@ -173,6 +176,7 @@ public class ArquillianJeeAuthzTest {
             indexPage.clickLogout();
 
         } catch (Exception e) {
+            debugTest(e);
             fail("Should display the main page");
         }
     }
@@ -189,6 +193,7 @@ public class ArquillianJeeAuthzTest {
             indexPage.clickLogout();
 
         } catch (Exception e) {
+            debugTest(e);
             fail("Should display the main page");
         }
     }
@@ -205,6 +210,7 @@ public class ArquillianJeeAuthzTest {
             indexPage.clickLogout();
 
         } catch (Exception e) {
+            debugTest(e);
             fail("Should display the main page");
         }
     }
@@ -221,6 +227,7 @@ public class ArquillianJeeAuthzTest {
             indexPage.clickLogout();
 
         } catch (Exception e) {
+            debugTest(e);
             fail("Should display the main page");
         }
     }
@@ -237,6 +244,7 @@ public class ArquillianJeeAuthzTest {
             indexPage.clickLogout();
 
         } catch (Exception e) {
+            debugTest(e);
             fail("Should display the main page");
         }
     }
@@ -253,7 +261,13 @@ public class ArquillianJeeAuthzTest {
             indexPage.clickLogout();
 
         } catch (Exception e) {
+            debugTest(e);
             fail("Should display the main page");
         }
+    }
+    
+    private void debugTest(Exception e) {
+        System.out.println(webDriver.getPageSource());
+        e.printStackTrace();
     }
 }

@@ -82,7 +82,7 @@ public class ArquillianProfileJeeVanillaTest {
                     .rootUrl(ROOT_URL)
                     .secret("secret")
                     .accessType(CONFIDENTIAL));
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -132,7 +132,13 @@ public class ArquillianProfileJeeVanillaTest {
             assertNotNull(profilePage.getUsername());
             profilePage.clickLogout();
         } catch (Exception e) {
+            debugTest(e);
             fail("Should display logged in user");
         }
+    }
+    
+    private void debugTest(Exception e) {
+        System.out.println(webDriver.getPageSource());
+        e.printStackTrace();
     }
 }

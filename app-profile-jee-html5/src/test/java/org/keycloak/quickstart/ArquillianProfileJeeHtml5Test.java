@@ -82,7 +82,7 @@ public class ArquillianProfileJeeHtml5Test {
     static {
         try {
             importTestRealm("admin", "admin", "/quickstart-realm.json");
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -133,6 +133,7 @@ public class ArquillianProfileJeeHtml5Test {
             assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.id("username"), "admin")));
             profilePage.clickLogout();
         } catch (Exception e) {
+            debugTest(e);
             fail("Should display logged in user");
         }
     }
@@ -150,6 +151,7 @@ public class ArquillianProfileJeeHtml5Test {
             webDriver.navigate().to(contextRoot);
             profilePage.clickLogout();
         } catch (Exception e) {
+            debugTest(e);
             fail("Should display logged in user");
         }
     }
@@ -164,12 +166,18 @@ public class ArquillianProfileJeeHtml5Test {
             webDriver.navigate().to(contextRoot);
             profilePage.clickLogout();
         } catch (Exception e) {
+            debugTest(e);
             fail("Should display account management page");
         }
     }
 
     private JsonObject parse(String json) {
         return new JsonParser().parse(json).getAsJsonObject();
+    }
+    
+    private void debugTest(Exception e) {
+        System.out.println(webDriver.getPageSource());
+        e.printStackTrace();
     }
 
 }

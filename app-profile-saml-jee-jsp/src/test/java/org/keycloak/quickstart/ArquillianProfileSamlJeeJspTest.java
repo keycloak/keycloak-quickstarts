@@ -76,7 +76,7 @@ public class ArquillianProfileSamlJeeJspTest {
     static {
         try {
             importTestRealm("admin", "admin", "/quickstart-realm.json");
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -127,6 +127,7 @@ public class ArquillianProfileSamlJeeJspTest {
             assertEquals(profilePage.getUsername(), "alice");
             profilePage.clickLogout();
         } catch (Exception e) {
+            debugTest(e);
             fail("Should display logged in user");
         }
     }
@@ -139,9 +140,13 @@ public class ArquillianProfileSamlJeeJspTest {
             profilePage.clickAccount();
             assertEquals("Keycloak Account Management", webDriver.getTitle());
         } catch (Exception e) {
+            debugTest(e);
             fail("Should display account management page");
         }
     }
 
-
+    private void debugTest(Exception e) {
+        System.out.println(webDriver.getPageSource());
+        e.printStackTrace();
+    }
 }

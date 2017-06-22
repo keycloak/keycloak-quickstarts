@@ -109,6 +109,7 @@ public class ArquillianSimpleStorageTest {
 
             removeProvider();
         } catch (Exception e) {
+            debugTest(e);
             fail("Should create a user federation storage");
         }
     }
@@ -141,7 +142,7 @@ public class ArquillianSimpleStorageTest {
             removeProvider();
             deleteStorage();
         } catch (Exception e) {
-            e.printStackTrace();
+            debugTest(e);
             fail("Should create a user federation storage");
         }
     }
@@ -157,5 +158,10 @@ public class ArquillianSimpleStorageTest {
     private void navigateToAccount(String user, String password) {
         loginPage.login(user, password);
         navigateTo("/realms/master/account");
+    }
+    
+    private void debugTest(Exception e) {
+        System.out.println(webDriver.getPageSource());
+        e.printStackTrace();
     }
 }

@@ -43,9 +43,7 @@ import java.net.URL;
 import static java.lang.String.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.keycloak.test.TestsHelper.importTestRealm;
 
 
 @RunWith(Arquillian.class)
@@ -98,7 +96,7 @@ public class ArquillianJpaStorageTest {
             assertEquals("Should display admin", "admin", consolePage.getUser());
             consolePage.logout();
         } catch (Exception e) {
-            e.printStackTrace();
+            debugTest(e);
             fail("Should create a user federation storage");
         }
     }
@@ -106,5 +104,10 @@ public class ArquillianJpaStorageTest {
     private void navigateTo(String path) {
         webDriver.navigate().to(format(KEYCLOAK_URL,
                 contextRoot.getHost(), contextRoot.getPort(), path));
+    }
+    
+    private void debugTest(Exception e) {
+        System.out.println(webDriver.getPageSource());
+        e.printStackTrace();
     }
 }
