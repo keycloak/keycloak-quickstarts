@@ -20,7 +20,7 @@
     <parent>
         <artifactId>keycloak-parent</artifactId>
         <groupId>org.keycloak</groupId>
-        <version>3.2.0.CR1-SNAPSHOT</version>
+        <version>3.2.0.CR1</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -85,6 +85,19 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
+                <groupId>org.keycloak</groupId>
+                <artifactId>keycloak-test-helper</artifactId>
+                <version>${version.keycloak}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.keycloak.bom</groupId>
+                <artifactId>keycloak-spi-bom</artifactId>
+                <version>${version.keycloak}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.wildfly.bom</groupId>
                 <artifactId>wildfly-javaee7</artifactId>
                 <version>${version.wildfly}</version>
@@ -126,10 +139,13 @@
         <module>app-authz-jee-servlet</module>
         <module>app-authz-jee-vanilla</module>
 
-        <!--<module>app-springboot</module>-->
-        <!--<module>app-springboot</module>-->
-        <!--<module>service-springboot-rest</module>-->
-        <!--<module>app-authz-springboot</module>-->
+        <module>fuse</module>
+        <module>user-storage-simple</module>
+        <module>user-storage-jpa</module>
+        <module>service-springboot-rest</module>
+
+        <module>app-springboot</module>
+        <module>app-authz-springboot</module>
     </modules>
 
     <build>
