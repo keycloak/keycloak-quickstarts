@@ -17,12 +17,6 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <parent>
-        <artifactId>keycloak-parent</artifactId>
-        <groupId>org.keycloak</groupId>
-        <version>3.2.0.CR1</version>
-    </parent>
-
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.keycloak.quickstarts</groupId>
@@ -138,14 +132,6 @@
         <module>app-angular2</module>
         <module>app-authz-jee-servlet</module>
         <module>app-authz-jee-vanilla</module>
-
-        <module>fuse</module>
-        <module>user-storage-simple</module>
-        <module>user-storage-jpa</module>
-        <module>service-springboot-rest</module>
-
-        <module>app-springboot</module>
-        <module>app-authz-springboot</module>
     </modules>
 
     <build>
