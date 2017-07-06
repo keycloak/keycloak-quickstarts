@@ -39,6 +39,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import static java.lang.String.format;
+import java.util.concurrent.TimeUnit;
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -87,6 +88,7 @@ public class ArquillianSimpleStorageTest {
     }
 
     private void navigateTo(String path) {
+        webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
         webDriver.navigate().to(format(KEYCLOAK_URL,
                 contextRoot.getHost(), contextRoot.getPort(), path));
     }
@@ -109,6 +111,7 @@ public class ArquillianSimpleStorageTest {
 
             removeProvider();
         } catch (Exception e) {
+            debugTest(e);
             fail("Should create a user federation storage");
         }
     }
@@ -141,7 +144,7 @@ public class ArquillianSimpleStorageTest {
             removeProvider();
             deleteStorage();
         } catch (Exception e) {
-            e.printStackTrace();
+            debugTest(e);
             fail("Should create a user federation storage");
         }
     }
@@ -157,5 +160,10 @@ public class ArquillianSimpleStorageTest {
     private void navigateToAccount(String user, String password) {
         loginPage.login(user, password);
         navigateTo("/realms/master/account");
+    }
+    
+    private void debugTest(Exception e) {
+        System.out.println(webDriver.getPageSource());
+        e.printStackTrace();
     }
 }

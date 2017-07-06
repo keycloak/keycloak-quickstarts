@@ -45,6 +45,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -76,7 +77,7 @@ public class ArquillianJeeHtml5Test {
     static {
         try {
             importTestRealm("admin", "admin", "/quickstart-realm.json");
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -116,6 +117,7 @@ public class ArquillianJeeHtml5Test {
 
     @Before
     public void setup() {
+        webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
         webDriver.navigate().to(contextRoot);
     }
 
@@ -125,6 +127,7 @@ public class ArquillianJeeHtml5Test {
             indexPage.clickSecured();
             assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.className("error"), UNAUTHORIZED)));
         } catch (Exception e) {
+            debugTest(e);
             fail("Should display an error message");
         }
     }
@@ -135,6 +138,7 @@ public class ArquillianJeeHtml5Test {
             indexPage.clickAdmin();
             assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.className("error"), UNAUTHORIZED)));
         } catch (Exception e) {
+            debugTest(e);
             fail("Should display an error message");
         }
     }
@@ -146,6 +150,7 @@ public class ArquillianJeeHtml5Test {
             assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(
                     By.className("message"), "Message: public")));
         } catch (Exception e) {
+            debugTest(e);
             fail("Should display an error message");
         }
     }
@@ -160,6 +165,7 @@ public class ArquillianJeeHtml5Test {
                     By.className("message"), "User: test-admin")));
             indexPage.clickLogout();
         } catch (Exception e) {
+            debugTest(e);
             fail("Should display logged in user");
         }
     }
@@ -174,7 +180,13 @@ public class ArquillianJeeHtml5Test {
                     By.className("message"), "User: alice")));
             indexPage.clickLogout();
         } catch (Exception e) {
+            debugTest(e);
             fail("Should display logged in user");
         }
+    }
+    
+    private void debugTest(Exception e) {
+        System.out.println(webDriver.getPageSource());
+        e.printStackTrace();
     }
 }

@@ -45,6 +45,7 @@ import org.openqa.selenium.WebDriver;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -76,7 +77,7 @@ public class ArquillianProfileSamlJeeJspTest {
     static {
         try {
             importTestRealm("admin", "admin", "/quickstart-realm.json");
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -116,6 +117,7 @@ public class ArquillianProfileSamlJeeJspTest {
 
     @Before
     public void setup() {
+        webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
         webDriver.navigate().to(contextRoot);
     }
 
@@ -127,6 +129,7 @@ public class ArquillianProfileSamlJeeJspTest {
             assertEquals(profilePage.getUsername(), "alice");
             profilePage.clickLogout();
         } catch (Exception e) {
+            debugTest(e);
             fail("Should display logged in user");
         }
     }
@@ -139,9 +142,13 @@ public class ArquillianProfileSamlJeeJspTest {
             profilePage.clickAccount();
             assertEquals("Keycloak Account Management", webDriver.getTitle());
         } catch (Exception e) {
+            debugTest(e);
             fail("Should display account management page");
         }
     }
 
-
+    private void debugTest(Exception e) {
+        System.out.println(webDriver.getPageSource());
+        e.printStackTrace();
+    }
 }

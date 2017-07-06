@@ -42,12 +42,14 @@ import org.keycloak.test.page.IndexPage;
 import org.keycloak.test.page.LoginPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -79,7 +81,7 @@ public class ArquillianAngular2Test {
     static {
         try {
             importTestRealm("admin", "admin", "/quickstart-realm.json");
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -120,6 +122,7 @@ public class ArquillianAngular2Test {
 
     @Before
     public void setup() {
+        webDriver.manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
         webDriver.navigate().to(contextRoot);
         waitNg2Init();
     }
@@ -128,7 +131,8 @@ public class ArquillianAngular2Test {
     public void testSecuredResource() throws InterruptedException {
         try {
             indexPage.clickSecured();
-            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.className("error"), UNAUTHORIZED)));
+            assertTrue(Graphene.waitGui().withTimeout(60, TimeUnit.SECONDS)
+                    .until(ExpectedConditions.textToBePresentInElementLocated(By.className("error"), UNAUTHORIZED)));
         } catch (Exception e) {
             debugTest(e);
             fail("Should display an error message");
@@ -139,7 +143,8 @@ public class ArquillianAngular2Test {
     public void testAdminResource() {
         try {
             indexPage.clickAdmin();
-            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.id("message"), UNAUTHORIZED)));
+            assertTrue(Graphene.waitGui().withTimeout(60, TimeUnit.SECONDS)
+                    .until(ExpectedConditions.textToBePresentInElementLocated(By.id("message"), UNAUTHORIZED)));
         } catch (Exception e) {
             debugTest(e);
             fail("Should display an error message");
@@ -150,7 +155,8 @@ public class ArquillianAngular2Test {
     public void testPublicResource() {
         try {
             indexPage.clickPublic();
-            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.id("message"), "Message: public")));
+            assertTrue(Graphene.waitGui().withTimeout(60, TimeUnit.SECONDS)
+                    .until(ExpectedConditions.textToBePresentInElementLocated(By.id("message"), "Message: public")));
         } catch (Exception e) {
             debugTest(e);
             fail("Should display an error message");
@@ -164,7 +170,8 @@ public class ArquillianAngular2Test {
             loginPage.login("test-admin", "password");
             waitNg2Init();
             indexPage.clickAdmin();
-            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.className("message"),
+            assertTrue(Graphene.waitGui().withTimeout(60, TimeUnit.SECONDS)
+                    .until(ExpectedConditions.textToBePresentInElementLocated(By.className("message"),
                     "Message: admin")));
             indexPage.clickLogout();
         } catch (Exception e) {
@@ -180,7 +187,8 @@ public class ArquillianAngular2Test {
             loginPage.login("alice", "password");
             waitNg2Init();
             indexPage.clickSecured();
-            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.id("message"),
+            assertTrue(Graphene.waitGui().withTimeout(60, TimeUnit.SECONDS)
+                    .until(ExpectedConditions.textToBePresentInElementLocated(By.id("message"),
                     "Message: secured")));
             indexPage.clickLogout();
         } catch (Exception e) {
@@ -190,7 +198,12 @@ public class ArquillianAngular2Test {
     }
     
     private void waitNg2Init() {
-        Graphene.waitModel().until(ExpectedConditions.presenceOfElementLocated(By.id("accountBtn")));
+        try {
+            Graphene.waitModel().withTimeout(60, TimeUnit.SECONDS).until(ExpectedConditions.presenceOfElementLocated(By.id("accountBtn")));
+        } catch (TimeoutException e) {
+            debugTest(e);
+            fail();
+        }
     }
     
     private void debugTest(Exception e) {

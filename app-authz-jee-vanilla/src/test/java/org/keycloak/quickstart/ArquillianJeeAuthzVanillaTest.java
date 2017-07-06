@@ -21,7 +21,6 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.drone.api.annotation.Drone;
-import org.jboss.arquillian.drone.api.annotation.Qualifier;
 import org.jboss.arquillian.graphene.page.Page;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
@@ -35,7 +34,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.keycloak.quickstart.page.AuthzPage;
 import org.keycloak.test.page.LoginPage;
 import org.openqa.selenium.WebDriver;
 
@@ -43,10 +41,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import org.keycloak.quickstart.page.AuthzPage;
 import static org.keycloak.test.TestsHelper.deleteRealm;
 import static org.keycloak.test.TestsHelper.importTestRealm;
 
@@ -69,7 +68,7 @@ public class ArquillianJeeAuthzVanillaTest {
     static {
         try {
             importTestRealm("admin", "admin", "/quickstart-realm.json");
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -104,6 +103,7 @@ public class ArquillianJeeAuthzVanillaTest {
 
     @Before
     public void setup() {
+        webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
         webDriver.navigate().to(contextRoot);
     }
 
@@ -118,7 +118,13 @@ public class ArquillianJeeAuthzVanillaTest {
             indexPage.clickLogout();
 
         } catch (Exception e) {
+            debugTest(e);
             fail("Should display the main page");
         }
+    }
+    
+    private void debugTest(Exception e) {
+        System.out.println(webDriver.getPageSource());
+        e.printStackTrace();
     }
 }
