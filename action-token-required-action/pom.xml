@@ -23,11 +23,11 @@
         <version>3.3.0.CR1-SNAPSHOT</version>
     </parent>
 
-    <name>Quickstart: Action Token</name>
+    <name>Quickstart: Action Token With Required Action</name>
     <description/>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>provider-action-token</artifactId>
+    <artifactId>provider-action-token-required-action</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>

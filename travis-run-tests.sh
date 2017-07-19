@@ -10,7 +10,8 @@ fi
 if [ $1 == "group2" ]; then
   mvn -B -s maven-settings.xml test -Pkeycloak-remote -f user-storage-jpa
   mvn -B -s maven-settings.xml test -Pkeycloak-remote -f user-storage-simple
-  mvn -B -s maven-settings.xml test -Pwildfly-managed -f action-token </dev/null
+  mvn -B -s maven-settings.xml test -Pwildfly-managed -f action-token-authenticator </dev/null
+  mvn -B -s maven-settings.xml test -Pwildfly-managed -f action-token-required-action </dev/null
 fi
 
 if [ $1 == "group3" ]; then
