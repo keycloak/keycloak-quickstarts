@@ -18,3 +18,12 @@ if [ $1 == "group3" ]; then
   cd fuse && mvn -B -s ../maven-settings.xml clean install -Pfuse-server
 fi
 
+if [ $1 == "group4" ]; then
+  cd app-authz-springboot && mvn -B -s ../maven-settings.xml clean test
+  cd ../service-springboot-rest && mvn -B -s ../maven-settings.xml clean test
+  mvn spring-boot:run&
+  cd ../app-springboot
+  mvn -B -s ../maven-settings.xml clean test
+fi
+
+
