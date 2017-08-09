@@ -33,4 +33,7 @@ if [ $1 == "group5" ]; then
   mvn -B -s maven-settings.xml test -Pkeycloak-remote -f user-storage-jpa
   mvn -B -s maven-settings.xml test -Pkeycloak-remote -f user-storage-simple
 fi
-
+if [ $1 == "group6" ] && [ $TRAVIS_PULL_REQUEST == "false" ]; then
+ ./productize.sh
+  exit 0
+fi  
