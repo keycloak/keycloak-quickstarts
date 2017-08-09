@@ -25,5 +25,7 @@ if [ $1 == "group4" ]; then
   cd ../app-springboot
   mvn -B -s ../maven-settings.xml clean test
 fi
-
+if [ $1 == "group5" ]; then
+  ./productize.sh
+fi  
 
