@@ -173,6 +173,8 @@
         <profile>
             <id>bump-version</id>
             <modules>
+                <module>action-token-authenticator</module>
+                <module>action-token-required-action</module>
                 <module>service-jee-jaxrs</module>
                 <module>app-profile-jee-html5</module>
                 <module>app-profile-jee-jsp</module>
