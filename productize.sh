@@ -25,7 +25,10 @@ sed -i '/<\/project>/{
     a \</project>
     d 
 }' pom.xml
-#TODO rename rename groupId in POMs
+
+#rename groupId in POMs
+find . -type f -name "*pom.xml*" -exec sed -i 's@<groupId>org.keycloak.bom</groupId>@<groupId>com.redhat.bom.rh-sso</groupId>@g' {} +
+find . -type f -name "*pom.xml*" -exec sed -i 's@<groupId>org.keycloak.quickstarts</groupId>@<groupId>com.redhat.rh-sso</groupId>@g' {} +
 
 git checkout -b prod_staging
 git rm -r action-token-authenticator
