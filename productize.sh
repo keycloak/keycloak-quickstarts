@@ -19,6 +19,12 @@ find . -type f -name "*README*" -exec sed -i 's@KEYCLOAK_HOME\bin@RHSSO_HOME\bin
 find . -type f -name "*README*" -exec sed -i 's@WILDFLY_HOME/bin@EAP_HOME/bin@g' {} +
 find . -type f -name "*README*" -exec sed -i 's@WILDFLY_HOME\bin@EAP_HOME\bin@g' {} +
 
+# Add RHSSO Repo
+sed -i '/<\/project>/{ 
+    r scripts/ssorepo.txt
+    a \</project>
+    d 
+}' pom.xml
 #TODO rename rename groupId in POMs
 
 git checkout -b prod_staging
