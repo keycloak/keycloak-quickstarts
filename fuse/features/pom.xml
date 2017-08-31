@@ -20,7 +20,7 @@
 
     <groupId>org.keycloak.quickstarts</groupId>
     <artifactId>keycloak-fuse-features</artifactId>
-    <version>3.2.1.Final</version>
+    <version>3.3.0.CR1</version>
     <packaging>pom</packaging>
     <name>Keycloak Quickstart: Fuse Features</name>
     <description>JBoss Fuse features to simplify install all Keycloak Fuse quickstarts</description>
