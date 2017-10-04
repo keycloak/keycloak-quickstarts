@@ -1,10 +1,10 @@
 service-nodejs: Node.js Service
 ===================================================
 
-Level: Beginner
-Technologies: Node.js
-Summary: Node.js Service
-Target Product: <span>Keycloak</span>, <span>WildFly</span>
+Level: Beginner  
+Technologies: Node.js  
+Summary: Node.js Service  
+Target Product: <span>Keycloak</span>, <span>WildFly</span>  
 Source: <https://github.com/keycloak/keycloak-quickstarts>
 
 
@@ -30,7 +30,7 @@ All you need to build this project is Node.js 4.0.0 or later.
 Configuration in <span>Keycloak</span>
 -----------------------
 
-Prior to running the quickstart you need to import the *quickstart* realm.Clicking on the below link will bring you to the create realm page in the Admin UI.
+Prior to running the quickstart you need to import the *quickstart* realm. Clicking on the below link will bring you to the create realm page in the Admin UI.
 
 [http://localhost:8180/auth/admin/master/console/#/create/realm](http://localhost:8180/auth/admin/master/console/#/create/realm)
 
@@ -83,7 +83,7 @@ The endpoints for the service are:
 You can open the public endpoint directly in the browser to test the service. The two other endpoints require
 invoking with a bearer token. To invoke these endpoints use one of the example quickstarts:
 
-* [app-jee-html5](../app-jee-html5/README.md) - HTML5 application that invokes the example service. Requires service example to be deployed.
-* [app-jee-jsp](../app-jee-jsp/README.md) - JSP application packaged that invokes the example service. Requires service example to be deployed.
+* [app-jee-html5](../app-jee-html5/README.md) - HTML5 application that invokes the example service.
+* [app-jee-jsp](../app-jee-jsp/README.md) - JSP application packaged that invokes the example service.
 
 For both examples, please make sure that you properly changed the service URL to HTTP port 3000.
