@@ -4,7 +4,7 @@ app-authz-jee-vanilla: JSP Application Using Fine-grained Authorization
 Level: Beginner  
 Technologies: JavaEE  
 Summary: JSP Application Using Fine-grained Authorization  
-Target Product: Keycloak, WildFly  
+Target Product: <span>Keycloak</span>, <span>WildFly</span>  
 Source: <https://github.com/keycloak/keycloak-quickstarts>  
 
 
@@ -21,18 +21,18 @@ You'll also learn how to use the `AuthorizationContext` object to obtain permiss
 System Requirements
 -------------------
 
-If you are deploying the application as a WAR you need to have WildFly 10 running.
+If you are deploying the application as a WAR you need to have <span>WildFly 10</span> running.
 
 All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
 
 Configure the Client Adapter
 ----------------------------------
 
-Before configuring the adapter you need to create a client in Keycloak.
+Before configuring the adapter you need to create a client in <span>Keycloak</span>.
 
 The following steps show how to create the client required for this quickstart:
 
-* Open the Keycloak admin console
+* Open the <span>Keycloak</span> admin console
 * Select `Clients` from the menu
 * Click `Create`
 * Add the following values:
@@ -46,11 +46,11 @@ Once saved you click the `Authorization Enabled` switch to `ON`, and then click 
 [NOTE]
 If you deploy the application somewhere else change the hostname and port of the URLs accordingly.
 
-When you enable authorization services for a client application, Keycloak automatically creates a few default settings for your client:
+When you enable authorization services for a client application, <span>Keycloak</span> automatically creates a few default settings for your client:
 
 * Click the `Resources` tab and you'll see a single `Default Resource` resource representing all resources in your application. Note that the `URI` for this resource
 is defined as `/*`.
-* Click the `Policies` tab and you'll see a single `Default Policy` policy. This policy is using a rule written in JavaScript to decide whether or not access should be granted. 
+* Click the `Policies` tab and you'll see a single `Default Policy` policy. This policy is using a rule written in JavaScript to decide whether or not access should be granted.
 By default, this policy always evaluate to a GRANT, which means that access  will always be granted.
 * Click `Permissions` tab and you'll see a single 'Default Permission' permission. This permission associates the resource you want to protect (e.g.: Default Resource) and
 the policies that must be applied when someone request access to the resource. In this case, only `Default Policy` is evaluated when
@@ -62,8 +62,8 @@ Finally you need to configure the adapter, this is done by retrieving the adapte
 * Select `Keycloak OIDC JSON`
 * Click `Download`
 * Move the file `keycloak.json` to the `config/` directory in the root of the quickstart
-* (optional) By default, the policy enforcer responds with a 403 status code when the user lacks permission to access protected resources 
-on the resource server. However, you can also specify a redirection URL for unauthorized users. 
+* (optional) By default, the policy enforcer responds with a 403 status code when the user lacks permission to access protected resources
+on the resource server. However, you can also specify a redirection URL for unauthorized users.
 To specify a redirection URL, edit the `keycloak.json` and replace the `policy-enforcer` configuration with the following:
 
     ````
@@ -105,7 +105,7 @@ For more information, please consult the Authorization Services documentation.
 Undeploy the Quickstart
 --------------------
 
-1. Open a terminal and navigate to the root of the Keycloak server directory.
+1. Open a terminal and navigate to the root of the <span>Keycloak</span> server directory.
 
 2. The following shows the command to undeploy the quickstart:
 

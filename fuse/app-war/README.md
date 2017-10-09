@@ -48,7 +48,7 @@ If you deploy the application somewhere else change the hostname and port of the
 Finally you need to configure the adapter, this is done by retrieving the adapter configuration file:
 
 * Click on `Installation` in the tab for the client you created
-* Select `Keycloak OIDC JSON`
+* Select `<span>Keycloak</span> OIDC JSON`
 * Click `Download`
 * Move the file `keycloak.json` to the directory `src/main/webapp/WEB-INF/`in the quickstart
 

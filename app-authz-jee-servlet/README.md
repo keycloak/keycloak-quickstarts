@@ -4,7 +4,7 @@ app-authz-jee-servlet: Servlet Application Using Fine-grained Authorization
 Level: Beginner  
 Technologies: JavaEE  
 Summary: Servlet Application Using Fine-grained Authorization  
-Target Product: Keycloak, WildFly 
+Target Product: <span>Keycloak</span>, <span>WildFly</span>
 Source: <https://github.com/keycloak/keycloak-quickstarts>  
 
 
@@ -12,7 +12,7 @@ What is it?
 -----------
 
 The `app-authz-jee-servlet` quickstart demonstrates how to enable fine-grained authorization to a Java EE application in order to protect
-specific resources and build a dynamic menu based on the permissions obtained from a Keycloak Server.
+specific resources and build a dynamic menu based on the permissions obtained from a <span>Keycloak</span> Server.
 
 For this application, users can be regular users, premium users or administrators, where:
 
@@ -31,18 +31,18 @@ You'll also learn how to use the `AuthorizationContext` object to obtain permiss
 System Requirements
 -------------------
 
-If you are deploying the application as a WAR you need to have WildFly 10 running.
+If you are deploying the application as a WAR you need to have <span>WildFly 10</span> running.
 
 All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
 
 Configure the Client Adapter
 ----------------------------------
 
-Before configuring the adapter you need to create a `realm` in Keycloak with all the necessary configuration to deploy and run the quickstart.
+Before configuring the adapter you need to create a `realm` in <span>Keycloak</span> with all the necessary configuration to deploy and run the quickstart.
 
 The following steps show how to create the realm required for this quickstart:
 
-* Open the Keycloak admin console
+* Open the <span>Keycloak</span> admin console
 * In the top left corner dropdown menu that is titled Master, click Add Realm. If you are logged in to the master realm this dropdown menu lists all the realms created.
 * For this quickstart we are not going to manually create the realm, but import all configuration from a JSON file. Click on `Select File` and import the [config/realm-import.json](config/realm-import.json).
 * Click `Create`
@@ -58,8 +58,8 @@ Finally you need to configure the adapter, this is done by retrieving the adapte
 * Select `Keycloak OIDC JSON`
 * Click `Download`
 * Move the file `keycloak.json` to the `config/` directory in the root of the quickstart
-* (optional) By default, the policy enforcer responds with a 403 status code when the user lacks permission to access protected resources 
-on the resource server. However, you can also specify a redirection URL for unauthorized users. 
+* (optional) By default, the policy enforcer responds with a 403 status code when the user lacks permission to access protected resources
+on the resource server. However, you can also specify a redirection URL for unauthorized users.
 To specify a redirection URL, edit the `keycloak.json` and replace the `policy-enforcer` configuration with the following:
 
     ````
@@ -82,7 +82,7 @@ Build and Deploy the Quickstart
 
    ````
 
-  
+
 Access the Quickstart
 ----------------------
 
@@ -92,7 +92,7 @@ If you want to play around, try the following steps:
 
 * Add `user_premium` to `alice` and see if she is now able to access premium resources as well if the dynamic menu changes and display `Do user premium thing`
 * Grant to `alice` the necessary permission to access administrative resources.
-    * Open the Keycloak admin console and make sure the `authz-servlet` realm is selected
+    * Open the <span>Keycloak</span> admin console and make sure the `authz-servlet` realm is selected
     * Click on `Clients` on the left-side menu and select `authz-servlet` client
     * Click on `Authorization` tab and then click the `Policies` tab
     * On the `Policies` tab, create a new `User-based Policy` by selecting `alice` user. Name this policy as `Only Alice Policy`
@@ -110,7 +110,7 @@ For more information, please consult the Authorization Services documentation.
 Undeploy the Quickstart
 --------------------
 
-1. Open a terminal and navigate to the root of the Keycloak server directory.
+1. Open a terminal and navigate to the root of the <span>Keycloak</span> server directory.
 
 2. The following shows the command to undeploy the quickstart:
 

@@ -4,33 +4,33 @@ app-profile-saml-jee-jsp: HTML5 Profile Application with SAML
 Level: Beginner
 Technologies: JavaEE
 Summary: JSP Profile Application
-Target Product: Keycloak, WildFly
-Source: <https://github.com/keycloak/Keycloak-quickstarts>
+Target Product: <span>Keycloak</span>, <span>WildFly</span>
+Source: <https://github.com/keycloak/keycloak-quickstarts>
 
 
 What is it?
 -----------
 
 The `app-profile-saml-jee-jsp` quickstart demonstrates how to write an application with JavaEE that
-authenticates using Keycloak over the SAML protocol. Once authenticated the application shows the users profile information.
+authenticates using <span>Keycloak</span> over the SAML protocol. Once authenticated the application shows the users profile information.
 
 
 System Requirements
 -------------------
 
-If you are deploying the application as a WAR you need to have WildFly 10 running.
+If you are deploying the application as a WAR you need to have <span>WildFly 10</span> running.
 
 All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
 
 
-Configuration in Keycloak
+Configuration in <span>Keycloak</span>
 -----------------------
 
-Prior to running the quickstart you need to create a client in Keycloak and download the installation file.
+Prior to running the quickstart you need to create a client in <span>Keycloak</span> and download the installation file.
 
 The following steps shows how to create the client required for this quickstart:
 
-* Open the Keycloak admin console
+* Open the <span>Keycloak</span> admin console
 * Select `Clients` from the menu
 * Click `Create`
 * Add the following values:
@@ -75,7 +75,7 @@ Build and Deploy the Quickstart
    mvn install wildfly:deploy
    ````
 
-If you prefer to secure WARs via Keycloak SAML subsystem:
+If you prefer to secure WARs via <span>Keycloak</span> SAML subsystem:
 
    ````
    mvn install -Dsubsystem wildfly:deploy

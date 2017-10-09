@@ -119,6 +119,15 @@
                         }
                     },
                     {
+                        "name": "Only User Policy",
+                        "type": "role",
+                        "logic": "POSITIVE",
+                        "decisionStrategy": "UNANIMOUS",
+                        "config": {
+                            "roles": "[{\"id\":\"user\",\"required\":false}]"
+                        }
+                    },
+                    {
                         "name": "Only Owner Policy",
                         "type": "js",
                         "logic": "POSITIVE",
@@ -156,6 +165,16 @@
                         "config": {
                             "resources": "[\"Premium Resource\"]",
                             "applyPolicies": "[\"Only Premium User Policy\"]"
+                        }
+                    },
+                    {
+                        "name": "Protected Resource Permission",
+                        "type": "resource",
+                        "logic": "POSITIVE",
+                        "decisionStrategy": "UNANIMOUS",
+                        "config": {
+                            "resources": "[\"Protected Resource\"]",
+                            "applyPolicies": "[\"Only User Policy\"]"
                         }
                     },
                     {

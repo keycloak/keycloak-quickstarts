@@ -162,7 +162,7 @@ public class ArquillianJeeHtml5Test {
             loginPage.login("test-admin", "password");
             indexPage.clickAdmin();
             assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(
-                    By.className("message"), "User: test-admin")));
+                    By.className("message"), "Message: admin")));
             indexPage.clickLogout();
         } catch (Exception e) {
             debugTest(e);
@@ -177,9 +177,10 @@ public class ArquillianJeeHtml5Test {
             loginPage.login("alice", "password");
             indexPage.clickSecured();
             assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(
-                    By.className("message"), "User: alice")));
+                    By.className("message"), "Message: secured")));
             indexPage.clickLogout();
         } catch (Exception e) {
+           //  indexPage.clickLogout();
             debugTest(e);
             fail("Should display logged in user");
         }

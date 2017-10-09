@@ -4,16 +4,16 @@ app-angular2: Angular 2 Service Invocation Application
 Level: Beginner  
 Technologies: Angular2, JavaScript  
 Summary: Angular2 Service Invocation Application packaged as a WAR  
-Target Product: Keycloak, WildFly  
+Target Product: <span>Keycloak</span>, <span>WildFly</span>  
 Source: <https://github.com/keycloak/keycloak-quickstarts>
 
 What is it?
 -----------
 
 The `app-angular2` quickstart demonstrates how to write an application with Angular2 and JavaScript that authenticates
-using Keycloak. Once authenticated the application shows how to invoke a service secured with Keycloak.
+using <span>Keycloak</span>. Once authenticated the application shows how to invoke a service secured with <span>Keycloak</span>.
 
-For simplicity of deploying the application it is packaged as a WAR archive and can be deployed to JBoss EAP.
+For simplicity of deploying the application it is packaged as a WAR archive and can be deployed to <span>WildFly</span>.
 As the example only contains static html pages the files in `src/main/webapp` can also be hosted on any web server.
 
 
@@ -22,10 +22,10 @@ System Requirements
 
 The quickstart requires that you have the [example services](../service-jee-jaxrs/README.md) running. It assumes the
 services are located at `http://localhost:8080/service`. If the services are running elsewhere you need to edit
-`app.component.ts` and replace the value of `serviceUrl`.  Then transpile using `npm run build` from the webapp 
+`app.component.ts` and replace the value of `serviceUrl`.  Then transpile using `npm run build` from the webapp
 directory.
 
-If you are deploying the application as a WAR you need to have WildFly 10 running.
+If you are deploying the application as a WAR you need to have <span>WildFly 10</span> running.
 
 To build this project, you will need nodejs/npm.  To make modifications you will
 need to install TypeScript.  For nodejs/npm, go to `https://nodejs.org`.  Once installed,
@@ -36,14 +36,14 @@ npm install -g typescript
 To build and run this project as a WAR you will need Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
 
 
-Configuration in Keycloak
+Configuration in <span>Keycloak</span>
 -----------------------
 
-Prior to running the quickstart you need to create a client in Keycloak and download the installation file.
+Prior to running the quickstart you need to create a client in <span>Keycloak</span> and download the installation file.
 
 The following steps show how to create the client required for this quickstart:
 
-* Open the Keycloak admin console
+* Open the <span>Keycloak</span> admin console
 * Select `Clients` from the menu
 * Click `Create`
 * Add the following values:

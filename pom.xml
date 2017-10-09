@@ -50,9 +50,11 @@
         <version.wildfly.arquillian.container>2.0.2.Final</version.wildfly.arquillian.container>
         <version.remote.wildfly.arquillian.container>8.2.1.Final</version.remote.wildfly.arquillian.container>
         <version.junit>4.12</version.junit>
+        <version.hamcrest>1.3</version.hamcrest>
 
         <arquillian-managed>true</arquillian-managed>
         <jboss-cli.executable>./jboss-cli.sh</jboss-cli.executable>
+        <keycloak.management.port>10090</keycloak.management.port>
     </properties>
 
     <dependencyManagement>
@@ -98,6 +100,12 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest-all</artifactId>
+                <version>${version.hamcrest}</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -116,7 +124,6 @@
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-test-helper</artifactId>
-            <version>${version.keycloak}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -166,6 +173,8 @@
         <profile>
             <id>bump-version</id>
             <modules>
+                <module>action-token-authenticator</module>
+                <module>action-token-required-action</module>
                 <module>service-jee-jaxrs</module>
                 <module>app-profile-jee-html5</module>
                 <module>app-profile-jee-jsp</module>
@@ -182,6 +191,7 @@
                 <module>service-springboot-rest</module>
                 <module>app-springboot</module>
                 <module>app-authz-springboot</module>
+                <module>action-token</module>
             </modules>
         </profile>
         <profile>

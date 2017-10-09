@@ -1,4 +1,9 @@
 language: java
+dist: trusty
+addons:
+  apt:
+    packages:
+      - lynx
 
 jdk:
   - oraclejdk8
@@ -18,6 +23,7 @@ env:
     - TESTS=group1
     - TESTS=group2
     - TESTS=group3
+    - TESTS=group4
 
 before_install:
   - ./travis-server.sh
@@ -35,5 +41,8 @@ script:
 after_install:
   - ./scripts/stop-server.sh
   - kill -9 `cat pid.txt`
+
+after_failure:
+  - if [ -f ${HOME}/keycloak.log ]; then lynx -dump ${HOME}/keycloak.log; fi
 
 sudo: false

@@ -4,7 +4,7 @@ app-profile-jee-html5: HTML5 Profile Application
 Level: Beginner  
 Technologies: HTML5, JavaScript  
 Summary: HTML5 Profile Application packaged as a WAR  
-Target Product: Keycloak, WildFly  
+Target Product: <span>Keycloak</span>, <span>WildFly</span>  
 Source: <https://github.com/keycloak/keycloak-quickstarts>
 
 
@@ -12,29 +12,29 @@ What is it?
 -----------
 
 The `app-profile-jee-html5` quickstart demonstrates how to write an application with HTML5 and JavaScript that
-authenticates using Keycloak. Once authenticated the application shows the user's profile information and can also
-display the token retrieved from Keycloak.
+authenticates using <span>Keycloak</span>. Once authenticated the application shows the user's profile information and can also
+display the token retrieved from <span>Keycloak</span>.
 
-For simplicity of deploying the application it is packaged as a WAR archive and can be deployed to WildFly.
+For simplicity of deploying the application it is packaged as a WAR archive and can be deployed to <span>WildFly</span>.
 As the example only contains static html pages the files in `src/main/webapp` can also be hosted on any web server.
 
 
 System Requirements
 -------------------
 
-If you are deploying the application as a WAR you need to have WildFly 10 running.
+If you are deploying the application as a WAR you need to have <span>WildFly 10</span> running.
 
 All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
 
 
-Configuration in Keycloak
+Configuration in <span>Keycloak</span>
 -----------------------
 
-Prior to running the quickstart you need to create a client in Keycloak and download the installation file.
+Prior to running the quickstart you need to create a client in <span>Keycloak</span> and download the installation file.
 
 The following steps show how to create the client required for this quickstart:
 
-* Open the Keycloak admin console
+* Open the <span>Keycloak</span> admin console
 * Select `Clients` from the menu
 * Click `Create`
 * Add the following values:
@@ -52,10 +52,10 @@ Finally you need to configure the javascript adapter, this is done by retrieving
 * Click on `Installation` in the tab for the client you created
 * Select `Keycloak OIDC JSON`
 * Click `Download`
-* Move the file `keycloak.json` to the `config/` directory in the root of the quickstart
+* Move the file `keycloak.json` to the `src/main/webapp/` directory in the root of the quickstart
 
 As an alternative you can create the client by importing the file [client-import.json](config/client-import.json) and
-copying [config/keycloak-example.json](config/keycloak-example.json) to `config/keycloak.json`.
+copying [config/keycloak-example.json](config/keycloak-example.json) to `src/main/webapp/keycloak.json`.
 
 
 Build and Deploy the Quickstart

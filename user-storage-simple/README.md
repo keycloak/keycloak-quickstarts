@@ -4,7 +4,7 @@ user-storage-properties: User Storage SPI Simple Example
 Level: Beginner  
 Technologies: JavaEE  
 Summary: User Storage SPI Simple Example  
-Target Product: Keycloak  
+Target Product: <span>Keycloak</span>  
 Source: <https://github.com/keycloak/keycloak-quickstarts>  
 
 
@@ -31,7 +31,7 @@ add new users in the admin console and they will be created within the property 
 System Requirements
 -------------------
 
-You need to have Keycloak running.
+You need to have <span>Keycloak</span> running.
 
 All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
 
@@ -39,7 +39,7 @@ All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven
 Build and Deploy the Quickstart
 -------------------------------
 
-To deploy this provider you must have Keycloak running in standalone or standalone-ha mode. Then type the follow maven command:
+To deploy this provider you must have <span>Keycloak</span> running in standalone or standalone-ha mode. Then type the follow maven command:
 
    ````
    mvn clean install wildfly:deploy
@@ -48,7 +48,7 @@ If you want to play with and modify the example, simply rerun the maven deploy c
 
 Enable the Provider for a Realm
 -------------------------------
-Login to the Keycloak Admin Console and got to the User Federation tab.   You should now see your deployed providers in the add-provider list box.
+Login to the <span>Keycloak</span> Admin Console and got to the User Federation tab.   You should now see your deployed providers in the add-provider list box.
 For the `readonly-property-file` provider, all you need to do is add the provider and save it as it is hardcoded to point
 to the property file that comes with the deployment.  You will be able to login to the account service using the username `tbrady` and password
 of `superbowl`.
@@ -56,7 +56,7 @@ of `superbowl`.
 For the `writeable-property-file` provider, you will have to specify a properties file on disk on the configuration page of the provider.
 This file can be empty, but it must exist on disk otherwise the provider will fail.
 Because this provider implements the UserRegistrationProvider interface, any new user you create in the
-admin console or on the registration pages of Keycloak, will be created in the properties file you configured.  If you go
+admin console or on the registration pages of <span>Keycloak</span>, will be created in the properties file you configured.  If you go
 to the Users tab in the Admin Console and create a new user, you'll be able to see the provider in action.  You can also
 edit the file yourself to add the username/password pairs you want.
 

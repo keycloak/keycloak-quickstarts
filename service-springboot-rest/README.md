@@ -4,14 +4,14 @@ service-springboot-rest: SpringBoot REST Service
 Level: Beginner
 Technologies: SpringBoot
 Summary: SpringBoot REST Service
-Target Product: Keycloak
-Source: <https://github.com/keycloak/Keycloak-quickstarts>
+Target Product: <span>Keycloak</span>
+Source: <https://github.com/keycloak/<span>Keycloak</span>-quickstarts>
 
 
 What is it?
 -----------
 
-The `service-springboot-rest` quickstart demonstrates how to write a RESTful service with SpringBoot that is secured with Keycloak.
+The `service-springboot-rest` quickstart demonstrates how to write a RESTful service with SpringBoot that is secured with <span>Keycloak</span>.
 
 There are 2 endpoints exposed by the service:
 
@@ -28,14 +28,14 @@ System Requirements
 All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
 
 
-Configuration in Keycloak
+Configuration in <span>Keycloak</span>
 -----------------------
 
-Prior to running the quickstart you need to create a client in Keycloak and download the installation file.
+Prior to running the quickstart you need to create a client in <span>Keycloak</span> and download the installation file.
 
 The following steps shows how to create the client required for this quickstart:
 
-* Open the Keycloak admin console
+* Open the <span>Keycloak</span> admin console
 * Select `Clients` from the menu
 * Click `Create`
 * Add the following values:
@@ -97,7 +97,7 @@ invoking with a bearer token. To invoke these endpoints use one of the example q
 Integration test of the Quickstart
 ----------------------------------
 
-1. Make sure you have an Keycloak server running with an admin user in the `master` realm or use the provided docker image
+1. Make sure you have an <span>Keycloak</span> server running with an admin user in the `master` realm or use the provided docker image
 2. Be sure to set the `TestHelper.keycloakBaseUrl` in the `createArchive` method (default URL is localhost:8180/auth).
 3. Set accordingly the correct url for the `keycloak.auth-server-url` in the test [application.properties](src/test/resources/application.properties).
 4. Run `mvn test`
