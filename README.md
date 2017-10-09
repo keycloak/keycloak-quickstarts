@@ -208,3 +208,8 @@ Troubleshooting
 | Failed to invoke service: 404 Not Found | Service not deployed, or service URL not correct | Deploy service or change the URL for the service as specified in the quickstart README
 | Failed to invoke service: Request failed message with no error code | CORS not enabled | Most likely cause is that you've deployed the HTML5 application to a different host than the service, if so the solution is to add CORS support to the service. See the README for the service for how to enable. |
 | Page displays: Forbidden | Authenticated user is missing a role required to access the url | This can happen if you fail to add `user` role to admin user as instructed in [Create Roles and User](#add-roles-user). |
+
+Reporting security vulnerabilities
+----------------------------------
+
+If you've found a security vulnerability, please look at the [instructions on how to properly report it](http://www.keycloak.org/security.html)
