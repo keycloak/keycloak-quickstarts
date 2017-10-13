@@ -35,11 +35,11 @@
             ]
         },
         {
-            "username": "service-account-app-authz-springboot",
+            "username": "service-account-app-authz-rest-springboot",
             "enabled": true,
-            "serviceAccountClientId": "app-authz-springboot",
+            "serviceAccountClientId": "app-authz-rest-springboot",
             "clientRoles": {
-                "app-authz-springboot": [
+                "app-authz-rest-springboot": [
                     "uma_protection"
                 ]
             }
@@ -59,56 +59,30 @@
     },
     "clients": [
         {
-            "clientId": "app-authz-springboot",
+            "clientId": "app-authz-rest-springboot",
             "enabled": true,
             "baseUrl": "http://localhost:8080",
             "adminUrl": "http://localhost:8080",
-            "bearerOnly": false,
             "redirectUris": [
                 "http://localhost:8080/*"
             ],
             "secret": "secret",
+            "directAccessGrantsEnabled": true,
             "authorizationServicesEnabled": true,
             "authorizationSettings": {
                 "allowRemoteResourceManagement": false,
                 "policyEnforcementMode": "ENFORCING",
                 "resources": [
                     {
-                        "name": "Protected Resource",
-                        "uri": "/protected/*"
+                        "name": "Default Resource",
+                        "uri": "/api/{resource}"
                     },
                     {
                         "name": "Premium Resource",
-                        "uri": "/protected/premium/*"
-                    },
-                    {
-                        "name": "Default Resource",
-                        "uri": "/*"
-                    },
-                    {
-                        "name": "User Resource",
-                        "type": "user-resource"
-                    },
-                    {
-                        "name": "Alice Resource",
-                        "type": "user-resource",
-                        "uri": "/protected/alice",
-                        "owner": {
-                            "name": "alice"
-                        }
+                        "uri": "/api/premium"
                     }
                 ],
                 "policies": [
-                    {
-                        "name": "Default Policy",
-                        "description": "A policy that grants access only for users within this realm",
-                        "type": "js",
-                        "logic": "POSITIVE",
-                        "decisionStrategy": "AFFIRMATIVE",
-                        "config": {
-                            "code": "// by default, grants any permission associated with this policy\n$evaluation.grant();\n"
-                        }
-                    },
                     {
                         "name": "Only Premium User Policy",
                         "type": "role",
@@ -128,22 +102,14 @@
                         }
                     },
                     {
-                        "name": "Only Owner Policy",
-                        "type": "js",
-                        "logic": "POSITIVE",
-                        "decisionStrategy": "UNANIMOUS",
-                        "config": {
-                            "code": "var context = $evaluation.getContext();\nvar permission = $evaluation.getPermission();\nvar resource = permission.getResource();\nvar identity = context.getIdentity();\n\nif (identity.id == resource.owner) {\n    $evaluation.grant();\n}"
-                        }
-                    },
-                    {
                         "name": "Default Resource Permission",
+                        "description": "A permission that applies to the default resource",
                         "type": "resource",
                         "logic": "POSITIVE",
                         "decisionStrategy": "UNANIMOUS",
                         "config": {
                             "resources": "[\"Default Resource\"]",
-                            "applyPolicies": "[\"Default Policy\"]"
+                            "applyPolicies": "[\"Only User Policy\"]"
                         }
                     },
                     {
@@ -154,26 +120,6 @@
                         "config": {
                             "resources": "[\"Premium Resource\"]",
                             "applyPolicies": "[\"Only Premium User Policy\"]"
-                        }
-                    },
-                    {
-                        "name": "Protected Resource Permission",
-                        "type": "resource",
-                        "logic": "POSITIVE",
-                        "decisionStrategy": "UNANIMOUS",
-                        "config": {
-                            "resources": "[\"Protected Resource\"]",
-                            "applyPolicies": "[\"Only User Policy\"]"
-                        }
-                    },
-                    {
-                        "name": "User Resource Permission",
-                        "type": "resource",
-                        "logic": "POSITIVE",
-                        "decisionStrategy": "UNANIMOUS",
-                        "config": {
-                            "defaultResourceType": "user-resource",
-                            "applyPolicies": "[\"Only Owner Policy\"]"
                         }
                     }
                 ]

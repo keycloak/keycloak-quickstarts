@@ -137,17 +137,6 @@
                         }
                     },
                     {
-                        "name": "Default Permission",
-                        "description": "A permission that applies to the default resource type",
-                        "type": "resource",
-                        "logic": "POSITIVE",
-                        "decisionStrategy": "UNANIMOUS",
-                        "config": {
-                            "defaultResourceType": "urn:app-authz-springboot:resources:default",
-                            "applyPolicies": "[\"Default Policy\"]"
-                        }
-                    },
-                    {
                         "name": "Default Resource Permission",
                         "type": "resource",
                         "logic": "POSITIVE",

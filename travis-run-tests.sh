@@ -20,6 +20,7 @@ fi
 
 if [ $1 == "group4" ]; then
   cd app-authz-springboot && mvn -B -s ../maven-settings.xml clean test
+  cd app-authz-rest-springboot && mvn -B -s ../maven-settings.xml clean test
   cd ../service-springboot-rest && mvn -B -s ../maven-settings.xml clean test
   mvn spring-boot:run&
   cd ../app-springboot
