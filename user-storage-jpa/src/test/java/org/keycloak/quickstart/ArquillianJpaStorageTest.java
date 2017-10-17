@@ -108,7 +108,7 @@ public class ArquillianJpaStorageTest {
     }
 
     private void waitTillElementPresent(By locator) {
-        Graphene.waitGui().withTimeout(30, TimeUnit.SECONDS).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+        Graphene.waitGui().withTimeout(60, TimeUnit.SECONDS).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
     }
     
     private void navigateTo(String path) {
