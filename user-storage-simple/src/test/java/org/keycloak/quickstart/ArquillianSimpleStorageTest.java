@@ -88,7 +88,7 @@ public class ArquillianSimpleStorageTest {
     }
 
     private void navigateTo(String path) {
-        webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
+        webDriver.manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
         webDriver.navigate().to(format(KEYCLOAK_URL,
                 contextRoot.getHost(), contextRoot.getPort(), path));
     }
