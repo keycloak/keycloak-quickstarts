@@ -6,7 +6,7 @@ echo "Building $TRAVIS_BRANCH"
 
 if [ $TRAVIS_BRANCH != "latest" ]; then
   # Clone Keycloak repo
-  git clone $REPO  > /dev/null 2>&1 && cd keycloak
+  git clone --depth 1 $REPO  > /dev/null 2>&1 && cd keycloak
 
   # The exact version of Keycloak based on Maven
   VERSION=`mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version|grep -Ev '(^\[|Download\w+:)'`
