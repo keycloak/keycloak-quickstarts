@@ -84,7 +84,7 @@ Access the Quickstart
 The endpoints for the service are:
 
 * public - <http://localhost:8081/public>
-* secured - <http://localhost:8080/products>
+* secured - <http://localhost:8081/products>
 
 
 You can open the public endpoint directly in the browser to test the service. The other endpoint require
