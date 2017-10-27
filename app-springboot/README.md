@@ -59,7 +59,7 @@ Finally you need to update the adapter using SpringBoot's configuration file (ap
 server.compression.enabled: true
 server.compression.min-response-size: 1
 server.connection-timeout=5000
-server.port = 8081
+server.port = 8080
 keycloak.realm=springboot-quickstart
 keycloak.auth-server-url=http://localhost:8180/auth
 keycloak.ssl-required=external
