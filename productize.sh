@@ -6,8 +6,8 @@ git config user.email "{GH_USER_EMAIL}"
 # Rename Keycloak to Red Hat SSO
 find . -type f -name "*README*" -exec sed -i 's@<span>Keycloak</span>@Red Hat SSO@g' {} +
 # Rename WildFly to JBoss EAP
-find . -type f -name "*README*" -exec sed -i 's@<span>WildFly</span>@JBoss EAP@g' {} +
 find . -type f -name "*README*" -exec sed -i 's@<span>WildFly 10</span>@JBoss EAP@g' {} +
+find . -type f -name "*README*" -exec sed -i 's@<span>WildFly</span>@JBoss EAP@g' {} +
 
 # Rename env
 find . -type f -name "*README*" -exec sed -i 's@<span>KEYCLOAK_HOME</span>@RHSSO_HOME@g' {} +
