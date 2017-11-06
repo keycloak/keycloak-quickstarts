@@ -36,7 +36,7 @@ The applications these projects produce are designed to be run on <span>WildFly<
 All you need to build these projects is Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
 
 
-<a id="<span>Keycloak</span>"></a>Start the <span>Keycloak</span> Server
+<a id="keycloak"></a>Start the <span>Keycloak</span> Server
 ------------------------------------------
 
 By default the <span>Keycloak</span> Server uses the same ports as the <span>WildFly</span> Server. To run the quickstarts you can either run the
@@ -119,10 +119,10 @@ One more step, if you want to access the examples with the admin user you need t
 
 Before starting the <span>WildFly</span> Server start by extracting the <span>Keycloak</span> client adapter into it.
 
-For <span>WildFly 10</span> extract `keycloak-wildfly-adapter-dist-2.5.0.Final.zip` into <span>WILDFLY_HOME</span>.
+For <span>WildFly 10</span> extract `keycloak-wildfly-adapter-${project.version}.zip` into <span>WILDFLY_HOME</span>.
 
 If you plan to try the SAML examples you also need the SAML <span>WildFly</span> adapter. To do this for <span>WildFly 10</span>
-`keycloak-saml-wildfly-adapter-dist.zip` into <span>WILDFLY_HOME</span>.
+`keycloak-saml-wildfly-adapter-dist-${project.version}.zip` into <span>WILDFLY_HOME</span>.
 
 The next step is to start <span>WildFly</span> server:
 
