@@ -193,6 +193,7 @@ Examples
 * [app-profile-jee-vanilla](app-profile-jee-vanilla/README.md) - JSP application configured with basic authentication. Shows how to secure an application with the client adapter subsystem.
 * [app-profile-saml-jee-jsp](app-profile-saml-jee-jsp/README.md) - JSP application that uses SAML and displays user profile.
 * [service-jee-jaxrs](service-jee-jaxrs/README.md) - JAX-RS Service with public and protected endpoints.
+* [fine-grain-admin-permissions](fine-grain-admin-permissions/README.md) - Fine grain admin permissions demo.
 
 
 Troubleshooting
