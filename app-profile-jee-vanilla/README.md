@@ -37,7 +37,7 @@ any changes to the application itself.
 2. The following shows the command to deploy the quickstart:
 
    ````
-   mvn install wildfly:deploy
+   mvn install -Pwildfly-managed wildfly:deploy -DskipTests=true
    ````
 
 
