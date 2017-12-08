@@ -97,7 +97,7 @@ public class ExternalApplicationNotificationActionTokenHandler extends AbstractA
         } catch (VerificationException ex) {
             return tokenContext.getSession().getProvider(LoginFormsProvider.class)
                     .setError(Messages.INVALID_PARAMETER)
-                    .createErrorPage();
+                    .createErrorPage(Response.Status.INTERNAL_SERVER_ERROR);
         }
 
         event.success();

@@ -60,7 +60,7 @@ public class RedirectToExternalApplication implements RequiredActionProvider, Re
         String token = new ExternalApplicationNotificationActionToken(
           context.getUser().getId(),
           absoluteExpirationInSecs,
-          context.getAuthenticationSession().getId(),
+          context.getAuthenticationSession().getClient().getId(),
           applicationId
         ).serialize(
           context.getSession(),
@@ -70,7 +70,7 @@ public class RedirectToExternalApplication implements RequiredActionProvider, Re
 
         String submitActionTokenUrl;
             submitActionTokenUrl = Urls
-              .actionTokenBuilder(context.getUriInfo().getBaseUri(), token)
+              .actionTokenBuilder(context.getUriInfo().getBaseUri(), token, context.getAuthenticationSession().getClient().getClientId())
               .queryParam(ExternalApplicationNotificationActionTokenHandler.QUERY_PARAM_APP_TOKEN, "{tokenParameterName}")
               .build(context.getRealm().getName(), "{APP_TOKEN}")
               .toString();

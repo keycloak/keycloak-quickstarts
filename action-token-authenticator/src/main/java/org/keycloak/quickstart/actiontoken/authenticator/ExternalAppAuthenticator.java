@@ -74,7 +74,7 @@ public class ExternalAppAuthenticator implements Authenticator {
         String token = new ExternalApplicationNotificationActionToken(
           context.getUser().getId(),
           absoluteExpirationInSecs,
-          context.getAuthenticationSession().getId(),
+          context.getAuthenticationSession().getClient().getId(),
           applicationId
         ).serialize(
           context.getSession(),
@@ -84,7 +84,7 @@ public class ExternalAppAuthenticator implements Authenticator {
 
         String submitActionTokenUrl;
         submitActionTokenUrl = Urls
-          .actionTokenBuilder(context.getUriInfo().getBaseUri(), token)
+          .actionTokenBuilder(context.getUriInfo().getBaseUri(), token, context.getAuthenticationSession().getClient().getId())
           .queryParam(Constants.EXECUTION, context.getExecution().getId())
           .queryParam(ExternalApplicationNotificationActionTokenHandler.QUERY_PARAM_APP_TOKEN, "{tokenParameterName}")
           .build(context.getRealm().getName(), "{APP_TOKEN}")
@@ -132,7 +132,7 @@ public class ExternalAppAuthenticator implements Authenticator {
             logger.error("Error handling action token", ex);
             context.failure(AuthenticationFlowError.INTERNAL_ERROR, context.form()
                     .setError(Messages.INVALID_PARAMETER)
-                    .createErrorPage());
+                    .createErrorPage(Status.INTERNAL_SERVER_ERROR));
         }
 
         context.success();
