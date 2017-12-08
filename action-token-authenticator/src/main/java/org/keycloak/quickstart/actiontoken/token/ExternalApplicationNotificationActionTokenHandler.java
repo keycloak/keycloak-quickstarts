@@ -91,7 +91,8 @@ public class ExternalApplicationNotificationActionTokenHandler extends AbstractA
 
     @Override
     public String getAuthenticationSessionIdFromToken(ExternalApplicationNotificationActionToken token, ActionTokenContext<ExternalApplicationNotificationActionToken> tokenContext) {
-        final String id = new AuthenticationSessionManager(tokenContext.getSession()).getCurrentAuthenticationSession(tokenContext.getRealm()).getId();
+        final String id = new AuthenticationSessionManager(tokenContext.getSession())
+                .getCurrentAuthenticationSession(tokenContext.getRealm(), tokenContext.getSession().getContext().getClient()).getParentSession().getId();
         LOG.infof("Returning %s", id);
         return id;
     }

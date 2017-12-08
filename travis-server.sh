@@ -4,7 +4,7 @@ REPO="https://github.com/keycloak/keycloak.git"
 
 echo "Building $TRAVIS_BRANCH"
 
-if [ $TRAVIS_BRANCH != "latest" ]; then
+if [[ $TRAVIS_BRANCH != "latest" ]]; then
   # Clone Keycloak repo
   git clone --depth 1 $REPO  > /dev/null 2>&1 && cd keycloak
 

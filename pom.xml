@@ -21,7 +21,7 @@
 
     <groupId>org.keycloak.quickstarts</groupId>
     <artifactId>keycloak-quickstart-parent</artifactId>
-    <version>3.4.0.CR1-SNAPSHOT</version>
+    <version>3.4.2.Final-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Keycloak Quickstart: parent</name>
     <description>Parent</description>
@@ -35,7 +35,7 @@
     </licenses>
 
     <properties>
-        <version.wildfly>10.1.0.Final</version.wildfly>
+        <version.wildfly>11.0.0.Final</version.wildfly>
         <version.keycloak>${project.version}</version.keycloak>
 
         <version.wildfly.maven.plugin>1.1.0.Final</version.wildfly.maven.plugin>
@@ -46,7 +46,8 @@
         <version.exec.maven.plugin>1.6.0</version.exec.maven.plugin>
         <version.frontend.maven.plugin>1.4</version.frontend.maven.plugin>
 
-        <version.graphene.webdriver>2.1.0.Final</version.graphene.webdriver>
+        <arquillian-graphene.version>2.1.0.Final</arquillian-graphene.version>
+        <arquillian-phantom.version>1.2.1.Final</arquillian-phantom.version>
         <version.wildfly.arquillian.container>2.0.2.Final</version.wildfly.arquillian.container>
         <version.remote.wildfly.arquillian.container>8.2.1.Final</version.remote.wildfly.arquillian.container>
         <version.junit>4.12</version.junit>
