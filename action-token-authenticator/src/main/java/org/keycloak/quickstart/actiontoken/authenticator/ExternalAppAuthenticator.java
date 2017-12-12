@@ -31,6 +31,7 @@ import org.keycloak.quickstart.actiontoken.token.ExternalApplicationNotification
 import org.keycloak.representations.JsonWebToken;
 import org.keycloak.services.Urls;
 import org.keycloak.services.messages.Messages;
+import org.keycloak.sessions.AuthenticationSessionCompoundId;
 import org.keycloak.sessions.AuthenticationSessionModel;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -64,17 +65,21 @@ public class ExternalAppAuthenticator implements Authenticator {
         if (externalApplicationUrl == null) {
             externalApplicationUrl = DEFAULT_EXTERNAL_APP_URL;
         }
+
         if (applicationId == null) {
             applicationId = DEFAULT_APPLICATION_ID;
         }
 
         int validityInSecs = context.getRealm().getActionTokenGeneratedByUserLifespan();
         int absoluteExpirationInSecs = Time.currentTime() + validityInSecs;
+        final AuthenticationSessionModel authSession = context.getAuthenticationSession();
+        final String clientId = authSession.getClient().getClientId();
 
+        // Create a token used to return back to the current authentication flow
         String token = new ExternalApplicationNotificationActionToken(
           context.getUser().getId(),
           absoluteExpirationInSecs,
-          context.getAuthenticationSession().getClient().getId(),
+          clientId,
           applicationId
         ).serialize(
           context.getSession(),
@@ -82,9 +87,10 @@ public class ExternalAppAuthenticator implements Authenticator {
           context.getUriInfo()
         );
 
+        // This URL will be used by the application to submit the action token above to return back to the flow
         String submitActionTokenUrl;
         submitActionTokenUrl = Urls
-          .actionTokenBuilder(context.getUriInfo().getBaseUri(), token, context.getAuthenticationSession().getClient().getId())
+          .actionTokenBuilder(context.getUriInfo().getBaseUri(), token, clientId, authSession.getTabId())
           .queryParam(Constants.EXECUTION, context.getExecution().getId())
           .queryParam(ExternalApplicationNotificationActionTokenHandler.QUERY_PARAM_APP_TOKEN, "{tokenParameterName}")
           .build(context.getRealm().getName(), "{APP_TOKEN}")

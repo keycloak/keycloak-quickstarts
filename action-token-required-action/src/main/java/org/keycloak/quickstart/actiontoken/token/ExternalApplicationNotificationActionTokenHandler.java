@@ -31,11 +31,13 @@ import org.keycloak.representations.JsonWebToken;
 import org.keycloak.services.managers.AuthenticationManager;
 import org.keycloak.services.managers.AuthenticationSessionManager;
 import org.keycloak.services.messages.Messages;
+import org.keycloak.sessions.AuthenticationSessionCompoundId;
 import org.keycloak.sessions.AuthenticationSessionModel;
 import java.io.IOException;
 import java.util.Collections;
 import javax.crypto.spec.SecretKeySpec;
 import javax.ws.rs.core.Response;
+import org.jboss.logging.Logger;
 
 /**
  * Action token handler for verification of e-mail address.
@@ -79,6 +81,21 @@ public class ExternalApplicationNotificationActionTokenHandler extends AbstractA
           // Validate correctness of the app token
           t -> isApplicationTokenValid(t, tokenContext)
         );
+    }
+
+    private static final Logger LOG = Logger.getLogger(ExternalApplicationNotificationActionTokenHandler.class);
+
+    @Override
+    public String getAuthenticationSessionIdFromToken(ExternalApplicationNotificationActionToken token, ActionTokenContext<ExternalApplicationNotificationActionToken> tokenContext,
+      AuthenticationSessionModel currentAuthSession) {
+        // always join current authentication session
+        final String id = currentAuthSession == null
+          ? null
+          : AuthenticationSessionCompoundId.fromAuthSession(currentAuthSession).getEncodedId();
+
+        LOG.infof("Returning %s", id);
+
+        return id;
     }
 
     @Override

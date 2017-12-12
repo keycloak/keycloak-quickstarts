@@ -28,6 +28,8 @@ import org.keycloak.events.*;
 import org.keycloak.representations.JsonWebToken;
 import org.keycloak.services.managers.AuthenticationSessionManager;
 import org.keycloak.services.messages.Messages;
+import org.keycloak.sessions.AuthenticationSessionCompoundId;
+import org.keycloak.sessions.AuthenticationSessionModel;
 import java.io.IOException;
 import javax.crypto.spec.SecretKeySpec;
 import javax.ws.rs.core.Response;
@@ -90,10 +92,15 @@ public class ExternalApplicationNotificationActionTokenHandler extends AbstractA
     private static final Logger LOG = Logger.getLogger(ExternalApplicationNotificationActionTokenHandler.class);
 
     @Override
-    public String getAuthenticationSessionIdFromToken(ExternalApplicationNotificationActionToken token, ActionTokenContext<ExternalApplicationNotificationActionToken> tokenContext) {
-        final String id = new AuthenticationSessionManager(tokenContext.getSession())
-                .getCurrentAuthenticationSession(tokenContext.getRealm(), tokenContext.getSession().getContext().getClient()).getParentSession().getId();
+    public String getAuthenticationSessionIdFromToken(ExternalApplicationNotificationActionToken token, ActionTokenContext<ExternalApplicationNotificationActionToken> tokenContext,
+      AuthenticationSessionModel currentAuthSession) {
+        // always join current authentication session
+        final String id = currentAuthSession == null
+          ? null
+          : AuthenticationSessionCompoundId.fromAuthSession(currentAuthSession).getEncodedId();
+
         LOG.infof("Returning %s", id);
+
         return id;
     }
 
