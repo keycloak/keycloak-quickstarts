@@ -19,12 +19,8 @@ find . -type f -name "*README*" -exec sed -i 's@KEYCLOAK_HOME\\bin@RHSSO_HOME\\b
 find . -type f -name "*README*" -exec sed -i 's@WILDFLY_HOME/bin@EAP_HOME/bin@g' {} +
 find . -type f -name "*README*" -exec sed -i 's@WILDFLY_HOME\\bin@EAP_HOME\\bin@g' {} +
 
-# Add RHSSO Repo
-sed -i '/<\/project>/{ 
-    r scripts/ssorepo.txt
-    a \</project>
-    d 
-}' pom.xml
+find . -type f -name "*pom.xml*" -exec sed -i 's@<id>jboss</id>@<id>jboss-enterprise-maven-repository</id>@g' {} +
+find . -type f -name "*pom.xml*" -exec sed -i 's@<url>jboss</url>@<url>https://maven.repository.redhat.com/ga</url>@g' {} +
 
 #update version to SSHO 
 ./set-version.sh 7.2.0.DR4
