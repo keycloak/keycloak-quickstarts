@@ -64,6 +64,8 @@ different host. To do this edit `keycloak.json` and add:
 }
 ````
 
+As an alternative you can create the client by importing the file [client-import.json](config/client-import.json) and
+copying [config/keycloak-example.json](config/keycloak-example.json) to `config/keycloak.json`.
 
 Build and Deploy the Quickstart
 -------------------------------
