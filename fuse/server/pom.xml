@@ -21,7 +21,7 @@
 
     <groupId>org.keycloak.quickstarts</groupId>
     <artifactId>keycloak-fuse-server</artifactId>
-    <version>3.4.2.Final-SNAPSHOT</version>
+    <version>3.4.2.Final</version>
     <packaging>pom</packaging>
     <name>Keycloak Quickstart: JBoss Fuse Server</name>
     <description>Quickstart JBoss Fuse Server</description>
@@ -30,7 +30,7 @@
         <dependency>
             <groupId>org.keycloak.quickstarts</groupId>
             <artifactId>keycloak-fuse-features</artifactId>
-            <version>3.4.2.Final-SNAPSHOT</version>
+            <version>3.4.2.Final</version>
         </dependency>
     </dependencies>
 
