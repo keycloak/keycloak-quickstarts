@@ -1,9 +1,9 @@
 {
-    "clientId": "authz-vanilla",
-    "rootUrl": "http://localhost:8080/authz-vanilla",
+    "clientId": "app-authz-vanilla",
+    "rootUrl": "http://localhost:8080/app-authz-vanilla",
     "enabled": true,
     "redirectUris": [
-        "http://localhost:8080/authz-vanilla/*"
+        "http://localhost:8080/app-authz-vanilla/*"
     ],
     "webOrigins": [
         "http://localhost:8080"

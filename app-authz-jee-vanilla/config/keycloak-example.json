@@ -1,5 +1,5 @@
 {
-  "realm": "master",
+  "realm": "hello-world-authz",
   "auth-server-url": "http://localhost:8180/auth",
   "ssl-required": "external",
   "resource": "app-authz-vanilla",

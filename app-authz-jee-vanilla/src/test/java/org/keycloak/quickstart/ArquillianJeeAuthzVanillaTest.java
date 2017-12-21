@@ -57,7 +57,7 @@ import static org.keycloak.test.TestsHelper.importTestRealm;
 public class ArquillianJeeAuthzVanillaTest {
 
     private static final String WEBAPP_SRC = "src/main/webapp";
-    private static final String APP_NAME = "authz-vanilla";
+    private static final String APP_NAME = "app-authz-vanilla";
 
     @Page
     private LoginPage loginPage;
@@ -110,13 +110,11 @@ public class ArquillianJeeAuthzVanillaTest {
     @Test
     public void testAdminLogin() throws MalformedURLException, InterruptedException {
         try {
-
             loginPage.login("test-admin", "password");
             assertEquals("Should display restricted page with permissions",
                     "Your permissions are:",
                     indexPage.getMessage());
             indexPage.clickLogout();
-
         } catch (Exception e) {
             debugTest(e);
             fail("Should display the main page");
