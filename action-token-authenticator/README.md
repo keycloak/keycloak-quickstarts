@@ -57,7 +57,7 @@ The custom authenticator is configured in admin console within the flow that use
     redirect back to Keycloak once its own flow is completed.
 
 To deploy the provider to Keycloak server, run the following maven command (optionally
-specifying Keycloak management port with `-Dwildfly.port=_port_`):
+specifying Keycloak management port with `-Dkeycloak.management.port=_port_`):
 
     ````
     mvn -Pwildfly-managed clean wildfly:deploy
