@@ -54,7 +54,7 @@ Finally you need to configure the javascript adapter, this is done by retrieving
 * Click on `Installation` in the tab for the client you created
 * Select `Keycloak OIDC JSON`
 * Click `Download`
-* Move the file `keycloak.json` to the `config/` directory in the root of the quickstart
+* Move the file `keycloak.json` to the `src/main/webapp` directory of the quickstart
 
 As an alternative you can create the client by importing the file [client-import.json](config/client-import.json) and
 copying [config/keycloak-example.json](config/keycloak-example.json) to `config/keycloak.json`.
