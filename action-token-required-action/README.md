@@ -64,6 +64,10 @@ specifying Keycloak management port with `-Dwildfly.port=_port_`):
 If you want to play with and modify the example, simply rerun the maven deploy
 command above and the new version will be hot deployed.
 
+Note that you need to deploy the responder application into WildFly. A sample responder
+application is part of the tests and after running the above command will be located in
+`target/deployments/wildfly_action-token-responder-example_action-token-responder-example.war`.
+
 Enable the Provider for a Realm
 -------------------------------
 Login to the Keycloak Admin Console and go to the Authentication section,
