@@ -44,6 +44,7 @@
         <version.enforcer.maven.plugin>1.4.1</version.enforcer.maven.plugin>
         <version.surefire.plugin>2.19.1</version.surefire.plugin>
         <version.exec.maven.plugin>1.6.0</version.exec.maven.plugin>
+        <version.antrun.maven.plugin>1.8</version.antrun.maven.plugin>
         <version.frontend.maven.plugin>1.4</version.frontend.maven.plugin>
 
         <arquillian-graphene.version>2.1.0.Final</arquillian-graphene.version>
@@ -286,22 +287,22 @@
                         </executions>
                     </plugin>
                     <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <version>${version.exec.maven.plugin}</version>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>${version.antrun.maven.plugin}</version>
                         <executions>
                             <execution>
                                 <id>install-adapters</id>
                                 <phase>process-test-classes</phase>
                                 <goals>
-                                    <goal>exec</goal>
+                                    <goal>run</goal>
                                 </goals>
                                 <configuration>
-                                    <executable>${jboss-cli.executable}</executable>
-                                    <workingDirectory>target/wildfly-${version.wildfly}/bin</workingDirectory>
-                                    <arguments>
-                                        <argument>--file=adapter-install-offline.cli</argument>
-                                    </arguments>
+                                    <target name="run">
+                                        <exec dir="target/wildfly-${version.wildfly}/bin" executable="${jboss-cli.executable}" inputstring="">
+                                            <arg value="--file=adapter-install-offline.cli" />
+                                        </exec>
+                                    </target>
                                 </configuration>
                             </execution>
                         </executions>

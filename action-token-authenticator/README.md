@@ -20,7 +20,8 @@ flow. It is implemented by cooperation of authenticator and action token:
 2. This authenticator prepares an action token for the current authentication
    session and redirects to the application, passing the action token along.
 
-3. The application does whatever it is suited for (in this example, lets the
+3. The application does whatever it is suited for, e.g. perform authentication
+   of the user with some custom advanced credential type (in this example, lets the
    user set values of two attributes).
 
 4. Application uses the action token obtained in Step 2. to return back to
@@ -65,6 +66,10 @@ specifying Keycloak management port with `-Dwildfly.port=_port_`):
 
 If you want to play with and modify the example, simply rerun the maven deploy
 command above and the new version will be hot deployed.
+
+Note that you need to deploy the responder application into WildFly. A sample responder
+application is part of the tests and after running the above command will be located in
+`target/deployments/wildfly_action-token-responder-example_action-token-responder-example.war`.
 
 Enable the Provider for a Realm
 -------------------------------
