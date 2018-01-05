@@ -1,3 +1,5 @@
+#!/bin/bash -e
+
 # surrounding_tags will be master in the end
 git config user.name "${GH_USER_NAME}"
 git config user.email "{GH_USER_EMAIL}"
