@@ -5,11 +5,16 @@ REPO="https://github.com/keycloak/keycloak.git"
 echo "Building $TRAVIS_BRANCH"
 
 if [[ $TRAVIS_BRANCH != "latest" ]]; then
+  # Temporarily commented 
+  # git clone --depth 1 $REPO  > /dev/null 2>&1 && cd keycloak
   # Clone Keycloak repo
-  git clone --depth 1 $REPO  > /dev/null 2>&1 && cd keycloak
+  git clone $REPO  > /dev/null 2>&1 && cd keycloak
+
+  # Temporarily workaround to checkout the latest changes for 3.4.3.Final-SNAPSHOT
+  git checkout 74fbe3ff6de75af0160a65b913ddeabda4e4a883
 
   # The exact version of Keycloak based on Maven
-  VERSION=`mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version|grep -Ev '(^\[|Download\w+:)'`
+  VERSION=`grep -A1 "keycloak-parent" pom.xml | grep "<version>.*</version>$" | awk -F'[><]' '{print $3}'`
 
   # Build the repository based on jboss-public-repository
   mvn -s ../maven-settings.xml clean install --no-snapshot-updates -Pdistribution -DskipTests=true -B -V
