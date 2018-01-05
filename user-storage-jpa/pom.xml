@@ -37,19 +37,6 @@
         </license>
     </licenses>
 
-    <repositories>
-        <repository>
-            <id>jboss-enterprise-maven-repository</id>
-            <url>https://maven.repository.redhat.com/ga/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-
     <properties>
         <version.compiler.maven.plugin>3.5.1</version.compiler.maven.plugin>
         <version.hibernate.javax.persistence>1.0.0.Final</version.hibernate.javax.persistence>
