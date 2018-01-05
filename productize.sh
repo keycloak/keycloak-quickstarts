@@ -31,7 +31,7 @@ sed -i '/<\/modules>/{
 }' pom.xml
 
 #update version to productized versions
-find . -type f -name "*pom.xml*" -exec sed -i 's@SNAPSHOT</version>@redhat1</version>@g' {} +
+find . -type f -name "*pom.xml*" -exec sed -i 's@SNAPSHOT</version>@redhat-2</version>@g' {} +
 
 #rename names in POMs
 find . -type f -name "*pom.xml*" -exec sed -i 's@<name>Keycloak Quickstart@<name>Red Hat SSO Quickstart@g' {} +
