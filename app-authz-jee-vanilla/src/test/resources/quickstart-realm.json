@@ -40,11 +40,11 @@
       }
     },
     {
-      "username": "service-account-authz-vanilla",
+      "username": "service-account-app-authz-vanilla",
       "enabled": true,
-      "serviceAccountClientId": "authz-vanilla",
+      "serviceAccountClientId": "app-authz-vanilla",
       "clientRoles": {
-        "authz-vanilla" : ["uma_protection"]
+        "app-authz-vanilla" : ["uma_protection"]
       }
     }
   ],
@@ -62,11 +62,11 @@
   },
   "clients": [
     {
-      "clientId": "authz-vanilla",
-      "rootUrl": "http://127.0.0.1:8080/authz-vanilla",
+      "clientId": "app-authz-vanilla",
+      "rootUrl": "http://127.0.0.1:8080/app-authz-vanilla",
       "enabled": true,
       "redirectUris": [
-        "http://127.0.0.1:8080/authz-vanilla/*"
+        "http://127.0.0.1:8080/app-authz-vanilla/*"
       ],
       "webOrigins": [
         "http://127.0.0.1:8080"
@@ -81,7 +81,7 @@
         "resources" : [ {
           "name" : "Default Resource",
           "uri" : "/*",
-          "type" : "urn:authz-vanilla:resources:default"
+          "type" : "default"
         } ],
         "policies" : [ {
           "name" : "Default Policy",
@@ -99,7 +99,7 @@
           "logic" : "POSITIVE",
           "decisionStrategy" : "UNANIMOUS",
           "config" : {
-            "defaultResourceType" : "urn:authz-vanilla:resources:default",
+            "defaultResourceType" : "default",
             "applyPolicies" : "[\"Default Policy\"]"
           }
         } ],

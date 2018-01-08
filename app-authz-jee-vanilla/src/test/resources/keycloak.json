@@ -2,7 +2,7 @@
   "realm": "quickstart-authz-vanilla",
   "auth-server-url": "http://127.0.0.1:8180/auth",
   "ssl-required": "external",
-  "resource": "authz-vanilla",
+  "resource": "app-authz-vanilla",
   "credentials": {
     "secret": "secret"
   },
