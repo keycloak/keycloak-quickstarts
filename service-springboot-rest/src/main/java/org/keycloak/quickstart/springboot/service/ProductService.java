@@ -28,4 +28,8 @@ public class ProductService {
                 "alpha", "bravo", "charlie", "delta", "echo", "foxtrot");
     }
 
+    public String getPublic() {
+        return "public";
+    }
+
 }
