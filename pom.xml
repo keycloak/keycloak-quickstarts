@@ -46,6 +46,7 @@
         <version.exec.maven.plugin>1.6.0</version.exec.maven.plugin>
         <version.antrun.maven.plugin>1.8</version.antrun.maven.plugin>
         <version.frontend.maven.plugin>1.4</version.frontend.maven.plugin>
+        <version.resources.maven.plugin>3.0.2</version.resources.maven.plugin>
 
         <arquillian-graphene.version>2.1.0.Final</arquillian-graphene.version>
         <arquillian-phantom.version>1.2.1.Final</arquillian-phantom.version>

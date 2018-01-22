@@ -90,24 +90,29 @@
             </plugin>
 
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>${version.war.maven.plugin}</version>
-                <configuration>
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
-
-                    <webResources>
-                        <resource>
-                            <directory>${basedir}/config</directory>
-                            <includes>
-                                <include>keycloak.json</include>
-                            </includes>
-                            <targetPath>/</targetPath>
-                        </resource>
-                    </webResources>
-                </configuration>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${version.resources.maven.plugin}</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.basedir}/target/${project.build.finalName}/</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/config</directory>
+                                    <includes>
+                                        <include>keycloak.json</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
-
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
