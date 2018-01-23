@@ -79,7 +79,7 @@ Build and Deploy the Quickstart
 4. The following shows the command to deploy the quickstart:
 
    ````
-   mvn install -Pwildfly-managed wildfly:deploy -DskipTests=true
+   mvn clean wildfly:deploy
 
    ````
 5. Any time you wish to rebuild the TypeScript-generated javascript files, run

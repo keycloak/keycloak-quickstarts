@@ -72,7 +72,7 @@ Build and Deploy the Quickstart
 2. The following shows the command to deploy the quickstart:
 
    ````
-   mvn install -Pwildfly-managed wildfly:deploy -DskipTests=true
+   mvn clean wildfly:deploy
    ````
 
 If you prefer to secure WARs via <span>Keycloak</span> SAML subsystem:
