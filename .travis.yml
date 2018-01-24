@@ -31,8 +31,8 @@ before_install:
   - ./travis-server.sh
 
 install:
-  - travis_wait 20 mvn -s maven-settings.xml clean install --no-snapshot-updates -DskipTests=true -Denforcer.skip=true -B -V -q
-  - mvn -s maven-settings.xml -Padd-datasource install -DskipTests=true -Denforcer.skip=true -f user-storage-jpa -q
+  - travis_wait 20 mvn -s maven-settings.xml clean install --no-snapshot-updates -Denforcer.skip=true -B -V -q
+  - mvn -s maven-settings.xml -Padd-datasource install -Denforcer.skip=true -f user-storage-jpa -q
 
 before_script:
   - export MAVEN_SKIP_RC=true

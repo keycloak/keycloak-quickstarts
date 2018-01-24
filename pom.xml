@@ -178,6 +178,15 @@
                     <artifactId>frontend-maven-plugin</artifactId>
                     <version>${version.frontend.maven.plugin}</version>
                 </plugin>
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${version.surefire.plugin}</version>
+                    <configuration>
+                        <redirectTestOutputToFile>false</redirectTestOutputToFile>
+                        <!-- See KEYCLOAK-6341 -->
+                        <skipTests>true</skipTests>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
@@ -247,6 +256,8 @@
                         <version>${version.surefire.plugin}</version>
                         <configuration>
                             <redirectTestOutputToFile>false</redirectTestOutputToFile>
+                            <!-- See KEYCLOAK-6341 -->
+                            <skipTests>false</skipTests>
                         </configuration>
                     </plugin>
 
