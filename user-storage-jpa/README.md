@@ -21,7 +21,7 @@ runtime. Before using this example, you should probably read the User Storage SP
 System Requirements
 -------------------
 
-You need to have <span>Keycloak</span> 3.1.Final running.
+You need to have <span>Keycloak</span> running.
 
 All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
 
