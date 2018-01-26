@@ -1,9 +1,22 @@
 #!/bin/bash -e
 
-# surrounding_tags will be master in the end
-git config user.name "${GH_USER_NAME}"
-git config user.email "{GH_USER_EMAIL}"
+if [ "$GH_USER_NAME" != "" ] && [ "$GH_USER_EMAIL" != "" ] && "$GH_TOKEN" != "" ] && [ "$GH_REF" != "" ]; then
+    DRY_RUN="false"
+else
+    DRY_RUN="true"
+fi
 
+if [ "$DRY_RUN" == "false" ]; then
+	git config user.name "${GH_USER_NAME}"
+	git config user.email "{GH_USER_EMAIL}"
+fi
+
+if [ "$DRY_RUN" == "true" ]; then
+    if ( git branch | grep 'prod_staging' &>/dev/null ); then
+        echo "prod_staging branch already exists, please delete and re-run"
+        exit 1
+    fi
+fi
 
 # Rename Keycloak to Red Hat SSO
 find . -type f -name "*README*" -exec sed -i 's@<span>Keycloak</span>@Red Hat SSO@g' {} +
@@ -32,10 +45,10 @@ sed -i '/<\/modules>/{
     d 
 }' pom.xml
 
-#update version to productized versions
+# Update version to productized versions
 find . -type f -name "*pom.xml*" -exec sed -i 's@SNAPSHOT</version>@redhat-2</version>@g' {} +
 
-#rename names in POMs
+# Rename names in POMs
 find . -type f -name "*pom.xml*" -exec sed -i 's@<name>Keycloak Quickstart@<name>Red Hat SSO Quickstart@g' {} +
 
 
@@ -49,5 +62,12 @@ git rm -r action-token-required-action
 git rm -r app-springboot 
 git status
 
-git commit . -m "rename pom and readme"
-git push --force "https://${GH_TOKEN}@${GH_REF}" prod_staging:7.2.x-devel
+git commit . -m "Converted to RH-SSO QuickStarts"
+
+if [ "$DRY_RUN" == "false" ]; then
+    git push --force "https://${GH_TOKEN}@${GH_REF}" prod_staging:7.2.x-devel
+else
+    echo ""
+    echo "Dry run, not committing"
+    echo ""
+fi
