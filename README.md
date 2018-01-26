@@ -7,7 +7,7 @@ that can be used as a reference for your own project.
 Introduction
 ------------
 
-These quickstarts run on <span>WildFly</span> 10.
+These quickstarts run on <span>WildFly 10</span>.
 
 Prior to running the quickstarts you should read this entire document and have completed the following steps:
 
