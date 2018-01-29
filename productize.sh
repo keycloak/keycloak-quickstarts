@@ -1,6 +1,8 @@
 #!/bin/bash -e
 
-if [ "$GH_USER_NAME" != "" ] && [ "$GH_USER_EMAIL" != "" ] && "$GH_TOKEN" != "" ] && [ "$GH_REF" != "" ]; then
+GH_PROD_BRANCH="7.2.x-devel"
+
+if [ "$GH_USER_NAME" != "" ] && [ "$GH_USER_EMAIL" != "" ] && [ "$GH_TOKEN" != "" ] && [ "$GH_REF" != "" ]; then
     DRY_RUN="false"
 else
     DRY_RUN="true"
@@ -65,7 +67,7 @@ git status
 git commit . -m "Converted to RH-SSO QuickStarts"
 
 if [ "$DRY_RUN" == "false" ]; then
-    git push --force "https://${GH_TOKEN}@${GH_REF}" prod_staging:7.2.x-devel
+    git push --force "https://${GH_TOKEN}@${GH_REF}" prod_staging:$GH_PROD_BRANCH
 else
     echo ""
     echo "Dry run, not committing"
