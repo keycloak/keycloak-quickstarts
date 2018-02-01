@@ -10,9 +10,6 @@ if [[ $TRAVIS_BRANCH != "latest" ]]; then
   # Clone Keycloak repo
   git clone $REPO  > /dev/null 2>&1 && cd keycloak
 
-  # Temporarily workaround to checkout the latest changes for 3.4.3.Final-SNAPSHOT
-  git checkout 74fbe3ff6de75af0160a65b913ddeabda4e4a883
-
   # The exact version of Keycloak based on Maven
   VERSION=`grep -A1 "keycloak-parent" pom.xml | grep "<version>.*</version>$" | awk -F'[><]' '{print $3}'`
 
