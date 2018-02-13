@@ -108,9 +108,23 @@ public class ArquillianJeeAuthzVanillaTest {
     }
 
     @Test
-    public void testAdminLogin() throws MalformedURLException, InterruptedException {
+    public void testAdminLogin() {
         try {
             loginPage.login("test-admin", "password");
+            assertEquals("Should display restricted page with permissions",
+                    "Your permissions are:",
+                    indexPage.getMessage());
+            indexPage.clickLogout();
+        } catch (Exception e) {
+            debugTest(e);
+            fail("Should display the main page");
+        }
+    }
+
+    @Test
+    public void testAliceLogin() {
+        try {
+            loginPage.login("alice", "password");
             assertEquals("Should display restricted page with permissions",
                     "Your permissions are:",
                     indexPage.getMessage());

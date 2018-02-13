@@ -107,16 +107,11 @@ Now replace the ``${access_token}`` variable below with the value of the ``acces
 
 ```bash
 curl -X POST \
-  http://localhost:8180/auth/realms/spring-boot-quickstart/authz/entitlement/app-authz-rest-springboot \
+  http://localhost:8180/auth/realms/spring-boot-quickstart/protocol/openid-connect/token \
   -H "Authorization: Bearer ${access_token}" \
-  -H 'Content-type: application/json' \
-  -d '{
-	"permissions": [
-		{
-			"resource_set_name": "Default Resource"
-		}	
-	]
-}'
+  --data "grant_type=urn:ietf:params:oauth:grant-type:uma-ticket" \
+  --data "audience=app-authz-rest-springboot" \
+  --data "permission=Default Resource"
 ```
 
 As an alternative, you can also obtain permissions for any resource protected by your application. For that, execute the command below:
@@ -131,41 +126,39 @@ After executing the command above, you should get a response similar to the foll
 
 ```bash
 {
-    "rpt": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJGSjg2R2NGM2pUYk5MT2NvNE52WmtVQ0lVbWZZQ3FvcXRPUWVNZmJoTmxFIn0.eyJqdGkiOiIzYzI2NmZhOS01NmZlLTQ0MjItODg4Ni0xMmRjYTRlZTYyMTYiLCJleHAiOjE1MDQxOTIwNDQsIm5iZiI6MCwiaWF0IjoxNTA0MTkxNzQ0LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgxODAvYXV0aC9yZWFsbXMvc3ByaW5nLWJvb3QtcXVpY2tzdGFydCIsImF1ZCI6ImFwcC1hdXRoei1yZXN0LXNwcmluZ2Jvb3QiLCJzdWIiOiJlNmE3NzcyYS1kZmZlLTRiNDItYTFiMS0zZDZmOTM0OWE0NmIiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJhcHAtYXV0aHotcmVzdC1zcHJpbmdib290IiwiYXV0aF90aW1lIjowLCJzZXNzaW9uX3N0YXRlIjoiMGQ2NTQ0YzMtZmY2Yi00ZGU4LTk5YzEtNDM2ZDg2YzkyNzIxIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiYWxpY2UiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbImh0dHA6Ly9sb2NhbGhvc3Q6ODA4MCJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsidXNlciJdfSwicmVzb3VyY2VfYWNjZXNzIjp7fSwiYXV0aG9yaXphdGlvbiI6eyJwZXJtaXNzaW9ucyI6W3sicmVzb3VyY2Vfc2V0X2lkIjoiNDIwZGMxNzktZTY5OC00ZmYzLTkyMTgtMWE0YmQ5N2I2ZjU5IiwicmVzb3VyY2Vfc2V0X25hbWUiOiJEZWZhdWx0IFJlc291cmNlIn1dfX0.m6ePUAiAGkRlAQWvroiRq4EwqTNGxsc3TtW0YbFeF_n8WrzJA38mIwrnU-D1fFSXBvA3SxPImf4y9er5Zo31ZMtBNhns4-yl850JPEoApJoaUHeL_PMCvN9zwvIi4IN4-wl58yOjQ1MzJ50SOpiJKfp7VXLgJQkj8OodMctz0GE"
+    "access_token": "${rpt}",
 }
 ```
 
-Finally, you are able to access the RESTFul resources protected by this application with a RPT (Requesting Party Token). For that, replace the ``${rpt}`` variable below with the value of the ``rpt`` claim from the response.
+Where `${rpt}` is an access token with all permissions granted by the server, also known as Requesting Party Token or RPT for short.
+
+Finally, you are able to access the RESTFul resources protected by this application with an RPT. For that, replace the ``${rpt}`` variable below with the value of the ``access_token`` claim from the response.
 
 ```bash
 curl -X GET \
   http://localhost:8080/api/resourcea \
-  -H 'Authorization: Bearer ${rpt}'
+  -H "Authorization: Bearer ${rpt}"
 ```
 
 User *alice* should be able to access */api/resourcea* and you should get **Access Granted** as a response. Now, if you try to access */api/premium* as *alice* you should
 get a **403** HTTP status code.
 
-You should also get a **403** HTTP status code if you try to obtain permissions from Keycloak for "Premium Resource".
+You should also get a **403** HTTP status code if you try to obtain permissions from Keycloak for `Premium Resource`, given that
+user *alice* is not allowed to access `Premium Resource`.
 
 ```bash
 curl -X POST \
-  http://localhost:8180/auth/realms/spring-boot-quickstart/authz/entitlement/app-authz-rest-springboot \
+  http://localhost:8180/auth/realms/spring-boot-quickstart/protocol/openid-connect/token \
   -H "Authorization: Bearer ${access_token}" \
-  -H 'Content-type: application/json' \
-  -d '{
-	"permissions": [
-		{
-			"resource_set_name": "Premium Resource"
-		}	
-	]
-}'
+  --data "grant_type=urn:ietf:params:oauth:grant-type:uma-ticket" \
+  --data "audience=app-authz-rest-springboot" \
+  --data "permission=Premium Resource"
 ```
 
 As a response you should get something similar to the following:
 
 ```bash
-{"error":"not_authorized"}
+{"error":"access_denied"}
 ```
 
 You can follow the same steps to check behavior when accessing the same resources with user *jdoe*.
