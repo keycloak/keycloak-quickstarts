@@ -25,7 +25,7 @@
      <ul>
          <#list identity.permissions as permission>
              <li>
-                <p>${permission.resourceSetName}</p>
+                <p>${permission.resourceName}</p>
             </li>
          </#list>
      </ul>
