@@ -26,6 +26,7 @@ env:
     - TESTS=group4
     - TESTS=group5
     - TESTS=group6
+    - TESTS=group7
 
 before_install:
   - ./travis-server.sh

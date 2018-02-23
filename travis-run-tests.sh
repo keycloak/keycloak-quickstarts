@@ -37,3 +37,7 @@ if [ $1 == "group6" ] && [ $TRAVIS_PULL_REQUEST == "false" ]; then
  ./productize.sh
   exit 0
 fi  
+if [ $1 == "group7" ]; then
+  mvn -B -s maven-settings.xml test -Pkeycloak-remote -f event-listener-sysout
+  mvn -B -s maven-settings.xml test -Pkeycloak-remote -f event-store-mem
+fi
