@@ -21,12 +21,12 @@ if [ $1 == "group3" ]; then
 fi
 
 if [ $1 == "group4" ]; then
-  cd app-authz-springboot && mvn -B -s ../maven-settings.xml clean test
-  cd app-authz-rest-springboot && mvn -B -s ../maven-settings.xml clean test
-  cd ../service-springboot-rest && mvn -B -s ../maven-settings.xml clean test
+  cd app-authz-springboot && mvn -B -s ../maven-settings.xml clean test -Pspring-boot
+  cd app-authz-rest-springboot && mvn -B -s ../maven-settings.xml clean test -Pspring-boot
+  cd ../service-springboot-rest && mvn -B -s ../maven-settings.xml clean test -Pspring-boot
   mvn spring-boot:run&
   cd ../app-springboot
-  mvn -B -s ../maven-settings.xml clean test
+  mvn -B -s ../maven-settings.xml clean test -Pspring-boot
 fi
 
 if [ $1 == "group5" ]; then

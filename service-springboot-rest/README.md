@@ -100,5 +100,5 @@ Integration test of the Quickstart
 1. Make sure you have an <span>Keycloak</span> server running with an admin user in the `master` realm or use the provided docker image
 2. Be sure to set the `TestHelper.keycloakBaseUrl` in the `createArchive` method (default URL is localhost:8180/auth).
 3. Set accordingly the correct url for the `keycloak.auth-server-url` in the test [application.properties](src/test/resources/application.properties).
-4. Run `mvn test`
+4. Run `mvn test -Pspring-boot`
 

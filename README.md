@@ -175,10 +175,12 @@ static {
 
 If you don't have access to admin's credentials, please import the `quickstart-realm.json` from `src/test/resources`.
 
-After that run integration tests:
+To run integration tests for Wildfly managed quickstarts use the following command:
 ```
 mvn clean install -Pwildfly-managed -Denforcer.skip=true
 ```
+
+If you want to run the tests for a quickstart that doesn't need Wildfly, you have to use appropriate profile. See a particular quickstart's README for more details.
 
 
 
