@@ -40,11 +40,12 @@ import org.openqa.selenium.WebDriver;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.keycloak.test.TestsHelper.deleteRealm;
 import static org.keycloak.test.TestsHelper.importTestRealm;
@@ -115,7 +116,7 @@ public class ArquillianJeeAuthzTest {
     }
 
     @Test
-    public void testAdminAccessToAdminResources() throws MalformedURLException, InterruptedException {
+    public void testAdminAccessToAdminResources() {
         try {
 
             loginPage.login("test-admin", "password");
@@ -132,7 +133,95 @@ public class ArquillianJeeAuthzTest {
     }
 
     @Test
-    public void testAdminAccessToPremiumResources() throws MalformedURLException, InterruptedException {
+    public void testAdminGrantedPermissions() {
+        try {
+
+            loginPage.login("test-admin", "password");
+            assertTrue("Should display the admin resource permission",
+                    webDriver.getPageSource().contains("Resource: Admin Resource"));
+            assertTrue("Should display the admin scope permission",
+                    webDriver.getPageSource().contains("urn:servlet-authz:protected:admin:access"));
+            assertTrue("Should display the proteced resource permission",
+                    webDriver.getPageSource().contains("Resource: Protected Resource"));
+            assertTrue("Should display the protected resource scope permission",
+                    webDriver.getPageSource().contains("urn:servlet-authz:protected:resource:access"));
+            assertTrue("Should display the main page resource permission",
+                    webDriver.getPageSource().contains("Resource: Main Page"));
+            assertTrue("Should display the main page scope permission",
+                    webDriver.getPageSource().contains("[urn:servlet-authz:page:main:actionForAdmin, urn:servlet-authz:page:main:actionForUser]"));
+            assertFalse("Should NOT display the premium resource permission",
+                    webDriver.getPageSource().contains("Resource: Premium Resource"));
+            assertFalse("Should NOT display the premium resource scope permission",
+                    webDriver.getPageSource().contains("urn:servlet-authz:protected:premium:access"));
+            indexPage.clickLogout();
+        } catch (Exception e) {
+            debugTest(e);
+            fail("Should display the main page");
+        }
+    }
+
+    @Test
+    public void testAliceGrantedPermissions() {
+        try {
+
+            loginPage.login("alice", "password");
+            assertTrue("Should display the proteced resource permission",
+                    webDriver.getPageSource().contains("Resource: Protected Resource"));
+            assertTrue("Should display the protected resource scope permission",
+                    webDriver.getPageSource().contains("urn:servlet-authz:protected:resource:access"));
+            assertTrue("Should display the main page resource permission",
+                    webDriver.getPageSource().contains("Resource: Main Page"));
+            assertTrue("Should display the main page user scope permission",
+                    webDriver.getPageSource().contains("[urn:servlet-authz:page:main:actionForUser]"));
+            assertFalse("Should NOT display the main page admin scope permission",
+                    webDriver.getPageSource().contains("urn:servlet-authz:page:main:actionForAdmin"));
+            assertFalse("Should NOT display the admin resource permission",
+                    webDriver.getPageSource().contains("Resource: Admin Resource"));
+            assertFalse("Should NOT display the admin scope permission",
+                    webDriver.getPageSource().contains("urn:servlet-authz:protected:admin:access"));
+            assertFalse("Should NOT display the premium resource permission",
+                    webDriver.getPageSource().contains("Resource: Premium Resource"));
+            assertFalse("Should NOT display the premium resource scope permission",
+                    webDriver.getPageSource().contains("urn:servlet-authz:protected:premium:access"));
+            indexPage.clickLogout();
+        } catch (Exception e) {
+            debugTest(e);
+            fail("Should display the main page");
+        }
+    }
+
+    @Test
+    public void testJdoeGrantedPermissions() {
+        try {
+
+            loginPage.login("jdoe", "password");
+            assertTrue("Should display the proteced resource permission",
+                    webDriver.getPageSource().contains("Resource: Protected Resource"));
+            assertTrue("Should display the protected resource scope permission",
+                    webDriver.getPageSource().contains("urn:servlet-authz:protected:resource:access"));
+            assertTrue("Should display the premium resource permission",
+                    webDriver.getPageSource().contains("Resource: Premium Resource"));
+            assertTrue("Should display the premium resource scope permission",
+                    webDriver.getPageSource().contains("urn:servlet-authz:protected:premium:access"));
+            assertTrue("Should display the main page resource permission",
+                    webDriver.getPageSource().contains("Resource: Main Page"));
+            assertTrue("Should display the main page premium scope permission",
+                    webDriver.getPageSource().contains("[urn:servlet-authz:page:main:actionForPremiumUser, urn:servlet-authz:page:main:actionForUser]"));
+            assertFalse("Should NOT display the main page admin scope permission",
+                    webDriver.getPageSource().contains("urn:servlet-authz:page:main:actionForAdmin"));
+            assertFalse("Should NOT display the admin resource permission",
+                    webDriver.getPageSource().contains("Resource: Admin Resource"));
+            assertFalse("Should NOT display the admin scope permission",
+                    webDriver.getPageSource().contains("urn:servlet-authz:protected:admin:access"));
+            indexPage.clickLogout();
+        } catch (Exception e) {
+            debugTest(e);
+            fail("Should display the main page");
+        }
+    }
+
+    @Test
+    public void testAdminAccessToPremiumResources() {
         try {
 
             loginPage.login("test-admin", "password");
@@ -149,7 +238,7 @@ public class ArquillianJeeAuthzTest {
     }
 
     @Test
-    public void testAdminAccessToSharedResources() throws MalformedURLException, InterruptedException {
+    public void testAdminAccessToSharedResources() {
         try {
 
             loginPage.login("test-admin", "password");
@@ -166,7 +255,7 @@ public class ArquillianJeeAuthzTest {
     }
 
     @Test
-    public void testPremiumAccessToPremiumResources() throws MalformedURLException, InterruptedException {
+    public void testPremiumAccessToPremiumResources() {
         try {
 
             loginPage.login("jdoe", "password");
@@ -183,7 +272,7 @@ public class ArquillianJeeAuthzTest {
     }
 
     @Test
-    public void testPremiumAccessToAdminResources() throws MalformedURLException, InterruptedException {
+    public void testPremiumAccessToAdminResources() {
         try {
 
             loginPage.login("jdoe", "password");
@@ -200,7 +289,7 @@ public class ArquillianJeeAuthzTest {
     }
 
     @Test
-    public void testPremiumAccessToSharedResources() throws MalformedURLException, InterruptedException {
+    public void testPremiumAccessToSharedResources() {
         try {
 
             loginPage.login("jdoe", "password");
@@ -217,7 +306,7 @@ public class ArquillianJeeAuthzTest {
     }
 
     @Test
-    public void testUserAccessToAdminResources() throws MalformedURLException, InterruptedException {
+    public void testUserAccessToAdminResources() {
         try {
 
             loginPage.login("alice", "password");
@@ -234,7 +323,7 @@ public class ArquillianJeeAuthzTest {
     }
 
     @Test
-    public void testUserAccessToPremiumResources() throws MalformedURLException, InterruptedException {
+    public void testUserAccessToPremiumResources() {
         try {
 
             loginPage.login("alice", "password");
@@ -251,7 +340,7 @@ public class ArquillianJeeAuthzTest {
     }
 
     @Test
-    public void testUserAccessToSharedResources() throws MalformedURLException, InterruptedException {
+    public void testUserAccessToSharedResources() {
         try {
 
             loginPage.login("alice", "password");
