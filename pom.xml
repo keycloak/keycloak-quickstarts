@@ -21,7 +21,7 @@
 
     <groupId>org.keycloak.quickstarts</groupId>
     <artifactId>keycloak-quickstart-parent</artifactId>
-    <version>4.0.0.CR1-SNAPSHOT</version>
+    <version>4.0.0.Beta2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Keycloak Quickstart: parent</name>
     <description>Parent</description>
@@ -48,7 +48,7 @@
         <version.frontend.maven.plugin>1.4</version.frontend.maven.plugin>
         <version.resources.maven.plugin>3.0.2</version.resources.maven.plugin>
 
-        <arquillian-graphene.version>2.1.0.Final</arquillian-graphene.version>
+        <arquillian-graphene.version>2.3.2</arquillian-graphene.version>
         <arquillian-phantom.version>1.2.1.Final</arquillian-phantom.version>
         <version.wildfly.arquillian.container>2.0.2.Final</version.wildfly.arquillian.container>
         <version.remote.wildfly.arquillian.container>8.2.1.Final</version.remote.wildfly.arquillian.container>
@@ -65,16 +65,29 @@
             <dependency>
                 <groupId>org.jboss.arquillian</groupId>
                 <artifactId>arquillian-bom</artifactId>
-                <version>1.1.12.Final</version>
+                <version>1.4.0.Final</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.arquillian.selenium</groupId>
+                <artifactId>selenium-bom</artifactId>
+                <version>3.11.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.jboss.arquillian.extension</groupId>
                 <artifactId>arquillian-drone-bom</artifactId>
-                <version>2.0.1.Final</version>
+                <version>2.5.1</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.arquillian.extension</groupId>
+                <artifactId>arquillian-phantom-driver</artifactId>
+                <version>${arquillian-phantom.version}</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.keycloak.bom</groupId>
@@ -142,6 +155,7 @@
         <module>app-angular2</module>
         <module>app-authz-jee-servlet</module>
         <module>app-authz-jee-vanilla</module>
+        <module>app-authz-uma-photoz</module>
     </modules>
 
     <repositories>
@@ -207,6 +221,7 @@
                 <module>app-angular2</module>
                 <module>app-authz-jee-servlet</module>
                 <module>app-authz-jee-vanilla</module>
+                <module>app-authz-uma-photoz</module>
                 <module>fuse</module>
                 <module>user-storage-simple</module>
                 <module>user-storage-jpa</module>
