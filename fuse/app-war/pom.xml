@@ -19,13 +19,13 @@
     <parent>
         <artifactId>keycloak-fuse-parent</artifactId>
         <groupId>org.keycloak.quickstarts</groupId>
-        <version>4.0.0.CR1-SNAPSHOT</version>
+        <version>4.0.0.Beta2-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>keycloak-fuse-app-war-jsp</artifactId>
-    <version>4.0.0.CR1-SNAPSHOT</version>
+    <version>4.0.0.Beta2-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Keycloak Quickstart: WAR frontend application</name>
     <description>JBoss Fuse WAR frontend application secured by Keycloak</description>
