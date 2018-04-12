@@ -10,7 +10,7 @@ function waitForServer {
   C=50
   while [ $C -gt 0 ]
   do
-    grep "Keycloak ${VERSION} (WildFly Core 2.0.10.Final) started" keycloak.log
+    grep "Keycloak ${VERSION} (WildFly Core .*) started" keycloak.log
     if [ $? -eq 0 ]; then
       echo "Server started."
       C=0
