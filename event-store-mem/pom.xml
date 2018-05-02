@@ -20,7 +20,7 @@
     <parent>
         <artifactId>keycloak-quickstart-parent</artifactId>
         <groupId>org.keycloak.quickstarts</groupId>
-        <version>4.0.0.Beta2-SNAPSHOT</version>
+        <version>4.0.0.Beta3-SNAPSHOT</version>
     </parent>
 
     <name>Keycloak Quickstart: Event Store In-Mem</name>
