@@ -36,6 +36,7 @@
 
     <properties>
         <version.wildfly>11.0.0.Final</version.wildfly>
+        <version.wildfly.core>3.0.10.Final</version.wildfly.core>
         <version.keycloak>${project.version}</version.keycloak>
 
         <version.wildfly.maven.plugin>1.1.0.Final</version.wildfly.maven.plugin>
@@ -47,6 +48,7 @@
         <version.antrun.maven.plugin>1.8</version.antrun.maven.plugin>
         <version.frontend.maven.plugin>1.4</version.frontend.maven.plugin>
         <version.resources.maven.plugin>3.0.2</version.resources.maven.plugin>
+        <version.compiler.maven.plugin>3.1</version.compiler.maven.plugin>
 
         <arquillian-graphene.version>2.3.2</arquillian-graphene.version>
         <arquillian-phantom.version>1.2.1.Final</arquillian-phantom.version>
@@ -54,6 +56,7 @@
         <version.remote.wildfly.arquillian.container>8.2.1.Final</version.remote.wildfly.arquillian.container>
         <version.junit>4.12</version.junit>
         <version.hamcrest>1.3</version.hamcrest>
+        <version.creaper>1.6.1</version.creaper>
 
         <arquillian-managed>true</arquillian-managed>
         <jboss-cli.executable>./jboss-cli.sh</jboss-cli.executable>
@@ -225,6 +228,8 @@
                 <module>fuse</module>
                 <module>user-storage-simple</module>
                 <module>user-storage-jpa</module>
+                <module>event-listener-sysout</module>
+                <module>event-store-mem</module>
                 <module>service-springboot-rest</module>
                 <module>app-springboot</module>
                 <module>app-authz-springboot</module>
