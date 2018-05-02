@@ -19,14 +19,14 @@
     <parent>
         <artifactId>keycloak-fuse-parent</artifactId>
         <groupId>org.keycloak.quickstarts</groupId>
-        <version>4.0.0.Beta2-SNAPSHOT</version>
+        <version>4.0.0.Beta2</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>keycloak-fuse-service-camel</artifactId>
-    <version>4.0.0.Beta2-SNAPSHOT</version>
+    <version>4.0.0.Beta2</version>
     <packaging>bundle</packaging>
     <name>Keycloak Quickstart: JBoss Fuse Service - Camel</name>
     <description>JBoss Fuse Apache Camel Service secured by Keycloak</description>
