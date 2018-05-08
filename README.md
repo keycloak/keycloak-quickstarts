@@ -53,7 +53,7 @@ To start the <span>Keycloak</span> server on a separate host:
    For Windows: KEYCLOAK_HOME\bin\standalone.bat -b 0.0.0.0
    ````
 
-3. The URL of the <span>Keycloak</span> server will be http://&lt;HOSTNAME&gt;:8080 (replace &lt;HOSTNAME&gt; with the hostname of the separate host).
+3. The URL of the <span>Keycloak</span> server will be http://&lt;HOSTNAME&gt;:8080/auth/ (replace &lt;HOSTNAME&gt; with the hostname of the separate host).
 
 To start the <span>Keycloak</span> server on different ports:
 
@@ -66,11 +66,11 @@ To start the <span>Keycloak</span> server on different ports:
    For Windows: KEYCLOAK_HOME\bin\standalone.bat -Djboss.socket.binding.port-offset=100
    ````
 
-3. The URL of the <span>Keycloak</span> server will be *http://localhost:8180*
+3. The URL of the <span>Keycloak</span> server will be *http://localhost:8180/auth/*
 
 ### <a id="add-admin"></a>Add Admin User
 
-Open the main page for the <span>Keycloak</span> server ([localhost:8180](http://localhost:8180) or http://&lt;HOSTNAME&gt;:8080). If
+Open the main page for the <span>Keycloak</span> server ([localhost:8080/auth/](http://localhost:8080/auth/) or http://&lt;HOSTNAME&gt;:8080/auth/). If
 this is a new installation of <span>Keycloak</span> server you will be instructed to create an initial admin user. To continue with
 the quickstarts you need to do this prior to continuing.
 
