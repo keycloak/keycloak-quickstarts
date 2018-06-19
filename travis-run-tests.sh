@@ -12,8 +12,8 @@ if [ $1 == "group1" ]; then
 fi
 
 if [ $1 == "group2" ]; then
-  mvn -B -s maven-settings.xml test -Pwildfly-managed -f action-token-authenticator </dev/null
-  mvn -B -s maven-settings.xml test -Pwildfly-managed -f action-token-required-action </dev/null
+  mvn -B -s maven-settings.xml test -Pwildfly-managed -f action-token-authenticator/pom.xml </dev/null
+  mvn -B -s maven-settings.xml test -Pwildfly-managed -f action-token-required-action/pom.xml </dev/null
 fi
 
 if [ $1 == "group3" ]; then

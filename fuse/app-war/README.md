@@ -50,10 +50,10 @@ Finally you need to configure the adapter, this is done by retrieving the adapte
 * Click on `Installation` in the tab for the client you created
 * Select `<span>Keycloak</span> OIDC JSON`
 * Click `Download`
-* Move the file `keycloak.json` to the directory `src/main/webapp/WEB-INF/`in the quickstart
+* Move the file `keycloak.json` to the `config/` directory in the root of the quickstart
 
 As an alternative you can create the client by importing the file [client-import.json](config/client-import.json) and
-copying [config/keycloak-example.json](config/keycloak-example.json) to `src/main/webapp/WEB-INF/keycloak.json`.
+copying [config/keycloak-example.json](config/keycloak-example.json) to `config/keycloak.json`.
 
 Build the Quickstart
 --------------------

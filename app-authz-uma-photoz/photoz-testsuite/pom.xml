@@ -26,7 +26,7 @@
     </parent>
     <artifactId>photoz-uma-testsuite</artifactId>
     <packaging>jar</packaging>
-    <name>Keycloak Quickstarts: Photoz UMA Testsuite</name>
+    <name>Keycloak Quickstart: Photoz UMA Testsuite</name>
     <description>Photoz UMA Testsuite</description>
 
     <properties>
@@ -90,6 +90,15 @@
                 <configuration>
                     <skip>false</skip>
                 </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>enforce-quickstart-realm-file-exist</id>
+                        <phase>validate</phase>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

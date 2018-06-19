@@ -39,7 +39,7 @@
         <version.wildfly.core>3.0.10.Final</version.wildfly.core>
         <version.keycloak>${project.version}</version.keycloak>
 
-        <version.wildfly.maven.plugin>1.1.0.Final</version.wildfly.maven.plugin>
+        <version.wildfly.maven.plugin>1.2.0.Final</version.wildfly.maven.plugin>
         <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
         <version.war.maven.plugin>2.6</version.war.maven.plugin>
         <version.enforcer.maven.plugin>1.4.1</version.enforcer.maven.plugin>
@@ -205,6 +205,46 @@
                         <skipTests>true</skipTests>
                     </configuration>
                 </plugin>
+                <plugin>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>${version.enforcer.maven.plugin}</version>
+                    <executions>
+                        <execution>
+                            <id>enforce-quickstart-realm-file-exist</id>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                            <phase>none</phase>
+                            <configuration>
+                                <rules>
+                                    <requireFilesExist>
+                                        <files>
+                                            <file>${basedir}/src/test/resources/quickstart-realm.json</file>
+                                        </files>
+                                    </requireFilesExist>
+                                </rules>
+                                <fail>true</fail>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>enforce-keycloak-file-exist</id>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                            <phase>none</phase>
+                            <configuration>
+                                <rules>
+                                    <requireFilesExist>
+                                        <files>
+                                            <file>${basedir}/config/keycloak.json</file>
+                                        </files>
+                                    </requireFilesExist>
+                                </rules>
+                                <fail>true</fail>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
@@ -354,35 +394,10 @@
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-enforcer-plugin</artifactId>
-                        <version>${version.enforcer.maven.plugin}</version>
-                        <executions>
-                            <execution>
-                                <id>enforce-files-exist</id>
-                                <goals>
-                                    <goal>enforce</goal>
-                                </goals>
-                                <configuration>
-                                    <rules>
-                                        <requireFilesExist>
-                                            <files>
-                                                <file>${basedir}/src/test/resources/quickstart-realm.json</file>
-                                            </files>
-                                        </requireFilesExist>
-                                    </rules>
-                                    <fail>true</fail>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
                         <version>${version.war.maven.plugin}</version>
                         <configuration>
                             <failOnMissingWebXml>false</failOnMissingWebXml>
-
                             <webResources>
                                 <resource>
                                     <directory>${basedir}/config</directory>
