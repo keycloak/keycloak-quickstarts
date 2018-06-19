@@ -26,7 +26,7 @@
     </parent>
     <artifactId>photoz-restful-api</artifactId>
     <packaging>war</packaging>
-    <name>Keycloak Quickstarts: Photoz RESTful API</name>
+    <name>Keycloak Quickstart: Photoz RESTful API</name>
     <description>Photoz RESTful API</description>
 
     <dependencies>
