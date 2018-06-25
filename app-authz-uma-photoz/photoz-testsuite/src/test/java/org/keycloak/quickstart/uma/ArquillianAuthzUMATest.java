@@ -96,13 +96,13 @@ public class ArquillianAuthzUMATest {
     @Deployment(name = HTML_CLIENT_APP_NAME, order = 1, testable = false)
     public static Archive createHtmlClientArchive() throws IOException {
         return ShrinkWrap.create(ZipImporter.class, "photoz-html5-client.war").importFrom(
-                new File("../photoz-html5-client/target/photoz-html5-client.war")).as(WebArchive.class);
+                new File("../photoz-html5-client/target/photoz-uma-html5-client.war")).as(WebArchive.class);
     }
 
     @Deployment(name = RESTFUL_API_APP_NAME, order = 2, testable = false)
     public static Archive createRestfulAPIArchive() throws IOException {
         return ShrinkWrap.create(ZipImporter.class, "photoz-restful-api.war").importFrom(new File(
-                "../photoz-restful-api/target/photoz-restful-api.war")).as(WebArchive.class);
+                "../photoz-restful-api/target/photoz-uma-restful-api.war")).as(WebArchive.class);
     }
 
     @AfterClass

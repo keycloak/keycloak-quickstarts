@@ -75,7 +75,7 @@
       "decisionStrategy": "UNANIMOUS",
       "config": {
         "mavenArtifactVersion": "${project.version}",
-        "mavenArtifactId": "photoz-authz-policy",
+        "mavenArtifactId": "photoz-authz-uma-policy",
         "sessionName": "MainOwnerSession",
         "mavenArtifactGroupId": "org.keycloak.quickstarts",
         "moduleName": "PhotozAuthzOwnerPolicy",

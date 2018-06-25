@@ -159,6 +159,7 @@
         <module>app-authz-jee-servlet</module>
         <module>app-authz-jee-vanilla</module>
         <module>app-authz-uma-photoz</module>
+        <module>app-authz-photoz</module>
     </modules>
 
     <repositories>

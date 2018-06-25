@@ -62,37 +62,34 @@ public class MyAppTest {
 
     @Test
     public void testAccessToPathsMappedWithDefaultResource() throws IOException {
+        // accessing resource using a regular access token
         HttpResponse response = makeRequest("http://localhost:8080/api/resourcea", "alice", "alice", false, "Default Resource");
-
-        // without a RPT, access should be denied
-        assertEquals(403, response.getStatusLine().getStatusCode());
-
-        response = makeRequest("http://localhost:8080/api/resourcea", "alice", "alice", true, "Default Resource");
-
-        // we got a RPT from Keycloak with the necessary permissions to access the requested resource
+        assertAccessGranted(response);
+        response = makeRequest("http://localhost:8080/api/resourceb", "alice", "alice", false, "Default Resource");
         assertAccessGranted(response);
 
-        response = makeRequest("http://localhost:8080/api/resourceb", "alice", "alice", true, "Default Resource");
 
-        // we got a RPT from Keycloak with the necessary permissions to access the requested resource
+        // accessing resource using an RPT
+        response = makeRequest("http://localhost:8080/api/resourcea", "alice", "alice", true, "Default Resource");
+        assertAccessGranted(response);
+        response = makeRequest("http://localhost:8080/api/resourceb", "alice", "alice", true, "Default Resource");
+        assertAccessGranted(response);
+
+        // jdoe should access /api/resourcea and /api/resourceb
+        response = makeRequest("http://localhost:8080/api/resourcea", "jdoe", "jdoe", false, "Default Resource");
+        assertAccessGranted(response);
+        response = makeRequest("http://localhost:8080/api/resourceb", "jdoe", "jdoe", false, "Default Resource");
         assertAccessGranted(response);
     }
 
     @Test
     public void testAccessToPathsMappedWithPremiumResource() throws IOException {
+        // accessing resource with regular access token
         HttpResponse response = makeRequest("http://localhost:8080/api/premium", "jdoe", "jdoe", false, "Premium Resource");
-
-        // without a RPT, access should be denied
-        assertEquals(403, response.getStatusLine().getStatusCode());
-
-        response = makeRequest("http://localhost:8080/api/premium", "jdoe", "jdoe", true, "Premium Resource");
-
-        // we got a RPT from Keycloak with the necessary permissions to access the requested resource
         assertAccessGranted(response);
 
-        response = makeRequest("http://localhost:8080/api/resourceb", "jdoe", "jdoe", true, "Default Resource");
-
-        // we got a RPT from Keycloak with the necessary permissions to access the requested resource
+        // accessing resource with an RPT
+        response = makeRequest("http://localhost:8080/api/premium", "jdoe", "jdoe", true, "Premium Resource");
         assertAccessGranted(response);
 
         try {
@@ -107,6 +104,27 @@ public class MyAppTest {
     public void testAccessToUnknownPathsShouldBeDenied() throws IOException {
         HttpResponse response = makeRequest("http://localhost:8080/unknownResource", "alice", "alice", true, "Default Resource");
         assertEquals(403, response.getStatusLine().getStatusCode());
+    }
+
+    @Test
+    public void testAccessToPathsMappedWithAdminResource() throws IOException {
+        // accessing resource with regular access token
+        HttpResponse response = makeRequest("http://localhost:8080/api/admin?parameter-a=claim-value", "alice", "alice", false, "Admin Resource");
+        assertAccessGranted(response);
+
+        try {
+            // alice can't access the requested resource because request parameter 'parameter-a' is missing
+            response = makeRequest("http://localhost:8080/api/admin", "alice", "alice", true, "Admin Resource");
+            fail("Should fail, user alice is not supposed to have access to premium resources (missing user-premium role)");
+        } catch (AuthorizationDeniedException ignore) {
+        }
+
+        try {
+            // alice can't access the requested resource because request parameter 'parameter-a' has an unexpected value
+            response = makeRequest("http://localhost:8080/api/admin?parameter-a=unexpected", "alice", "alice", true, "Admin Resource");
+            fail("Should fail, user alice is not supposed to have access to premium resources (missing user-premium role)");
+        } catch (AuthorizationDeniedException ignore) {
+        }
     }
 
     private HttpResponse makeRequest(String uri, String userName, String password, boolean sendRpt, String resourceId) throws IOException {

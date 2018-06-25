@@ -24,10 +24,10 @@
         <version>4.1.0.Final-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>photoz-testsuite</artifactId>
+    <artifactId>photoz-uma-testsuite</artifactId>
     <packaging>jar</packaging>
-    <name>Keycloak Quickstarts: Photoz Testsuite</name>
-    <description>Photoz Testsuite</description>
+    <name>Keycloak Quickstarts: Photoz UMA Testsuite</name>
+    <description>Photoz UMA Testsuite</description>
 
     <properties>
         <browser>firefox</browser>

@@ -30,16 +30,25 @@ public class ApplicationController {
 
     @RequestMapping(value = "/api/resourcea", method = RequestMethod.GET)
     public String handleResourceA() {
-        return "Access Granted";
+        return createResponse();
     }
 
     @RequestMapping(value = "/api/resourceb", method = RequestMethod.GET)
     public String handleResourceB() {
-        return "Access Granted";
+        return createResponse();
     }
 
     @RequestMapping(value = "/api/premium", method = RequestMethod.GET)
     public String handlePremiumResource() {
+        return createResponse();
+    }
+
+    @RequestMapping(value = "/api/admin", method = RequestMethod.GET)
+    public String handleAdminResource() {
+        return createResponse();
+    }
+
+    private String createResponse() {
         return "Access Granted";
     }
 }

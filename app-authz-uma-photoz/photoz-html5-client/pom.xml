@@ -24,10 +24,10 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>photoz-html5-client</artifactId>
+    <artifactId>photoz-uma-html5-client</artifactId>
     <packaging>war</packaging>
-    <name>Keycloak Quickstarts: Photoz HTML5 Client</name>
-    <description>Photoz HTML5 Client</description>
+    <name>Keycloak Quickstarts: Photoz UMA HTML5 Client</name>
+    <description>Photoz UMA HTML5 Client</description>
 
     <build>
         <finalName>${project.artifactId}</finalName>

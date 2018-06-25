@@ -80,6 +80,10 @@
                     {
                         "name": "Premium Resource",
                         "uri": "/api/premium"
+                    },
+                    {
+                        "name": "Admin Resource",
+                        "uri": "/api/admin"
                     }
                 ],
                 "policies": [
@@ -102,6 +106,15 @@
                         }
                     },
                     {
+                        "name": "Claim-Based Policy",
+                        "type": "js",
+                        "logic": "POSITIVE",
+                        "decisionStrategy": "UNANIMOUS",
+                        "config": {
+                            "code": "var context = $evaluation.context;\n\nvar attributes = context.attributes;\n\nif (attributes.containsValue('some-claim', 'claim-value')) {\n    $evaluation.grant();\n}"
+                        }
+                    },
+                    {
                         "name": "Default Resource Permission",
                         "description": "A permission that applies to the default resource",
                         "type": "resource",
@@ -120,6 +133,16 @@
                         "config": {
                             "resources": "[\"Premium Resource\"]",
                             "applyPolicies": "[\"Only Premium User Policy\"]"
+                        }
+                    },
+                    {
+                        "name": "Admin Resource Permission",
+                        "type": "resource",
+                        "logic": "POSITIVE",
+                        "decisionStrategy": "UNANIMOUS",
+                        "config": {
+                            "resources": "[\"Admin Resource\"]",
+                            "applyPolicies": "[\"Claim-Based Policy\"]"
                         }
                     }
                 ]
