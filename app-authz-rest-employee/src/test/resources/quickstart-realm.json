@@ -1,0 +1,118 @@
+{
+    "realm": "spring-boot-quickstart",
+    "enabled": true,
+    "privateKey": "MIICXAIBAAKBgQCrVrCuTtArbgaZzL1hvh0xtL5mc7o0NqPVnYXkLvgcwiC3BjLGw1tGEGoJaXDuSaRllobm53JBhjx33UNv+5z/UMG4kytBWxheNVKnL6GgqlNabMaFfPLPCF8kAgKnsi79NMo+n6KnSY8YeUmec/p2vjO2NjsSAVcWEQMVhJ31LwIDAQABAoGAfmO8gVhyBxdqlxmIuglbz8bcjQbhXJLR2EoS8ngTXmN1bo2L90M0mUKSdc7qF10LgETBzqL8jYlQIbt+e6TH8fcEpKCjUlyq0Mf/vVbfZSNaVycY13nTzo27iPyWQHK5NLuJzn1xvxxrUeXI6A2WFpGEBLbHjwpx5WQG9A+2scECQQDvdn9NE75HPTVPxBqsEd2z10TKkl9CZxu10Qby3iQQmWLEJ9LNmy3acvKrE3gMiYNWb6xHPKiIqOR1as7L24aTAkEAtyvQOlCvr5kAjVqrEKXalj0Tzewjweuxc0pskvArTI2Oo070h65GpoIKLc9jf+UA69cRtquwP93aZKtW06U8dQJAF2Y44ks/mK5+eyDqik3koCI08qaC8HYq2wVl7G2QkJ6sbAaILtcvD92ToOvyGyeE0flvmDZxMYlvaZnaQ0lcSQJBAKZU6umJi3/xeEbkJqMfeLclD27XGEFoPeNrmdx0q10Azp4NfJAY+Z8KRyQCR2BEG+oNitBOZ+YXF9KCpH3cdmECQHEigJhYg+ykOvr1aiZUMFT72HU0jnmQe2FVekuG+LJUt2Tm7GtMjTFoGpf0JwrVuZN39fOYAlo+nTixgeW7X8Y=",
+    "publicKey": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCrVrCuTtArbgaZzL1hvh0xtL5mc7o0NqPVnYXkLvgcwiC3BjLGw1tGEGoJaXDuSaRllobm53JBhjx33UNv+5z/UMG4kytBWxheNVKnL6GgqlNabMaFfPLPCF8kAgKnsi79NMo+n6KnSY8YeUmec/p2vjO2NjsSAVcWEQMVhJ31LwIDAQAB",
+    "requiredCredentials": [
+        "password"
+    ],
+    "users": [
+        {
+            "username": "alice",
+            "enabled": true,
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "alice"
+                }
+            ],
+            "realmRoles": [
+                "user"
+            ]
+        },
+        {
+            "username": "jdoe",
+            "enabled": true,
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "jdoe"
+                }
+            ],
+            "realmRoles": [
+                "user",
+                "people-manager"
+            ]
+        },
+        {
+            "username": "service-account-app-authz-rest-employee",
+            "enabled": true,
+            "serviceAccountClientId": "app-authz-rest-employee",
+            "clientRoles": {
+                "app-authz-rest-employee": [
+                    "uma_protection"
+                ]
+            }
+        }
+    ],
+    "roles": {
+        "realm": [
+            {
+                "name": "user",
+                "description": "User privileges"
+            },
+            {
+                "name": "people-manager",
+                "description": "People manager privileges"
+            }
+        ]
+    },
+    "clients": [
+        {
+            "clientId": "app-authz-rest-employee",
+            "enabled": true,
+            "baseUrl": "http://localhost:8080",
+            "adminUrl": "http://localhost:8080",
+            "redirectUris": [
+                "http://localhost:8080/*"
+            ],
+            "secret": "secret",
+            "directAccessGrantsEnabled": true,
+            "authorizationServicesEnabled": true,
+            "authorizationSettings": {
+                "allowRemoteResourceManagement": false,
+                "policyEnforcementMode": "ENFORCING",
+                "resources": [
+                    {
+                        "_id": "deed8ae3-41a9-4781-b6c7-cb297516c2c6",
+                        "name": "Employee Resource",
+                        "uri": "/api/{employee}/*"
+                    }
+                ],
+                "policies": [
+                    {
+                        "id": "afee73e2-c22d-4b41-ac16-17febeee541c",
+                        "name": "Employee Policy",
+                        "type": "js",
+                        "logic": "POSITIVE",
+                        "decisionStrategy": "UNANIMOUS",
+                        "config": {
+                            "code": "var context = $evaluation.getContext();\nvar attributes = context.getAttributes();\nvar httpUri = attributes.getValue('http.uri');\n\nif (httpUri) {\n    var uriParts = httpUri.asString(0).split('/');\n    var identity = context.getIdentity();\n    var username = identity.getAttributes().getValue('preferred_username').asString(0);\n    \n    if (uriParts[2] == username) {\n        $evaluation.grant();\n    }\n}"
+                        }
+                    },
+                    {
+                        "id": "15e7bbe5-34da-4f7f-9513-5ca0e09ca13e",
+                        "name": "Only People Manager Policy",
+                        "type": "role",
+                        "logic": "POSITIVE",
+                        "decisionStrategy": "UNANIMOUS",
+                        "config": {
+                            "roles": "[{\"id\":\"people-manager\",\"required\":false}]"
+                        }
+                    },
+                    {
+                        "id": "521b8081-5097-4264-af70-168f34c3b2a7",
+                        "name": "Employee Permission",
+                        "type": "resource",
+                        "logic": "POSITIVE",
+                        "decisionStrategy": "AFFIRMATIVE",
+                        "config": {
+                            "resources": "[\"Employee Resource\"]",
+                            "applyPolicies": "[\"Only People Manager Policy\",\"Employee Policy\"]"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}
