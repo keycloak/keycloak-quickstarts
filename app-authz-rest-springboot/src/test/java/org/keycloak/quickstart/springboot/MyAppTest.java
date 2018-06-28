@@ -127,6 +127,12 @@ public class MyAppTest {
         }
     }
 
+    @Test
+    public void testAccessWithoutBearerShouldBeDenied() throws IOException {
+        HttpResponse httpResponse = makeRequestWithoutBearer("http://localhost:8080/api/admin");
+        assertEquals(403, httpResponse.getStatusLine().getStatusCode());
+    }
+
     private HttpResponse makeRequest(String uri, String userName, String password, boolean sendRpt, String resourceId) throws IOException {
         HttpClient client = HttpClientBuilder.create().build();
         HttpGet request = new HttpGet(uri);
@@ -140,6 +146,13 @@ public class MyAppTest {
         }
 
         request.addHeader("Authorization", "Bearer " + rpt);
+
+        return client.execute(request);
+    }
+
+    private HttpResponse makeRequestWithoutBearer(String uri) throws IOException {
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpGet request = new HttpGet(uri);
 
         return client.execute(request);
     }
