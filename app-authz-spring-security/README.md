@@ -1,17 +1,17 @@
-app-authz-springboot: SpringBoot Web Application using Authorization Services
+app-authz-spring-security: Spring Security Application using Authorization Services
 ===================================================
 
 Level: Beginner
 Technologies: SpringBoot, Spring MVC, Spring Security
 Summary: SpringBoot, Spring MVC, Spring Security
 Target Product: <span>Keycloak</span>
-Source: <https://github.com/keycloak/Keycloak-quickstarts>
+Source: <https://github.com/keycloak/keycloak-quickstarts>
 
 
 What is it?
 -----------
 
-The `app-authz-springboot` quickstart demonstrates how to write a SpringBoot Web application where both authentication and
+The `app-authz-spring-security` quickstart demonstrates how to write a Spring Security application where both authentication and
 authorization aspects are managed by <span>Keycloak</span>.
 
 This application tries to focus on the authorization features provided by <span>Keycloak</span> Authorization Services, where resources are
@@ -29,7 +29,7 @@ only users with a role *user-premium* is allowed to access this page.
 * **/protected/alice**, where access to this page is based on the evaluation of permissions associated with a resource **Alice Resource** in <span>Keycloak</span>. Basically,
 only user *alice* is allowed to access this page.
 
-The home page (home.ftl) also demonstrates how to use a ``AuthorizationContext`` instance to check for user`s permissions and hide/show
+The home page (home.ftl) also demonstrates how to use a ``AuthorizationContext`` instance to check for user's permissions and hide/show
 things in a page. Where the ``AuthorizationContext`` encapsulates all permissions granted by a <span>Keycloak</span> server and provides methods
 to check these permissions.
 
@@ -52,14 +52,14 @@ Configuration in <span>Keycloak</span>
 
 Prior to running the quickstart you need to create a `realm` in <span>Keycloak</span> with all the necessary configuration to deploy and run the quickstart.
 
-The following steps show how to create the realm required for this quickstart:
+To create the realm required for this quickstart, follow these steps:
 
-* Open the <span>Keycloak</span> admin console
-* In the top left corner dropdown menu that is titled `Master`, click `Add Realm`. If you are logged in to the master realm this dropdown menu lists all the realms created.
-* For this quickstart we are not going to manually create the realm, but import all configuration from a JSON file. Click on `Select File` and import the [config/quickstart-realm.json](config/quickstart-realm.json).
-* Click `Create`
+1. Open the <span>Keycloak</span> admin console
+2. In the top left corner dropdown menu that is titled `Master`, click `Add Realm`. If you are logged in to the master realm this dropdown menu lists all the realms created.
+3. For this quickstart we are not going to manually create the realm, but import all configuration from a JSON file. Click on `Select File` and import the [config/realm-import.json](config/realm-import.json).
+4. Click `Create`
 
-The steps above will result on a new `spring-boot-quickstart` realm.
+The steps above will result on a new `spring-security-quickstart` realm.
 
 Build and Run the Quickstart
 -------------------------------
