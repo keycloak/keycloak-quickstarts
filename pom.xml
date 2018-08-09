@@ -21,7 +21,7 @@
 
     <groupId>org.keycloak.quickstarts</groupId>
     <artifactId>keycloak-quickstart-parent</artifactId>
-    <version>4.2.0.Final-SNAPSHOT</version>
+    <version>4.3.0.Final-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Keycloak Quickstart: parent</name>
     <description>Parent</description>
@@ -265,8 +265,11 @@
                 <module>app-angular2</module>
                 <module>app-authz-jee-servlet</module>
                 <module>app-authz-jee-vanilla</module>
+                <module>app-authz-rest-employee</module>
+                <module>app-authz-rest-springboot</module>
+                <module>app-authz-spring-security</module>
                 <module>app-authz-uma-photoz</module>
-                <module>fuse</module>
+                <module>fuse63</module>
                 <module>user-storage-simple</module>
                 <module>user-storage-jpa</module>
                 <module>event-listener-sysout</module>

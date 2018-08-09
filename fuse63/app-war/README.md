@@ -58,10 +58,10 @@ copying [config/keycloak-example.json](config/keycloak-example.json) to `config/
 Build the Quickstart
 --------------------
 
-1. Open a terminal and navigate to the [fuse](../fuse) directory.
+1. Open a terminal and navigate to the [fuse63](../fuse63) directory.
 
 ```
-mvn clean install -Pfuse-server
+mvn clean install
 ```
 
 Access the Quickstart

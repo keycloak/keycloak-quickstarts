@@ -16,14 +16,21 @@
     limitations under the License.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <artifactId>keycloak-fuse63-parent</artifactId>
+        <groupId>org.keycloak.quickstarts</groupId>
+        <version>4.3.0.Final-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.keycloak.quickstarts</groupId>
-    <artifactId>keycloak-fuse-features</artifactId>
-    <version>4.2.0.Final-SNAPSHOT</version>
+    <artifactId>keycloak-fuse63-features</artifactId>
+    <version>4.3.0.Final-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>Keycloak Quickstart: Fuse Features</name>
-    <description>JBoss Fuse features to simplify install all Keycloak Fuse quickstarts</description>
+    <name>Keycloak Quickstart: Fuse 6.3 Features</name>
+    <description>JBoss Fuse 6.3 features to simplify install all Keycloak Fuse quickstarts</description>
 
     <licenses>
         <license>
@@ -34,7 +41,6 @@
     </licenses>
 
     <properties>
-        <resources.plugin.version>2.7</resources.plugin.version>
         <build.helper.maven.plugin.version>1.9.1</build.helper.maven.plugin.version>
     </properties>
 
@@ -49,7 +55,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>${resources.plugin.version}</version>
+                <version>${version.resources.maven.plugin}</version>
                 <executions>
                     <execution>
                         <id>filter</id>
