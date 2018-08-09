@@ -18,7 +18,7 @@
 
 <features xmlns="http://karaf.apache.org/xmlns/features/v1.0.0" name="keycloak-${project.version}">
 
-    <feature name="keycloak-fuse-quickstarts" version="${project.version}">
+    <feature name="keycloak-fuse63-quickstarts" version="${project.version}">
         <details>The Keycloak Fuse example</details>
         <feature>war</feature>
         <feature>camel</feature>
@@ -26,9 +26,9 @@
         <feature>cxf</feature>
         <feature>keycloak</feature>
         <feature>keycloak-jetty9-adapter</feature>
-        <bundle>mvn:org.keycloak.quickstarts/keycloak-fuse-app-war-jsp/${project.version}/war</bundle>
-        <bundle>mvn:org.keycloak.quickstarts/keycloak-fuse-service-camel/${project.version}</bundle>
-        <bundle>mvn:org.keycloak.quickstarts/keycloak-service-cxf-jaxrs/${project.version}</bundle>
+        <bundle>mvn:org.keycloak.quickstarts/keycloak-fuse63-app-war-jsp/${project.version}/war</bundle>
+        <bundle>mvn:org.keycloak.quickstarts/keycloak-fuse63-service-camel/${project.version}</bundle>
+        <bundle>mvn:org.keycloak.quickstarts/keycloak-fuse63-service-cxf-jaxrs/${project.version}</bundle>
     </feature>
 
 </features>

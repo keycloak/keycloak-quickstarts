@@ -17,7 +17,7 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
-        <artifactId>keycloak-fuse-parent</artifactId>
+        <artifactId>keycloak-fuse63-parent</artifactId>
         <groupId>org.keycloak.quickstarts</groupId>
         <version>4.3.0.Final-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
@@ -25,11 +25,11 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>keycloak-fuse-service-camel</artifactId>
+    <artifactId>keycloak-fuse63-service-cxf-jaxrs</artifactId>
     <version>4.3.0.Final-SNAPSHOT</version>
     <packaging>bundle</packaging>
-    <name>Keycloak Quickstart: JBoss Fuse Service - Camel</name>
-    <description>JBoss Fuse Apache Camel Service secured by Keycloak</description>
+    <name>Keycloak Quickstart: JBoss Fuse 6.3 Service - CXF JAXRS</name>
+    <description>JBoss Fuse 6.3 Apache CXF JAXRS Service Secured by Keycloak</description>
 
     <licenses>
         <license>
@@ -49,18 +49,23 @@
         <keycloak.osgi.export>
         </keycloak.osgi.export>
         <keycloak.osgi.import>
-            javax.servlet;version="[3,4)",
-            javax.servlet.http;version="[3,4)",
-            org.apache.camel.*,
-            org.apache.camel;version="[2.13,3)",
+            javax.servlet.http,
+            javax.ws.rs,
+            javax.ws.rs.core,
+            org.osgi.framework,
+            META-INF.cxf;version="[2.7,3.2)",
+            META-INF.cxf.osgi;version="[2.7,3.2)";resolution:=optional,
+            com.fasterxml.jackson.jaxrs.json;version="[2,3)",
+            org.apache.cxf.bus;version="[2.7,3.2)",
+            org.apache.cxf.bus.spring;version="[2.7,3.2)",
+            org.apache.cxf.bus.resource;version="[2.7,3.2)",
+            org.apache.cxf.transport.http;version="[2.7,3.2)",
+            org.apache.cxf.*;version="[2.7,3.2)",
+            org.springframework.beans.factory.config,
             org.eclipse.jetty.security;version="[8,10)",
-            org.eclipse.jetty.server.nio;version="[8,10)",
             org.eclipse.jetty.util.security;version="[8,10)",
             org.keycloak.*;version="${project.version}",
-            org.osgi.service.blueprint,
-            org.osgi.service.blueprint.container,
-            org.osgi.service.event,
-            org.osgi.framework,
+            org.keycloak.adapters.jetty;version="${project.version}"
         </keycloak.osgi.import>
         <keycloak.osgi.private>
             org.keycloak.quickstart.*
@@ -68,12 +73,11 @@
     </properties>
 
     <dependencies>
+        <!-- TODO: These are needed just for KeycloakConfigResolver. Remove if we move stuff to keycloak codebase itself -->
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-core</artifactId>
         </dependency>
-
-        <!-- TODO: These are needed just for KeycloakConfigResolver. Remove if we move stuff to keycloak codebase itself -->
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-adapter-core</artifactId>
@@ -89,24 +93,24 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>${camel.version}</version>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+            <version>${cxf.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-blueprint</artifactId>
-            <version>${camel.version}</version>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-transports-http</artifactId>
+            <version>${cxf.version}</version>
         </dependency>
-        <dependency><groupId>org.apache.camel</groupId>
-            <artifactId>camel-jetty9</artifactId>
-            <version>${camel.version}</version>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-transports-http-jetty</artifactId>
+            <version>${cxf.version}</version>
         </dependency>
     </dependencies>
 
     <build>
         <defaultGoal>install</defaultGoal>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

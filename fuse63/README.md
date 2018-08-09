@@ -37,14 +37,14 @@ Start and Configure the JBoss Fuse
 * Setup the JBOSS_FUSE_HOME variable:
 
 ```
-export JBOSS_FUSE_HOME=/path/to/jboss-fuse-6.3.0.redhat-224
+export JBOSS_FUSE_HOME=/path/to/jboss-fuse-6.3.0.redhat-343
 ```
 
 * Set up each client based on `Build and Deploy` section
 
 * Install the common set of Keycloak features and start the server
 ```
-mvn clean install -Pfuse-server
+mvn clean install
 ```
 
 The command above will run the server setup and deploy all the artifacts, including the services required for this quickstart. You can use any REST service deployed anywhere. However for testing purposes, it is good if you use either one (or both) of:
@@ -55,7 +55,7 @@ The command above will run the server setup and deploy all the artifacts, includ
 By default, `app-war` app will refer to the `service-camel` deployed at `http://localhost:8383/service`. But you can change it anytime, by running:
 
 ```
-mvn clean install -Pfuse-server -Dservice.url=http://localhost:8282/service
+mvn clean install -Dservice.url=http://localhost:8282/service
 ```
 
 If you use this command once you invoked an endpoint:

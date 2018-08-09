@@ -17,18 +17,18 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
-        <artifactId>keycloak-fuse-parent</artifactId>
+        <artifactId>keycloak-fuse63-parent</artifactId>
         <groupId>org.keycloak.quickstarts</groupId>
         <version>4.3.0.Final-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>keycloak-fuse-app-war-jsp</artifactId>
+    <artifactId>keycloak-fuse63-app-war-jsp</artifactId>
     <version>4.3.0.Final-SNAPSHOT</version>
     <packaging>war</packaging>
-    <name>Keycloak Quickstart: WAR frontend application</name>
-    <description>JBoss Fuse WAR frontend application secured by Keycloak</description>
+    <name>Keycloak Quickstart: Fuse 6.3 WAR frontend application</name>
+    <description>JBoss Fuse 6.3 WAR frontend application secured by Keycloak</description>
 
     <licenses>
         <license>
@@ -49,7 +49,9 @@
         <keycloak.osgi.export>
         </keycloak.osgi.export>
         <keycloak.osgi.import>
-            org.apache.http.*;version=${apache.httpcomponents.version},
+            org.apache.http.*;version=${apache.httpcomponents.httpcore.version},
+            org.apache.http.client.*;version=${apache.httpcomponents.version},
+            org.apache.http.impl.client.*;version=${apache.httpcomponents.version},
             javax.servlet.*;version="[2.5,4)",
             org.keycloak.adapters.jetty;version="${project.version}",
             org.keycloak.adapters;version="${project.version}",
@@ -114,6 +116,7 @@
                 <version>${maven.compiler.plugin.version}</version>
                 <configuration>
                     <source>${maven.compiler.source}</source>
+
                     <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
