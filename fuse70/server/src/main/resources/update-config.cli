@@ -1,0 +1,7 @@
+config:edit org.ops4j.pax.url.mvn
+config:propset org.ops4j.pax.url.mvn.localRepository ${user.home}/.m2/repository
+config:update
+
+features:refreshurl
+
+dev:system-property service.url ${service.url}

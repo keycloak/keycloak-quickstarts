@@ -17,7 +17,8 @@ if [ $1 == "group2" ]; then
 fi
 
 if [ $1 == "group3" ]; then
-  cd fuse63 && mvn -B -s ../maven-settings.xml clean install -Pfuse-server
+  mvn -f fuse63/pom.xml -B -s maven-settings.xml clean install
+  mvn -f fuse70/pom.xml -B -s maven-settings.xml clean install
 fi
 
 if [ $1 == "group4" ]; then

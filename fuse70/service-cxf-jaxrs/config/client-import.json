@@ -1,0 +1,5 @@
+{
+  "clientId": "fuse-service-cxf",
+  "enabled": true,
+  "bearerOnly": true
+}
