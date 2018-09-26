@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.keycloak.quickstarts</groupId>
         <artifactId>app-authz-photoz-parent</artifactId>
-        <version>4.5.0.Final-SNAPSHOT</version>
+        <version>4.5.0.Final</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>photoz-testsuite</artifactId>
