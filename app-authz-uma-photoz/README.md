@@ -150,7 +150,7 @@ If everything is correct, you will be redirect to Keycloak login page. You can l
 Creating and Sharing Resources
 ----------
 
-Lest's first login as Alice (username: alice, password: alice). Once logged in, the `photoz` client app will display a simple
+Let's first login as Alice (username: alice, password: alice). Once logged in, the `photoz` client app will display a simple
 page containing some links that can be used to display things like the RPT or the Access Token. While it is interesting to
 view the token contents, we will focus on the main functionality of the quickstart, which is managing albums.
 
