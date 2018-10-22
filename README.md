@@ -129,8 +129,8 @@ The next step is to start <span>WildFly</span> server:
 1. Open a terminal and navigate to the root of the <span>WildFly</span> server directory.
 2. Use the following command to start the <span>WildFly</span> server:
    ````
-   For Linux:   EAP_HOME/bin/standalone.sh
-   For Windows: EAP_HOME\bin\standalone.bat
+   For Linux:   WILDFLY_HOME/bin/standalone.sh
+   For Windows: WILDFLY_HOME\bin\standalone.bat
    ````
 3. To install the <span>Keycloak</span> adapter run the following commands:
    ````
