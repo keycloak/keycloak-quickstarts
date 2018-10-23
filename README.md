@@ -129,8 +129,8 @@ The next step is to start <span>WildFly</span> server:
 1. Open a terminal and navigate to the root of the <span>WildFly</span> server directory.
 2. Use the following command to start the <span>WildFly</span> server:
    ````
-   For Linux:   EAP_HOME/bin/standalone.sh
-   For Windows: EAP_HOME\bin\standalone.bat
+   For Linux:   WILDFLY_HOME/bin/standalone.sh
+   For Windows: WILDFLY_HOME\bin\standalone.bat
    ````
 3. To install the <span>Keycloak</span> adapter run the following commands:
    ````
@@ -188,12 +188,14 @@ Examples
 --------
 
 * [app-angular2](app-angular2/README.md) - Angular 2 application that invokes the example service. Requires service example to be deployed.
+* [app-authz-rest-employee](app-authz-rest-employee/README.md) - SpringBoot REST Service Protected Using Keycloak Authorization Services
 * [app-jee-html5](app-jee-html5/README.md) - HTML5 application that invokes the example service. Requires service example to be deployed.
 * [app-jee-jsp](app-jee-jsp/README.md) - JSP application packaged that invokes the example service. Requires service example to be deployed.
 * [app-profile-jee-html5](app-profile-jee-html5/README.md) - HTML5 application that displays user profile and token details.
 * [app-profile-jee-jsp](app-profile-jee-jsp/README.md) - JSP application that displays user profile and token details.
 * [app-profile-jee-vanilla](app-profile-jee-vanilla/README.md) - JSP application configured with basic authentication. Shows how to secure an application with the client adapter subsystem.
 * [app-profile-saml-jee-jsp](app-profile-saml-jee-jsp/README.md) - JSP application that uses SAML and displays user profile.
+* [app-springboot](app-springboot/README.md) - SpringBoot application that is secured with Keycloak. [Requires SpringBoot Service](service-springboot-rest/README.md).
 * [service-jee-jaxrs](service-jee-jaxrs/README.md) - JAX-RS Service with public and protected endpoints.
 
 
