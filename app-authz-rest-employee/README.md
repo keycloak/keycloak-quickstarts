@@ -13,7 +13,7 @@ What is it?
 
 The `app-authz-rest-employee` quickstart demonstrates how to protect a SpringBoot REST service using Keycloak Authorization Services.
 
-This quickstartis provides a RESTful API exposing a single endpoint to obtain information about employees. Employees
+This quickstart provides a RESTful API exposing a single endpoint to obtain information about employees. Employees
 can only obtain information about themselves, but access is not granted if trying to obtain information about other employee.
 
 However, users granted with a role `people-manager` are also allowed to access information about any employee.
@@ -33,7 +33,7 @@ You can use two distinct users to access this application:
 |alice|alice|user|
 |jdoe|jdoe|user, people-manager|
 
-The quickstarts demonstrates how to use Keycloak Authorization Services to:
+The quickstart demonstrates how to use Keycloak Authorization Services to:
 
 * Pass information about the execution environment to policies in order to evaluate permissions for a resource
 * Use a JavaScript-based policy to define constraints based on the execution environment
