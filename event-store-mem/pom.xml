@@ -32,6 +32,16 @@
 
     <dependencies>
         <dependency>
+    		<groupId>org.jboss</groupId>
+    		<artifactId>jboss-dmr</artifactId>
+    		<version>${version.jboss.dmr}</version>
+		</dependency>
+		<dependency>
+        	<groupId>org.wildfly.core</groupId>
+    		<artifactId>wildfly-controller-client</artifactId>
+        	<version>${version.wildfly.core}</version>
+        </dependency>
+        <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-core</artifactId>
         </dependency>
@@ -100,7 +110,7 @@
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
-                <version>1.2.1.Final</version>
+                <version>${version.wildfly.maven.plugin}</version>
                 <configuration>
                     <skip>${wildfly.skip}</skip>
                     <filename>${project.build.finalName}.jar</filename>

@@ -39,6 +39,7 @@
     	<maven.compiler.target>11</maven.compiler.target>
         <version.wildfly>15.0.0.Alpha1-SNAPSHOT</version.wildfly>
         <version.wildfly.core>7.0.0.Alpha4</version.wildfly.core>
+        <version.jboss.dmr>1.5.0.Final</version.jboss.dmr>
         <version.keycloak>${project.version}</version.keycloak>
 
 		<spec.javaee.version>8.0</spec.javaee.version>
