@@ -38,7 +38,6 @@
     </licenses>
 
     <properties>
-        <version.compiler.maven.plugin>3.5.1</version.compiler.maven.plugin>
         <version.hibernate.javax.persistence>1.0.0.Final</version.hibernate.javax.persistence>
         <version.jboss-ejb-api>1.0.0.Final</version.jboss-ejb-api>
     </properties>
@@ -89,15 +88,6 @@
     <build>
         <finalName>user-storage-jpa-example</finalName>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${version.compiler.maven.plugin}</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>

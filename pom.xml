@@ -35,20 +35,22 @@
     </licenses>
 
     <properties>
-        <version.wildfly>11.0.0.Final</version.wildfly>
-        <version.wildfly.core>3.0.10.Final</version.wildfly.core>
+    	<maven.compiler.source>11</maven.compiler.source>
+    	<maven.compiler.target>11</maven.compiler.target>
+        <version.wildfly>15.0.0.Alpha1-SNAPSHOT</version.wildfly>
+        <version.wildfly.core>7.0.0.Alpha4</version.wildfly.core>
         <version.keycloak>${project.version}</version.keycloak>
 
-        <version.wildfly.maven.plugin>1.2.0.Final</version.wildfly.maven.plugin>
-        <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
-        <version.war.maven.plugin>2.6</version.war.maven.plugin>
+		<spec.javaee.version>8.0</spec.javaee.version>
+        <version.wildfly.maven.plugin>1.2.2.Final</version.wildfly.maven.plugin>
+        <version.jboss.maven.plugin>7.9.Final</version.jboss.maven.plugin>
+        <version.war.maven.plugin>3.2.2</version.war.maven.plugin>
         <version.enforcer.maven.plugin>1.4.1</version.enforcer.maven.plugin>
         <version.surefire.plugin>2.19.1</version.surefire.plugin>
         <version.exec.maven.plugin>1.6.0</version.exec.maven.plugin>
         <version.antrun.maven.plugin>1.8</version.antrun.maven.plugin>
-        <version.frontend.maven.plugin>1.4</version.frontend.maven.plugin>
-        <version.resources.maven.plugin>3.0.2</version.resources.maven.plugin>
-        <version.compiler.maven.plugin>3.1</version.compiler.maven.plugin>
+        <version.frontend.maven.plugin>1.6</version.frontend.maven.plugin>
+        <version.resources.maven.plugin>3.1.0</version.resources.maven.plugin>
 
         <arquillian-graphene.version>2.3.2</arquillian-graphene.version>
         <arquillian-phantom.version>1.2.1.Final</arquillian-phantom.version>
@@ -114,7 +116,7 @@
             </dependency>
             <dependency>
                 <groupId>org.wildfly.bom</groupId>
-                <artifactId>wildfly-javaee7</artifactId>
+                <artifactId>wildfly-javaee8</artifactId>
                 <version>${version.wildfly}</version>
                 <type>pom</type>
                 <scope>import</scope>
@@ -128,7 +130,13 @@
         </dependencies>
     </dependencyManagement>
 
-    <dependencies>
+    <dependencies>                
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>${spec.javaee.version}</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.jboss.arquillian.junit</groupId>
             <artifactId>arquillian-junit-container</artifactId>
@@ -236,7 +244,7 @@
                                 <rules>
                                     <requireFilesExist>
                                         <files>
-                                            <file>${basedir}/config/keycloak.json</file>
+                                            <file>${basedir}/config/keycloak-example.json</file>
                                         </files>
                                     </requireFilesExist>
                                 </rules>

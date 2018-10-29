@@ -63,11 +63,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.jboss.spec.javax.servlet</groupId>
-            <artifactId>jboss-servlet-api_3.1_spec</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>org.jboss.arquillian.graphene</groupId>
             <artifactId>graphene-webdriver</artifactId>
             <version>${arquillian-graphene.version}</version>
@@ -150,7 +145,7 @@
                                     <rules>
                                         <requireFilesExist>
                                             <files>
-                                                <file>${basedir}/config/keycloak-saml.xml</file>
+                                                <file>${basedir}/config/keycloak-saml-example.xml</file>
                                             </files>
                                         </requireFilesExist>
                                     </rules>

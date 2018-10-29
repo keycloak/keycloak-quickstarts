@@ -37,10 +37,6 @@
         </license>
     </licenses>
 
-    <properties>
-        <version.compiler.maven.plugin>3.5.1</version.compiler.maven.plugin>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.keycloak</groupId>
@@ -75,15 +71,6 @@
     <build>
         <finalName>user-storage-properties-example</finalName>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${version.compiler.maven.plugin}</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
