@@ -40,15 +40,6 @@
 
     <extension qualifier="webdriver">
         <property name="browser">${browser}</property>
-        <property name="downloadBinaries">${webdriverDownloadBinaries}</property>
-
-        <!-- firefox -->
-        <property name="firefox_binary">${firefox_binary}</property>
-        <property name="firefoxLogLevel">OFF</property>
-        <property name="firefoxLegacy">true</property>
-
-        <!-- chrome -->
-        <property name="chromeDriverBinary">${chromeDriverBinary}</property>
     </extension>
 
     <extension qualifier="drone">

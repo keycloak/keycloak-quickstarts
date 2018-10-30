@@ -31,10 +31,7 @@
 
     <properties>
         <browser>firefox</browser>
-        <webdriverDownloadBinaries>true</webdriverDownloadBinaries>
         <droneInstantiationTimeoutInSeconds>60</droneInstantiationTimeoutInSeconds>
-        <firefox_binary/>
-        <chromeDriverBinary/>
     </properties>
 
     <dependencies>
