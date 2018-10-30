@@ -25,8 +25,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Igor</a>
@@ -34,58 +32,58 @@ import java.util.List;
 @Entity
 public class Album {
 
-    @Id
-    private String id;
+	@Id
+	private String id;
 
-    @Column(nullable = false)
-    private String name;
+	@Column(nullable = false)
+	private String name;
 
-    @OneToMany(mappedBy = "album", fetch = FetchType.EAGER)
-    private List<Photo> photos = new ArrayList<Photo>();
+	@OneToMany(mappedBy = "album", fetch = FetchType.EAGER)
+	private List<Photo> photos = new ArrayList<Photo>();
 
-    @Column(nullable = false)
-    private String userId;
+	@Column(nullable = false)
+	private String userId;
 
-    @Column
-    private String externalId;
+	@Column
+	private String externalId;
 
-    public String getId() {
-        return this.id;
-    }
+	public String getId() {
+		return this.id;
+	}
 
-    public void setId(final String id) {
-        this.id = id;
-    }
+	public void setId(final String id) {
+		this.id = id;
+	}
 
-    public String getName() {
-        return this.name;
-    }
+	public String getName() {
+		return this.name;
+	}
 
-    public void setName(final String name) {
-        this.name = name;
-    }
+	public void setName(final String name) {
+		this.name = name;
+	}
 
-    public List<Photo> getPhotos() {
-        return this.photos;
-    }
+	public List<Photo> getPhotos() {
+		return this.photos;
+	}
 
-    public void setPhotos(final List<Photo> photos) {
-        this.photos = photos;
-    }
+	public void setPhotos(final List<Photo> photos) {
+		this.photos = photos;
+	}
 
-    public void setUserId(final String userId) {
-        this.userId = userId;
-    }
+	public void setUserId(final String userId) {
+		this.userId = userId;
+	}
 
-    public String getUserId() {
-        return this.userId;
-    }
+	public String getUserId() {
+		return this.userId;
+	}
 
-    public void setExternalId(String externalId) {
-        this.externalId = externalId;
-    }
+	public void setExternalId(String externalId) {
+		this.externalId = externalId;
+	}
 
-    public String getExternalId() {
-        return externalId;
-    }
+	public String getExternalId() {
+		return externalId;
+	}
 }

@@ -17,16 +17,20 @@
  */
 package org.keycloak.example.photoz.album;
 
+import java.security.Principal;
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import java.security.Principal;
-import java.util.List;
+
+import org.keycloak.example.photoz.entity.Album;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Igor</a>
@@ -34,34 +38,33 @@ import java.util.List;
 @Path("/profile")
 public class ProfileService {
 
-    private static final String PROFILE_VIEW = "urn:photoz.com:scopes:profile:view";
+	@Inject
+	private EntityManager entityManager;
 
-    @Inject
-    private EntityManager entityManager;
+	@GET
+	@Produces("application/json")
+	public Response view(@Context HttpServletRequest request) {
+		Principal userPrincipal = request.getUserPrincipal();
+		TypedQuery<Album> query = this.entityManager.createQuery("from Album where userId = :id", Album.class);
+		List<Album> albums = query.setParameter("id", userPrincipal.getName()).getResultList();
+		return Response.ok(new Profile(userPrincipal.getName(), albums.size())).build();
+	}
 
-    @GET
-    @Produces("application/json")
-    public Response view(@Context HttpServletRequest request) {
-        Principal userPrincipal = request.getUserPrincipal();
-        List albums = this.entityManager.createQuery("from Album where userId = :id").setParameter("id", userPrincipal.getName()).getResultList();
-        return Response.ok(new Profile(userPrincipal.getName(), albums.size())).build();
-    }
+	public static class Profile {
+		private String userName;
+		private int totalAlbums;
 
-    public static class Profile {
-        private String userName;
-        private int totalAlbums;
+		public Profile(String name, int totalAlbums) {
+			this.userName = name;
+			this.totalAlbums = totalAlbums;
+		}
 
-        public Profile(String name, int totalAlbums) {
-            this.userName = name;
-            this.totalAlbums = totalAlbums;
-        }
+		public String getUserName() {
+			return userName;
+		}
 
-        public String getUserName() {
-            return userName;
-        }
-
-        public int getTotalAlbums() {
-            return totalAlbums;
-        }
-    }
+		public int getTotalAlbums() {
+			return totalAlbums;
+		}
+	}
 }

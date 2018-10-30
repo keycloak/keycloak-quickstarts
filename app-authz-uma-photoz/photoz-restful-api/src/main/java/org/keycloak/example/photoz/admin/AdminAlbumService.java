@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -36,26 +37,27 @@ import org.keycloak.example.photoz.entity.Album;
 @Path("/admin/album")
 public class AdminAlbumService {
 
-    @Inject
-    private EntityManager entityManager;
+	@Inject
+	private EntityManager entityManager;
 
-    @GET
-    @Produces("application/json")
-    public Response findAll() {
-        HashMap<String, List<Album>> albums = new HashMap<String, List<Album>>();
-        List<Album> result = this.entityManager.createQuery("from Album").getResultList();
+	@GET
+	@Produces("application/json")
+	public Response findAll() {
+		HashMap<String, List<Album>> albums = new HashMap<String, List<Album>>();
+		TypedQuery<Album> query = this.entityManager.createQuery("from Album", Album.class);
+		List<Album> result = query.getResultList();
 
-        for (Album album : result) {
-            List<Album> userAlbums = albums.get(album.getUserId());
+		for (Album album : result) {
+			List<Album> userAlbums = albums.get(album.getUserId());
 
-            if (userAlbums == null) {
-                userAlbums = new ArrayList<Album>();
-                albums.put(album.getUserId(), userAlbums);
-            }
+			if (userAlbums == null) {
+				userAlbums = new ArrayList<Album>();
+				albums.put(album.getUserId(), userAlbums);
+			}
 
-            userAlbums.add(album);
-        }
+			userAlbums.add(album);
+		}
 
-        return Response.ok(albums).build();
-    }
+		return Response.ok(albums).build();
+	}
 }

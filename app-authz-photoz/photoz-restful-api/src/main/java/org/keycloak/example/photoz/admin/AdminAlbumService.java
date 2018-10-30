@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -43,7 +44,8 @@ public class AdminAlbumService {
     @Produces("application/json")
     public Response findAll() {
         HashMap<String, List<Album>> albums = new HashMap<String, List<Album>>();
-        List<Album> result = this.entityManager.createQuery("from Album").getResultList();
+		TypedQuery<Album> query = this.entityManager.createQuery("from Album", Album.class);
+		List<Album> result = query.getResultList();
 
         for (Album album : result) {
             List<Album> userAlbums = albums.get(album.getUserId());

@@ -10,6 +10,7 @@ import java.util.UUID;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -121,7 +122,8 @@ public class AlbumService {
     @Path("{id}")
     @Produces("application/json")
     public Response findById(@PathParam("id") String id) {
-        List result = this.entityManager.createQuery("from Album where id = :id").setParameter("id", id).getResultList();
+		TypedQuery<Album> query = this.entityManager.createQuery("from Album where id = :id", Album.class);
+		List<Album> result = query.setParameter("id", id).getResultList();
 
         if (result.isEmpty()) {
             return Response.status(Status.NOT_FOUND).build();
