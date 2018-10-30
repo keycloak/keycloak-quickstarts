@@ -53,6 +53,9 @@
         <version.frontend.maven.plugin>1.6</version.frontend.maven.plugin>
         <version.resources.maven.plugin>3.1.0</version.resources.maven.plugin>
 
+        <selenium.version>3.13.0</selenium.version>
+        <arquillian.version>1.4.1.Final</arquillian.version>
+        <arquillian.drone.version>2.5.1</arquillian.drone.version>
         <arquillian-graphene.version>2.3.2</arquillian-graphene.version>
         <arquillian-phantom.version>1.2.1.1</arquillian-phantom.version>
         <version.wildfly.arquillian.container>2.1.1.Final</version.wildfly.arquillian.container>
@@ -71,21 +74,21 @@
             <dependency>
                 <groupId>org.jboss.arquillian</groupId>
                 <artifactId>arquillian-bom</artifactId>
-                <version>1.4.0.Final</version>
+                <version>${arquillian.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.jboss.arquillian.selenium</groupId>
                 <artifactId>selenium-bom</artifactId>
-                <version>3.11.0</version>
+                <version>${selenium.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.jboss.arquillian.extension</groupId>
                 <artifactId>arquillian-drone-bom</artifactId>
-                <version>2.5.1</version>
+                <version>${arquillian.drone.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
