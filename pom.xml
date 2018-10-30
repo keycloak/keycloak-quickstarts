@@ -37,6 +37,9 @@
     <properties>
     	<maven.compiler.source>11</maven.compiler.source>
     	<maven.compiler.target>11</maven.compiler.target>
+    	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    	<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    	
         <wildfly.version>15.0.0.Alpha1-SNAPSHOT</wildfly.version>
         <wildfly.core.version>7.0.0.Alpha4</wildfly.core.version>
         <jboss.dmr.version>1.5.0.Final</jboss.dmr.version>
