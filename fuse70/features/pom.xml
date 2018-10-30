@@ -27,7 +27,6 @@
 
     <groupId>org.keycloak.quickstarts</groupId>
     <artifactId>keycloak-fuse70-features</artifactId>
-    <version>4.5.0.Final</version>
     <packaging>pom</packaging>
     <name>Keycloak Quickstart: Fuse 7.0 Features</name>
     <description>JBoss Fuse 7.0 features to simplify install all Keycloak Fuse quickstarts</description>
@@ -55,7 +54,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>${version.resources.maven.plugin}</version>
+                <version>${resources.maven.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>filter</id>

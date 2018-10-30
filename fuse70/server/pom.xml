@@ -28,7 +28,6 @@
 
     <groupId>org.keycloak.quickstarts</groupId>
     <artifactId>keycloak-fuse70-server</artifactId>
-    <version>4.5.0.Final</version>
     <packaging>pom</packaging>
     <name>Keycloak Quickstart: JBoss Fuse 7.0 Server</name>
     <description>Quickstart JBoss Fuse 7.0 Server</description>
@@ -54,7 +53,7 @@
         <plugins>
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>${version.resources.maven.plugin}</version>
+                <version>${resources.maven.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>copy-clis</id>
@@ -100,7 +99,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>${version.exec.maven.plugin}</version>
+                <version>${exec.maven.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>install-features</id>

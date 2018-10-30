@@ -34,12 +34,12 @@
         <dependency>
     		<groupId>org.jboss</groupId>
     		<artifactId>jboss-dmr</artifactId>
-    		<version>${version.jboss.dmr}</version>
+    		<version>${jboss.dmr.version}</version>
 		</dependency>
 		<dependency>
         	<groupId>org.wildfly.core</groupId>
     		<artifactId>wildfly-controller-client</artifactId>
-        	<version>${version.wildfly.core}</version>
+        	<version>${wildfly.core.version}</version>
         </dependency>
         <dependency>
             <groupId>org.keycloak</groupId>
@@ -53,7 +53,7 @@
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-server-spi-private</artifactId>
-            <version>${version.keycloak}</version>
+            <version>${keycloak.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -77,7 +77,7 @@
         <dependency>
             <groupId>org.wildfly.extras.creaper</groupId>
             <artifactId>creaper-core</artifactId>
-            <version>${version.creaper}</version>
+            <version>${creaper.version}</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -99,7 +99,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>${version.surefire.plugin}</version>
+                <version>${surefire.plugin.version}</version>
                 <configuration>
                     <systemPropertyVariables>
                         <keycloakManagementPort>${keycloak.management.port}</keycloakManagementPort>
@@ -110,7 +110,7 @@
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
-                <version>${version.wildfly.maven.plugin}</version>
+                <version>${wildfly.maven.plugin.version}</version>
                 <configuration>
                     <skip>${wildfly.skip}</skip>
                     <filename>${project.build.finalName}.jar</filename>

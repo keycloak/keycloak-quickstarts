@@ -12,14 +12,14 @@
     <name>Spring Boot Keycloak Sample</name>
     <description>Spring Boot Keycloak Sample</description>
     <properties>
-        <springboot-version>2.0.3.RELEASE</springboot-version>
+        <springboot.version>2.0.3.RELEASE</springboot.version>
     </properties>
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-parent</artifactId>
-                <version>${springboot-version}</version>
+                <version>${springboot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -80,7 +80,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <version>${springboot-version}</version>
+            <version>${springboot.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -91,7 +91,7 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.5.3</version>
+            <version>${httpclient.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

@@ -25,7 +25,6 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>keycloak-fuse63-app-war-jsp</artifactId>
-    <version>4.5.0.Final</version>
     <packaging>war</packaging>
     <name>Keycloak Quickstart: Fuse 6.3 WAR frontend application</name>
     <description>JBoss Fuse 6.3 WAR frontend application secured by Keycloak</description>
@@ -43,7 +42,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <felix.plugin.version>2.3.7</felix.plugin.version>
-        <version.enforcer.maven.plugin>1.4.1</version.enforcer.maven.plugin>
+        <enforcer.maven.plugin.version>1.4.1</enforcer.maven.plugin.version>
 
         <keycloak.osgi.export>
         </keycloak.osgi.export>
@@ -112,7 +111,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>${version.war.maven.plugin}</version>
+                <version>${war.maven.plugin.version}</version>
                 <configuration>
                     <archive>
                         <manifestFile>${basedir}/target/classes/META-INF/MANIFEST.MF</manifestFile>

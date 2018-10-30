@@ -54,7 +54,7 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.5</version>
+            <version>${httpclient.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -67,7 +67,7 @@
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-client-registration-api</artifactId>
-            <version>${version.keycloak}</version>
+            <version>${keycloak.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -83,7 +83,7 @@
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
-                <version>${version.wildfly.maven.plugin}</version>
+                <version>${wildfly.maven.plugin.version}</version>
                 <configuration>
                     <skip>false</skip>
                 </configuration>

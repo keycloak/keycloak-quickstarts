@@ -38,8 +38,8 @@
     </licenses>
 
     <properties>
-        <version.hibernate.javax.persistence>1.0.0.Final</version.hibernate.javax.persistence>
-        <version.jboss-ejb-api>1.0.0.Final</version.jboss-ejb-api>
+        <hibernate.javax.persistence.version>1.0.0.Final</hibernate.javax.persistence.version>
+        <jboss-ejb-api.version>1.0.0.Final</jboss-ejb-api.version>
     </properties>
 
     <dependencies>
@@ -61,13 +61,13 @@
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.1-api</artifactId>
-            <version>${version.hibernate.javax.persistence}</version>
+            <version>${hibernate.javax.persistence.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.jboss.spec.javax.ejb</groupId>
             <artifactId>jboss-ejb-api_3.2_spec</artifactId>
-            <version>${version.jboss-ejb-api}</version>
+            <version>${jboss-ejb-api.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -91,7 +91,7 @@
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
-                <version>${version.wildfly.maven.plugin}</version>
+                <version>${wildfly.maven.plugin.version}</version>
                 <configuration>
                     <skip>false</skip>
                 </configuration>
@@ -118,7 +118,7 @@
                     <plugin>
                         <groupId>org.wildfly.plugins</groupId>
                         <artifactId>wildfly-maven-plugin</artifactId>
-                		<version>${version.wildfly.maven.plugin}</version>
+                		<version>${wildfly.maven.plugin.version}</version>
                         <configuration>
                             <skip>false</skip>
                             <force>true</force>

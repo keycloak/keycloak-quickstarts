@@ -37,32 +37,33 @@
     <properties>
     	<maven.compiler.source>11</maven.compiler.source>
     	<maven.compiler.target>11</maven.compiler.target>
-        <version.wildfly>15.0.0.Alpha1-SNAPSHOT</version.wildfly>
-        <version.wildfly.core>7.0.0.Alpha4</version.wildfly.core>
-        <version.jboss.dmr>1.5.0.Final</version.jboss.dmr>
-        <version.keycloak>${project.version}</version.keycloak>
+        <wildfly.version>15.0.0.Alpha1-SNAPSHOT</wildfly.version>
+        <wildfly.core.version>7.0.0.Alpha4</wildfly.core.version>
+        <jboss.dmr.version>1.5.0.Final</jboss.dmr.version>
+        <keycloak.version>${project.version}</keycloak.version>
 
 		<spec.javaee.version>8.0</spec.javaee.version>
-        <version.wildfly.maven.plugin>1.2.2.Final</version.wildfly.maven.plugin>
-        <version.jboss.maven.plugin>7.9.Final</version.jboss.maven.plugin>
-        <version.war.maven.plugin>3.2.2</version.war.maven.plugin>
-        <version.enforcer.maven.plugin>1.4.1</version.enforcer.maven.plugin>
-        <version.surefire.plugin>2.19.1</version.surefire.plugin>
-        <version.exec.maven.plugin>1.6.0</version.exec.maven.plugin>
-        <version.antrun.maven.plugin>1.8</version.antrun.maven.plugin>
-        <version.frontend.maven.plugin>1.6</version.frontend.maven.plugin>
-        <version.resources.maven.plugin>3.1.0</version.resources.maven.plugin>
+        <wildfly.maven.plugin.version>1.2.2.Final</wildfly.maven.plugin.version>
+        <jboss.maven.plugin.version>7.9.Final</jboss.maven.plugin.version>
+        <war.maven.plugin.version>3.2.2</war.maven.plugin.version>
+        <enforcer.maven.plugin.version>1.4.1</enforcer.maven.plugin.version>
+        <surefire.plugin.version>2.19.1</surefire.plugin.version>
+        <exec.maven.plugin.version>1.6.0</exec.maven.plugin.version>
+        <antrun.maven.plugin.version>1.8</antrun.maven.plugin.version>
+        <frontend.maven.plugin.version>1.6</frontend.maven.plugin.version>
+        <resources.maven.plugin.version>3.1.0</resources.maven.plugin.version>
+        <httpclient.version>4.5.6</httpclient.version>
 
         <selenium.version>3.13.0</selenium.version>
         <arquillian.version>1.4.1.Final</arquillian.version>
         <arquillian.drone.version>2.5.1</arquillian.drone.version>
         <arquillian-graphene.version>2.3.2</arquillian-graphene.version>
         <arquillian-phantom.version>1.2.1.1</arquillian-phantom.version>
-        <version.wildfly.arquillian.container>2.1.1.Final</version.wildfly.arquillian.container>
-        <version.remote.wildfly.arquillian.container>2.1.1.Final</version.remote.wildfly.arquillian.container>
-        <version.junit>4.12</version.junit>
-        <version.hamcrest>1.3</version.hamcrest>
-        <version.creaper>1.6.1</version.creaper>
+        <wildfly.arquillian.container.version>2.1.1.Final</wildfly.arquillian.container.version>
+        <remote.wildfly.arquillian.container.version>2.1.1.Final</remote.wildfly.arquillian.container.version>
+        <junit.version>4.12</junit.version>
+        <hamcrest.version>1.3</hamcrest.version>
+        <creaper.version>1.6.1</creaper.version>
 
         <arquillian-managed>true</arquillian-managed>
         <jboss-cli.executable>./jboss-cli.sh</jboss-cli.executable>
@@ -101,34 +102,34 @@
             <dependency>
                 <groupId>org.keycloak.bom</groupId>
                 <artifactId>keycloak-adapter-bom</artifactId>
-                <version>${version.keycloak}</version>
+                <version>${keycloak.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.keycloak</groupId>
                 <artifactId>keycloak-test-helper</artifactId>
-                <version>${version.keycloak}</version>
+                <version>${keycloak.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.keycloak.bom</groupId>
                 <artifactId>keycloak-spi-bom</artifactId>
-                <version>${version.keycloak}</version>
+                <version>${keycloak.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.wildfly.bom</groupId>
                 <artifactId>wildfly-javaee8</artifactId>
-                <version>${version.wildfly}</version>
+                <version>${wildfly.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.hamcrest</groupId>
                 <artifactId>hamcrest-all</artifactId>
-                <version>${version.hamcrest}</version>
+                <version>${hamcrest.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
@@ -149,7 +150,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>${version.junit}</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -190,7 +191,7 @@
                 <plugin>
                     <groupId>org.wildfly.plugins</groupId>
                     <artifactId>wildfly-maven-plugin</artifactId>
-                    <version>${version.wildfly.maven.plugin}</version>
+                    <version>${wildfly.maven.plugin.version}</version>
                     <configuration>
                         <skip>true</skip>
                     </configuration>
@@ -198,7 +199,7 @@
                 <plugin>
                     <groupId>org.jboss.as.plugins</groupId>
                     <artifactId>jboss-as-maven-plugin</artifactId>
-                    <version>${version.jboss.maven.plugin}</version>
+                    <version>${jboss.maven.plugin.version}</version>
                     <configuration>
                         <skip>true</skip>
                     </configuration>
@@ -206,11 +207,11 @@
                 <plugin>
                     <groupId>com.github.eirslett</groupId>
                     <artifactId>frontend-maven-plugin</artifactId>
-                    <version>${version.frontend.maven.plugin}</version>
+                    <version>${frontend.maven.plugin.version}</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${version.surefire.plugin}</version>
+                    <version>${surefire.plugin.version}</version>
                     <configuration>
                         <redirectTestOutputToFile>false</redirectTestOutputToFile>
                         <!-- See KEYCLOAK-6341 -->
@@ -219,7 +220,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-enforcer-plugin</artifactId>
-                    <version>${version.enforcer.maven.plugin}</version>
+                    <version>${enforcer.maven.plugin.version}</version>
                     <executions>
                         <execution>
                             <id>enforce-quickstart-realm-file-exist</id>
@@ -316,7 +317,7 @@
                 <dependency>
                     <groupId>org.wildfly.arquillian</groupId>
                     <artifactId>wildfly-arquillian-container-managed</artifactId>
-                    <version>${version.wildfly.arquillian.container}</version>
+                    <version>${wildfly.arquillian.container.version}</version>
                     <scope>test</scope>
                 </dependency>
             </dependencies>
@@ -330,7 +331,7 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-surefire-plugin</artifactId>
-                        <version>${version.surefire.plugin}</version>
+                        <version>${surefire.plugin.version}</version>
                         <configuration>
                             <redirectTestOutputToFile>false</redirectTestOutputToFile>
                             <!-- See KEYCLOAK-6341 -->
@@ -352,23 +353,23 @@
                                         <artifactItem>
                                             <groupId>org.wildfly</groupId>
                                             <artifactId>wildfly-dist</artifactId>
-                                            <version>${version.wildfly}</version>
+                                            <version>${wildfly.version}</version>
                                             <type>zip</type>
                                             <outputDirectory>target</outputDirectory>
                                         </artifactItem>
                                         <artifactItem>
                                             <groupId>org.keycloak</groupId>
                                             <artifactId>keycloak-wildfly-adapter-dist</artifactId>
-                                            <version>${version.keycloak}</version>
+                                            <version>${keycloak.version}</version>
                                             <type>zip</type>
-                                            <outputDirectory>target/wildfly-${version.wildfly}</outputDirectory>
+                                            <outputDirectory>target/wildfly-${wildfly.version}</outputDirectory>
                                         </artifactItem>
                                         <artifactItem>
                                             <groupId>org.keycloak</groupId>
                                             <artifactId>keycloak-saml-wildfly-adapter-dist</artifactId>
-                                            <version>${version.keycloak}</version>
+                                            <version>${keycloak.version}</version>
                                             <type>zip</type>
-                                            <outputDirectory>target/wildfly-${version.wildfly}</outputDirectory>
+                                            <outputDirectory>target/wildfly-${wildfly.version}</outputDirectory>
                                         </artifactItem>
                                     </artifactItems>
                                 </configuration>
@@ -378,7 +379,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-antrun-plugin</artifactId>
-                        <version>${version.antrun.maven.plugin}</version>
+                        <version>${antrun.maven.plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>install-adapters</id>
@@ -388,7 +389,7 @@
                                 </goals>
                                 <configuration>
                                     <target name="run">
-                                        <exec dir="target/wildfly-${version.wildfly}/bin" executable="${jboss-cli.executable}" inputstring="">
+                                        <exec dir="target/wildfly-${wildfly.version}/bin" executable="${jboss-cli.executable}" inputstring="">
                                             <arg value="--file=adapter-install-offline.cli" />
                                         </exec>
                                     </target>
@@ -411,7 +412,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
-                        <version>${version.war.maven.plugin}</version>
+                        <version>${war.maven.plugin.version}</version>
                         <configuration>
                             <failOnMissingWebXml>false</failOnMissingWebXml>
                             <webResources>
@@ -440,7 +441,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
-                        <version>${version.war.maven.plugin}</version>
+                        <version>${war.maven.plugin.version}</version>
                         <configuration>
                             <failOnMissingWebXml>false</failOnMissingWebXml>
                         </configuration>
@@ -455,7 +456,7 @@
                 <dependency>
                     <groupId>org.wildfly.arquillian</groupId>
                     <artifactId>wildfly-arquillian-container-remote</artifactId>
-                    <version>${version.remote.wildfly.arquillian.container}</version>
+                    <version>${remote.wildfly.arquillian.container.version}</version>
                     <scope>test</scope>
                 </dependency>
             </dependencies>
@@ -463,7 +464,7 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-surefire-plugin</artifactId>
-                        <version>${version.surefire.plugin}</version>
+                        <version>${surefire.plugin.version}</version>
                         <configuration>
                             <redirectTestOutputToFile>false</redirectTestOutputToFile>
                             <skipTests>false</skipTests>
@@ -479,7 +480,7 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-surefire-plugin</artifactId>
-                        <version>${version.surefire.plugin}</version>
+                        <version>${surefire.plugin.version}</version>
                         <configuration>
                             <redirectTestOutputToFile>false</redirectTestOutputToFile>
                             <skipTests>false</skipTests>

@@ -27,7 +27,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>keycloak-fuse70-parent</artifactId>
-    <version>4.5.0.Final</version>
     <packaging>pom</packaging>
     <properties>
         <camel.version>2.17.0</camel.version>
@@ -63,7 +62,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>${version.enforcer.maven.plugin}</version>
+                <version>${enforcer.maven.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>enforce-files-exist</id>

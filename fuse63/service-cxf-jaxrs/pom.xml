@@ -26,7 +26,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>keycloak-fuse63-service-cxf-jaxrs</artifactId>
-    <version>4.5.0.Final</version>
     <packaging>bundle</packaging>
     <name>Keycloak Quickstart: JBoss Fuse 6.3 Service - CXF JAXRS</name>
     <description>JBoss Fuse 6.3 Apache CXF JAXRS Service Secured by Keycloak</description>
@@ -42,7 +41,7 @@
     <properties>
         <maven.compiler.plugin.version>3.1</maven.compiler.plugin.version>
         <felix.plugin.version>2.3.7</felix.plugin.version>
-        <version.enforcer.maven.plugin>1.4.1</version.enforcer.maven.plugin>
+        <enforcer.maven.plugin.version>1.4.1</enforcer.maven.plugin.version>
 
         <keycloak.osgi.export>
         </keycloak.osgi.export>
@@ -113,7 +112,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>${version.enforcer.maven.plugin}</version>
+                <version>${enforcer.maven.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>enforce-files-exist</id>

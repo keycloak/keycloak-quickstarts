@@ -12,7 +12,7 @@
     <artifactId>service-springboot</artifactId>
     <description>Spring Boot Keycloak Product Service</description>
     <properties>
-        <springboot-version>2.0.3.RELEASE</springboot-version>
+        <springboot.version>2.0.3.RELEASE</springboot.version>
         <arquillian-managed>false</arquillian-managed>
     </properties>
     <dependencyManagement>
@@ -20,7 +20,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-parent</artifactId>
-                <version>${springboot-version}</version>
+                <version>${springboot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -38,7 +38,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <version>${springboot-version}</version>
+            <version>${springboot.version}</version>
         </dependency>
 
         <!-- KeyCloak -->
