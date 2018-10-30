@@ -17,6 +17,7 @@
     <!-- Example configuration for a remote JBoss AS 7 instance -->
     <container qualifier="wildfly-remote" default="true" >
         <configuration>
+            <property name="javaVmArguments">--add-modules=java.se</property>
             <property name="managementAddress">127.0.0.1</property>
             <property name="managementPort">10090</property>
             <property name="username">admin</property>

@@ -31,6 +31,7 @@
         <!-- If you want to use the JBOSS_HOME environment variable, just delete
             the jbossHome property -->
         <configuration>
+            <property name="javaVmArguments">--add-modules=java.se</property>
             <property name="managementAddress">127.0.0.1</property>
             <property name="managementPort">9990</property>
             <property name="jbossHome">${basedir}/target/wildfly-${version.wildfly}</property>

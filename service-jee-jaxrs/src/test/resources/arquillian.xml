@@ -25,6 +25,7 @@
             the jbossHome property -->
         <configuration>
             <forkMode>always</forkMode>
+            <property name="javaVmArguments">--add-modules=java.se</property>
             <property name="managementAddress">127.0.0.1</property>
             <property name="managementPort">9990</property>
             <property name="jbossHome">${basedir}/target/wildfly-${version.wildfly}</property>
