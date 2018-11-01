@@ -27,7 +27,7 @@
             <property name="javaVmArguments">--add-modules=java.se</property>
             <property name="managementAddress">127.0.0.1</property>
             <property name="managementPort">9990</property>
-            <property name="jbossHome">${basedir}/target/wildfly-${version.wildfly}</property>
+            <property name="jbossHome">${basedir}/target/wildfly-${wildfly.version}</property>
             <property name="serverConfig">../../../test-classes/standalone-test.xml</property>
         </configuration>
     </container>
