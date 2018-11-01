@@ -28,20 +28,16 @@ All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven
 Configure the Client Adapter
 ----------------------------------
 
-Before configuring the adapter you need to create a client in <span>Keycloak</span>.
+Before configuring the adapter you need to create a `realm` in <span>Keycloak</span> with all the necessary configuration to deploy and run the quickstart.
 
-The following steps show how to create the client required for this quickstart:
+The following steps show how to create the realm required for this quickstart:
 
 * Open the <span>Keycloak</span> admin console
-* Select `Clients` from the menu
+* In the top left corner dropdown menu that is titled Master, click Add Realm. If you are logged in to the master realm this dropdown menu lists all the realms created.
+* For this quickstart we are not going to manually create the realm, but import all configuration from a JSON file. Click on `Select File` and import the [config/realm-import.json](config/realm-import.json).
 * Click `Create`
-* Add the following values:
-  * Client ID: You choose (for example `app-authz-vanilla`)
-  * Client Protocol: `openid-connect`
-  * Root URL: URL to the application (for example `http://localhost:8080/app-authz-vanilla`)
-* Click `Save`
 
-Once saved you click the `Authorization Enabled` switch to `ON`, and then click `Save`. A new `Authorization` tab is displayed for the client, click on this tab to see the authorization settings for the client.
+The steps above will result on a new `quickstart` realm.
 
 [NOTE]
 If you deploy the application somewhere else change the hostname and port of the URLs accordingly.
@@ -68,12 +64,11 @@ To specify a redirection URL, edit the `keycloak.json` and replace the `policy-e
 
     ````
       "policy-enforcer": {
-          "on-deny-redirect-to" : "/app-authz-vanilla/error.jsp"
+          "on-deny-redirect-to" : "/authz-servlet/accessDenied.jsp"
         }
     ````
 
-As an alternative you can create the client by importing the file [client-import.json](config/client-import.json) and
-copying [config/keycloak-example.json](config/keycloak-example.json) to `config/keycloak.json`.
+As an alternative you can configure the client adapter by copying [config/keycloak-example.json](config/keycloak-example.json) to `config/keycloak.json`.
 
 Build and Deploy the Quickstart
 -------------------------------
