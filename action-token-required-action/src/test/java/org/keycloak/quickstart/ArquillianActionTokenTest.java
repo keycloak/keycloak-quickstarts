@@ -17,6 +17,8 @@
 
 package org.keycloak.quickstart;
 
+import org.keycloak.Token;
+import org.keycloak.TokenCategory;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.authentication.RequiredActionFactory;
@@ -118,7 +120,7 @@ public class ArquillianActionTokenTest {
           .addAsWebResource(new File(WEBAPP_SRC, "submit-back.jsp"))
 
           // Few Keycloak dependencies handling JWT serialization
-          .addClasses(JsonWebToken.class)
+          .addClasses(JsonWebToken.class, Token.class, TokenCategory.class)
           .addPackages(true, Base64.class.getPackage(), JWSInput.class.getPackage(), JsonSerialization.class.getPackage())
           .addPackages(true, "org.keycloak.json")
           ;

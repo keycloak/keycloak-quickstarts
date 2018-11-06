@@ -49,13 +49,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
-import static org.keycloak.test.TestsHelper.createClient;
-import static org.keycloak.test.TestsHelper.deleteRealm;
-import static org.keycloak.test.TestsHelper.importTestRealm;
+import static org.junit.Assert.*;
+import static org.keycloak.test.TestsHelper.*;
 import static org.keycloak.test.builders.ClientBuilder.AccessType.BEARER_ONLY;
 import static org.keycloak.test.builders.ClientBuilder.AccessType.PUBLIC;
 
@@ -150,7 +145,6 @@ public class ArquillianProfileJeeJspTest {
             profilePage.clickToken();
             JsonObject json = parse(profilePage.getTokenContent());
             assertNotNull("JSON content should not be empty", json);
-            assertEquals(json.get("aud").getAsString(), APP_NAME);
             assertFalse(json.get("session_state").isJsonNull());
             webDriver.navigate().to(contextRoot);
             profilePage.clickLogout();

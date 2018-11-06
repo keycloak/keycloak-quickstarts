@@ -109,7 +109,7 @@
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
-                <version>1.2.1.Final</version>
+                <version>1.2.2.Final</version>
                 <configuration>
                     <skip>${wildfly.skip}</skip>
                     <filename>${project.build.finalName}.jar</filename>
