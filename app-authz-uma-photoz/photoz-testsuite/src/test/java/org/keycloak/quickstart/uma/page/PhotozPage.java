@@ -80,6 +80,7 @@ public class PhotozPage {
 
 
     public void login(final String username, final String password, final String fullName) {
+        waitForPageToLoad();
         loginPage.login(username, password);
         waitForPageToLoad();
         if (consentPage.isCurrent()) {
@@ -119,10 +120,21 @@ public class PhotozPage {
         this.deleteAlbum(webDriver.findElement(By.id("delete-share-" + albumName)));
     }
 
+    public void viewAlbum(final String albumName) {
+        this.viewAlbum(webDriver.findElement(By.id("view-" + albumName)));
+    }
+
     private void deleteAlbum(final WebElement deleteLink) {
         waitGui().until().element(deleteLink).is().clickable();
         deleteLink.click();
         waitGui().until().element(deleteLink).is().not().present();
+        waitForPageToLoad();
+    }
+
+    private void viewAlbum(final WebElement viewLink) {
+        waitGui().until().element(viewLink).is().clickable();
+        viewLink.click();
+        waitGui().until().element(viewLink).is().not().present();
         waitForPageToLoad();
     }
 
@@ -210,39 +222,10 @@ public class PhotozPage {
     }
 
     public void waitForPageToLoad() {
-
-        if (webDriver instanceof HtmlUnitDriver) {
-            return; // not needed
-        }
-
-        // Ensure the URL is "stable", i.e. is not changing anymore; if it'd changing, some redirects are probably still in progress
-        for (int maxRedirects = 2; maxRedirects > 0; maxRedirects--) {
-            String currentUrl = webDriver.getCurrentUrl();
-            FluentWait<WebDriver> wait = new FluentWait<>(webDriver).withTimeout(Duration.of(250, ChronoUnit.MILLIS));
-            try {
-                wait.until(not(urlToBe(currentUrl)));
-            } catch (TimeoutException e) {
-                break; // URL has not changed recently - ok, the URL is stable and page is current
-            }
-            if (maxRedirects == 1) {
-                log.warn("URL seems unstable! (Some redirect are probably still in progress)");
-            }
-        }
-
-        WebDriverWait wait = new WebDriverWait(webDriver, PAGELOAD_TIMEOUT_MILLIS / 1000);
-
         try {
-            // Checks if the document is ready and asks AngularJS, if present, whether there are any REST API requests
-            // in progress
-            wait.until(javaScriptThrowsNoExceptions(
-                    "if (document.readyState !== 'complete' "
-                            + "|| (typeof angular !== 'undefined' && angular.element(document.body).injector().get('$http').pendingRequests.length !== 0)) {"
-                            + "throw \"Not ready\";"
-                            + "}"));
-        } catch (TimeoutException e) {
-            // Sometimes, for no obvious reason, the browser/JS doesn't set document.readyState to 'complete' correctly
-            // but that's no reason to let the test fail; after the timeout the page is surely fully loaded
-            log.warn("waitForPageToLoad time exceeded!");
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 

@@ -79,15 +79,6 @@ public class ArquillianAuthzUMATest {
     static {
         try {
             importTestRealm("admin", "admin", "/quickstart-realm.json");
-
-            // import the authorization configuration for the photoz-restful-api client.
-            Keycloak keycloak = Keycloak.getInstance("http://localhost:8180/auth", "master", "admin", "admin", "admin-cli");
-            ClientsResource clients = keycloak.realms().realm(REALM_NAME).clients();
-            ClientRepresentation client = clients.findByClientId(RESTFUL_API_APP_NAME).get(0);
-            ResourceServerRepresentation settings = JsonSerialization.readValue(
-                    new FileInputStream(new File("../photoz-restful-api/target/classes/photoz-restful-api-authz-service.json")),
-                    ResourceServerRepresentation.class);
-            clients.get(client.getId()).authorization().importSettings(settings);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -175,6 +166,8 @@ public class ArquillianAuthzUMATest {
             photozPage.login("alice", "alice", null);
             photozPage.createAlbum("Germany Vacations");
             photozPage.shareResource("Germany Vacations", "jdoe");
+            photozPage.viewAlbum("Germany Vacations");
+            webDriver.navigate().to(contextRoot);
             photozPage.logout();
 
             photozPage.login("jdoe", "jdoe", null);

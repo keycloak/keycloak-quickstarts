@@ -39,7 +39,6 @@
     <modules>
         <module>photoz-restful-api</module>
         <module>photoz-html5-client</module>
-        <module>photoz-authz-policy</module>
         <module>photoz-testsuite</module>
     </modules>
 

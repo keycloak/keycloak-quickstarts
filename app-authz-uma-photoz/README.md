@@ -18,7 +18,6 @@ Basically, it is a project containing three modules:
  
 * **photoz-restful-api**, a simple RESTFul API based on JAX-RS and acting as a resource server.
 * **photoz-html5-client**, a HTML5 + AngularJS client that will consume the RESTful API published by a resource server.
-* **photoz-authz-policy**, a simple project with some rule-based policies using JBoss Drools.
 
 For this application, users can be regular users or administrators. Regular users can create/view/delete their albums 
 and administrators can do anything. Regular users are also allowed to share their albums with other users.
@@ -54,7 +53,6 @@ That said, this quickstart will show you how to use the Keycloak to define polic
 
 * Role-based Access Control
 * Attribute-based Access Control
-* Rule-based policies using JBoss Drools
 * Rule-based policies using JavaScript 
 
 This quickstart demonstrates how to enable User-Managed Access (UMA) in an application in order to allow users to manage access
@@ -79,28 +77,6 @@ That will import a pre-configured realm with everything you need to run this qui
 into Keycloak, check the Keycloak's reference documentation.
 
 After importing that file, you'll have a new realm called `photoz`. 
-
-Back to the command-line, build the quickstart. This step is necessary given that we're using policies based on
-JBoss Drools, which require `photoz-authz-policy` artifact installed into your local maven repository.
-
-To build the quickstart, open a terminal and navigate to the root of this quickstart. Then run the following command:
-
-   ````
-   mvn clean install 
-   ````
-    
-> Please make sure you have the environment variable M2_HOME set. It should reference the path for your Maven installation. If not set, you will see some WARN messages in the logs when booting Keycloak.
-
-Now, let's import another configuration using the Administration Console in order to configure the client application ``photoz-restful-api`` as a resource server with all resources, scopes, permissions and policies.
-
-Click on `Clients` on the left side menu. Click on the `photoz-restful-api` on the client listing page. This will
-open the `Client Details` page. Once there, click on the `Authorization` tab. 
-
-Click on the `Select file` button, which means you want to import a resource server configuration. Now select the file that is located at:
-
-    keycloak-quickstarts/app-authz-uma-photoz/photoz-restful-api/target/classes/photoz-restful-api-authz-service.json
-    
-Now click `Upload` and the resource server will be updated accordingly.
 
 Deploy and Run the quickstart applications
 -----------
