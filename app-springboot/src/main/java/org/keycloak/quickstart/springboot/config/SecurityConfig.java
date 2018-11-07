@@ -28,7 +28,6 @@ import org.keycloak.adapters.springsecurity.KeycloakSecurityComponents;
 
 /**
  * Application security configuration.
- *
  */
 @Configuration
 @EnableWebSecurity
@@ -45,10 +44,10 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
         auth.authenticationProvider(keycloakAuthenticationProvider);
     }
 
-    
+
     @Autowired
     public KeycloakClientRequestFactory keycloakClientRequestFactory;
-    
+
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     public KeycloakRestTemplate keycloakRestTemplate() {

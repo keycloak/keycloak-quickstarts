@@ -30,30 +30,30 @@ import net.rossillo.spring.web.mvc.CacheControlHandlerInterceptor;
 @SpringBootApplication
 public class ProductApplication {
 
-	private static Log logger = LogFactory.getLog(ProductApplication.class);
+    private static Log logger = LogFactory.getLog(ProductApplication.class);
 
-	@Bean
-	protected ServletContextListener listener() {
-		return new ServletContextListener() {
+    @Bean
+    protected ServletContextListener listener() {
+        return new ServletContextListener() {
 
-			@Override
-			public void contextInitialized(ServletContextEvent sce) {
-				logger.info("ServletContext initialized");
-			}
+            @Override
+            public void contextInitialized(ServletContextEvent sce) {
+                logger.info("ServletContext initialized");
+            }
 
-			@Override
-			public void contextDestroyed(ServletContextEvent sce) {
-				logger.info("ServletContext destroyed");
-			}
+            @Override
+            public void contextDestroyed(ServletContextEvent sce) {
+                logger.info("ServletContext destroyed");
+            }
 
-		};
-	}
+        };
+    }
 
-	public static void main(String[] args) throws Exception {
-		SpringApplication.run(ProductApplication.class, args);
-	}
-        
-        @Bean
+    public static void main(String[] args) throws Exception {
+        SpringApplication.run(ProductApplication.class, args);
+    }
+
+    @Bean
     public CacheControlHandlerInterceptor cacheControlHandlerInterceptor() {
         return new CacheControlHandlerInterceptor();
     }

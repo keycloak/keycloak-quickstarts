@@ -13,7 +13,7 @@ What is it?
 
 The `app-authz-rest-employee` quickstart demonstrates how to protect a SpringBoot REST service using Keycloak Authorization Services.
 
-This quickstartis provides a RESTful API exposing a single endpoint to obtain information about employees. Employees
+This quickstart provides a RESTful API exposing a single endpoint to obtain information about employees. Employees
 can only obtain information about themselves, but access is not granted if trying to obtain information about other employee.
 
 However, users granted with a role `people-manager` are also allowed to access information about any employee.
@@ -33,7 +33,7 @@ You can use two distinct users to access this application:
 |alice|alice|user|
 |jdoe|jdoe|user, people-manager|
 
-The quickstarts demonstrates how to use Keycloak Authorization Services to:
+The quickstart demonstrates how to use Keycloak Authorization Services to:
 
 * Pass information about the execution environment to policies in order to evaluate permissions for a resource
 * Use a JavaScript-based policy to define constraints based on the execution environment
@@ -88,28 +88,13 @@ First thing, your client needs to obtain an OAuth2 access token from a Keycloak 
 on behalf of user `jdoe`, just make sure to change both `username` and `password` request parameters.
 
 ```bash
-curl -X POST \
-  http://localhost:8180/auth/realms/spring-boot-quickstart/protocol/openid-connect/token \
-  -H 'Authorization: Basic YXBwLWF1dGh6LXJlc3Qtc3ByaW5nYm9vdDpzZWNyZXQ=' \
-  -H 'content-type: application/x-www-form-urlencoded' \
-  -d 'username=alice&password=alice&grant_type=password'
+ export access_token=$(\
+    curl -X POST http://localhost:8180/auth/realms/spring-boot-quickstart/protocol/openid-connect/token \
+    -H 'Authorization: Basic YXBwLWF1dGh6LXJlc3QtZW1wbG95ZWU6c2VjcmV0' \
+    -H 'content-type: application/x-www-form-urlencoded' \
+    -d 'username=alice&password=alice&grant_type=password' | jq --raw-output '.access_token' \
+ )
 ```
-
-After executing the command above, you should get a response similar to the following:
-
-```bash
-{
-    "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJGSjg2R2NGM2pUYk5MT2NvNE52WmtVQ0lVbWZZQ3FvcXRPUWVNZmJoTmxFIn0.eyJqdGkiOiI3OWY4NmFjZS01Zjk4LTQ0MTctYWJmZC0xMjcyOGQ2OGJkNDEiLCJleHAiOjE1MDQxOTE5MzYsIm5iZiI6MCwiaWF0IjoxNTA0MTkxNjM2LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgxODAvYXV0aC9yZWFsbXMvc3ByaW5nLWJvb3QtcXVpY2tzdGFydCIsImF1ZCI6ImFwcC1hdXRoei1yZXN0LXNwcmluZ2Jvb3QiLCJzdWIiOiJlNmE3NzcyYS1kZmZlLTRiNDItYTFiMS0zZDZmOTM0OWE0NmIiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJhcHAtYXV0aHotcmVzdC1zcHJpbmdib290IiwiYXV0aF90aW1lIjowLCJzZXNzaW9uX3N0YXRlIjoiNzE4MmU0YzEtNzY5ZS00MTNlLWI2MWItM2FlZTFjYWZmY2JmIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyJodHRwOi8vbG9jYWxob3N0OjgwODAiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbInVzZXIiXX0sInJlc291cmNlX2FjY2VzcyI6e30sInByZWZlcnJlZF91c2VybmFtZSI6ImFsaWNlIn0.bpKwmY2CqEm1TLYZoC_6jG0V1XcLKC2dStTAnUJgUMQfTBn3kZHsrWZeahKq7IdVocn7bWoBU0mP8i0rf89GcoZS1j-oju32XArTtE2e-tWVeWaRa1vJHNjhsIAuvZ4CmRh6QOTa-0qowbi1oEZxL3aQ6jPL4OSjBOAJgS51tn4",
-    "expires_in":300,
-    "refresh_expires_in":1800,
-    "refresh_token": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJGSjg2R2NGM2pUYk5MT2NvNE52WmtVQ0lVbWZZQ3FvcXRPUWVNZmJoTmxFIn0.eyJqdGkiOiI2Mzk3MDRhOS1jYTg1LTQxOWYtODA5Yi03MDkzOGQyNzQwNTQiLCJleHAiOjE1MDQxOTM0MzYsIm5iZiI6MCwiaWF0IjoxNTA0MTkxNjM2LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgxODAvYXV0aC9yZWFsbXMvc3ByaW5nLWJvb3QtcXVpY2tzdGFydCIsImF1ZCI6ImFwcC1hdXRoei1yZXN0LXNwcmluZ2Jvb3QiLCJzdWIiOiJlNmE3NzcyYS1kZmZlLTRiNDItYTFiMS0zZDZmOTM0OWE0NmIiLCJ0eXAiOiJSZWZyZXNoIiwiYXpwIjoiYXBwLWF1dGh6LXJlc3Qtc3ByaW5nYm9vdCIsImF1dGhfdGltZSI6MCwic2Vzc2lvbl9zdGF0ZSI6IjcxODJlNGMxLTc2OWUtNDEzZS1iNjFiLTNhZWUxY2FmZmNiZiIsInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJ1c2VyIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnt9fQ.CV3tZfYylhXMK7F0ozf-u4AZx_edm0FhdIDYiRDbhM3trRFzmpaRtuwML2KethVqj01PhD0VYYjt2yK0GWgkFswW1tc-Rqq2TMjabeGTcLPwvb8NZ7FcZnwglZUU46mfuV8-m1Idzqgs5DhmpkBALkAXjeaVPedAMNsPFQSPJE4",
-    "token_type":"bearer",
-    "not-before-policy":0,
-    "session_state":"7182e4c1-769e-413e-b61b-3aee1caffcbf"
-}
-```
-
-Keep the value of ``access_token`` as you will need it later to access resources protected by this application.
 
 Accessing Protected Resources using an OAuth2 Access Token
 ---------------------

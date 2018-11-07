@@ -18,6 +18,7 @@ package org.keycloak.quickstart.springboot.service;
 import java.util.Arrays;
 import java.util.List;
 import javax.validation.constraints.NotNull;
+
 import org.keycloak.adapters.springsecurity.client.KeycloakRestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
