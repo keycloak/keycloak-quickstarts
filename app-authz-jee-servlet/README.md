@@ -47,7 +47,7 @@ The following steps show how to create the realm required for this quickstart:
 * For this quickstart we are not going to manually create the realm, but import all configuration from a JSON file. Click on `Select File` and import the [config/realm-import.json](config/realm-import.json).
 * Click `Create`
 
-The steps above will result on a new `authz-servlet` realm.
+The steps above will result on a new `quickstart` realm.
 
 [NOTE]
 If you deploy the application somewhere else change the hostname and port of the URLs accordingly.

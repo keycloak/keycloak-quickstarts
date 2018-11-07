@@ -26,7 +26,7 @@ before_install:
   - ./scripts/generate_keycloak_json.sh
 
 install:
-  - travis_wait 20 mvn -s maven-settings.xml clean install --no-snapshot-updates -B -V -q
+  - travis_wait 60 mvn -s maven-settings.xml clean install --no-snapshot-updates -B -V -q
   - mvn -s maven-settings.xml -Padd-datasource install -f user-storage-jpa -q
 
 before_script:

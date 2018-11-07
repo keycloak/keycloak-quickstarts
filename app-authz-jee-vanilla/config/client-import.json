@@ -9,7 +9,7 @@
         "http://localhost:8080"
     ],
     "publicClient": false,
-    "secret": "bce5816d-98c4-404f-a18d-bcc5cb005c79",
+    "secret": "secret",
     "serviceAccountsEnabled": true,
     "authorizationServicesEnabled": true
 }
