@@ -35,11 +35,12 @@
     </licenses>
 
     <properties>
-        <version.wildfly>11.0.0.Final</version.wildfly>
-        <version.wildfly.core>3.0.10.Final</version.wildfly.core>
+        <version.wildfly>14.0.1.Final</version.wildfly>
         <version.keycloak>${project.version}</version.keycloak>
 
         <version.wildfly.maven.plugin>1.2.2.Final</version.wildfly.maven.plugin>
+        <servlet.api.30.version>1.0.2.Final</servlet.api.30.version>
+        <jboss-jaxrs-api_2.1_spec>1.0.1.Final</jboss-jaxrs-api_2.1_spec>
         <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
         <version.war.maven.plugin>2.6</version.war.maven.plugin>
         <version.enforcer.maven.plugin>1.4.1</version.enforcer.maven.plugin>
@@ -62,6 +63,11 @@
         <arquillian-managed>true</arquillian-managed>
         <jboss-cli.executable>./jboss-cli.sh</jboss-cli.executable>
         <keycloak.management.port>10090</keycloak.management.port>
+        <selenium-bom.version>3.11.0</selenium-bom.version>
+        <arquillian-bom.version>1.4.0.Final</arquillian-bom.version>
+        <arquillian-drone-bom.version>2.5.1</arquillian-drone-bom.version>
+        <version.json.javax>1.1.2</version.json.javax>
+        <version.yasson>1.0.1</version.yasson>
     </properties>
 
     <dependencyManagement>
@@ -69,21 +75,21 @@
             <dependency>
                 <groupId>org.jboss.arquillian</groupId>
                 <artifactId>arquillian-bom</artifactId>
-                <version>1.4.0.Final</version>
+                <version>${arquillian-bom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.jboss.arquillian.selenium</groupId>
                 <artifactId>selenium-bom</artifactId>
-                <version>3.11.0</version>
+                <version>${selenium-bom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.jboss.arquillian.extension</groupId>
                 <artifactId>arquillian-drone-bom</artifactId>
-                <version>2.5.1</version>
+                <version>${arquillian-drone-bom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -115,7 +121,7 @@
             </dependency>
             <dependency>
                 <groupId>org.wildfly.bom</groupId>
-                <artifactId>wildfly-javaee7</artifactId>
+                <artifactId>wildfly-javaee8</artifactId>
                 <version>${version.wildfly}</version>
                 <type>pom</type>
                 <scope>import</scope>
@@ -130,6 +136,26 @@
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
                 <version>${version.jackson}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.spec.javax.servlet</groupId>
+                <artifactId>jboss-servlet-api_3.0_spec</artifactId>
+                <version>${servlet.api.30.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.spec.javax.ws.rs</groupId>
+                <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>
+                <version>${jboss-jaxrs-api_2.1_spec}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish</groupId>
+                <artifactId>javax.json</artifactId>
+                <version>${version.json.javax}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse</groupId>
+                <artifactId>yasson</artifactId>
+                <version>${version.yasson}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
