@@ -13,6 +13,9 @@
     <description>Spring Boot Keycloak Sample</description>
     <properties>
         <springboot-version>2.0.3.RELEASE</springboot-version>
+        <httpclient.version>4.5.3</httpclient.version>
+        <spring-mvc-cache-control.version>1.1.1-RELEASE</spring-mvc-cache-control.version>
+        <spring-boot-starter-security.version>1.4.2.RELEASE</spring-boot-starter-security.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -45,7 +48,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
-            <version>1.4.2.RELEASE</version>
+            <version>${spring-boot-starter-security.version}</version>
         </dependency>
 
         <!-- KeyCloak -->
@@ -56,7 +59,7 @@
         <dependency>
             <groupId>net.rossillo.mvc.cache</groupId>
             <artifactId>spring-mvc-cache-control</artifactId>
-            <version>1.1.1-RELEASE</version>
+            <version>${spring-mvc-cache-control.version}</version>
             <scope>compile</scope>
         </dependency>
         <!-- test -->
@@ -91,8 +94,16 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.5.3</version>
+            <version>${httpclient.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.json</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse</groupId>
+            <artifactId>yasson</artifactId>
         </dependency>
     </dependencies>
     <build>
