@@ -62,7 +62,7 @@
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-authz-client</artifactId>
-            <version>${project.version}</version>
+            <version>${version.keycloak}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

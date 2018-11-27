@@ -1,6 +1,8 @@
 #!/bin/bash -e
 
-GH_PROD_BRANCH="7.2.x-devel"
+GH_PROD_BRANCH="7.3.x-devel"
+GH_PROD_VERSION=$(curl -s https://raw.githubusercontent.com/redhat-developer/redhat-sso-boms/7.3.x/pom.xml | grep -m1 "<version>" | sed 's/<[^>]*>//g' | tr -d ' ')
+KEYCLOAK_VERSION=$(cat pom.xml | grep -m1 "<version>" | sed 's/<[^>]*>//g' | sed 's/-SNAPSHOT//g' | tr -d ' ')
 
 if [ "$GH_USER_NAME" != "" ] && [ "$GH_USER_EMAIL" != "" ] && [ "$GH_TOKEN" != "" ] && [ "$GH_REF" != "" ]; then
     DRY_RUN="false"
@@ -50,7 +52,14 @@ sed -i '/<\/modules>/{
 }' pom.xml
 
 # Update version to productized versions
-find . -type f -name "*pom.xml*" -exec sed -i 's@SNAPSHOT</version>@redhat-2</version>@g' {} +
+find . -type f -name "*pom.xml*" -exec sed -i "s/<version>.*SNAPSHOT/<version>$GH_PROD_VERSION/g" {} + 
+find . -type f -name "*pom.xml*" -exec sed -i "s@<version.keycloak>.*</version.keycloak>@<version.keycloak>$KEYCLOAK_VERSION</version.keycloak>@g" {} + 
+
+# Switch to productized artifacts
+find . -type f -name "*pom.xml*" -exec sed -i 's@org.keycloak.bom@com.redhat.bom.rh-sso@g' {} + 
+find . -type f -name "*pom.xml*" -exec sed -i 's@keycloak-adapter-bom@rh-sso-adapter-bom@g' {} + 
+find . -type f -name "*pom.xml*" -exec sed -i 's@keycloak-spi-bom@rh-sso-spi-bom@g' {} + 
+find . -type f -name "*pom.xml*" -exec sed -i 's@keycloak-misc-bom@rh-sso-misc-bom@g' {} + 
 
 # Rename names in POMs
 find . -type f -name "*pom.xml*" -exec sed -i 's@<name>Keycloak Quickstart@<name>Red Hat SSO Quickstart@g' {} +
