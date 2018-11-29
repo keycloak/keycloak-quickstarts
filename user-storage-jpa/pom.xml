@@ -140,7 +140,7 @@
                                     <goal>add-resource</goal>
                                 </goals>
                                 <configuration>
-                                    <port>9990</port>
+                                    <port>10090</port>
                                     <force/>
                                     <address>subsystem=datasources</address>
                                     <resources>
