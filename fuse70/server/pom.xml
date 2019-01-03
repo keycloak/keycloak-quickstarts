@@ -20,7 +20,7 @@
     <parent>
         <artifactId>keycloak-fuse70-parent</artifactId>
         <groupId>org.keycloak.quickstarts</groupId>
-        <version>4.8.0.Final-SNAPSHOT</version>
+        <version>4.8.2.Final-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -28,7 +28,7 @@
 
     <groupId>org.keycloak.quickstarts</groupId>
     <artifactId>keycloak-fuse70-server</artifactId>
-    <version>4.8.0.Final-SNAPSHOT</version>
+    <version>4.8.2.Final-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Keycloak Quickstart: JBoss Fuse 7.0 Server</name>
     <description>Quickstart JBoss Fuse 7.0 Server</description>
