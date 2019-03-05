@@ -19,7 +19,7 @@
     <parent>
         <artifactId>keycloak-fuse70-parent</artifactId>
         <groupId>org.keycloak.quickstarts</groupId>
-        <version>5.0.0-SNAPSHOT</version>
+        <version>5.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -27,7 +27,7 @@
 
     <groupId>org.keycloak.quickstarts</groupId>
     <artifactId>keycloak-fuse70-features</artifactId>
-    <version>5.0.0-SNAPSHOT</version>
+    <version>5.0.0</version>
     <packaging>pom</packaging>
     <name>Keycloak Quickstart: Fuse 7.0 Features</name>
     <description>JBoss Fuse 7.0 features to simplify install all Keycloak Fuse quickstarts</description>

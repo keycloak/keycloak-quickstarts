@@ -20,14 +20,14 @@
     <parent>
         <groupId>org.keycloak.quickstarts</groupId>
         <artifactId>keycloak-quickstart-parent</artifactId>
-        <version>5.0.0-SNAPSHOT</version>
+        <version>5.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>keycloak-fuse70-parent</artifactId>
-    <version>5.0.0-SNAPSHOT</version>
+    <version>5.0.0</version>
     <packaging>pom</packaging>
     <properties>
         <camel.version>2.17.0</camel.version>
