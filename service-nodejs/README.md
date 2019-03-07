@@ -64,11 +64,11 @@ Build and Deploy the Quickstart
 
 1. Open a terminal and navigate to the root directory of this quickstart.
 
-2. The following shows the command to run the quickstart:
+2. The following shows the commands to run the quickstart:
 
    ````
-   npm install
-   node app
+   npm install # install dependencies
+   npm start # start the app
    ````
 
 Access the Quickstart
