@@ -23,22 +23,22 @@ if [ "$DRY_RUN" == "true" ]; then
 fi
 
 # Rename Keycloak to Red Hat SSO
-find . -type f -name "*README*" -exec sed -i 's@<span>Keycloak</span>@Red Hat SSO@g' {} +
+find . -type f \( -name "*README*" -o -name "*getting-started*" -o -name "*test-development*" \) -exec sed -i 's@<span>Keycloak</span>@Red Hat SSO@g' {} +
 # Rename WildFly to JBoss EAP
-find . -type f -name "*README*" -exec sed -i 's@<span>WildFly 10</span>@JBoss EAP 7.1.0@g' {} +
-find . -type f -name "*README*" -exec sed -i 's@<span>WildFly</span>@JBoss EAP@g' {} +
+find . -type f \( -name "*README*" -o -name "*getting-started*" -o -name "*test-development*" \) -exec  sed -i 's@<span>WildFly 10</span>@JBoss EAP 7.1.0@g' {} +
+find . -type f \( -name "*README*" -o -name "*getting-started*" -o -name "*test-development*" \) -exec  sed -i 's@<span>WildFly</span>@JBoss EAP@g' {} +
 # Rename values in tests
-find ./*/src/test/java -type f -name "*Test*" -exec sed -i 's@Keycloak Account Management@RH-SSO Account Management@g' {} +
+find ./*/src/test/java -type f -name "*Test*" -exec  sed -i 's@Keycloak Account Management@RH-SSO Account Management@g' {} +
 
 # Rename env
-find . -type f -name "*README*" -exec sed -i 's@<span>KEYCLOAK_HOME</span>@RHSSO_HOME@g' {} +
-find . -type f -name "*README*" -exec sed -i 's@<span>WILDFLY_HOME</span>@EAP_HOME@g' {} +
+find . -type f \( -name "*README*" -o -name "*getting-started*" -o -name "*test-development*" \) -exec  sed -i 's@<span>KEYCLOAK_HOME</span>@RHSSO_HOME@g' {} +
+find . -type f \( -name "*README*" -o -name "*getting-started*" -o -name "*test-development*" \) -exec  sed -i 's@<span>WILDFLY_HOME</span>@EAP_HOME@g' {} +
 
 # Rename commands
-find . -type f -name "*README*" -exec sed -i 's@KEYCLOAK_HOME/bin@RHSSO_HOME/bin@g' {} +
-find . -type f -name "*README*" -exec sed -i 's@KEYCLOAK_HOME\\bin@RHSSO_HOME\\bin@g' {} +
-find . -type f -name "*README*" -exec sed -i 's@WILDFLY_HOME/bin@EAP_HOME/bin@g' {} +
-find . -type f -name "*README*" -exec sed -i 's@WILDFLY_HOME\\bin@EAP_HOME\\bin@g' {} +
+find . -type f \( -name "*README*" -o -name "*getting-started*" -o -name "*test-development*" \) -exec  sed -i 's@KEYCLOAK_HOME/bin@RHSSO_HOME/bin@g' {} +
+find . -type f \( -name "*README*" -o -name "*getting-started*" -o -name "*test-development*" \) -exec  sed -i 's@KEYCLOAK_HOME\\bin@RHSSO_HOME\\bin@g' {} +
+find . -type f \( -name "*README*" -o -name "*getting-started*" -o -name "*test-development*" \) -exec  sed -i 's@WILDFLY_HOME/bin@EAP_HOME/bin@g' {} +
+find . -type f \( -name "*README*" -o -name "*getting-started*" -o -name "*test-development*" \) -exec  sed -i 's@WILDFLY_HOME\\bin@EAP_HOME\\bin@g' {} +
 
 # Remove JBoss Repo
 sed -i '/<repositories>/,/<\/repositories>/ d' pom.xml
