@@ -48,9 +48,9 @@ added or changes you've made to users loaded by this provider will be wiped clea
 
 To deploy the provider, run the following maven command:
 
-    ````
-    mvn clean install wildfly:deploy
-    ````
+   ````
+   mvn clean install wildfly:deploy
+   ````
 
 If you want to play with and modify the example, simply rerun the maven deploy command above and the new version will be hot deployed.
 
