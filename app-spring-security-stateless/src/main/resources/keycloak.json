@@ -1,0 +1,14 @@
+{
+  "realm": "spring-security-quickstart",
+  "auth-server-url": "http://localhost:8180/auth",
+  "ssl-required": "external",
+  "resource": "app-authz-spring-security",
+  "credentials": {
+    "secret": "secret"
+  },
+  "token-store": "cookie",
+  "adapter-state-cookie-path": "/",
+  "policy-enforcer": {
+    "on-deny-redirect-to": "/accessDenied"
+  }
+}

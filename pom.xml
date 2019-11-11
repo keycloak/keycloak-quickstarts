@@ -67,7 +67,7 @@
         <arquillian-bom.version>1.4.0.Final</arquillian-bom.version>
         <arquillian-drone-bom.version>2.5.1</arquillian-drone-bom.version>
         <version.json.javax>1.1.2</version.json.javax>
-        <version.yasson>1.0.1</version.yasson>
+        <version.yasson>1.0.5</version.yasson>
     </properties>
 
     <dependencyManagement>
@@ -305,6 +305,7 @@
                 <module>app-authz-rest-employee</module>
                 <module>app-authz-rest-springboot</module>
                 <module>app-authz-spring-security</module>
+                <module>app-spring-security-stateless</module>
                 <module>app-authz-uma-photoz</module>
                 <module>fuse63</module>
                 <module>fuse70</module>
