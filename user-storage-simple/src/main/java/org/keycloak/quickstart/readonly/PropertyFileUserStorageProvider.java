@@ -112,12 +112,13 @@ public class PropertyFileUserStorageProvider implements
 
     @Override
     public boolean isValid(RealmModel realm, UserModel user, CredentialInput input) {
-        if (!supportsCredentialType(input.getType()) || !(input instanceof UserCredentialModel)) return false;
+        // No need to check input is of type UserCredentialModel since there no need to cast it anymore
+        if (!supportsCredentialType(input.getType())) return false;
 
-        UserCredentialModel cred = (UserCredentialModel)input;
         String password = properties.getProperty(user.getUsername());
         if (password == null) return false;
-        return password.equals(cred.getValue());
+        // Input Password can now be obtained using the getChallengeResponse() method of the CredentialInput  type
+        return password.equals(input.getChallengeResponse());
     }
 
     // CredentialInputUpdater methods
