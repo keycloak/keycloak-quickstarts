@@ -52,7 +52,7 @@ Finally you need to configure the adapter, this is done by retrieving the adapte
 * Click on `Installation` in the tab for the client you created
 * Select `Keycloak OIDC JSON`
 * Click `Download`
-* Move the file `keycloak.json` to the `config/` directory in the root of the quickstart
+* Move the file `keycloak.json` to the `config/` directory which is inside in `service-jee-jaxrs/` directory
 
 You may also want to enable CORS for the service if you want to allow invocations from HTML5 applications deployed to a
 different host. To do this edit `keycloak.json` and add:
