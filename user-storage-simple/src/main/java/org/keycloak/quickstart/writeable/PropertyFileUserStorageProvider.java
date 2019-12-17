@@ -28,6 +28,7 @@ import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserCredentialModel;
 import org.keycloak.models.UserModel;
+import org.keycloak.models.credential.PasswordCredentialModel;
 import org.keycloak.storage.StorageId;
 import org.keycloak.storage.UserStorageProvider;
 import org.keycloak.storage.adapter.AbstractUserAdapterFederatedStorage;
@@ -239,22 +240,22 @@ public class PropertyFileUserStorageProvider implements
     @Override
     public boolean isConfiguredFor(RealmModel realm, UserModel user, String credentialType) {
         String password = properties.getProperty(user.getUsername());
-        return credentialType.equals(CredentialModel.PASSWORD) && password != null;
+        return credentialType.equals(PasswordCredentialModel.TYPE) && password != null;
     }
 
     @Override
     public boolean supportsCredentialType(String credentialType) {
-        return credentialType.equals(CredentialModel.PASSWORD);
+        return credentialType.equals(PasswordCredentialModel.TYPE);
     }
 
     @Override
     public boolean isValid(RealmModel realm, UserModel user, CredentialInput input) {
-        if (!supportsCredentialType(input.getType()) || !(input instanceof UserCredentialModel)) return false;
+        if (!supportsCredentialType(input.getType())) return false;
 
         UserCredentialModel cred = (UserCredentialModel)input;
         String password = properties.getProperty(user.getUsername());
         if (password == null || UNSET_PASSWORD.equals(password)) return false;
-        return password.equals(cred.getValue());
+        return password.equals(cred.getChallengeResponse());
     }
 
     // CredentialInputUpdater methods
@@ -262,10 +263,10 @@ public class PropertyFileUserStorageProvider implements
     @Override
     public boolean updateCredential(RealmModel realm, UserModel user, CredentialInput input) {
         if (!(input instanceof UserCredentialModel)) return false;
-        if (!input.getType().equals(CredentialModel.PASSWORD)) return false;
+        if (!input.getType().equals(PasswordCredentialModel.TYPE)) return false;
         UserCredentialModel cred = (UserCredentialModel)input;
         synchronized (properties) {
-            properties.setProperty(user.getUsername(), cred.getValue());
+            properties.setProperty(user.getUsername(), cred.getChallengeResponse());
             save();
         }
         return true;
@@ -273,7 +274,7 @@ public class PropertyFileUserStorageProvider implements
 
     @Override
     public void disableCredentialType(RealmModel realm, UserModel user, String credentialType) {
-        if (!credentialType.equals(CredentialModel.PASSWORD)) return;
+        if (!credentialType.equals(PasswordCredentialModel.TYPE)) return;
         synchronized (properties) {
             properties.setProperty(user.getUsername(), UNSET_PASSWORD);
             save();
@@ -284,7 +285,7 @@ public class PropertyFileUserStorageProvider implements
     private static final Set<String> disableableTypes = new HashSet<>();
 
     static {
-        disableableTypes.add(CredentialModel.PASSWORD);
+        disableableTypes.add(PasswordCredentialModel.TYPE);
     }
 
     @Override

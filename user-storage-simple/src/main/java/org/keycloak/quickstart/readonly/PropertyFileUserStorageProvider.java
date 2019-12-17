@@ -26,6 +26,7 @@ import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserCredentialModel;
 import org.keycloak.models.UserModel;
+import org.keycloak.models.credential.PasswordCredentialModel;
 import org.keycloak.storage.ReadOnlyException;
 import org.keycloak.storage.StorageId;
 import org.keycloak.storage.UserStorageProvider;
@@ -102,29 +103,27 @@ public class PropertyFileUserStorageProvider implements
     @Override
     public boolean isConfiguredFor(RealmModel realm, UserModel user, String credentialType) {
         String password = properties.getProperty(user.getUsername());
-        return credentialType.equals(CredentialModel.PASSWORD) && password != null;
+        return credentialType.equals(PasswordCredentialModel.TYPE) && password != null;
     }
 
     @Override
     public boolean supportsCredentialType(String credentialType) {
-        return credentialType.equals(CredentialModel.PASSWORD);
+        return credentialType.equals(PasswordCredentialModel.TYPE);
     }
 
     @Override
     public boolean isValid(RealmModel realm, UserModel user, CredentialInput input) {
-        if (!supportsCredentialType(input.getType()) || !(input instanceof UserCredentialModel)) return false;
-
-        UserCredentialModel cred = (UserCredentialModel)input;
+        if (!supportsCredentialType(input.getType())) return false;
         String password = properties.getProperty(user.getUsername());
         if (password == null) return false;
-        return password.equals(cred.getValue());
+        return password.equals(input.getChallengeResponse());
     }
 
     // CredentialInputUpdater methods
 
     @Override
     public boolean updateCredential(RealmModel realm, UserModel user, CredentialInput input) {
-        if (input.getType().equals(CredentialModel.PASSWORD)) throw new ReadOnlyException("user is read only for this update");
+        if (input.getType().equals(PasswordCredentialModel.TYPE)) throw new ReadOnlyException("user is read only for this update");
 
         return false;
     }
