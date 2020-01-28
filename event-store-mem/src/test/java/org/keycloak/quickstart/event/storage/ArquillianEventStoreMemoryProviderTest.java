@@ -18,28 +18,40 @@
 package org.keycloak.quickstart.event.storage;
 
 import org.hamcrest.Matchers;
-import org.jboss.arquillian.container.test.api.*;
+import org.jboss.arquillian.container.test.api.Deployer;
+import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.container.test.api.RunAsClient;
+import org.jboss.arquillian.container.test.api.TargetsContainer;
+import org.jboss.arquillian.drone.api.annotation.Drone;
+import org.jboss.arquillian.graphene.Graphene;
 import org.jboss.arquillian.graphene.page.Page;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.junit.InSequence;
 import org.jboss.arquillian.test.api.ArquillianResource;
-import org.jboss.arquillian.drone.api.annotation.Drone;
-import org.junit.*;
-import org.keycloak.admin.client.Keycloak;
-import org.keycloak.events.EventStoreProviderFactory;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.wildfly.extras.creaper.core.ManagementClient;
-import org.wildfly.extras.creaper.core.online.*;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.junit.runner.RunWith;
-
+import org.keycloak.admin.client.Keycloak;
+import org.keycloak.events.EventStoreProviderFactory;
 import org.keycloak.events.EventType;
 import org.keycloak.representations.idm.AdminEventRepresentation;
 import org.keycloak.representations.idm.RealmEventsConfigRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
+import org.keycloak.test.FluentTestsHelper;
 import org.keycloak.test.page.LoginPage;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.wildfly.extras.creaper.core.ManagementClient;
+import org.wildfly.extras.creaper.core.online.CliException;
+import org.wildfly.extras.creaper.core.online.ManagementProtocol;
+import org.wildfly.extras.creaper.core.online.ModelNodeResult;
+import org.wildfly.extras.creaper.core.online.OnlineManagementClient;
+import org.wildfly.extras.creaper.core.online.OnlineOptions;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,9 +61,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
-import static org.keycloak.test.TestsHelper.deleteRealm;
-import static org.keycloak.test.TestsHelper.importTestRealm;
-import static org.keycloak.test.TestsHelper.keycloakBaseUrl;
 
 /**
  * @author <a href="mailto:mkanis@redhat.com">Martin Kanis</a>
@@ -74,6 +83,14 @@ public class ArquillianEventStoreMemoryProviderTest {
     public static int keycloakManagementPort;
 
     public static OnlineManagementClient onlineManagementClient;
+
+    public static final String KEYCLOAK_URL = "http://localhost:8180/auth";
+    public static final FluentTestsHelper testHelper = new FluentTestsHelper(KEYCLOAK_URL,
+            FluentTestsHelper.DEFAULT_ADMIN_USERNAME,
+            FluentTestsHelper.DEFAULT_ADMIN_PASSWORD,
+            FluentTestsHelper.DEFAULT_ADMIN_REALM,
+            FluentTestsHelper.DEFAULT_ADMIN_CLIENT,
+            FluentTestsHelper.DEFAULT_TEST_REALM);
 
     @Page
     private LoginPage loginPage;
@@ -101,17 +118,20 @@ public class ArquillianEventStoreMemoryProviderTest {
 
     @BeforeClass
     public static void setupClass() throws IOException {
-        importTestRealm("admin", "admin", "/quickstart-realm.json");
+        testHelper.init();
+        testHelper.importTestRealm("/quickstart-realm.json");
 
         keycloakManagementPort = Integer.parseInt(System.getProperty("keycloakManagementPort"));
 
-        ADMIN_CLIENT = Keycloak.getInstance(keycloakBaseUrl, "master", "admin", "admin", "admin-cli");
+        ADMIN_CLIENT = Keycloak.getInstance(KEYCLOAK_URL, FluentTestsHelper.DEFAULT_ADMIN_REALM, FluentTestsHelper.DEFAULT_ADMIN_USERNAME, FluentTestsHelper.DEFAULT_ADMIN_PASSWORD, FluentTestsHelper.DEFAULT_ADMIN_CLIENT);
         ADMIN_ID = ADMIN_CLIENT.realm(REALM_QS_EVENT_STORE).users().search("test-admin").get(0).getId();
     }
 
     @AfterClass
-    public static void tearDownClass() throws Exception {
-        deleteRealm("admin", "admin", REALM_QS_EVENT_STORE);
+    public static void tearDownClass() {
+        testHelper
+                .init()
+                .deleteRealm(REALM_QS_EVENT_STORE);
     }
 
     @InSequence(1)
@@ -146,6 +166,8 @@ public class ArquillianEventStoreMemoryProviderTest {
         // logout and login to generate some events
         logout();
         navigateAndLogin("/realms/" + REALM_QS_EVENT_STORE);
+
+        ADMIN_CLIENT.realm(REALM_QS_EVENT_STORE).getEvents().stream().map(e -> e.getType()).collect(Collectors.toList());
 
         checkIfEventExists(EventType.CODE_TO_TOKEN.name(), EventType.LOGIN.name());
 
@@ -207,16 +229,18 @@ public class ArquillianEventStoreMemoryProviderTest {
         if (!currentUrl.endsWith(path) && !currentUrl.contains(path + "&state=")) {
             // wait for redirect to login page
             while (!currentUrl.contains("protocol/openid-connect/auth?client_id=security-admin-console")) {
-                TimeUnit.MILLISECONDS.sleep(50);
+                TimeUnit.MILLISECONDS.sleep(100);
                 currentUrl = webDriver.getCurrentUrl();
             }
+
+            Graphene.waitGui().pollingEvery(1, TimeUnit.SECONDS).until().element(By.id("username")).is().present();
 
             loginPage.login("test-admin", "password");
             currentUrl = webDriver.getCurrentUrl();
 
             // wait for redirect to original page
             while (!currentUrl.contains(path)) {
-                TimeUnit.MILLISECONDS.sleep(50);
+                TimeUnit.MILLISECONDS.sleep(100);
                 currentUrl = webDriver.getCurrentUrl();
             }
         }
@@ -268,6 +292,6 @@ public class ArquillianEventStoreMemoryProviderTest {
 
     private void restartRemoteServer() throws IOException, CliException {
         onlineManagementClient.executeCli("reload");
-        ADMIN_CLIENT = Keycloak.getInstance(keycloakBaseUrl, "master", "admin", "admin", "admin-cli");
+        ADMIN_CLIENT = Keycloak.getInstance(KEYCLOAK_URL, FluentTestsHelper.DEFAULT_ADMIN_REALM, FluentTestsHelper.DEFAULT_ADMIN_USERNAME, FluentTestsHelper.DEFAULT_ADMIN_PASSWORD, FluentTestsHelper.DEFAULT_ADMIN_CLIENT);
     }
 }

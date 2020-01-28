@@ -17,42 +17,45 @@
 
 package org.keycloak.quickstart.event.listener;
 
+import org.hamcrest.Matchers;
 import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.container.test.api.TargetsContainer;
+import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.jboss.arquillian.graphene.page.Page;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
-import org.jboss.arquillian.drone.api.annotation.Drone;
-import org.junit.*;
-
-import org.keycloak.admin.client.Keycloak;
-import org.keycloak.representations.idm.RealmEventsConfigRepresentation;
-import org.wildfly.extras.creaper.core.ManagementClient;
-import org.wildfly.extras.creaper.core.online.*;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.junit.runner.RunWith;
-
+import org.keycloak.admin.client.Keycloak;
 import org.keycloak.events.EventListenerProviderFactory;
+import org.keycloak.events.EventType;
+import org.keycloak.representations.idm.RealmEventsConfigRepresentation;
+import org.keycloak.test.FluentTestsHelper;
 import org.keycloak.test.page.LoginPage;
 import org.openqa.selenium.WebDriver;
+import org.wildfly.extras.creaper.core.ManagementClient;
+import org.wildfly.extras.creaper.core.online.CliException;
+import org.wildfly.extras.creaper.core.online.ManagementProtocol;
+import org.wildfly.extras.creaper.core.online.ModelNodeResult;
+import org.wildfly.extras.creaper.core.online.OnlineManagementClient;
+import org.wildfly.extras.creaper.core.online.OnlineOptions;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
+import java.net.URI;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.concurrent.TimeUnit;
 
 import static java.lang.String.format;
-import org.hamcrest.Matchers;
-import static org.keycloak.test.TestsHelper.deleteRealm;
-import static org.keycloak.test.TestsHelper.importTestRealm;
-import static org.keycloak.test.TestsHelper.keycloakBaseUrl;
-
-import org.keycloak.events.EventType;
-
-import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author <a href="mailto:mkanis@redhat.com">Martin Kanis</a>
@@ -74,17 +77,26 @@ public class ArquillianSysoutEventListenerProviderTest {
 
     public static String ADMIN_ID;
 
-    private OnlineManagementClient onlineManagementClient;
+    private static OnlineManagementClient onlineManagementClient;
+
+    public static final String KEYCLOAK_URL = "http://localhost:8180/auth";
+
+    public static final String KEYCLOAK_HOST = URI.create(KEYCLOAK_URL).getHost();
+    public static final int KEYCLOAK_PORT = URI.create(KEYCLOAK_URL).getPort();
+    public static final int KEYCLOAK_MANAGEMENT_PORT = 10090;
+
+    public static final FluentTestsHelper testHelper = new FluentTestsHelper(KEYCLOAK_URL,
+            FluentTestsHelper.DEFAULT_ADMIN_USERNAME,
+            FluentTestsHelper.DEFAULT_ADMIN_PASSWORD,
+            FluentTestsHelper.DEFAULT_ADMIN_REALM,
+            FluentTestsHelper.DEFAULT_ADMIN_CLIENT,
+            FluentTestsHelper.DEFAULT_TEST_REALM);
 
     @Page
     private LoginPage loginPage;
 
     @Drone
     private WebDriver webDriver;
-
-    @ArquillianResource
-    @OperateOnDeployment(PROVIDER_JAR)
-    public static URL keycloakContextRoot;
 
     @Deployment(testable=false, name=PROVIDER_JAR)
     @TargetsContainer("keycloak-remote")
@@ -98,36 +110,45 @@ public class ArquillianSysoutEventListenerProviderTest {
     }
 
     @BeforeClass
-    public static void setupClass() throws IOException {
-        importTestRealm("admin", "admin", "/quickstart-realm.json");
+    public static void setupClass() throws Exception {
+        onlineManagementClient = ManagementClient.online(OnlineOptions
+                .standalone()
+                .hostAndPort(KEYCLOAK_HOST, KEYCLOAK_MANAGEMENT_PORT)
+                .protocol(ManagementProtocol.HTTP_REMOTING)
+                .build()
+        );
 
-        keycloakManagementPort = Integer.parseInt(System.getProperty("keycloakManagementPort"));
+        testHelper.init();
+        testHelper.importTestRealm("/quickstart-realm.json");
 
-        ADMIN_CLIENT = Keycloak.getInstance(keycloakBaseUrl, "master", "admin", "admin", "admin-cli");
+        ADMIN_CLIENT = Keycloak.getInstance(KEYCLOAK_URL, FluentTestsHelper.DEFAULT_ADMIN_REALM, FluentTestsHelper.DEFAULT_ADMIN_USERNAME, FluentTestsHelper.DEFAULT_ADMIN_PASSWORD, FluentTestsHelper.DEFAULT_ADMIN_CLIENT);
         ADMIN_ID = ADMIN_CLIENT.realm(REALM_QS_EVENT_SYSOUT).users().search("test-admin").get(0).getId();
     }
 
     @AfterClass
-    public static void tearDownClass() throws Exception {
-        deleteRealm("admin", "admin", REALM_QS_EVENT_SYSOUT);
+    public static void tearDownClass() {
+        testHelper
+                // We manually logout users, so here we need to re-initialize
+                .init()
+                .deleteRealm(REALM_QS_EVENT_SYSOUT);
     }
 
     @Before
     public void setup() throws IOException {
         webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
-
         registerEventListener();
+    }
 
-        onlineManagementClient = ManagementClient.online(OnlineOptions
-                .standalone()
-                .hostAndPort(keycloakContextRoot.getHost(), keycloakManagementPort)
-                .protocol(ManagementProtocol.HTTP_REMOTING)
-                .build()
-        );
+    @After
+    public void cleanup() throws Exception {
+        removeEventListener();
+        logout();
+        removeSpi();
     }
 
     @Test
     public void testEventListenerOutput() throws IOException, CliException, InterruptedException {
+        addDefaultProvider();
         // generate some events
         navigateAndLogin("/realms/" + REALM_QS_EVENT_SYSOUT + "/clients");
         logout();
@@ -135,17 +156,12 @@ public class ArquillianSysoutEventListenerProviderTest {
 
         // check all events in the server's log
         String log = getServerLog();
-        checkServerLogForEvents(log, EventType.LOGIN, EventType.CODE_TO_TOKEN);
-
-        // clean and logout
-        removeEventListener();
-        logout();
+        checkServerLogForEvents(log, EventType.LOGIN);
     }
 
     @Test
     public void testEventListenerExcludes() throws IOException, CliException, InterruptedException {
         addExcludes();
-
         // generate some events
         navigateAndLogin("/realms/" + REALM_QS_EVENT_SYSOUT);
         logout();
@@ -153,32 +169,26 @@ public class ArquillianSysoutEventListenerProviderTest {
 
         // check all expected events in the server's log
         String log = getServerLog();
-        checkServerLogForEvents(log, EventType.LOGIN);
-
-        // check if CODE_TO_TOKEN event was filtered out
-        Assert.assertThat(log, Matchers.not(Matchers.containsString(EventType.CODE_TO_TOKEN.name())));
-
-        // clean and logout
-        removeEventListener();
-        removeSpi();
-        logout();
+        Assert.assertThat(log, Matchers.not(Matchers.containsString(EventType.LOGIN.name())));
     }
 
     private void registerEventListener() {
         RealmEventsConfigRepresentation realmEventsConfig = ADMIN_CLIENT.realm(REALM_QS_EVENT_SYSOUT).getRealmEventsConfig();
+        realmEventsConfig.setEventsListeners(new LinkedList<>());
         realmEventsConfig.getEventsListeners().add("sysout");
         ADMIN_CLIENT.realm(REALM_QS_EVENT_SYSOUT).updateRealmEventsConfig(realmEventsConfig);
     }
 
     private void removeEventListener() {
         RealmEventsConfigRepresentation realmEventsConfig = ADMIN_CLIENT.realm(REALM_QS_EVENT_SYSOUT).getRealmEventsConfig();
+        realmEventsConfig.setEventsListeners(new LinkedList<>());
         realmEventsConfig.getEventsListeners().remove("sysout");
         ADMIN_CLIENT.realm(REALM_QS_EVENT_SYSOUT).updateRealmEventsConfig(realmEventsConfig);
     }
 
     private void navigateTo(String path) {
-        webDriver.navigate().to(format(KEYCLOAK_URL_CONSOLE, keycloakContextRoot.getHost(),
-                keycloakContextRoot.getPort(), REALM_QS_EVENT_SYSOUT, path));
+        webDriver.navigate().to(format(KEYCLOAK_URL_CONSOLE, KEYCLOAK_HOST,
+                KEYCLOAK_PORT, REALM_QS_EVENT_SYSOUT, path));
     }
 
     /**
@@ -197,7 +207,7 @@ public class ArquillianSysoutEventListenerProviderTest {
         if (!currentUrl.endsWith(path) && !currentUrl.contains(path + "&state=")) {
             // wait for redirect to login page
             while (!currentUrl.contains("protocol/openid-connect/auth?client_id=security-admin-console")) {
-                TimeUnit.MILLISECONDS.sleep(50);
+                TimeUnit.MILLISECONDS.sleep(100);
                 currentUrl = webDriver.getCurrentUrl();
             }
 
@@ -206,23 +216,18 @@ public class ArquillianSysoutEventListenerProviderTest {
 
             // wait for redirect to original page
             while (!currentUrl.contains(path)) {
-                TimeUnit.MILLISECONDS.sleep(50);
+                TimeUnit.MILLISECONDS.sleep(100);
                 currentUrl = webDriver.getCurrentUrl();
             }
         }
     }
 
     private void logout() throws InterruptedException {
-        ADMIN_CLIENT = Keycloak.getInstance(keycloakBaseUrl, "master", "admin", "admin", "admin-cli");
-        ADMIN_CLIENT.realm(REALM_QS_EVENT_SYSOUT).users().get(ADMIN_ID).logout();
-
         navigateTo("");
-        String currentUrl = webDriver.getCurrentUrl();
+        TimeUnit.MILLISECONDS.sleep(100);
+        webDriver.manage().deleteAllCookies();
 
-        while (!currentUrl.contains("protocol/openid-connect/auth?client_id=security-admin-console")) {
-            TimeUnit.MILLISECONDS.sleep(50);
-            currentUrl = webDriver.getCurrentUrl();
-        }
+        ADMIN_CLIENT.realm(REALM_QS_EVENT_SYSOUT).users().get(ADMIN_ID).logout();
     }
 
     /**
@@ -235,22 +240,34 @@ public class ArquillianSysoutEventListenerProviderTest {
         return result.get("result").toJSONString(false);
     }
 
-    private void addExcludes() throws IOException, CliException {
-        ModelNodeResult result = onlineManagementClient.execute("/subsystem=keycloak-server/spi=eventsListener/provider=sysout/:add(properties={exclude-events => \"[\\\"REFRESH_TOKEN\\\",\\\"CODE_TO_TOKEN\\\"]\"},enabled=true)");
+    private static void addDefaultProvider() throws IOException, CliException {
+        ModelNodeResult result = onlineManagementClient.execute("/subsystem=keycloak-server/spi=eventsListener:add(default-provider=sysout)");
+        result.assertSuccess();
+        result = onlineManagementClient.execute("/subsystem=keycloak-server/spi=eventsListener/provider=sysout:add(enabled=true)");
         result.assertSuccess();
         onlineManagementClient.executeCli("reload");
 
         // reconnect admin client
-        ADMIN_CLIENT = Keycloak.getInstance(keycloakBaseUrl, "master", "admin", "admin", "admin-cli");
+        ADMIN_CLIENT = Keycloak.getInstance(KEYCLOAK_URL, FluentTestsHelper.DEFAULT_ADMIN_REALM, FluentTestsHelper.DEFAULT_ADMIN_USERNAME, FluentTestsHelper.DEFAULT_ADMIN_PASSWORD, FluentTestsHelper.DEFAULT_ADMIN_CLIENT);
     }
 
-    private void removeSpi() throws IOException, CliException {
-        ModelNodeResult result = onlineManagementClient.execute("/subsystem=keycloak-server/spi=eventsListener/:remove");
+    private void addExcludes() throws IOException, CliException {
+        ModelNodeResult result = onlineManagementClient.execute("/subsystem=keycloak-server/spi=eventsListener:add(default-provider=sysout)");
+        result.assertSuccess();
+        result = onlineManagementClient.execute("/subsystem=keycloak-server/spi=eventsListener/provider=sysout/:add(properties={exclude-events => \"[\\\"LOGIN\\\"]\"},enabled=true)");
         result.assertSuccess();
         onlineManagementClient.executeCli("reload");
 
         // reconnect admin client
-        ADMIN_CLIENT = Keycloak.getInstance(keycloakBaseUrl, "master", "admin", "admin", "admin-cli");
+        ADMIN_CLIENT = Keycloak.getInstance(KEYCLOAK_URL, FluentTestsHelper.DEFAULT_ADMIN_REALM, FluentTestsHelper.DEFAULT_ADMIN_USERNAME, FluentTestsHelper.DEFAULT_ADMIN_PASSWORD, FluentTestsHelper.DEFAULT_ADMIN_CLIENT);
+    }
+
+    private static void removeSpi() throws IOException, CliException {
+        onlineManagementClient.execute("/subsystem=keycloak-server/spi=eventsListener/:remove");
+        onlineManagementClient.executeCli("reload");
+
+        // reconnect admin client
+        ADMIN_CLIENT = Keycloak.getInstance(KEYCLOAK_URL, FluentTestsHelper.DEFAULT_ADMIN_REALM, FluentTestsHelper.DEFAULT_ADMIN_USERNAME, FluentTestsHelper.DEFAULT_ADMIN_PASSWORD, FluentTestsHelper.DEFAULT_ADMIN_CLIENT);
     }
 
     private void checkServerLogForEvents(String log, EventType... events) {

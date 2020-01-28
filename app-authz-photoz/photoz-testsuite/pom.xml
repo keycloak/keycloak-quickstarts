@@ -30,7 +30,7 @@
     <description>Photoz Testsuite</description>
 
     <properties>
-        <browser>firefox</browser>
+        <browser>chrome</browser>
         <webdriverDownloadBinaries>true</webdriverDownloadBinaries>
         <droneInstantiationTimeoutInSeconds>60</droneInstantiationTimeoutInSeconds>
         <firefox_binary/>

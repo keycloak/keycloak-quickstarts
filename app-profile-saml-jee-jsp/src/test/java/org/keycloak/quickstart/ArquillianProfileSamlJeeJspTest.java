@@ -38,7 +38,6 @@ import org.keycloak.test.page.IndexPage;
 import org.keycloak.test.page.LoginPage;
 import org.keycloak.test.page.ProfilePage;
 import org.keycloak.quickstart.profilejee.Controller;
-import org.keycloak.test.TestsHelper;
 import org.keycloak.test.builders.ClientBuilder;
 import org.openqa.selenium.WebDriver;
 
@@ -49,10 +48,9 @@ import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.keycloak.test.TestsHelper.createClient;
-import static org.keycloak.test.TestsHelper.deleteRealm;
 import static org.keycloak.test.TestsHelper.importTestRealm;
 import static org.keycloak.test.builders.ClientBuilder.AccessType.BEARER_ONLY;
+import static org.keycloak.test.builders.ClientBuilder.AccessType.PUBLIC;
 
 /**
  * @author <a href="mailto:bruno@abstractj.org">Bruno Oliveira</a>
@@ -65,6 +63,9 @@ public class ArquillianProfileSamlJeeJspTest {
     private static final String APP_NAME = "app-profile-saml";
     private static final String APP_SERVICE = "service-jaxrs";
 
+    public static final String TEST_DGA = "test-dga";
+    public static final String TEST_REALM = "quickstart";
+
     @Page
     private IndexPage indexPage;
 
@@ -74,21 +75,24 @@ public class ArquillianProfileSamlJeeJspTest {
     @Page
     private ProfilePage profilePage;
 
+    public static final JspTestHelper testHelper = new JspTestHelper();
+
     static {
         try {
-            importTestRealm("admin", "admin", "/quickstart-realm.json");
-        } catch (IOException e) {
-            e.printStackTrace();
+            testHelper.init();
+            testHelper.importTestRealm("/quickstart-realm.json")
+                    .createClient(ClientBuilder.create(TEST_DGA).accessType(PUBLIC))
+                    .createClient(ClientBuilder.create(APP_SERVICE).accessType(BEARER_ONLY));
+        } catch (Exception e) {
+            throw new IllegalStateException("Could not initialize Keycloak", e);
         }
     }
 
     @Deployment(name = APP_SERVICE, order = 1, testable = false)
-    public static Archive<?> createTestArchive1() throws IOException {
+    public static Archive<?> createTestArchive1() throws Exception {
         return ShrinkWrap.createFromZipFile(WebArchive.class,
                 new File("../service-jee-jaxrs/target/service.war"))
-                .addAsWebInfResource(
-                        new StringAsset(createClient(
-                                ClientBuilder.create(APP_SERVICE).accessType(BEARER_ONLY))), "keycloak.json");
+                .addAsWebInfResource(new StringAsset(testHelper.getAdapterConfiguration(APP_SERVICE)), "keycloak.json");
     }
 
     @Deployment(name = APP_NAME, order = 2, testable = false)
@@ -112,7 +116,7 @@ public class ArquillianProfileSamlJeeJspTest {
 
     @AfterClass
     public static void cleanUp() throws IOException{
-        deleteRealm("admin","admin",TestsHelper.testRealm);
+        testHelper.deleteRealm(TEST_REALM);
     }
 
     @Before

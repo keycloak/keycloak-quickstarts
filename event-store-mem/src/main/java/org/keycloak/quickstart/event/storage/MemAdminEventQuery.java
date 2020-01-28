@@ -146,7 +146,7 @@ public class MemAdminEventQuery implements AdminEventQuery {
                 itr.remove();
             }
         }
-        return (AdminEventQuery) this;
+        return this;
     }
 
     @Override

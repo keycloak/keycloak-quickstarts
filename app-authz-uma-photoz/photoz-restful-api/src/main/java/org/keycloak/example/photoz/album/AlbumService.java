@@ -105,7 +105,7 @@ public class AlbumService {
             SharedAlbum share = shares.get(permission.getResource());
 
             if (share == null) {
-                share = new SharedAlbum(Album.class.cast(entityManager.createQuery("from Album where externalId = :externalId").setParameter("externalId", permission.getResource()).getSingleResult()));
+                share = new SharedAlbum((Album) entityManager.createQuery("from Album where externalId = :externalId").setParameter("externalId", permission.getResource()).getSingleResult());
                 shares.put(permission.getResource(), share);
             }
 
@@ -172,10 +172,10 @@ public class AlbumService {
     }
 
     private ClientAuthorizationContext getAuthorizationContext() {
-        return ClientAuthorizationContext.class.cast(getKeycloakSecurityContext().getAuthorizationContext());
+        return (ClientAuthorizationContext) getKeycloakSecurityContext().getAuthorizationContext();
     }
 
     private KeycloakSecurityContext getKeycloakSecurityContext() {
-        return KeycloakSecurityContext.class.cast(request.getAttribute(KeycloakSecurityContext.class.getName()));
+        return (KeycloakSecurityContext) request.getAttribute(KeycloakSecurityContext.class.getName());
     }
 }

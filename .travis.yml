@@ -22,12 +22,20 @@ env:
     - TESTS=group7
 
 before_install:
+  # Keycloak build requires custom Maven version. Let's grab the latest one
+  # https://github.com/keycloak/keycloak/blob/master/testsuite/integration-arquillian/pom.xml#L307
+  - wget https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.zip
+  - unzip -qq apache-maven-3.6.3-bin.zip
+  - export M2_HOME=$PWD/apache-maven-3.6.3
+  - export PATH=$M2_HOME/bin:$PATH
   - ./travis-server.sh
   - ./scripts/generate_keycloak_json.sh
 
 install:
   - travis_wait 20 mvn -s maven-settings.xml clean install --no-snapshot-updates -B -V -q
-  - mvn -s maven-settings.xml -Padd-datasource install -f user-storage-jpa -q
+#  Requires updating to 9.0.1-SNAPSHOT and above
+#  https://issues.redhat.com/browse/KEYCLOAK-13051
+#  - mvn -s maven-settings.xml -Padd-datasource install -f user-storage-jpa -q
 
 before_script:
   - export MAVEN_SKIP_RC=true

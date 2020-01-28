@@ -18,11 +18,6 @@
  */
 package org.keycloak.quickstart.springboot;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import java.io.IOException;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -32,13 +27,21 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.keycloak.admin.client.Keycloak;
 import org.keycloak.authorization.client.AuthorizationDeniedException;
 import org.keycloak.authorization.client.AuthzClient;
 import org.keycloak.authorization.client.Configuration;
 import org.keycloak.representations.idm.authorization.AuthorizationRequest;
-import org.keycloak.test.TestsHelper;
+import org.keycloak.test.FluentTestsHelper;
+import org.keycloak.test.builders.ClientBuilder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.io.IOException;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.keycloak.test.builders.ClientBuilder.AccessType.PUBLIC;
 
 /**
  * @author <a href="mailto:psilva@redhat.com">Pedro Igor</a>
@@ -47,17 +50,28 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.DEFINED_PORT, classes = {MyApplication.class})
 public class MyAppTest {
 
+    public static final String TEST_REALM = "spring-boot-quickstart";
+    public static final String TEST_DGA = "test-dga";
+
+    public static final String KEYCLOAK_URL = "http://localhost:8180/auth";
+    public static final FluentTestsHelper testHelper = new FluentTestsHelper(KEYCLOAK_URL,
+            FluentTestsHelper.DEFAULT_ADMIN_USERNAME,
+            FluentTestsHelper.DEFAULT_ADMIN_PASSWORD,
+            FluentTestsHelper.DEFAULT_ADMIN_REALM,
+            FluentTestsHelper.DEFAULT_ADMIN_CLIENT,
+            FluentTestsHelper.DEFAULT_TEST_REALM);
+
     @BeforeClass
-    public static void setup() throws IOException {
-        TestsHelper.baseUrl = "http://localhost:8080";
-        TestsHelper.testRealm="spring-boot-quickstart";
-        TestsHelper.importTestRealm("admin","admin","/quickstart-realm.json");
-        TestsHelper.createDirectGrantClient();
+    public static void setup() throws Exception {
+        testHelper
+                .init()
+                .importTestRealm("/quickstart-realm.json")
+                .createClient(ClientBuilder.create(TEST_DGA).accessType(PUBLIC));
     }
 
     @AfterClass
-    public static void cleanUp() throws IOException{
-        TestsHelper.deleteRealm("admin","admin", "spring-boot-quickstart");
+    public static void cleanUp() {
+        testHelper.deleteRealm(TEST_REALM);
     }
 
     @Test
@@ -136,7 +150,8 @@ public class MyAppTest {
     private HttpResponse makeRequest(String uri, String userName, String password, boolean sendRpt, String resourceId) throws IOException {
         HttpClient client = HttpClientBuilder.create().build();
         HttpGet request = new HttpGet(uri);
-        String accessToken = TestsHelper.getToken(userName, password, TestsHelper.testRealm);
+        Keycloak keycloak = Keycloak.getInstance(KEYCLOAK_URL, TEST_REALM, userName, password, TEST_DGA);
+        String accessToken = keycloak.tokenManager().getAccessTokenString();
         String rpt;
 
         if (sendRpt) {
@@ -169,8 +184,8 @@ public class MyAppTest {
         Configuration configuration = new Configuration();
 
         configuration.setResource("app-authz-rest-springboot");
-        configuration.setAuthServerUrl(TestsHelper.keycloakBaseUrl);
-        configuration.setRealm(TestsHelper.testRealm);
+        configuration.setAuthServerUrl(KEYCLOAK_URL);
+        configuration.setRealm(TEST_REALM);
 
         AuthzClient authzClient = AuthzClient.create(configuration);
 

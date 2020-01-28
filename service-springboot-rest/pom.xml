@@ -13,6 +13,8 @@
     <description>Spring Boot Keycloak Product Service</description>
     <properties>
         <springboot-version>2.0.3.RELEASE</springboot-version>
+        <httpclient.version>4.5.3</httpclient.version>
+        <httpcore.version>4.4.5</httpcore.version>
         <arquillian-managed>false</arquillian-managed>
     </properties>
     <dependencyManagement>
@@ -45,6 +47,16 @@
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${httpclient.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>${httpcore.version}</version>
         </dependency>
         <dependency>
             <groupId>org.keycloak</groupId>

@@ -38,6 +38,7 @@ fi
 $KEYCLOAK/bin/add-user-keycloak.sh -u admin -p admin
 # Start the server
 $KEYCLOAK/bin/standalone.sh -Djava.net.preferIPv4Stack=true \
-                            -Djboss.socket.binding.port-offset=100 > keycloak.log 2>&1 &
+                            -Djboss.socket.binding.port-offset=100 \
+                            -Dkeycloak.profile.feature.upload_scripts=enabled > keycloak.log 2>&1 &
 
 waitForServer

@@ -19,12 +19,14 @@ package org.keycloak.quickstart.uma.page;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
+import java.util.concurrent.locks.LockSupport;
 
 import org.jboss.arquillian.graphene.page.Page;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.Assert;
 import org.keycloak.test.page.LoginPage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -90,6 +92,7 @@ public class PhotozPage {
         if (fullName != null) {
             Assert.assertEquals("Welcome To Photoz, " + fullName, welcomeMessage.getText());
         }
+        waitForPageToLoad();
     }
 
     public void logout() {
@@ -222,11 +225,15 @@ public class PhotozPage {
     }
 
     public void waitForPageToLoad() {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        WebDriverWait wait = new WebDriverWait(webDriver, 15);
+        wait.until(webDriver -> {
+            if (webDriver instanceof JavascriptExecutor) {
+                return ((JavascriptExecutor) webDriver).executeScript("return document.readyState").toString().equals("complete");
+            } else {
+                LockSupport.parkNanos(1_000_000_000);
+            }
+            return true;
+        });
     }
 
 }

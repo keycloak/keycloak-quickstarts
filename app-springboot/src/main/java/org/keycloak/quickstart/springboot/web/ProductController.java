@@ -19,6 +19,7 @@ package org.keycloak.quickstart.springboot.web;
 import java.security.Principal;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+
 import net.rossillo.spring.web.mvc.CacheControl;
 import net.rossillo.spring.web.mvc.CachePolicy;
 import org.keycloak.common.util.KeycloakUriBuilder;
@@ -36,30 +37,31 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @CacheControl(policy = CachePolicy.NO_CACHE)
 public class ProductController {
 
-	@Autowired
-	private ProductService productService;
-        
-        private @Autowired HttpServletRequest request;
+    @Autowired
+    private ProductService productService;
 
-	@RequestMapping(value = "/products", method = RequestMethod.GET)
-	public String handleCustomersRequest(Principal principal, Model model) {
-			model.addAttribute("products", productService.getProducts());
-			model.addAttribute("principal",  principal);
-                        String logoutUri = KeycloakUriBuilder.fromUri("http://localhost:8180/auth").path(ServiceUrlConstants.TOKEN_SERVICE_LOGOUT_PATH)
-            .queryParam("redirect_uri", "http://localhost:8080/products").build("quickstart").toString();
-                        model.addAttribute("logout",  logoutUri);
-			return "products";
-	}
-        
-        @RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String handleLogoutt() throws ServletException {
-            request.logout();
-            return "landing";
-        }
-        
-        @RequestMapping(value = "/", method = RequestMethod.GET)
-	public String landing() throws ServletException {
-            return "landing";
-        }
+    private @Autowired
+    HttpServletRequest request;
+
+    @RequestMapping(value = "/products", method = RequestMethod.GET)
+    public String handleCustomersRequest(Principal principal, Model model) {
+        model.addAttribute("products", productService.getProducts());
+        model.addAttribute("principal", principal);
+        String logoutUri = KeycloakUriBuilder.fromUri("http://localhost:8180/auth").path(ServiceUrlConstants.TOKEN_SERVICE_LOGOUT_PATH)
+                .queryParam("redirect_uri", "http://localhost:8080/products").build("quickstart").toString();
+        model.addAttribute("logout", logoutUri);
+        return "products";
+    }
+
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String handleLogoutt() throws ServletException {
+        request.logout();
+        return "landing";
+    }
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String landing() throws ServletException {
+        return "landing";
+    }
 
 }

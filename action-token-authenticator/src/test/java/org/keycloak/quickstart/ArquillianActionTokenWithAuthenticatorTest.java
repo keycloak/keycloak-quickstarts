@@ -17,6 +17,7 @@
 
 package org.keycloak.quickstart;
 
+import org.junit.Ignore;
 import org.keycloak.Token;
 import org.keycloak.TokenCategory;
 import org.keycloak.admin.client.Keycloak;
@@ -44,6 +45,7 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.keycloak.test.FluentTestsHelper;
 import org.keycloak.test.page.LoginPage;
 import org.keycloak.util.JsonSerialization;
 import com.google.common.collect.ImmutableMap;
@@ -71,17 +73,25 @@ import static org.keycloak.test.TestsHelper.importTestRealm;
 import static org.keycloak.test.TestsHelper.keycloakBaseUrl;
 
 @RunWith(Arquillian.class)
+@Ignore("https://issues.redhat.com/browse/KEYCLOAK-13055")
 public class ArquillianActionTokenWithAuthenticatorTest {
 
     private static final String PROVIDER_JAR = "action-token-provider";
     private static final String EXTERNAL_APP = "action-token-responder-example";
 
     private static Keycloak ADMIN_CLIENT;
-    private static final String KEYCLOAK_URL = "http://%s:%s/auth%s";
     private static final String REALM_QUICKSTART_ACTION_TOKEN = "quickstart-action-token";
 
     private static final String WEBAPP_SRC = "src/main/webapp";
     private static final String RESOURCES_SRC = "src/test/resources";
+
+    public static final String KEYCLOAK_URL = "http://localhost:8180/auth";
+    public static final FluentTestsHelper testHelper = new FluentTestsHelper(KEYCLOAK_URL,
+            FluentTestsHelper.DEFAULT_ADMIN_USERNAME,
+            FluentTestsHelper.DEFAULT_ADMIN_PASSWORD,
+            FluentTestsHelper.DEFAULT_ADMIN_REALM,
+            FluentTestsHelper.DEFAULT_ADMIN_CLIENT,
+            FluentTestsHelper.DEFAULT_TEST_REALM);
 
     @Page
     private LoginPage loginPage;
@@ -132,11 +142,10 @@ public class ArquillianActionTokenWithAuthenticatorTest {
 
     @BeforeClass
     public static void setupClass() throws Exception {
-        ADMIN_CLIENT = Keycloak.getInstance(keycloakBaseUrl, "master", "admin", "admin", "admin-cli");
+        testHelper.init();
+        testHelper.importTestRealm("/quickstart-realm.json");
+        ADMIN_CLIENT = Keycloak.getInstance(KEYCLOAK_URL, FluentTestsHelper.DEFAULT_ADMIN_REALM, FluentTestsHelper.DEFAULT_ADMIN_USERNAME, FluentTestsHelper.DEFAULT_ADMIN_PASSWORD, FluentTestsHelper.DEFAULT_ADMIN_CLIENT);
         final RealmResource qsRealm = ADMIN_CLIENT.realm(REALM_QUICKSTART_ACTION_TOKEN);
-
-        // Import realm
-        importTestRealm("admin", "admin", "/quickstart-realm.json");
 
         // Update authentication flow to use external application redirection
         qsRealm.flows().copy("browser", ImmutableMap.<String, String>builder().put("newName", "browser-copy").build()).close();
@@ -159,8 +168,8 @@ public class ArquillianActionTokenWithAuthenticatorTest {
     }
 
     @AfterClass
-    public static void tearDownClass() throws Exception {
-        deleteRealm("admin", "admin", REALM_QUICKSTART_ACTION_TOKEN);
+    public static void tearDownClass() {
+        testHelper.deleteRealm(REALM_QUICKSTART_ACTION_TOKEN);
     }
 
     @Before
@@ -195,6 +204,6 @@ public class ArquillianActionTokenWithAuthenticatorTest {
     }
 
     private void navigateTo(String path) {
-        webDriver.navigate().to(format(KEYCLOAK_URL, keycloakContextRoot.getHost(), keycloakContextRoot.getPort(), path));
+        webDriver.navigate().to(KEYCLOAK_URL + path);
     }
 }

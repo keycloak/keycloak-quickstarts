@@ -34,9 +34,11 @@ import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.importer.ZipImporter;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.keycloak.admin.client.Keycloak;
@@ -44,6 +46,7 @@ import org.keycloak.admin.client.resource.ClientsResource;
 import org.keycloak.quickstart.uma.page.PhotozPage;
 import org.keycloak.representations.idm.ClientRepresentation;
 import org.keycloak.representations.idm.authorization.ResourceServerRepresentation;
+import org.keycloak.test.FluentTestsHelper;
 import org.keycloak.util.JsonSerialization;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -62,9 +65,17 @@ import static org.keycloak.test.TestsHelper.importTestRealm;
 @RunAsClient
 public class ArquillianAuthzUMATest {
 
-    private static final String REALM_NAME = "photoz";
     private static final String HTML_CLIENT_APP_NAME = "photoz-html5-client";
     private static final String RESTFUL_API_APP_NAME = "photoz-restful-api";
+
+    public static final String TEST_REALM = "photoz";
+    public static final String KEYCLOAK_URL = "http://localhost:8180/auth";
+    public static final FluentTestsHelper testHelper = new FluentTestsHelper(KEYCLOAK_URL,
+            FluentTestsHelper.DEFAULT_ADMIN_USERNAME,
+            FluentTestsHelper.DEFAULT_ADMIN_PASSWORD,
+            FluentTestsHelper.DEFAULT_ADMIN_REALM,
+            FluentTestsHelper.DEFAULT_ADMIN_CLIENT,
+            FluentTestsHelper.DEFAULT_TEST_REALM);
 
     @Page
     private PhotozPage photozPage;
@@ -78,9 +89,10 @@ public class ArquillianAuthzUMATest {
 
     static {
         try {
-            importTestRealm("admin", "admin", "/quickstart-realm.json");
+            testHelper.init();
+            testHelper.importTestRealm("/quickstart-realm.json");
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IllegalStateException("Could not initialize Keycloak", e);
         }
     }
 
@@ -98,12 +110,13 @@ public class ArquillianAuthzUMATest {
 
     @AfterClass
     public static void cleanUp() throws IOException {
-        deleteRealm("admin", "admin", "photoz");
+        testHelper.deleteRealm(TEST_REALM);
     }
 
     @Before
     public void setup() {
         webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
+        webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         webDriver.navigate().to(contextRoot);
     }
 
@@ -111,7 +124,6 @@ public class ArquillianAuthzUMATest {
     public void testCreateDeleteAlbum() {
         try {
             photozPage.login("alice", "alice", "Alice In Chains");
-
             // the albums and shared albums lists should be empty.
             WebElement emptyAlbumsList = webDriver.findElement(By.id("resource-list-empty"));
             Assert.assertTrue(emptyAlbumsList.isDisplayed());
@@ -136,6 +148,7 @@ public class ArquillianAuthzUMATest {
     }
 
     @Test
+    @Ignore("https://issues.redhat.com/browse/KEYCLOAK-13053")
     public void testRequestEntitlements() {
         try {
             photozPage.login("admin", "admin", "Admin Istrator");

@@ -24,14 +24,15 @@ fi
 if [ $1 == "group4" ]; then
   cd app-authz-springboot && mvn -B -s ../maven-settings.xml clean test -Pspring-boot -q
   cd ../service-springboot-rest && mvn -B -s ../maven-settings.xml clean test -Pspring-boot -q
-  mvn spring-boot:run >/dev/null&
-  cd ../app-springboot
-  mvn -B -s ../maven-settings.xml clean test -Pspring-boot
+  cd ../app-springboot && mvn -B -s ../maven-settings.xml clean test -Pspring-boot
 fi
 
 if [ $1 == "group5" ]; then
-  mvn -B -s maven-settings.xml test -Pkeycloak-remote -f user-storage-jpa
-  mvn -B -s maven-settings.xml test -Pkeycloak-remote -f user-storage-simple
+  # Requires updating to 9.0.1-SNAPSHOT and above
+  # https://issues.redhat.com/browse/KEYCLOAK-13051
+  #mvn -B -s maven-settings.xml test -Pkeycloak-remote -f user-storage-jpa
+  #mvn -B -s maven-settings.xml test -Pkeycloak-remote -f user-storage-simple
+  echo "Skipping due to https://issues.redhat.com/browse/KEYCLOAK-13051"
 fi
 if [ $1 == "group6" ] && [ $TRAVIS_PULL_REQUEST == "false" ]; then
  ./productize.sh

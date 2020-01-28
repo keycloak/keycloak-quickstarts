@@ -66,6 +66,8 @@ public class ArquillianProfileJeeJspTest {
     private static final String APP_SERVICE = "service-jaxrs";
     private static final String ROOT_URL = "http://127.0.0.1:8080/app-profile-jsp";
 
+    public static final String TEST_REALM = "quickstart";
+
     @Page
     private IndexPage indexPage;
 
@@ -75,34 +77,35 @@ public class ArquillianProfileJeeJspTest {
     @Page
     private ProfilePage profilePage;
 
+    public static final JspTestHelper testHelper = new JspTestHelper();
+
     static {
         try {
-            importTestRealm("admin", "admin", "/quickstart-realm.json");
-        } catch (IOException e) {
-            e.printStackTrace();
+            testHelper.init();
+            testHelper.importTestRealm("/quickstart-realm.json")
+                    .createClient(ClientBuilder.create(APP_NAME).rootUrl(ROOT_URL).accessType(PUBLIC))
+                    .createClient(ClientBuilder.create(APP_SERVICE).accessType(BEARER_ONLY));
+        } catch (Exception e) {
+            throw new IllegalStateException("Could not initialize Keycloak", e);
         }
     }
 
     @Deployment(name = APP_SERVICE, order = 1, testable = false)
-    public static Archive<?> createTestArchive1() throws IOException {
+    public static Archive<?> createTestArchive1() throws Exception {
         return ShrinkWrap.createFromZipFile(WebArchive.class,
                 new File("../service-jee-jaxrs/target/service.war"))
-                .addAsWebInfResource(
-                        new StringAsset(createClient(
-                                ClientBuilder.create(APP_SERVICE).accessType(BEARER_ONLY))), "keycloak.json");
+                .addAsWebInfResource(new StringAsset(testHelper.getAdapterConfiguration(APP_SERVICE)), "keycloak.json");
     }
 
     @Deployment(name = APP_NAME, order = 2, testable = false)
-    public static Archive<?> createTestArchive2() throws IOException {
+    public static Archive<?> createTestArchive2() throws Exception {
         return ShrinkWrap.create(WebArchive.class, "app-profile-jsp.war")
                 .addPackages(true, Filters.exclude(".*Test.*"), Controller.class.getPackage())
                 .addAsWebResource(new File(WEBAPP_SRC, "index.jsp"))
                 .addAsWebResource(new File(WEBAPP_SRC, "profile.jsp"))
                 .addAsWebResource(new File(WEBAPP_SRC, "styles.css"))
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-                .addAsWebInfResource(new StringAsset(createClient(ClientBuilder.create(APP_NAME)
-                        .rootUrl(ROOT_URL)
-                        .accessType(PUBLIC))), "keycloak.json")
+                .addAsWebInfResource(new StringAsset(testHelper.getAdapterConfiguration(APP_NAME)), "keycloak.json")
                 .setWebXML(new File("src/main/webapp", "WEB-INF/web.xml"));
     }
 
@@ -115,7 +118,7 @@ public class ArquillianProfileJeeJspTest {
 
     @AfterClass
     public static void cleanUp() throws IOException {
-        deleteRealm("admin", "admin", TestsHelper.testRealm);
+        testHelper.deleteRealm(TEST_REALM);
     }
 
     @Before
