@@ -35,6 +35,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.keycloak.quickstart.page.AuthzPage;
+import org.keycloak.test.FluentTestsHelper;
+import org.keycloak.test.builders.ClientBuilder;
 import org.keycloak.test.page.LoginPage;
 import org.openqa.selenium.WebDriver;
 
@@ -49,6 +51,8 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.keycloak.test.TestsHelper.deleteRealm;
 import static org.keycloak.test.TestsHelper.importTestRealm;
+import static org.keycloak.test.builders.ClientBuilder.AccessType.BEARER_ONLY;
+import static org.keycloak.test.builders.ClientBuilder.AccessType.PUBLIC;
 
 /**
  * @author <a href="mailto:bruno@abstractj.org">Bruno Oliveira</a>
@@ -60,6 +64,15 @@ public class ArquillianJeeAuthzTest {
     private static final String WEBAPP_SRC = "src/main/webapp";
     private static final String APP_NAME = "authz-servlet";
 
+    public static final String TEST_REALM = "quickstart-authz-servlet";
+    public static final String KEYCLOAK_URL = "http://localhost:8180/auth";
+    public static final FluentTestsHelper testHelper = new FluentTestsHelper(KEYCLOAK_URL,
+            FluentTestsHelper.DEFAULT_ADMIN_USERNAME,
+            FluentTestsHelper.DEFAULT_ADMIN_PASSWORD,
+            FluentTestsHelper.DEFAULT_ADMIN_REALM,
+            FluentTestsHelper.DEFAULT_ADMIN_CLIENT,
+            FluentTestsHelper.DEFAULT_TEST_REALM);
+
     @Page
     private AuthzPage indexPage;
 
@@ -68,9 +81,10 @@ public class ArquillianJeeAuthzTest {
 
     static {
         try {
-            importTestRealm("admin", "admin", "/quickstart-realm.json");
+            testHelper.init();
+            testHelper.importTestRealm("/quickstart-realm.json");
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IllegalStateException("Could not initialize Keycloak", e);
         }
     }
 
@@ -105,8 +119,8 @@ public class ArquillianJeeAuthzTest {
     private URL contextRoot;
 
     @AfterClass
-    public static void cleanUp() throws IOException {
-        deleteRealm("admin", "admin", "quickstart-authz-servlet");
+    public static void cleanUp() {
+        testHelper.deleteRealm(TEST_REALM);
     }
 
     @Before

@@ -117,7 +117,6 @@
                                 <command>    /subsystem=keycloak-server/spi=actionTokenHandler:add</command>
                                 <command>    /subsystem=keycloak-server/spi=actionTokenHandler/provider=external-app-notification:add(enabled=true,properties={hmacSecret="aSqzP4reFgWR4j94BDT1r+81QYp/NYbY9SBwXtqV1ko="}</command>
                                 <command>end-if</command>
-
                                 <command>:reload</command>
                             </commands>
                         </configuration>

@@ -34,6 +34,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.keycloak.test.FluentTestsHelper;
 import org.keycloak.test.page.LoginPage;
 import org.openqa.selenium.WebDriver;
 
@@ -59,6 +60,15 @@ public class ArquillianJeeAuthzVanillaTest {
     private static final String WEBAPP_SRC = "src/main/webapp";
     private static final String APP_NAME = "app-authz-vanilla";
 
+    public static final String TEST_REALM = "quickstart-authz-vanilla";
+    public static final String KEYCLOAK_URL = "http://localhost:8180/auth";
+    public static final FluentTestsHelper testHelper = new FluentTestsHelper(KEYCLOAK_URL,
+            FluentTestsHelper.DEFAULT_ADMIN_USERNAME,
+            FluentTestsHelper.DEFAULT_ADMIN_PASSWORD,
+            FluentTestsHelper.DEFAULT_ADMIN_REALM,
+            FluentTestsHelper.DEFAULT_ADMIN_CLIENT,
+            FluentTestsHelper.DEFAULT_TEST_REALM);
+
     @Page
     private LoginPage loginPage;
 
@@ -67,9 +77,10 @@ public class ArquillianJeeAuthzVanillaTest {
 
     static {
         try {
-            importTestRealm("admin", "admin", "/quickstart-realm.json");
-        } catch (IOException e) {
-            e.printStackTrace();
+            testHelper.init();
+            testHelper.importTestRealm("/quickstart-realm.json");
+        } catch (Exception e) {
+            throw new IllegalStateException("Could not initialize Keycloak", e);
         }
     }
 
@@ -97,8 +108,8 @@ public class ArquillianJeeAuthzVanillaTest {
     private URL contextRoot;
 
     @AfterClass
-    public static void cleanUp() throws IOException {
-        deleteRealm("admin", "admin", "quickstart-authz-vanilla");
+    public static void cleanUp() {
+        testHelper.deleteRealm(TEST_REALM);
     }
 
     @Before

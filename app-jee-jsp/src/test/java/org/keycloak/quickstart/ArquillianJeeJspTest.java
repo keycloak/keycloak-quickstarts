@@ -37,7 +37,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.keycloak.quickstart.appjee.Controller;
-import org.keycloak.test.TestsHelper;
 import org.keycloak.test.builders.ClientBuilder;
 import org.keycloak.test.page.IndexPage;
 import org.keycloak.test.page.LoginPage;
@@ -51,11 +50,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.keycloak.test.TestsHelper.createClient;
-import static org.keycloak.test.TestsHelper.deleteRealm;
-import static org.keycloak.test.TestsHelper.importTestRealm;
 import static org.keycloak.test.builders.ClientBuilder.AccessType.BEARER_ONLY;
 import static org.keycloak.test.builders.ClientBuilder.AccessType.PUBLIC;
 import static org.keycloak.test.page.IndexPage.UNAUTHORIZED;
@@ -72,31 +67,36 @@ public class ArquillianJeeJspTest {
     private static final String APP_SERVICE = "service-jaxrs";
     private static final String ROOT_URL = "http://127.0.0.1:8080/app-jsp";
 
+    public static final String TEST_REALM = "quickstart";
+
     @Page
     private IndexPage indexPage;
 
     @Page
     private LoginPage loginPage;
 
+    public static final JspTestHelper testHelper = new JspTestHelper();
+
     static {
         try {
-            importTestRealm("admin", "admin", "/quickstart-realm.json");
-        } catch (IOException e) {
-            e.printStackTrace();
+            testHelper.init();
+            testHelper.importTestRealm("/quickstart-realm.json")
+                    .createClient(ClientBuilder.create(APP_NAME).rootUrl(ROOT_URL).accessType(PUBLIC))
+                    .createClient(ClientBuilder.create(APP_SERVICE).accessType(BEARER_ONLY));
+        } catch (Exception e) {
+            throw new IllegalStateException("Could not initialize Keycloak", e);
         }
     }
 
     @Deployment(name= APP_SERVICE, order = 1, testable = false)
-    public static Archive<?> createTestArchive1() throws IOException {
+    public static Archive<?> createTestArchive1() throws Exception {
         return ShrinkWrap.createFromZipFile(WebArchive.class,
                 new File("../service-jee-jaxrs/target/service.war"))
-                .addAsWebInfResource(
-                        new StringAsset(createClient(
-                                ClientBuilder.create(APP_SERVICE).accessType(BEARER_ONLY))), "keycloak.json");
+                .addAsWebInfResource(new StringAsset(testHelper.getAdapterConfiguration(APP_SERVICE)), "keycloak.json");
     }
 
     @Deployment(name= APP_NAME, order = 2, testable = false)
-    public static Archive<?> createTestArchive2() throws IOException {
+    public static Archive<?> createTestArchive2() throws Exception {
         File[] files = Maven.resolver().loadPomFromFile("pom.xml")
                     .importRuntimeDependencies().resolve().withTransitivity().asFile();
 
@@ -107,9 +107,7 @@ public class ArquillianJeeJspTest {
                 .addAsWebResource(new File(WEBAPP_SRC, "protected.jsp"))
                 .addAsWebResource(new File(WEBAPP_SRC, "styles.css"))
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-                .addAsWebInfResource(new StringAsset(createClient(ClientBuilder.create(APP_NAME)
-                        .rootUrl(ROOT_URL)
-                        .accessType(PUBLIC))), "keycloak.json")
+                .addAsWebInfResource(new StringAsset(testHelper.getAdapterConfiguration(APP_NAME)), "keycloak.json")
                 .setWebXML(new File("src/main/webapp", "WEB-INF/web.xml"));
     }
 
@@ -122,7 +120,7 @@ public class ArquillianJeeJspTest {
 
     @AfterClass
     public static void cleanUp() throws IOException{
-        deleteRealm("admin","admin",TestsHelper.testRealm);
+        testHelper.deleteRealm(TEST_REALM);
     }
 
     @Before
@@ -135,7 +133,7 @@ public class ArquillianJeeJspTest {
     public void testSecuredResource() throws InterruptedException {
         try {
             indexPage.clickSecured();
-            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.className("error"), UNAUTHORIZED)));
+            Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.className("error"), UNAUTHORIZED));
         } catch (Exception e) {
             debugTest(e);
             fail("Should display an error message");
@@ -146,7 +144,7 @@ public class ArquillianJeeJspTest {
     public void testAdminResource() {
         try {
             indexPage.clickAdmin();
-            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.className("error"), UNAUTHORIZED)));
+            Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.className("error"), UNAUTHORIZED));
         } catch (Exception e) {
             debugTest(e);
             fail("Should display an error message");
@@ -157,7 +155,7 @@ public class ArquillianJeeJspTest {
     public void testPublicResource() {
         try {
             indexPage.clickPublic();
-            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.className("message"), "Message: public")));
+            Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.className("message"), "Message: public"));
         } catch (Exception e) {
             debugTest(e);
             fail("Should display an error message");
@@ -170,8 +168,8 @@ public class ArquillianJeeJspTest {
             indexPage.clickLogin();
             loginPage.login("test-admin", "password");
             indexPage.clickAdmin();
-            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(
-                    By.className("message"), "Message: admin")));
+            Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(
+                    By.className("message"), "Message: admin"));
             indexPage.clickLogout();
         } catch (Exception e) {
             debugTest(e);
@@ -185,8 +183,8 @@ public class ArquillianJeeJspTest {
             indexPage.clickLogin();
             loginPage.login("alice", "password");
             indexPage.clickSecured();
-            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(
-                    By.className("message"), "Message: secured")));
+            Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(
+                    By.className("message"), "Message: secured"));
             indexPage.clickLogout();
         } catch (Exception e) {
             debugTest(e);

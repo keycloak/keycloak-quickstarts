@@ -29,100 +29,108 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.keycloak.test.TestsHelper;
 import org.keycloak.test.builders.ClientBuilder;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
 import java.io.File;
-import java.io.IOException;
 
-import static org.keycloak.test.TestsHelper.createClient;
-import static org.keycloak.test.TestsHelper.createDirectGrantClient;
-import static org.keycloak.test.TestsHelper.importTestRealm;
 import static org.keycloak.test.builders.ClientBuilder.AccessType.BEARER_ONLY;
+import static org.keycloak.test.builders.ClientBuilder.AccessType.PUBLIC;
 
 
 @RunWith(Arquillian.class)
 public class ArquillianServiceJeeJaxrsTest {
 
+    public static final String APP_SERVER_URL = "http://localhost:8080";
+
+    public static final String TEST_APP_NAME = "test-demo";
+    public static final String TEST_DGA = "test-dga";
+    public static final String TEST_REALM = "quickstart";
+
+    public static final String APP_URL = APP_SERVER_URL + "/" + TEST_APP_NAME;
+
+    public static final JaxrsTestHelper testHelper = new JaxrsTestHelper();
+
     static {
         try {
-            TestsHelper.appName = "test-demo";
-            TestsHelper.baseUrl = "http://localhost:8080/test-demo";
-            //TestsHelper.keycloakBaseUrl  = "set keycloak server docker IP"
-            importTestRealm("admin", "admin", "/quickstart-realm.json");
-            createDirectGrantClient();
+            testHelper.init();
+            testHelper.importTestRealm("/quickstart-realm.json")
+                    .createClient(ClientBuilder.create(TEST_DGA).accessType(PUBLIC))
+                    .createClient(ClientBuilder.create(TEST_APP_NAME).baseUrl(APP_URL).accessType(BEARER_ONLY));
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IllegalStateException("Could not initialize Keycloak", e);
         }
     }
 
     @Deployment(testable = false)
-    public static Archive<?> createTestArchive() throws IOException {
+    public static Archive<?> createTestArchive() throws Exception {
         return ShrinkWrap.create(WebArchive.class, "test-demo.war")
                 .addPackages(true, Filters.exclude(".*Test.*"), Application.class.getPackage())
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-                .addAsWebInfResource(new StringAsset(createClient(ClientBuilder.create("test-demo")
-                                .baseUrl(TestsHelper.baseUrl).accessType(BEARER_ONLY))), "keycloak.json")
+                .addAsWebInfResource(new StringAsset(testHelper.getAdapterConfiguration(TEST_APP_NAME)), "keycloak.json")
                 .setWebXML(new File("src/main/webapp", "WEB-INF/web.xml"));
 
     }
 
     @AfterClass
-    public static void cleanUp() throws IOException {
-        TestsHelper.deleteRealm("admin", "admin", TestsHelper.testRealm);
+    public static void cleanUp() {
+        testHelper.deleteRealm(TEST_REALM);
     }
 
     @Test
     public void testSecuredEndpoint() {
-        try {
-            Assert.assertTrue(TestsHelper.returnsForbidden("/secured"));
-        } catch (IOException e) {
-            Assert.fail();
-        }
+        Assert.assertEquals(401, get(APP_URL + "/secured").getStatus());
     }
 
     @Test
     public void testAdminEndpoint() {
-        try {
-            Assert.assertTrue(TestsHelper.returnsForbidden("/admin"));
-        } catch (IOException e) {
-            Assert.fail();
-        }
+        Assert.assertEquals(401, get(APP_URL + "/admin").getStatus());
     }
 
     @Test
     public void testPublicEndpoint() {
-        try {
-            Assert.assertFalse(TestsHelper.returnsForbidden("/public"));
-        } catch (IOException e) {
-            Assert.fail();
-        }
+        Assert.assertEquals(200, get(APP_URL + "/public").getStatus());
     }
 
     @Test
     public void testSecuredEndpointWithAuth() {
-        try {
-            Assert.assertTrue(TestsHelper.testGetWithAuth("/secured", TestsHelper.getToken("alice", "password", TestsHelper.testRealm)));
-        } catch (IOException e) {
-            Assert.fail();
-        }
+        String tokenForAlice = new JaxrsTestHelper("alice", "password", TEST_REALM, TEST_DGA).initWithoutInitialToken().getToken();
+        Assert.assertEquals(200, get(APP_URL + "/secured", tokenForAlice).getStatus());
     }
 
     @Test
     public void testAdminEndpointWithAuthButNoRole() {
-        try {
-            Assert.assertFalse(TestsHelper.testGetWithAuth("/admin", TestsHelper.getToken("alice", "password", TestsHelper.testRealm)));
-        } catch (IOException e) {
-            Assert.fail();
-        }
+        String tokenForAlice = new JaxrsTestHelper("alice", "password", TEST_REALM, TEST_DGA).initWithoutInitialToken().getToken();
+        Assert.assertEquals(403, get(APP_URL + "/admin", tokenForAlice).getStatus());
     }
 
     @Test
     public void testAdminEndpointWithAuthAndRole() {
-        try {
-            Assert.assertTrue(TestsHelper.testGetWithAuth("/admin", TestsHelper.getToken("test-admin", "password", TestsHelper.testRealm)));
-        } catch (IOException e) {
-            Assert.fail();
-        }
+        String tokenForTestAdmin = new JaxrsTestHelper("test-admin", "password", TEST_REALM, TEST_DGA).initWithoutInitialToken().getToken();
+        Assert.assertEquals(200, get(APP_URL + "/admin", tokenForTestAdmin).getStatus());
     }
+
+    public Response get(String uri) {
+        return get(uri, null);
+    }
+
+    public Response get(String uri, String token) {
+        Client client = javax.ws.rs.client.ClientBuilder.newClient();
+        Response response = null;
+        try {
+            WebTarget target = client.target(uri);
+            Invocation.Builder request = target.request();
+            if (token != null)
+                request.header("Authorization", "Bearer " + token);
+            response = request.get();
+            response.close();
+        } finally {
+            client.close();
+        }
+        return response;
+    }
+
 }

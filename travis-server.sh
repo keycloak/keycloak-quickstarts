@@ -14,7 +14,7 @@ if [[ $TRAVIS_BRANCH != "latest" ]]; then
   VERSION=`grep -A1 "keycloak-parent" pom.xml | grep "<version>.*</version>$" | awk -F'[><]' '{print $3}'`
 
   # Build the repository based on jboss-public-repository
-  mvn -s ../maven-settings.xml clean install --no-snapshot-updates -Pdistribution -DskipTests=true -B -V
+  mvn -s ../maven-settings.xml clean install --no-snapshot-updates -DskipTestsuite -Pdistribution -DskipTests=true -B -V
 
   # Extract and start the Keycloak server distribution
   mkdir ../keycloak-server && tar xzf distribution/server-dist/target/keycloak-$VERSION.tar.gz -C ../keycloak-server --strip-components 1

@@ -36,12 +36,10 @@ public class ProductApplication {
 	protected ServletContextListener listener() {
 		return new ServletContextListener() {
 
-			@Override
 			public void contextInitialized(ServletContextEvent sce) {
 				logger.info("ServletContext initialized");
 			}
 
-			@Override
 			public void contextDestroyed(ServletContextEvent sce) {
 				logger.info("ServletContext destroyed");
 			}

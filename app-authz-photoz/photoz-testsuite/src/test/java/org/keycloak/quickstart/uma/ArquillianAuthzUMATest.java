@@ -37,6 +37,7 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.keycloak.admin.client.Keycloak;
@@ -44,6 +45,7 @@ import org.keycloak.admin.client.resource.ClientsResource;
 import org.keycloak.quickstart.uma.page.PhotozPage;
 import org.keycloak.representations.idm.ClientRepresentation;
 import org.keycloak.representations.idm.authorization.ResourceServerRepresentation;
+import org.keycloak.test.FluentTestsHelper;
 import org.keycloak.util.JsonSerialization;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -60,11 +62,20 @@ import static org.keycloak.test.TestsHelper.importTestRealm;
  */
 @RunWith(Arquillian.class)
 @RunAsClient
+@Ignore("https://issues.redhat.com/browse/KEYCLOAK-13052")
 public class ArquillianAuthzUMATest {
 
-    private static final String REALM_NAME = "photoz";
     private static final String HTML_CLIENT_APP_NAME = "photoz-html5-client";
     private static final String RESTFUL_API_APP_NAME = "photoz-restful-api";
+
+    public static final String TEST_REALM = "photoz";
+    public static final String KEYCLOAK_URL = "http://localhost:8180/auth";
+    public static final FluentTestsHelper testHelper = new FluentTestsHelper(KEYCLOAK_URL,
+            FluentTestsHelper.DEFAULT_ADMIN_USERNAME,
+            FluentTestsHelper.DEFAULT_ADMIN_PASSWORD,
+            FluentTestsHelper.DEFAULT_ADMIN_REALM,
+            FluentTestsHelper.DEFAULT_ADMIN_CLIENT,
+            FluentTestsHelper.DEFAULT_TEST_REALM);
 
     @Page
     private PhotozPage photozPage;
@@ -78,18 +89,23 @@ public class ArquillianAuthzUMATest {
 
     static {
         try {
-            importTestRealm("admin", "admin", "/quickstart-realm.json");
+            testHelper.init();
+            testHelper.importTestRealm("/quickstart-realm.json");
 
             // import the authorization configuration for the photoz-restful-api client.
-            Keycloak keycloak = Keycloak.getInstance("http://localhost:8180/auth", "master", "admin", "admin", "admin-cli");
-            ClientsResource clients = keycloak.realms().realm(REALM_NAME).clients();
+            Keycloak keycloak = Keycloak.getInstance(KEYCLOAK_URL,
+                    FluentTestsHelper.DEFAULT_ADMIN_REALM,
+                    FluentTestsHelper.DEFAULT_ADMIN_USERNAME,
+                    FluentTestsHelper.DEFAULT_ADMIN_USERNAME,
+                    FluentTestsHelper.DEFAULT_ADMIN_CLIENT);
+            ClientsResource clients = keycloak.realms().realm(TEST_REALM).clients();
             ClientRepresentation client = clients.findByClientId(RESTFUL_API_APP_NAME).get(0);
             ResourceServerRepresentation settings = JsonSerialization.readValue(
                     new FileInputStream(new File("../photoz-restful-api/target/classes/photoz-restful-api-authz-service.json")),
                     ResourceServerRepresentation.class);
             clients.get(client.getId()).authorization().importSettings(settings);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IllegalStateException("Could not initialize Keycloak", e);
         }
     }
 
@@ -106,13 +122,14 @@ public class ArquillianAuthzUMATest {
     }
 
     @AfterClass
-    public static void cleanUp() throws IOException {
-        deleteRealm("admin", "admin", "photoz");
+    public static void cleanUp() {
+        testHelper.deleteRealm(TEST_REALM);
     }
 
     @Before
     public void setup() {
         webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
+        webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         webDriver.navigate().to(contextRoot);
     }
 

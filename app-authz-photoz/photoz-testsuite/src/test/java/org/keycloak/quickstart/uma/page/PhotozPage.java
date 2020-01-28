@@ -19,12 +19,14 @@ package org.keycloak.quickstart.uma.page;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
+import java.util.concurrent.locks.LockSupport;
 
 import org.jboss.arquillian.graphene.page.Page;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.Assert;
 import org.keycloak.test.page.LoginPage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -80,6 +82,7 @@ public class PhotozPage {
 
 
     public void login(final String username, final String password, final String fullName) {
+        waitForPageToLoad();
         loginPage.login(username, password);
         waitForPageToLoad();
         if (consentPage.isCurrent()) {
@@ -89,6 +92,7 @@ public class PhotozPage {
         if (fullName != null) {
             Assert.assertEquals("Welcome To Photoz, " + fullName, welcomeMessage.getText());
         }
+        waitForPageToLoad();
     }
 
     public void logout() {
@@ -229,20 +233,15 @@ public class PhotozPage {
             }
         }
 
-        WebDriverWait wait = new WebDriverWait(webDriver, PAGELOAD_TIMEOUT_MILLIS / 1000);
-
-        try {
-            // Checks if the document is ready and asks AngularJS, if present, whether there are any REST API requests
-            // in progress
+        if (webDriver instanceof JavascriptExecutor) {
+            WebDriverWait wait = new WebDriverWait(webDriver, PAGELOAD_TIMEOUT_MILLIS / 1000);
             wait.until(javaScriptThrowsNoExceptions(
                     "if (document.readyState !== 'complete' "
                             + "|| (typeof angular !== 'undefined' && angular.element(document.body).injector().get('$http').pendingRequests.length !== 0)) {"
                             + "throw \"Not ready\";"
                             + "}"));
-        } catch (TimeoutException e) {
-            // Sometimes, for no obvious reason, the browser/JS doesn't set document.readyState to 'complete' correctly
-            // but that's no reason to let the test fail; after the timeout the page is surely fully loaded
-            log.warn("waitForPageToLoad time exceeded!");
+        } else {
+            LockSupport.parkNanos(1_000_000_000);
         }
     }
 
