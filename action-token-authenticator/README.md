@@ -46,7 +46,7 @@ Build and Deploy the Quickstart
 If you open the pom.xml file you'll see that the add-spi-configurations execution creates
 a configuration of a single custom SPI implemented in this example:
 
- *  `external-app-notification` action token handler is given a secret key that
+ *  `external-app-notification` action token handler is given a HMAC secret key that
     is used in step 5 to verify that the invocation comes from the correct app.
 
 The custom authenticator is configured in admin console within the flow that uses it:
