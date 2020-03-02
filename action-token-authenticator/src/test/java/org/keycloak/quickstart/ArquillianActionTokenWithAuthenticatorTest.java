@@ -23,6 +23,7 @@ import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.authentication.AuthenticatorFactory;
 import org.keycloak.authentication.actiontoken.ActionTokenHandlerFactory;
+import org.keycloak.authentication.authenticators.browser.UsernamePasswordFormFactory;
 import org.keycloak.common.util.Base64;
 import org.keycloak.jose.jws.JWSInput;
 import org.keycloak.quickstart.actiontoken.authenticator.ExternalAppAuthenticator;
@@ -140,18 +141,25 @@ public class ArquillianActionTokenWithAuthenticatorTest {
 
         // Update authentication flow to use external application redirection
         qsRealm.flows().copy("browser", ImmutableMap.<String, String>builder().put("newName", "browser-copy").build()).close();
-        qsRealm.flows().addExecution("browser-copy",
+        List<AuthenticationExecutionInfoRepresentation> executions = qsRealm.flows().getExecutions("browser-copy");
+
+        AuthenticationExecutionInfoRepresentation browserFormFlow = executions.stream()
+          .filter(ex -> Objects.equals(ex.getAuthenticationFlow(), Boolean.TRUE) && Objects.equals(ex.getDisplayName(), "browser-copy forms"))
+          .findFirst()
+          .orElseThrow(() -> new AssertionError("Could not find forms flow"));
+
+        qsRealm.flows().addExecution(browserFormFlow.getDisplayName(),
           ImmutableMap.<String, String>builder()
             .put("provider", ExternalAppAuthenticatorFactory.ID)
             .build());
 
-        final List<AuthenticationExecutionInfoRepresentation> executions = qsRealm.flows().getExecutions("browser-copy");
+        executions = qsRealm.flows().getExecutions("browser-copy");
         AuthenticationExecutionInfoRepresentation extAppExecution = executions.stream()
           .filter(ex -> Objects.equals(ex.getProviderId(), ExternalAppAuthenticatorFactory.ID))
           .findFirst()
           .orElseThrow(() -> new AssertionError("Could not find execution"));
         extAppExecution.setRequirement("REQUIRED");
-        qsRealm.flows().updateExecutions("browser-copy", extAppExecution);
+        qsRealm.flows().updateExecutions(browserFormFlow.getDisplayName(), extAppExecution);
 
         final RealmRepresentation qsRealmRepresentation = qsRealm.toRepresentation();
         qsRealmRepresentation.setBrowserFlow("browser-copy");
