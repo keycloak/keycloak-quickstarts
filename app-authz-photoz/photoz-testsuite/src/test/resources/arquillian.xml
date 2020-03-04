@@ -26,16 +26,28 @@
         is the most mature -->
     <defaultProtocol type="Servlet 3.0" />
 
-    <!-- Example configuration for a remote JBoss AS 7 instance -->
-    <container qualifier="jboss" default="true">
-        <!-- If you want to use the JBOSS_HOME environment variable, just delete
-            the jbossHome property -->
-        <configuration>
-            <property name="managementAddress">127.0.0.1</property>
-            <property name="managementPort">9990</property>
-            <property name="jbossHome">${basedir}/target/wildfly-${version.wildfly}</property>
-        </configuration>
-    </container>
+    <group qualifier="default" default="true">
+        <!-- Example configuration for a remote JBoss AS 7 instance -->
+        <container qualifier="jboss" default="true">
+            <!-- If you want to use the JBOSS_HOME environment variable, just delete
+                the jbossHome property -->
+            <configuration>
+                <property name="managementAddress">127.0.0.1</property>
+                <property name="managementPort">9990</property>
+                <property name="jbossHome">${basedir}/target/wildfly-${version.wildfly}</property>
+            </configuration>
+        </container>
+    
+        <container qualifier="keycloak">
+            <configuration>
+                <property name="managementAddress">127.0.0.1</property>
+                <property name="managementPort">10090</property>
+                <property name="username">admin</property>
+                <property name="password">admin</property>
+                <property name="allowConnectingToRunningServer">true</property>
+            </configuration>
+        </container>
+    </group>
 
     <extension qualifier="webdriver">
         <property name="browser">${browser}</property>

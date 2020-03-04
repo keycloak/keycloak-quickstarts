@@ -65,9 +65,29 @@ In addition it provides some background on how one can actually protect JAX-RS e
 Create the Example Realm and a Resource Server
 -----------
 
-Considering that your Keycloak Server is up and running, log in to the Keycloak Administration Console.
+Build the quickstart by running the following command:
 
-Now, create a new realm based on the following configuration file:
+   ````
+   mvn clean install 
+   ````
+
+This quickstart defines some policies using JavaScript. Before creating the realm, you need to deploy these policies to the Keycloak Server as follows:
+
+1. Open a terminal and navigate to the root directory of this quickstart.
+
+2. Enter the `photoz-js-policies` module:
+
+   ````
+   cd photoz-js-policies
+   ````
+
+3. Deploy the policies to the server as follows:
+
+   ````
+   cp target/photoz-uma-js-policies.jar KEYCLOAK_HOME/standalone/deployments
+   ````
+
+Now, log in to the Keycloak Administration Console and create a new realm based on the following configuration file:
 
    ````
    keycloak-quickstarts/app-authz-uma-photoz/photoz-realm.json
@@ -76,7 +96,7 @@ Now, create a new realm based on the following configuration file:
 That will import a pre-configured realm with everything you need to run this quickstart. For more details about how to import a realm 
 into Keycloak, check the Keycloak's reference documentation.
 
-After importing that file, you'll have a new realm called `photoz`. 
+After importing that file, you'll have a new realm called `photoz`.
 
 Deploy and Run the quickstart applications
 -----------

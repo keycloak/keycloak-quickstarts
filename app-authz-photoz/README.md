@@ -86,15 +86,21 @@ into Keycloak, check the Keycloak's reference documentation.
 After importing that file, you'll have a new realm called `photoz`. 
 
 Back to the command-line, build the quickstart. This step is necessary given that we're using policies based on
-JBoss Drools, which require `photoz-authz-policy` artifact installed into your local maven repository.
+JavaScript, which require `photoz-js-policies` artifact deployed into the Keycloak Server.
 
 To build the quickstart, open a terminal and navigate to the root of this quickstart. Then run the following command:
 
    ````
    mvn clean install 
    ````
-    
-Now, let's import another configuration using the Administration Console in order to configure the client application ``photoz-restful-api`` as a resource server with all resources, scopes, permissions and policies.
+
+Now, you should just copy the JAR with the policies to the Keycloak Server as follows:
+
+   ````
+   cp photoz-js-policies/target/photoz-js-policies.jar KEYCLOAK_HOME/standalone/deployments
+   ```` 
+
+For last, let's import another configuration file using the Administration Console in order to configure the client application ``photoz-restful-api`` as a resource server with all resources, scopes, permissions and policies.
 
 Click on `Clients` on the left side menu. Click on the `photoz-restful-api` on the client listing page. This will
 open the `Client Details` page. Once there, click on the `Authorization` tab. 

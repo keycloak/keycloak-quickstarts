@@ -4,7 +4,7 @@ if [ $1 == "group1" ]; then
   for i in `mvn -q --also-make exec:exec -Dexec.executable="pwd" | awk -F '/' '{if (NR > 1) print $NF}'`;
   do
     # FIXME Workaround to skip Angular.js app on Travis CI while we figure out the best way to fix the issues with Selenium
-    if [ "$i" = "app-angular2" -o "$i" = "app-authz-uma-photoz" -o "$i" = "app-authz-photoz" -o "$i" = "photoz-html5-client" -o "$i" = "photoz-authz-policy" -o "$i" = "photoz-restful-api" -o "$i" = "photoz-testsuite" -o "$i" = "app-profile-jee-html5" ]; then
+    if [ "$i" = "app-angular2" -o "$i" = "app-authz-uma-photoz" -o "$i" = "app-authz-photoz" -o "$i" = "photoz-html5-client" -o "$i" = "photoz-js-policies" -o "$i" = "photoz-restful-api" -o "$i" = "photoz-testsuite" -o "$i" = "app-profile-jee-html5" ]; then
       continue
     fi
     mvn -B -s maven-settings.xml clean install -Pwildfly-managed -Denforcer.skip=true -f $i
