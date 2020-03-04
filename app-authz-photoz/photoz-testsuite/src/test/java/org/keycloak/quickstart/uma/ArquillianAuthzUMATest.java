@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
+import org.jboss.arquillian.container.test.api.TargetsContainer;
 import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.jboss.arquillian.graphene.page.Page;
 import org.jboss.arquillian.junit.Arquillian;
@@ -34,6 +35,7 @@ import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.importer.ZipImporter;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
@@ -44,6 +46,7 @@ import org.keycloak.admin.client.resource.ClientsResource;
 import org.keycloak.quickstart.uma.page.PhotozPage;
 import org.keycloak.representations.idm.ClientRepresentation;
 import org.keycloak.representations.idm.authorization.ResourceServerRepresentation;
+import org.keycloak.test.FluentTestsHelper;
 import org.keycloak.util.JsonSerialization;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -62,9 +65,18 @@ import static org.keycloak.test.TestsHelper.importTestRealm;
 @RunAsClient
 public class ArquillianAuthzUMATest {
 
-    private static final String REALM_NAME = "photoz";
     private static final String HTML_CLIENT_APP_NAME = "photoz-html5-client";
     private static final String RESTFUL_API_APP_NAME = "photoz-restful-api";
+    private static final String JS_POLICIES = "photoz-js-policies";
+
+    public static final String TEST_REALM = "photoz";
+    public static final String KEYCLOAK_URL = "http://localhost:8180/auth";
+    public static final FluentTestsHelper testHelper = new FluentTestsHelper(KEYCLOAK_URL,
+            FluentTestsHelper.DEFAULT_ADMIN_USERNAME,
+            FluentTestsHelper.DEFAULT_ADMIN_PASSWORD,
+            FluentTestsHelper.DEFAULT_ADMIN_REALM,
+            FluentTestsHelper.DEFAULT_ADMIN_CLIENT,
+            FluentTestsHelper.DEFAULT_TEST_REALM);
 
     @Page
     private PhotozPage photozPage;
@@ -78,18 +90,9 @@ public class ArquillianAuthzUMATest {
 
     static {
         try {
-            importTestRealm("admin", "admin", "/quickstart-realm.json");
-
-            // import the authorization configuration for the photoz-restful-api client.
-            Keycloak keycloak = Keycloak.getInstance("http://localhost:8180/auth", "master", "admin", "admin", "admin-cli");
-            ClientsResource clients = keycloak.realms().realm(REALM_NAME).clients();
-            ClientRepresentation client = clients.findByClientId(RESTFUL_API_APP_NAME).get(0);
-            ResourceServerRepresentation settings = JsonSerialization.readValue(
-                    new FileInputStream(new File("../photoz-restful-api/target/classes/photoz-restful-api-authz-service.json")),
-                    ResourceServerRepresentation.class);
-            clients.get(client.getId()).authorization().importSettings(settings);
+            testHelper.init();
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IllegalStateException("Could not initialize Keycloak", e);
         }
     }
 
@@ -105,42 +108,41 @@ public class ArquillianAuthzUMATest {
                 "../photoz-restful-api/target/photoz-restful-api.war")).as(WebArchive.class);
     }
 
-    @AfterClass
-    public static void cleanUp() throws IOException {
-        deleteRealm("admin", "admin", "photoz");
+    @TargetsContainer("keycloak")
+    @Deployment(name = JS_POLICIES, order = 3, testable = false)
+    public static Archive createJsPoliciesArchive() throws IOException {
+        return ShrinkWrap.create(ZipImporter.class, "photoz-js-policies.jar").importFrom(new File(
+                "../photoz-js-policies/target/photoz-js-policies.jar")).as(WebArchive.class);
+    }
+
+    @After
+    public void cleanUp() {
+        testHelper.deleteRealm(TEST_REALM);
     }
 
     @Before
     public void setup() {
-        webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
-        webDriver.navigate().to(contextRoot);
-    }
-
-    @Test
-    public void testCreateDeleteAlbum() {
         try {
-            photozPage.login("alice", "alice", "Alice In Chains");
+            testHelper.importTestRealm("/quickstart-realm.json");
 
-            // the albums and shared albums lists should be empty.
-            WebElement emptyAlbumsList = webDriver.findElement(By.id("resource-list-empty"));
-            Assert.assertTrue(emptyAlbumsList.isDisplayed());
-            Assert.assertEquals("You don't have any albums, yet.", emptyAlbumsList.getText());
-            WebElement emptySharedList = webDriver.findElement(By.id("share-list-empty"));
-            Assert.assertTrue(emptySharedList.isDisplayed());
-            Assert.assertEquals("You don't have any shares, yet.", emptySharedList.getText());
-
-            // create an album and check the list of albums in no longer empty.
-            photozPage.createAlbum("France Vacations");
-            Assert.assertFalse(emptyAlbumsList.isDisplayed());
-
-            // now delete the created album and verify the list of albums is empty again.
-            photozPage.deleteAlbum("France Vacations");
-            Assert.assertTrue(emptyAlbumsList.isDisplayed());
-            photozPage.logout();
+            // import the authorization configuration for the photoz-restful-api client.
+            Keycloak keycloak = Keycloak.getInstance(KEYCLOAK_URL,
+                    FluentTestsHelper.DEFAULT_ADMIN_REALM,
+                    FluentTestsHelper.DEFAULT_ADMIN_USERNAME,
+                    FluentTestsHelper.DEFAULT_ADMIN_USERNAME,
+                    FluentTestsHelper.DEFAULT_ADMIN_CLIENT);
+            ClientsResource clients = keycloak.realms().realm(TEST_REALM).clients();
+            ClientRepresentation client = clients.findByClientId(RESTFUL_API_APP_NAME).get(0);
+            ResourceServerRepresentation settings = JsonSerialization.readValue(
+                    new FileInputStream(new File("../photoz-restful-api/target/classes/photoz-restful-api-authz-service.json")),
+                    ResourceServerRepresentation.class);
+            clients.get(client.getId()).authorization().importSettings(settings);
         } catch (Exception e) {
-            debugTest(e);
-            fail("Should display the main page");
+            throw new IllegalStateException("Could not initialize Keycloak", e);
         }
+        webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
+        webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        webDriver.navigate().to(contextRoot);
     }
 
     @Test
@@ -181,7 +183,7 @@ public class ArquillianAuthzUMATest {
             Assert.assertEquals("You don't have any albums, yet.", emptyAlbumsList.getText());
             emptySharedList = webDriver.findElement(By.id("share-list-empty"));
             Assert.assertFalse(emptySharedList.isDisplayed());
-            photozPage.deleteSharedAlbum("Italy Vacations");
+            photozPage.deleteSharedAlbum("Italy Vacations", false);
             Assert.assertTrue(wasDenied());
             photozPage.logout();
 

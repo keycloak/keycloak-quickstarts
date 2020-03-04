@@ -57,23 +57,17 @@
     },
     {
       "name": "Only From @keycloak.org or Admin",
-      "description": "Defines that only users from @keycloak.org",
-      "type": "js",
+      "description": "Defines that only users from @keycloak.org or Admins can do something",
+      "type": "script-only-from-specific-client-address.js",
       "logic": "POSITIVE",
-      "decisionStrategy": "UNANIMOUS",
-      "config": {
-        "code": "var context = $evaluation.getContext();\nvar identity = context.getIdentity();\nvar attributes = identity.getAttributes();\nvar email = attributes.getValue('email').asString(0);\n\nif (identity.hasRealmRole('admin') || email.endsWith('@keycloak.org')) {\n    $evaluation.grant();\n}"
-      }
+      "decisionStrategy": "UNANIMOUS"
     },
     {
       "name": "Only Owner Policy",
       "description": "Defines that only the resource owner is allowed to do something",
-      "type": "js",
+      "type": "script-only-owner.js",
       "logic": "POSITIVE",
-      "decisionStrategy": "UNANIMOUS",
-      "config": {
-        "code": "var context = $evaluation.context;\nvar identity = context.identity;\nvar permission = $evaluation.permission;\nvar resource = permission.resource;\n\nif (resource.owner == identity.id) {\n    $evaluation.grant();\n}"
-      }
+      "decisionStrategy": "UNANIMOUS"
     },
     {
       "name": "Any Admin Policy",
@@ -88,12 +82,9 @@
     {
       "name": "Only From a Specific Client Address",
       "description": "Defines that only clients from a specific address can do something",
-      "type": "js",
+      "type": "script-only-keycloak-domain-or-admin.js",
       "logic": "POSITIVE",
-      "decisionStrategy": "UNANIMOUS",
-      "config": {
-        "code": "var contextAttributes = $evaluation.getContext().getAttributes();\n\nif (contextAttributes.containsValue('kc.client.network.ip_address', '127.0.0.1')) {\n    $evaluation.grant();\n}"
-      }
+      "decisionStrategy": "UNANIMOUS"
     },
     {
       "name": "Any User Policy",

@@ -119,11 +119,24 @@ public class PhotozPage {
         this.deleteAlbum(webDriver.findElement(By.id("delete-share-" + albumName)));
     }
 
+    public void deleteSharedAlbum(final String albumName, boolean waitForRemoval) {
+        this.deleteAlbum(webDriver.findElement(By.id("delete-share-" + albumName)), waitForRemoval);
+    }
+
     private void deleteAlbum(final WebElement deleteLink) {
         waitGui().until().element(deleteLink).is().clickable();
         deleteLink.click();
         waitGui().until().element(deleteLink).is().not().present();
         waitForPageToLoad();
+    }
+
+    private void deleteAlbum(final WebElement deleteLink, boolean waitForRemoval) {
+        waitGui().until().element(deleteLink).is().clickable();
+        deleteLink.click();
+        if (waitForRemoval) {
+            waitGui().until().element(deleteLink).is().not().present();
+            waitForPageToLoad();
+        }
     }
 
     public void requestEntitlements() {

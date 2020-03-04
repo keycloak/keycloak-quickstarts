@@ -1,0 +1,19 @@
+{
+  "policies": [
+    {
+      "name": "Only From @keycloak.org or Admin",
+      "fileName": "only-keycloak-domain-or-admin.js",
+      "description": "Defines that only users from @keycloak.org or Admins can do something"
+    },
+    {
+      "name": "Only Owner Policy",
+      "fileName": "only-owner.js",
+      "description": "Defines that only the resource owner is allowed to do something"
+    },
+    {
+      "name": "Only From a Specific Client Address",
+      "fileName": "only-from-specific-client-address.js",
+      "description": "Defines that only clients from a specific address can do something"
+    }
+  ]
+}
