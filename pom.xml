@@ -334,6 +334,7 @@
                 <module>service-springboot-rest</module>
                 <module>app-springboot</module>
                 <module>app-authz-springboot</module>
+                <module>app-authz-springboot-multitenancy</module>
             </modules>
         </profile>
         <profile>
