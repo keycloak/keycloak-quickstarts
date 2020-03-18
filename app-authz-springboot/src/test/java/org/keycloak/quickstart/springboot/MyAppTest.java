@@ -68,7 +68,6 @@ public class MyAppTest {
         HtmlPage page = login("alice", "alice");
         assertTrue(page.getTitleText().contains("Home Page"));
         assertTrue(page.getBody().getTextContent().contains("Default Resource"));
-        assertTrue(page.getBody().getTextContent().contains("Alice Resource"));
         logout(page);
         page = login("jdoe", "jdoe");
         assertTrue(page.getBody().getTextContent().contains("Default Resource"));
@@ -102,16 +101,6 @@ public class MyAppTest {
         page = login("jdoe", "jdoe");
         page = page.getElementById("premium-resource").click();
         assertTrue(page.getBody().getTextContent().contains("\"Premium Resource\""));
-    }
-
-    @Test
-    public void testAliceResource() throws IOException {
-        HtmlPage page = login("alice", "alice");
-        page = page.getElementById("alice-resource").click();
-        assertTrue(page.getBody().getTextContent().contains("Only Alice"));
-        logout(page);
-        page = login("jdoe", "jdoe");
-        assertNull(page.getElementById("alice-resource"));
     }
 
     private HtmlPage login(String username, String password) throws IOException {

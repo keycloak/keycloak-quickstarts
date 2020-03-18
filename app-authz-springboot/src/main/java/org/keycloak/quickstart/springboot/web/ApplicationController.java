@@ -50,12 +50,6 @@ public class ApplicationController {
         return "premium";
     }
 
-    @RequestMapping(value = "/protected/alice", method = RequestMethod.GET)
-    public String handleAliceResources(Model model) {
-        configCommonAttributes(model);
-        return "alice";
-    }
-
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String handleLogoutt() throws ServletException {
         request.logout();
