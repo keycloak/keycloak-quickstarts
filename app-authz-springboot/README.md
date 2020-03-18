@@ -26,9 +26,6 @@ any user with a role *user* is allowed to access this page.
 * **/protected/premium**, where access to this page is based on the evaluation of permissions associated with a resource **Premium Resource** in <span>Keycloak</span>. Basically,
 only users with a role *user-premium* is allowed to access this page.
 
-* **/protected/alice**, where access to this page is based on the evaluation of permissions associated with a resource **Alice Resource** in <span>Keycloak</span>. Basically,
-only user *alice* is allowed to access this page.
-
 The home page (home.ftl) also demonstrates how to use a ``AuthorizationContext`` instance to check for user`s permissions and hide/show
 things in a page. Where the ``AuthorizationContext`` encapsulates all permissions granted by a <span>Keycloak</span> server and provides methods
 to check these permissions.

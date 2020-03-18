@@ -88,25 +88,17 @@
                     {
                         "name": "User Resource",
                         "type": "user-resource"
-                    },
-                    {
-                        "name": "Alice Resource",
-                        "type": "user-resource",
-                        "uri": "/protected/alice",
-                        "owner": {
-                            "name": "alice"
-                        }
                     }
                 ],
                 "policies": [
                     {
                         "name": "Default Policy",
                         "description": "A policy that grants access only for users within this realm",
-                        "type": "js",
+                        "type": "role",
                         "logic": "POSITIVE",
                         "decisionStrategy": "AFFIRMATIVE",
                         "config": {
-                            "code": "// by default, grants any permission associated with this policy\n$evaluation.grant();\n"
+                            "roles": "[{\"id\":\"user\",\"required\":false}]"
                         }
                     },
                     {
@@ -125,15 +117,6 @@
                         "decisionStrategy": "UNANIMOUS",
                         "config": {
                             "roles": "[{\"id\":\"user\",\"required\":false}]"
-                        }
-                    },
-                    {
-                        "name": "Only Owner Policy",
-                        "type": "js",
-                        "logic": "POSITIVE",
-                        "decisionStrategy": "UNANIMOUS",
-                        "config": {
-                            "code": "var context = $evaluation.getContext();\nvar permission = $evaluation.getPermission();\nvar resource = permission.getResource();\nvar identity = context.getIdentity();\n\nif (identity.id == resource.owner) {\n    $evaluation.grant();\n}"
                         }
                     },
                     {
@@ -164,16 +147,6 @@
                         "config": {
                             "resources": "[\"Protected Resource\"]",
                             "applyPolicies": "[\"Only User Policy\"]"
-                        }
-                    },
-                    {
-                        "name": "User Resource Permission",
-                        "type": "resource",
-                        "logic": "POSITIVE",
-                        "decisionStrategy": "UNANIMOUS",
-                        "config": {
-                            "defaultResourceType": "user-resource",
-                            "applyPolicies": "[\"Only Owner Policy\"]"
                         }
                     }
                 ]

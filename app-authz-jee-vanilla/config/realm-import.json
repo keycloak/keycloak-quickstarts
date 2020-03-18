@@ -107,14 +107,13 @@
         ],
         "policies": [
           {
-            "id": "0824625e-83c1-40cb-88a0-2dd600589cb6",
-            "name": "Default Policy",
-            "description": "A policy that grants access only for users within this realm",
-            "type": "js",
-            "logic": "POSITIVE",
-            "decisionStrategy": "AFFIRMATIVE",
-            "config": {
-              "code": "// by default, grants any permission associated with this policy\n$evaluation.grant();\n"
+            "name" : "Default Policy",
+            "description" : "A policy that grants access to any user",
+            "type" : "role",
+            "logic" : "POSITIVE",
+            "decisionStrategy" : "AFFIRMATIVE",
+            "config" : {
+              "roles": "[{\"id\":\"user\",\"required\":false}]"
             }
           },
           {

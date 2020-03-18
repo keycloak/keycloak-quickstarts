@@ -66,10 +66,10 @@
       "rootUrl": "http://127.0.0.1:8080/app-authz-vanilla",
       "enabled": true,
       "redirectUris": [
-        "http://127.0.0.1:8080/app-authz-vanilla/*"
+        "http://127.0.0.1:8080/app-authz-vanilla/*", "http://localhost:8080/app-authz-vanilla/*"
       ],
       "webOrigins": [
-        "http://127.0.0.1:8080"
+        "http://127.0.0.1:8080", "http://localhost:8080"
       ],
       "publicClient": false,
       "secret": "secret",
@@ -85,12 +85,12 @@
         } ],
         "policies" : [ {
           "name" : "Default Policy",
-          "description" : "A policy that grants access only for users within this realm",
-          "type" : "js",
+          "description" : "A policy that grants access to any user",
+          "type" : "role",
           "logic" : "POSITIVE",
           "decisionStrategy" : "AFFIRMATIVE",
           "config" : {
-            "code" : "// by default, grants any permission associated with this policy\n$evaluation.grant();\n"
+            "roles": "[{\"id\":\"user\",\"required\":false}]"
           }
         }, {
           "name" : "Default Permission",
