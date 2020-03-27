@@ -56,6 +56,16 @@ find . -type f -name "*pom.xml*" -exec sed -i "s/<version>.*SNAPSHOT/<version>$G
 find . -type f -name "*pom.xml*" -exec sed -i "s@<version.keycloak>.*</version.keycloak>@<version.keycloak>$KEYCLOAK_VERSION</version.keycloak>@g" {} + 
 
 # Switch to productized artifacts
+new_version='${project.version}'
+
+find . -type f -name "*pom.xml*" -exec sed -i '/<dependency>/ {
+    :start
+    N
+    /<\/dependency>$/!b start
+    /<groupId>org.keycloak.bom<\/groupId>/ {
+        s/\(<version>\).*\(<\/version>\)/\1'"$new_version"'\2/
+    }
+}' {} +
 find . -type f -name "*pom.xml*" -exec sed -i 's@org.keycloak.bom@com.redhat.bom.rh-sso@g' {} + 
 find . -type f -name "*pom.xml*" -exec sed -i 's@keycloak-adapter-bom@rh-sso-adapter-bom@g' {} + 
 find . -type f -name "*pom.xml*" -exec sed -i 's@keycloak-spi-bom@rh-sso-spi-bom@g' {} + 
