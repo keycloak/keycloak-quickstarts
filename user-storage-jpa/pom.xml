@@ -41,6 +41,7 @@
         <version.compiler.maven.plugin>3.5.1</version.compiler.maven.plugin>
         <version.hibernate.javax.persistence>1.0.0.Final</version.hibernate.javax.persistence>
         <version.jboss-ejb-api>1.0.0.Final</version.jboss-ejb-api>
+        <jboss.server.port>9990</jboss.server.port>
     </properties>
 
     <dependencies>
@@ -140,7 +141,7 @@
                                     <goal>add-resource</goal>
                                 </goals>
                                 <configuration>
-                                    <port>10090</port>
+                                    <port>${jboss.server.port}</port>
                                     <force/>
                                     <address>subsystem=datasources</address>
                                     <resources>
