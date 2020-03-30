@@ -36,6 +36,14 @@ Start up the <span>Keycloak</span> server.  Then in the directory of this exampl
    mvn -Padd-datasource install
    ````
 
+**Note**: If the server runs on different port than `9990`, you have to specify it by setting a
+maven property `jboss.server.port` (f.e. if you've specified the `-Djboss.socket.binding.port-offset=100` 
+before starting of the server, then you should use port `10090`).
+
+   ````
+   mvn -Padd-datasource install -Djboss.server.port=10090
+   ````
+
 You only need to execute this maven command once.  If you execute this again, then you will get an error message that the datasource
 already exists.
 
@@ -48,9 +56,9 @@ added or changes you've made to users loaded by this provider will be wiped clea
 
 To deploy the provider, run the following maven command:
 
-    ````
-    mvn clean install wildfly:deploy
-    ````
+   ````
+   mvn clean install wildfly:deploy
+   ````
 
 If you want to play with and modify the example, simply rerun the maven deploy command above and the new version will be hot deployed.
 
