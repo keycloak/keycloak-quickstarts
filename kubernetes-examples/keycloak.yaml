@@ -32,7 +32,11 @@ spec:
     spec:
       containers:
       - name: keycloak
+<<<<<<< HEAD
         image: quay.io/keycloak/keycloak:9.0.2
+=======
+        image: quay.io/keycloak/keycloak:9.0.2
+>>>>>>> fdf67cce... Update Kubernetes and OpenShift versions
         env:
         - name: KEYCLOAK_USER
           value: "admin"
