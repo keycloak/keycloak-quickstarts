@@ -73,6 +73,8 @@ git checkout app-springboot/README.md
 git rm -r action-token-authenticator
 git rm -r action-token-required-action
 git rm -r app-springboot 
+git rm -r kubernetes-examples
+git rm -r openshift-examples
 git status
 
 git commit . -m "Converted to RH-SSO QuickStarts"
