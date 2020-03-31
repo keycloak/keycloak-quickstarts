@@ -50,6 +50,20 @@ Configuration in Keycloak
 
 Prior to running the quickstart you need to create a `realm` in Keycloak with all the necessary configuration to deploy and run the quickstart.
 
+Make sure your Keycloak server is running on <http://localhost:8180/>. For that, you can start the server using the command below:
+
+   ````
+   cd {KEYCLOAK_HOME}/bin
+   ./standalone.sh -Djboss.socket.binding.port-offset=100
+   
+   ````
+
+You should also deploy some JS policies into the Keycloak Server. For that, perform the following steps:
+
+   ````
+   mvn -f ../authz-js-policies clean install && cp ../authz-js-policies/target/authz-js-policies.jar {KEYCLOAK_HOME}/standalone/deployments
+   ````
+
 The following steps show how to create the realm required for this quickstart:
 
 * Open the Keycloak Admin Console
@@ -61,14 +75,6 @@ The steps above will result on a new `spring-boot-quickstart` realm.
 
 Build and Run the Quickstart
 -------------------------------
-
-Make sure your Keycloak server is running on <http://localhost:8180/>. For that, you can start the server using the command below:
-
-   ````
-   cd {KEYCLOAK_HOME}/bin
-   ./standalone.sh -Djboss.socket.binding.port-offset=100
-   
-   ````
 
 If your server is up and running, perform the following steps to start the application:
 
@@ -103,9 +109,8 @@ The most simple way to invoke resources protected by a policy enforcer is sendin
 you can access resources in this application as follows:
 
 ```bash
-curl -v -X GET \
-  http://localhost:8080/api/alice \
-  -H "Authorization: Bearer "$access_token
+curl http://localhost:8080/api/alice \
+    -H "Authorization: Bearer "$access_token
 ```
 
 User `alice` should be able to access information about herself and you should get a response as follows:
@@ -119,8 +124,7 @@ User `alice` should be able to access information about herself and you should g
 User `alice` can not access information about `jdoe` and you should get an access denied.
 
 ```bash
-curl -v -X GET \
-  http://localhost:8080/api/jdoe \
+curl http://localhost:8080/api/jdoe \
   -H "Authorization: Bearer "$access_token
 ```
 
@@ -128,9 +132,8 @@ User `jdoe` is granted with role `people-manager` and you should be able to acce
 including `alice`. For that, make sure to obtain an access token for user `jdoe` and then send a request to:
 
 ```$bash
-curl -v -X GET \
-  http://localhost:8080/api/alice \
-  -H "Authorization: Bearer "$access_token
+curl http://localhost:8080/api/alice \
+    -H "Authorization: Bearer "$access_token
 ```
 
 What to do next ?

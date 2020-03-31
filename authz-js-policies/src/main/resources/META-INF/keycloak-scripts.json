@@ -1,0 +1,24 @@
+{
+  "policies": [
+    {
+      "name": "Match User From Requested Uri",
+      "fileName": "match-user-from-uri.js",
+      "description": "A policy that extracts the username from a request URI and check if it matches the current identity"
+    },
+    {
+      "name": "Claim-Based",
+      "fileName": "pushed-claim-from-request.js",
+      "description": "A policy that makes decision based on the value of a context attribute"
+    },
+    {
+      "name": "Always Grant",
+      "fileName": "always-grant.js",
+      "description": "A policy that always grants access"
+    },
+    {
+      "name": "Only Owner",
+      "fileName": "only-owner.js",
+      "description": "A policy that always grants access to resource owners"
+    }
+  ]
+}

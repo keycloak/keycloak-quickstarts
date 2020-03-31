@@ -35,6 +35,7 @@ else
   KEYCLOAK="keycloak-server"
 fi
 
+cp authz-js-policies/target/authz-js-policies.jar $KEYCLOAK/standalone/deployments 
 $KEYCLOAK/bin/add-user-keycloak.sh -u admin -p admin
 # Start the server
 $KEYCLOAK/bin/standalone.sh -Djava.net.preferIPv4Stack=true \

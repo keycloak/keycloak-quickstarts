@@ -46,6 +46,20 @@ Configuration in Keycloak
 
 Prior to running the quickstart you need to create a `realm` in Keycloak with all the necessary configuration to deploy and run the quickstart.
 
+Make sure your Keycloak server is running on <http://localhost:8180/>. For that, you can start the server using the command below:
+
+   ````
+   cd {KEYCLOAK_HOME}/bin
+   ./standalone.sh -Djboss.socket.binding.port-offset=100
+   
+   ````
+
+You should also deploy some JS policies into the Keycloak Server. For that, perform the following steps:
+
+   ````
+   mvn -f ../authz-js-policies clean install && cp ../authz-js-policies/target/authz-js-policies.jar {KEYCLOAK_HOME}/standalone/deployments
+   ````
+
 The following steps show how to create the realm required for this quickstart:
 
 * Open the Keycloak Admin Console
@@ -57,14 +71,6 @@ The steps above will result on a new `spring-boot-quickstart` realm.
 
 Build and Run the Quickstart
 -------------------------------
-
-Make sure your Keycloak server is running on <http://localhost:8180/>. For that, you can start the server using the command below:
-
-   ````
-   cd {KEYCLOAK_HOME}/bin
-   ./standalone.sh -Djboss.socket.binding.port-offset=100
-   
-   ````
 
 If your server is up and running, perform the following steps to start the application:
 
@@ -99,8 +105,7 @@ The most simple way to invoke resources protected by a policy enforcer is sendin
 you can access resources in this application as follows:
 
 ```bash
-curl -v -X GET \
-  http://localhost:8080/api/resourcea \
+curl http://localhost:8080/api/resourcea \
   -H "Authorization: Bearer "$access_token
 ```
 
@@ -118,12 +123,13 @@ The RPT is an access token with all permissions granted by the server, basically
 To obtain an RPT, you must first exchange an OAuth2 Access Token for a RPT by invoking the token endpoint at the Keycloak server: 
 
 ```bash
-curl -v -X POST \
-  http://localhost:8180/auth/realms/spring-boot-quickstart/protocol/openid-connect/token \
-  -H "Authorization: Bearer "$access_token \
-  --data "grant_type=urn:ietf:params:oauth:grant-type:uma-ticket" \
-  --data "audience=app-authz-rest-springboot" \
-  --data "permission=Default Resource"
+export rpt=$(curl -X POST \
+ http://localhost:8180/auth/realms/spring-boot-quickstart/protocol/openid-connect/token \
+ -H "Authorization: Bearer "$access_token \
+ --data "grant_type=urn:ietf:params:oauth:grant-type:uma-ticket" \
+ --data "audience=app-authz-rest-springboot" \
+  --data "permission=Default Resource" | jq --raw-output '.access_token' \
+ )
 ```
 
 The command above is trying to obtain permissions from the server in the format of a RPT. Note that the request is specifying the resource we want
@@ -132,11 +138,12 @@ to obtain permissions, in this case, `Default Resource`.
 As an alternative, you can also obtain permissions for any resource protected by your application. For that, execute the command below:
 
 ```bash
-curl -v -X POST \
-  http://localhost:8180/auth/realms/spring-boot-quickstart/protocol/openid-connect/token \
-  -H "Authorization: Bearer "$access_token \
-  --data "grant_type=urn:ietf:params:oauth:grant-type:uma-ticket" \
-  --data "audience=app-authz-rest-springboot"
+export rpt=$(curl -X POST \
+ http://localhost:8180/auth/realms/spring-boot-quickstart/protocol/openid-connect/token \
+ -H "Authorization: Bearer "$access_token \
+ --data "grant_type=urn:ietf:params:oauth:grant-type:uma-ticket" \
+ --data "audience=app-authz-rest-springboot" | jq --raw-output '.access_token' \
+ )
 ```
 
 After executing any of the commands above, you should get a response similar to the following:
@@ -150,9 +157,8 @@ After executing any of the commands above, you should get a response similar to 
 To finally invoke the resource protected by the application, replace the ``${rpt}`` variable below with the value of the ``access_token`` claim from the response above and execute the following command:
 
 ```bash
-curl -X GET \
-  http://localhost:8080/api/resourcea \
-  -H "Authorization: Bearer ${rpt}"
+curl http://localhost:8080/api/resourcea \
+    -H "Authorization: Bearer ${rpt}"
 ```
 
 User `alice` should be able to access */api/resourcea* and you should get **Access Granted** as a response.
@@ -163,9 +169,8 @@ Using information from the runtime to evaluate permissions in Keycloak
 When trying to access the path `/api/admin` from this application, you need to set a specific parameter in the request as follows:
 
 ```bash
-curl -v -X GET \
-  http://localhost:8080/api/admin?parameter-a=claim-value \
-  -H "Authorization: Bearer "$access_token
+curl http://localhost:8080/api/admin?parameter-a=claim-value \
+    -H "Authorization: Bearer "$access_token
 ```
 
 If you don't set the request parameter `parameter-a` with that value the request will be denied. The reason for that is that this particular path

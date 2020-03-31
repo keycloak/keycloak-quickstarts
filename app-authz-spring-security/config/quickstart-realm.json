@@ -101,13 +101,10 @@
                 "policies": [
                     {
                         "name": "Default Policy",
-                        "description": "A policy that grants access only for users within this realm",
-                        "type": "js",
+                        "description": "A policy that always grant access",
+                        "type": "script-always-grant.js",
                         "logic": "POSITIVE",
-                        "decisionStrategy": "AFFIRMATIVE",
-                        "config": {
-                            "code": "// by default, grants any permission associated with this policy\n$evaluation.grant();\n"
-                        }
+                        "decisionStrategy": "AFFIRMATIVE"
                     },
                     {
                         "name": "Only Premium User Policy",
@@ -129,12 +126,10 @@
                     },
                     {
                         "name": "Only Owner Policy",
-                        "type": "js",
+                        "description": "A policy that grants access to resource owners",
+                        "type": "script-only-owner.js",
                         "logic": "POSITIVE",
-                        "decisionStrategy": "UNANIMOUS",
-                        "config": {
-                            "code": "var context = $evaluation.getContext();\nvar permission = $evaluation.getPermission();\nvar resource = permission.getResource();\nvar identity = context.getIdentity();\n\nif (identity.id == resource.owner) {\n    $evaluation.grant();\n}"
-                        }
+                        "decisionStrategy": "UNANIMOUS"
                     },
                     {
                         "name": "Default Resource Permission",

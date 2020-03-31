@@ -52,6 +52,20 @@ Configuration in <span>Keycloak</span>
 
 Prior to running the quickstart you need to create a `realm` in <span>Keycloak</span> with all the necessary configuration to deploy and run the quickstart.
 
+Make sure your <span>Keycloak</span> server is running on <http://localhost:8180/>. For that, you can start the server using the command below:
+
+   ````
+   cd {KEYCLOAK_HOME}/bin
+   ./standalone.sh -Djboss.socket.binding.port-offset=100
+   
+   ````
+
+You should also deploy some JS policies into the Keycloak Server. For that, perform the following steps:
+
+   ````
+   mvn -f ../authz-js-policies clean install && cp ../authz-js-policies/target/authz-js-policies.jar {KEYCLOAK_HOME}/standalone/deployments
+   ````
+
 To create the realm required for this quickstart, follow these steps:
 
 1. Open the <span>Keycloak</span> admin console
@@ -63,14 +77,6 @@ The steps above will result on a new `spring-security-quickstart` realm.
 
 Build and Run the Quickstart
 -------------------------------
-
-Make sure your <span>Keycloak</span> server is running on <http://localhost:8180/>. For that, you can start the server using the command below:
-
-   ````
-   cd {KEYCLOAK_HOME}/bin
-   ./standalone.sh -Djboss.socket.binding.port-offset=100
-   
-   ````
 
 If your server is up and running, perform the following steps to start the application:
 
