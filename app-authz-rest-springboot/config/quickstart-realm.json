@@ -107,12 +107,10 @@
                     },
                     {
                         "name": "Claim-Based Policy",
-                        "type": "js",
+                        "description": "A policy that enforces access based on a claim pushed from the request",
+                        "type": "script-pushed-claim-from-request.js",
                         "logic": "POSITIVE",
-                        "decisionStrategy": "UNANIMOUS",
-                        "config": {
-                            "code": "var context = $evaluation.context;\n\nvar attributes = context.attributes;\n\nif (attributes.containsValue('some-claim', 'claim-value')) {\n    $evaluation.grant();\n}"
-                        }
+                        "decisionStrategy": "UNANIMOUS"
                     },
                     {
                         "name": "Default Resource Permission",

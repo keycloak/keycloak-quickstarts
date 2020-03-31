@@ -81,14 +81,11 @@
                 ],
                 "policies": [
                     {
-                        "id": "afee73e2-c22d-4b41-ac16-17febeee541c",
                         "name": "Employee Policy",
-                        "type": "js",
+                        "description": "A policy that enforces access based on the current user and requested path",
+                        "type": "script-match-user-from-uri.js",
                         "logic": "POSITIVE",
-                        "decisionStrategy": "UNANIMOUS",
-                        "config": {
-                            "code": "var context = $evaluation.getContext();\nvar attributes = context.getAttributes();\nvar httpUri = attributes.getValue('http.uri');\n\nif (httpUri) {\n    var uriParts = httpUri.asString(0).split('/');\n    var identity = context.getIdentity();\n    var username = identity.getAttributes().getValue('preferred_username').asString(0);\n    \n    if (uriParts[2] == username) {\n        $evaluation.grant();\n    }\n}"
-                        }
+                        "decisionStrategy": "UNANIMOUS"
                     },
                     {
                         "id": "15e7bbe5-34da-4f7f-9513-5ca0e09ca13e",
