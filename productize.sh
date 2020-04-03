@@ -75,6 +75,8 @@ git rm -r action-token-required-action
 git rm -r app-springboot 
 git rm -r kubernetes-examples
 git rm -r openshift-examples
+git rm -f event-listener-sysout
+git rm -f event-store-mem
 git status
 
 git commit . -m "Converted to RH-SSO QuickStarts"
