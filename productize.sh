@@ -70,6 +70,8 @@ git checkout action-token-authenticator/pom.xml
 git checkout action-token-required-action/pom.xml 
 git checkout app-springboot/pom.xml
 git checkout app-springboot/README.md
+git checkout event-listener-sysout/pom.xml
+git checkout event-store-mem/pom.xml 
 git rm -r action-token-authenticator
 git rm -r action-token-required-action
 git rm -r app-springboot 
