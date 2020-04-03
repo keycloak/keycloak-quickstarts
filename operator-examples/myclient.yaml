@@ -1,0 +1,14 @@
+apiVersion: keycloak.org/v1alpha1
+kind: KeycloakClient
+metadata:
+  name: myclient
+  labels:
+    client: myclient
+spec:
+  realmSelector:
+    matchLabels:
+      realm: myrealm
+  client:
+    clientId: myclient
+    protocol: openid-connect
+    rootUrl: https://www.keycloak.org/app/

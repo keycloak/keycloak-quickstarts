@@ -1,0 +1,19 @@
+apiVersion: keycloak.org/v1alpha1
+kind: KeycloakUser
+metadata:
+  name: myuser
+  labels:
+    app: mykeycloak
+spec:
+  user:
+    username: "myuser"
+    firstName: "John"
+    lastName: "Doe"
+    email: "myuser@keycloak.org"
+    enabled: True
+    credentials:
+      - type: "password"
+        value: "12345"
+  realmSelector:
+    matchLabels:
+      realm: myrealm
