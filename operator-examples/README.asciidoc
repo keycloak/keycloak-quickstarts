@@ -1,0 +1,5 @@
+Keycloak Operator Examples
+==========================
+
+This directory contains files necessary for the Keycloak Operator Getting Started Guide. Please navigate to https://www.keycloak.org/ for more information.
+

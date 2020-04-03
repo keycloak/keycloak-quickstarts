@@ -1,0 +1,14 @@
+apiVersion: keycloak.org/v1alpha1
+kind: KeycloakRealm
+metadata:
+  name: myrealm
+  labels:
+    realm: myrealm
+spec:
+  realm:
+    realm: "myrealm"
+    enabled: True
+    displayName: "My Realm"
+  instanceSelector:
+    matchLabels:
+      app: mykeycloak
