@@ -23,7 +23,7 @@ System Requirements
 
 You need to have <span>Keycloak</span> running.
 
-All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
+All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.3.3 or later.
 
 
 Build and Deploy the Quickstart

@@ -22,7 +22,7 @@ System Requirements
 
 You need to have JBoss Fuse 7.0.1 or newer
 
-All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
+All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.3.3 or later.
 
 
 Configuration in Keycloak

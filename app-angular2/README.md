@@ -33,7 +33,7 @@ the the following command will install TypeScript:
 ````
 npm install -g typescript
 ````
-To build and run this project as a WAR you will need Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
+To build and run this project as a WAR you will need Java 8.0 (Java SDK 1.8) or later and Maven 3.3.3 or later.
 
 
 Configuration in <span>Keycloak</span>

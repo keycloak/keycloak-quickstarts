@@ -22,7 +22,7 @@ System Requirements
 
 You need to have Keycloak running with an initial user created. The example requires that Keycloak server is running on port 8180 (management port 10090). See the parent [README](https://github.com/keycloak/keycloak-quickstarts#start-the-keycloak-server) for more details.
 
-All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
+All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.3.3 or later.
 
 
 Build and Deploy the Quickstart
