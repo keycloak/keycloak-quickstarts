@@ -19,7 +19,7 @@ are common for all JBoss Fuse quickstarts.
 System Requirements
 -------------------
 
-All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
+All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.3.3 or later.
 
 Start and Configure the Wildfly
 -------------------------------

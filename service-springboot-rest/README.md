@@ -25,7 +25,7 @@ There are 2 endpoints exposed by the service:
 System Requirements
 -------------------
 
-All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
+All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.3.3 or later.
 
 
 Configuration in <span>Keycloak</span>

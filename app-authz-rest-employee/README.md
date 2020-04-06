@@ -42,7 +42,7 @@ The quickstart demonstrates how to use Keycloak Authorization Services to:
 System Requirements
 -------------------
 
-All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
+All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.3.3 or later.
 
 
 Configuration in Keycloak
