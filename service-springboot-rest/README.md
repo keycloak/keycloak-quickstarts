@@ -45,7 +45,8 @@ The following steps shows how to create the client required for this quickstart:
 
 Once saved you need to change the `Access Type` to `bearer-only` and click save.
 
-Finally you need to update the adapter using SpringBoot's configuration file (application.properties) :
+Finally you need to update the adapter using SpringBoot's configuration file (application.properties). If you followed 
+the steps above it should be:
 
 ````
 server.compression.enabled: true
@@ -55,11 +56,11 @@ server.port = 8081
 keycloak.realm=springboot-quickstart
 keycloak.auth-server-url=http://localhost:8180/auth
 keycloak.ssl-required=external
-keycloak.resource=product-service
+keycloak.resource=service-springboot
 keycloak.public-client=true
 keycloak.bearer-only=true
 keycloak.securityConstraints[0].securityCollections[0].name = protected resource
-keycloak.securityConstraints[0].securityCollections[0].authRoles[0] = ROLE_USER
+keycloak.securityConstraints[0].authRoles[0] = user
 keycloak.securityConstraints[0].securityCollections[0].patterns[0] = /products
 
 ````
