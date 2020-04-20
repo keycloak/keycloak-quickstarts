@@ -35,39 +35,39 @@
     </licenses>
 
     <properties>
-        <version.wildfly>14.0.1.Final</version.wildfly>
+        <version.wildfly>19.0.0.Final</version.wildfly>
         <version.keycloak>${project.version}</version.keycloak>
 
-        <version.wildfly.maven.plugin>1.2.2.Final</version.wildfly.maven.plugin>
+        <version.wildfly.maven.plugin>2.0.0.Final</version.wildfly.maven.plugin>
         <servlet.api.30.version>1.0.2.Final</servlet.api.30.version>
-        <jboss-jaxrs-api_2.1_spec>1.0.1.Final</jboss-jaxrs-api_2.1_spec>
-        <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
-        <version.war.maven.plugin>2.6</version.war.maven.plugin>
-        <version.enforcer.maven.plugin>1.4.1</version.enforcer.maven.plugin>
-        <version.surefire.plugin>2.19.1</version.surefire.plugin>
+        <jboss-jaxrs-api_2.1_spec>2.0.1.Final</jboss-jaxrs-api_2.1_spec>
+        <version.jboss.maven.plugin>7.5.Final</version.jboss.maven.plugin>
+        <version.war.maven.plugin>3.2.2</version.war.maven.plugin>
+        <version.enforcer.maven.plugin>3.0.0-M2</version.enforcer.maven.plugin>
+        <version.surefire.plugin>2.22.0</version.surefire.plugin>
         <version.exec.maven.plugin>1.6.0</version.exec.maven.plugin>
         <version.antrun.maven.plugin>1.8</version.antrun.maven.plugin>
-        <version.frontend.maven.plugin>1.4</version.frontend.maven.plugin>
-        <version.resources.maven.plugin>3.0.2</version.resources.maven.plugin>
-        <version.compiler.maven.plugin>3.1</version.compiler.maven.plugin>
+        <version.frontend.maven.plugin>1.8.0</version.frontend.maven.plugin>
+        <version.resources.maven.plugin>3.1.0</version.resources.maven.plugin>
+        <version.compiler.maven.plugin>3.8.0-jboss-2</version.compiler.maven.plugin>
 
         <arquillian-graphene.version>2.3.2</arquillian-graphene.version>
         <arquillian-phantom.version>1.2.1.Final</arquillian-phantom.version>
-        <version.wildfly.arquillian.container>2.0.2.Final</version.wildfly.arquillian.container>
-        <version.remote.wildfly.arquillian.container>8.2.1.Final</version.remote.wildfly.arquillian.container>
+        <version.wildfly.arquillian.container>2.1.1.Final</version.wildfly.arquillian.container>
         <version.junit>4.12</version.junit>
         <version.hamcrest>1.3</version.hamcrest>
         <version.creaper>1.6.1</version.creaper>
-        <version.jackson>2.9.5</version.jackson>
+        <version.jackson>2.10.0</version.jackson>
 
         <arquillian-managed>true</arquillian-managed>
         <jboss-cli.executable>./jboss-cli.sh</jboss-cli.executable>
         <keycloak.management.port>10090</keycloak.management.port>
         <selenium-bom.version>3.11.0</selenium-bom.version>
-        <arquillian-bom.version>1.4.0.Final</arquillian-bom.version>
+        <arquillian-bom.version>1.6.0.Final</arquillian-bom.version>
         <arquillian-drone-bom.version>2.5.1</arquillian-drone-bom.version>
-        <version.json.javax>1.1.2</version.json.javax>
+        <version.json.javax>1.1.6</version.json.javax>
         <version.yasson>1.0.1</version.yasson>
+        <version.commons.logging>1.2</version.commons.logging>
     </properties>
 
     <dependencyManagement>
@@ -122,7 +122,7 @@
             </dependency>
             <dependency>
                 <groupId>org.wildfly.bom</groupId>
-                <artifactId>wildfly-javaee8</artifactId>
+                <artifactId>wildfly-jakartaee8</artifactId>
                 <version>${version.wildfly}</version>
                 <type>pom</type>
                 <scope>import</scope>
@@ -132,6 +132,11 @@
                 <artifactId>hamcrest-all</artifactId>
                 <version>${version.hamcrest}</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${version.jackson}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
@@ -150,13 +155,18 @@
             </dependency>
             <dependency>
                 <groupId>org.glassfish</groupId>
-                <artifactId>javax.json</artifactId>
+                <artifactId>jakarta.json</artifactId>
                 <version>${version.json.javax}</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse</groupId>
                 <artifactId>yasson</artifactId>
                 <version>${version.yasson}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>${version.commons.logging}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -177,6 +187,10 @@
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-test-helper</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -479,9 +493,9 @@
             <id>keycloak-remote</id>
             <dependencies>
                 <dependency>
-                    <groupId>org.wildfly</groupId>
+                    <groupId>org.wildfly.arquillian</groupId>
                     <artifactId>wildfly-arquillian-container-remote</artifactId>
-                    <version>${version.remote.wildfly.arquillian.container}</version>
+                    <version>${version.wildfly.arquillian.container}</version>
                     <scope>test</scope>
                 </dependency>
             </dependencies>
