@@ -49,8 +49,8 @@ mvn clean install
 
 The command above will run the server setup and deploy all the artifacts, including the services required for this quickstart. You can use any REST service deployed anywhere. However for testing purposes, it is good if you use either one (or both) of:
 
-* [service-camel](../service-camel/README.md)
-* [service-cxf-jaxrs](../service-cxf-jaxrs/README.md)
+* [service-camel](../fuse63/service-camel/README.md)
+* [service-cxf-jaxrs](../fuse63/service-cxf-jaxrs/README.md)
 
 By default, `app-war` app will refer to the `service-camel` deployed at `http://localhost:8383/service`. But you can change it anytime, by running:
 
