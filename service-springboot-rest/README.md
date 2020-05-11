@@ -89,11 +89,7 @@ The endpoints for the service are:
 
 
 You can open the public endpoint directly in the browser to test the service. The other endpoint require
-invoking with a bearer token. To invoke these endpoints use one of the example quickstarts:
-
-* [app-springboot](../app-springboot/README.md) - SpringBoot application that invokes the example service. Requires service example to be deployed.
-* [app-jee-html5](../app-jee-html5/README.md) - HTML5 application that invokes the example service. Requires service example to be deployed.
-* [app-jee-jsp](../app-jee-jsp/README.md) - JSP application packaged that invokes the example service. Requires service example to be deployed.
+invoking with a bearer token. To invoke these endpoints use the [app-springboot](../app-springboot/README.md) example quickstart.
 
 Integration test of the Quickstart
 ----------------------------------
