@@ -37,6 +37,9 @@
     <properties>
         <version.wildfly>14.0.1.Final</version.wildfly>
         <version.keycloak>${project.version}</version.keycloak>
+        
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
 
         <version.wildfly.maven.plugin>1.2.2.Final</version.wildfly.maven.plugin>
         <servlet.api.30.version>1.0.2.Final</servlet.api.30.version>
