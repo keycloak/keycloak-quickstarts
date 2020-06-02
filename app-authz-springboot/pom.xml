@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.keycloak.quickstarts</groupId>
         <artifactId>keycloak-quickstart-parent</artifactId>
-        <version>10.0.1</version>
+        <version>10.0.2</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
