@@ -36,8 +36,7 @@ Start up the <span>Keycloak</span> server.  Then in the directory of this exampl
    mvn -Padd-datasource install
    ````
 
-You only need to execute this maven command once.  If you execute this again, then you will get an error message that the datasource
-already exists.
+You only need to execute this maven command once.  If you execute it again, then you will get an error message saying that the datasource already exists.
 
 If you open the pom.xml file you'll see that the add-datasource profile creates an XA datasource using the built
 in H2 database that comes with the server.  An XA datasource is required because you cannot use two non-xa datasources
@@ -56,7 +55,7 @@ If you want to play with and modify the example, simply rerun the maven deploy c
 
 Enable the Provider for a Realm
 -------------------------------
-Login to the <span>Keycloak</span> Admin Console and got to the User Federation tab.   You should now see your deployed provider in the add-provider list box.
+Login to the <span>Keycloak</span> Admin Console and go to the User Federation tab.   You should now see your deployed provider in the add-provider list box.
 Add the provider, save it.  This will now enable the provider for the 'master' realm.  Because this provider implements the UserRegistrationProvider interface, any new user you create in the
 admin console or on the registration pages of <span>Keycloak</span>, will be created in the custom store used by the provider.  If you go
 to the Users tab in the Admin Console and create a new user, you'll be able to see the provider in action.
