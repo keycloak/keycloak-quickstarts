@@ -198,6 +198,7 @@
         <module>app-authz-uma-photoz</module>
         <module>app-authz-photoz</module>
         <module>authz-js-policies</module>
+        <module>extend-account-console</module>
     </modules>
 
     <repositories>
@@ -313,6 +314,7 @@
                 <module>user-storage-jpa</module>
                 <module>event-listener-sysout</module>
                 <module>event-store-mem</module>
+                <module>extend-account-console</module>
                 <module>service-springboot-rest</module>
                 <module>app-springboot</module>
                 <module>app-authz-springboot</module>
