@@ -92,6 +92,7 @@ git rm -r -f kubernetes-examples
 git rm -r -f openshift-examples
 git rm -r -f event-listener-sysout
 git rm -r -f event-store-mem
+git rm -r -f applications/app-vue
 git status
 
 git commit . -m "Converted to RH-SSO QuickStarts"
