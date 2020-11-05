@@ -59,8 +59,9 @@ Finally you need to configure the adapter, this is done by retrieving the adapte
 * Move the file `keycloak-saml.xml` to the `config/` directory in the root of the quickstart
 
 As an alternative you can create the client by importing the file [client-import.json](config/client-import.json) and
-copying [config/keycloak-saml-example.xml](config/keycloak-saml-example.xml) to `config/keycloak-saml.xml`. Finally,
-you need to edit `config/keycloak-saml.xml` and replace `REPLACE WITH REALM CERTIFICATE` with the actual realm certificate.
+copying [config/keycloak-saml-example.xml](config/keycloak-saml-example.xml) to `config/keycloak-saml.xml`. 
+In case you work with a realm that you created, you need to edit `config/keycloak-saml.xml` 
+and replace `<PrivateKeyPem>` and `<CertificatePem>` with the actual realm certificate.
 You can retrieve the realm certificate from the admin console from `Keys` under `Realm Settings`.
 
 
