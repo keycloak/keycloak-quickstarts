@@ -18,6 +18,7 @@ Basically, it is a project containing three modules:
  
 * **photoz-restful-api**, a simple RESTFul API based on JAX-RS and acting as a resource server.
 * **photoz-html5-client**, a HTML5 + AngularJS client that will consume the RESTful API published by a resource server.
+* **photoz-authz-policy**, a simple project with some rule-based policies using JBoss Drools.
 
 For this application, users can be regular users or administrators. Regular users can create/view/delete their albums 
 and administrators can do anything. Regular users are also allowed to share their albums with other users.
