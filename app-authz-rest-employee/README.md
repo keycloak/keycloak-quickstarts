@@ -68,7 +68,7 @@ The following steps show how to create the realm required for this quickstart:
 
 * Open the Keycloak Admin Console
 * In the top left corner dropdown menu that is titled `Master`, click `Add Realm`. If you are logged in to the master realm this dropdown menu lists all the realms created.
-* For this quickstart we are not going to manually create the realm, but import all configuration from a JSON file. Click on `Select File` and import the [config/quickstart-realm](config/quickstart-realm).
+* For this quickstart we are not going to manually create the realm, but import all configuration from a JSON file. Click on `Select File` and import the [config/quickstart-realm.json](config/quickstart-realm.json).
 * Click `Create`
 
 The steps above will result on a new `spring-boot-quickstart` realm.
