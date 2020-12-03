@@ -14,7 +14,7 @@ Here's a quick checklist for a good PR, more details below:
 2. A JIRA associated with the PR
 3. One feature/change per PR
 4. One commit per PR
-5. PR rebased on master (`git rebase`, not `git pull`) 
+5. PR rebased on master (`git rebase`, not `git pull`)
 5. Commit message is prefixed by JIRA number
 6. No changes to code not directly related to your PR
 7. Includes functional/integration test
@@ -29,12 +29,12 @@ not be able to respond to your PR immediately. The best place to ping us is on t
 ### Finding something to work on
 
 If you would like to contribute to Keycloak, but are not sure exactly what to work on, you can find a number of open
-issues that are awaiting contributions in the 
+issues that are awaiting contributions in the
 [Keycloak JIRA](https://issues.jboss.org/projects/KEYCLOAK/versions/12340167).
 
 ### Open a discussion on Keycloak Dev Mailing List
 
-As Keycloak is a community-driven project we require contributors to send a description of what they are planning to 
+As Keycloak is a community-driven project we require contributors to send a description of what they are planning to
 work on to the [Keycloak Dev Mailing List](https://lists.jboss.org/mailman/listinfo/keycloak-dev).
 
 We recommend starting the discussion prior to submitting your PR. Through the mailing list you can get valuable
@@ -42,15 +42,15 @@ feedback both from the core Keycloak team as well as the wider community.
 
 ### Create an issue in Keycloak JIRA
 
-Take your time to write a proper JIRA including a good summary and description. 
+Take your time to write a proper JIRA including a good summary and description.
 
-Remember this may be the first thing a reviewer of your PR will look at to get an idea of what you are proposing 
-and it will also be used by the community in the future to find about what new features and enhancements are included in 
+Remember this may be the first thing a reviewer of your PR will look at to get an idea of what you are proposing
+and it will also be used by the community in the future to find about what new features and enhancements are included in
 new releases.
 
 ### Implementing
 
-Details for building from source and working with the codebase are provided in the 
+Details for building from source and working with the codebase are provided in the
 [building and working with the code base](docs/getting-started.md) guide.
 
 Do not format or refactor code that is not directly related to your contribution. If you do this it will significantly
@@ -70,9 +70,17 @@ We require contributions to include relevant documentation. Alongside your PR fo
 
 In the description of your PR include a link to the PR to [Keycloak Documentation](https://github.com/keycloak/keycloak-documentation).
 
+### Picking correct branch for your PR
+
+Quickstarts are organized into the following branches:
+* `master` contains the latest state of the development on par with latest Keycloak.
+  This is destination for your PR.
+* `latest` is the branch that corresponds to the latest _released_ version of Keycloak.
+  You should *not* open PRs to this branch unless there is proper justification.
+
 ### Submitting your PR
 
-When preparing your PR make sure you have a single commit and your branch is rebased on the master branch from the 
+When preparing your PR make sure you have a single commit and your branch is rebased on the master branch from the
 project repository.
 
 This means use the `git rebase` command and not `git pull` when integrating changes from master to your branch. See
@@ -83,7 +91,7 @@ is the number of commits you want to squash. See the [Git Documentation](https:/
 for more details.
 
 The above helps us review your PR and also makes it easier for us to maintain the repository. It is also required by
-our automatic merging process. 
+our automatic merging process.
 
-We also require that the commit message is prefixed with the Keycloak JIRA issue number (example commit message 
+We also require that the commit message is prefixed with the Keycloak JIRA issue number (example commit message
 "KEYCLOAK-9876 My super cool new feature").
