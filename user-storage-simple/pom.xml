@@ -70,6 +70,10 @@
             <version>${arquillian-phantom.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.graphene</groupId>
+            <artifactId>arquillian-browser-screenshooter</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -90,6 +94,7 @@
                 <version>${version.wildfly.maven.plugin}</version>
                 <configuration>
                     <skip>false</skip>
+                    <port>${keycloak.management.port}</port>
                 </configuration>
             </plugin>
             <plugin>
