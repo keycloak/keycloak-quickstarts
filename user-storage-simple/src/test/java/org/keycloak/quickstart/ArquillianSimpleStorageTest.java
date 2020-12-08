@@ -26,23 +26,27 @@ import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.keycloak.common.util.MultivaluedHashMap;
 import org.keycloak.quickstart.page.ConsolePage;
 import org.keycloak.quickstart.util.StorageManager;
+import org.keycloak.representations.idm.ComponentRepresentation;
+import org.keycloak.test.FluentTestsHelper;
 import org.keycloak.test.page.LoginPage;
 import org.openqa.selenium.WebDriver;
 
+import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 import static java.lang.String.format;
-import java.util.concurrent.TimeUnit;
-import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import static org.keycloak.quickstart.util.StorageManager.addUser;
 import static org.keycloak.quickstart.util.StorageManager.createStorage;
 import static org.keycloak.quickstart.util.StorageManager.deleteStorage;
@@ -52,7 +56,7 @@ import static org.keycloak.quickstart.util.StorageManager.getPropertyFile;
 @RunWith(Arquillian.class)
 public class ArquillianSimpleStorageTest {
 
-    private static final String KEYCLOAK_URL = "http://%s:%s/auth%s";
+    public static final String KEYCLOAK_URL = "http://localhost:8180/auth";
 
     @Page
     private LoginPage loginPage;
@@ -65,6 +69,8 @@ public class ArquillianSimpleStorageTest {
 
     @ArquillianResource
     private URL contextRoot;
+
+    private static FluentTestsHelper testsHelper;
 
     @Deployment(testable = false)
     public static Archive<?> createTestArchive() throws IOException {
@@ -81,89 +87,87 @@ public class ArquillianSimpleStorageTest {
 
     }
 
+    @BeforeClass
+    public static void beforeTestClass() throws IOException {
+        testsHelper = new FluentTestsHelper(KEYCLOAK_URL,
+                "admin", "admin",
+                FluentTestsHelper.DEFAULT_ADMIN_REALM,
+                FluentTestsHelper.DEFAULT_ADMIN_CLIENT,
+                FluentTestsHelper.DEFAULT_TEST_REALM)
+                .init();
+    }
+
+    @AfterClass
+    public static void afterTestClass() {
+        if (testsHelper != null) {
+            testsHelper.close();
+        }
+    }
 
     @Before
-    public void setup() {
-        navigateTo("/admin");
+    public void beforeTest() throws IOException {
+        testsHelper.importTestRealm("/quickstart-realm.json");
+        webDriver.manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
+        webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    }
+
+    @After
+    public void afterTest() {
+        testsHelper.deleteTestRealm();
+        deleteStorage(); // the storage must not be deleted before realm
     }
 
     private void navigateTo(String path) {
-        webDriver.manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
-        webDriver.navigate().to(format(KEYCLOAK_URL,
-                contextRoot.getHost(), contextRoot.getPort(), path));
+        webDriver.navigate().to(KEYCLOAK_URL + path);
     }
 
     @Test
-    public void testUserReadOnlyFederationStorage() throws MalformedURLException, InterruptedException {
-        try {
-            loginPage.login("admin", "admin");
-            consolePage.createReadOnlyStorage();
-            consolePage.navigateToUserFederationMenu();
-            assertNotNull("Storage provider should be created", consolePage.readOnlyStorageLink());
+    public void testUserReadOnlyFederationStorage() {
+        addProvider(org.keycloak.quickstart.readonly.PropertyFileUserStorageProviderFactory.PROVIDER_NAME);
+        assertEquals("There should be no tbrady user", 0, testsHelper.getTestRealmResource().users().search("tbrady").size());
 
-            navigateTo("/realms/master/account");
-            assertEquals("Should display admin", "admin", consolePage.getUser());
-            consolePage.logout();
-
-            navigateToAccount("tbrady", "superbowl");
-            assertEquals("Should display the user from storage provider", "tbrady", consolePage.getUser());
-            consolePage.logout();
-
-            removeProvider();
-        } catch (Exception e) {
-            debugTest(e);
-            fail("Should create a user federation storage");
-        }
-    }
-
-    @Test
-    public void testUserWritableFederationStorage() throws MalformedURLException, InterruptedException {
-        try {
-            createStorage();
-            addUser("malcom", "butler");
-
-            loginPage.login("admin", "admin");
-            consolePage.selectWritableStorage();
-            consolePage.setFileStoragePath(getPropertyFile());
-            consolePage.save();
-
-            assertNotNull("Storage provider should be created", consolePage.writableStorageLink());
-            navigateTo("/realms/master/account");
-            assertEquals("Should display admin", "admin", consolePage.getUser());
-            consolePage.logout();
-
-            navigateToAccount("malcom", "butler");
-            assertEquals("Should display the user from storage provider", "malcom", consolePage.getUser());
-            consolePage.logout();
-
-            addUser("rob", "gronkowski");
-            navigateToAccount("rob", "gronkowski");
-            assertEquals("Should display the user from storage provider", "rob", consolePage.getUser());
-            consolePage.logout();
-
-            removeProvider();
-            deleteStorage();
-        } catch (Exception e) {
-            debugTest(e);
-            fail("Should create a user federation storage");
-        }
-    }
-
-    private void removeProvider() {
-        navigateTo("/admin");
-        loginPage.login("admin", "admin");
-        consolePage.delete();
-        navigateTo("/realms/master/account");
+        navigateToAccount("tbrady", "superbowl");
+        assertEquals("Should display the user from storage provider", "tbrady", consolePage.getUser());
         consolePage.logout();
     }
 
-    private void navigateToAccount(String user, String password) {
-        loginPage.login(user, password);
-        navigateTo("/realms/master/account");
+    @Test
+    public void testUserWritableFederationStorage() {
+        assertEquals("There should be no malcom user", 0, testsHelper.getTestRealmResource().users().search("malcom").size());
+        assertEquals("There should be no rob user", 0, testsHelper.getTestRealmResource().users().search("rob").size());
+
+        createStorage();
+        addUser("malcom", "butler");
+        addProvider(org.keycloak.quickstart.writeable.PropertyFileUserStorageProviderFactory.PROVIDER_NAME);
+
+        navigateToAccount("malcom", "butler");
+        assertEquals("Should display the user from storage provider", "malcom", consolePage.getUser());
+        consolePage.logout();
+
+        addUser("rob", "gronkowski");
+        navigateToAccount("rob", "gronkowski");
+        assertEquals("Should display the user from storage provider", "rob", consolePage.getUser());
+        consolePage.logout();
     }
-    
-    private void debugTest(Exception e) {
-        System.out.println(webDriver.getPageSource());
-        e.printStackTrace();
+
+    private void addProvider(String providerId) {
+        ComponentRepresentation provider = new ComponentRepresentation();
+        provider.setProviderId(providerId);
+        provider.setProviderType("org.keycloak.storage.UserStorageProvider");
+        provider.setName(providerId);
+
+        if (org.keycloak.quickstart.writeable.PropertyFileUserStorageProviderFactory.PROVIDER_NAME.equals(providerId)) {
+            provider.setConfig(new MultivaluedHashMap<String, String>() {{
+                putSingle("path", getPropertyFile());
+            }});
+        }
+
+        Response response = testsHelper.getTestRealmResource().components().add(provider);
+        assertEquals(201, response.getStatus());
+    }
+
+    private void navigateToAccount(String user, String password) {
+        navigateTo(format("/realms/%s/account/#/personal-info", testsHelper.getTestRealmName()));
+        loginPage.login(user, password);
     }
 }

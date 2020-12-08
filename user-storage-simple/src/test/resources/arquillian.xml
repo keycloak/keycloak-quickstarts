@@ -25,6 +25,7 @@
     </container>
 
     <extension qualifier="webdriver">
-        <property name="browser">phantomjs</property>
+        <property name="browser">chromeheadless</property>
+        <property name="chromeArguments">--window-size=1920,1080</property>
     </extension>
 </arquillian>

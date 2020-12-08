@@ -53,6 +53,7 @@
 
         <arquillian-graphene.version>2.3.2</arquillian-graphene.version>
         <arquillian-phantom.version>1.2.1.Final</arquillian-phantom.version>
+        <arquillian-screenshooter.version>2.3.2</arquillian-screenshooter.version>
         <version.wildfly.arquillian.container>2.0.2.Final</version.wildfly.arquillian.container>
         <version.remote.wildfly.arquillian.container>8.2.1.Final</version.remote.wildfly.arquillian.container>
         <version.junit>4.12</version.junit>
@@ -98,6 +99,18 @@
                 <artifactId>arquillian-phantom-driver</artifactId>
                 <version>${arquillian-phantom.version}</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.arquillian.graphene</groupId>
+                <artifactId>arquillian-browser-screenshooter</artifactId>
+                <version>${arquillian-screenshooter.version}</version>
+                <scope>test</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-io</groupId>
+                        <artifactId>commons-io</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.keycloak.bom</groupId>

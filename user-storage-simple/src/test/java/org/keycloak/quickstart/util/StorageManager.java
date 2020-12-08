@@ -41,7 +41,7 @@ public class StorageManager {
 
     public static void deleteStorage() {
         try {
-            Files.delete(file);
+            Files.deleteIfExists(file);
         } catch (IOException e) {
             e.printStackTrace();
         }
