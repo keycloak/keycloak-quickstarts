@@ -28,7 +28,7 @@
     "concurrently": "^3.2.0",
     "typescript": "~2.1.0",
     "canonical-path": "0.0.2",
-    "lodash": "^4.16.4",
+    "lodash": "^4.17.19",
     "rimraf": "^2.5.4",
     "@types/node": "^6.0.46"
   },
