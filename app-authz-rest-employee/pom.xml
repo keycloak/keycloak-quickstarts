@@ -80,6 +80,10 @@
             <artifactId>undertow-servlet</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse</groupId>
+            <artifactId>yasson</artifactId>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
