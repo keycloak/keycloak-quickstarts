@@ -78,6 +78,10 @@
             <artifactId>htmlunit-driver</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse</groupId>
+            <artifactId>yasson</artifactId>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>

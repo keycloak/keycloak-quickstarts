@@ -68,7 +68,7 @@
         <arquillian-bom.version>1.4.0.Final</arquillian-bom.version>
         <arquillian-drone-bom.version>2.5.1</arquillian-drone-bom.version>
         <version.json.javax>1.1.2</version.json.javax>
-        <version.yasson>1.0.1</version.yasson>
+        <version.yasson>1.0.8</version.yasson>
     </properties>
 
     <dependencyManagement>
