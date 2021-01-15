@@ -22,6 +22,9 @@ jobs:
       - name: Build Keycloak
         run: mvn clean install -Pdistribution -DskipTests -s maven-settings.xml -f keycloak -B
 
+      - name: Prepare Quickstarts
+        run: .github/scripts/generate-keycloak-json.sh
+
       - name: Build Quickstarts
         run: mvn clean install -Pdistribution -DskipTests -s maven-settings.xml -B
 
