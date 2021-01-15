@@ -1,0 +1,49 @@
+name: Quickstarts tests
+
+on: [push, pull_request]
+
+jobs:
+  tests:
+    name: Quickstarts tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - run: |
+          cp -f maven-settings.xml ~/.m2/settings.xml
+          .github/scripts/generate-keycloak-json.sh
+
+      - name: Cache Maven repo
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.m2/repository
+            !~/.m2/repository/org/keycloak
+          key: cache-1-${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: cache-1-${{ runner.os }}-m2
+
+      - name: Get Keycloak
+        run: .github/scripts/prepare-local-server.sh
+
+      - name: Build Quickstarts
+        run: |
+          mvn clean install -DskipTests -B
+          cp authz-js-policies/target/authz-js-policies.jar keycloak-dist/standalone/deployments
+
+      - name: Start Keycloak
+        run: .github/scripts/start-local-server.sh
+
+      - name: Run tests
+        run: .github/scripts/run-tests.sh
+
+      - name: Archive logs
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-logs
+          retention-days: 2
+          path: |
+            test-logs
+            keycloak.log
