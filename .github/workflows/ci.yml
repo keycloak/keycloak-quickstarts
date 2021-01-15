@@ -51,8 +51,8 @@ jobs:
           retention-days: 2
           path: |
             ~/.m2/repository/org/keycloak
-            !~/.m2/repository/org/keycloak/**/*.tar.gz
             !~/.m2/repository/org/keycloak/keycloak-server-dist
+            !~/.m2/repository/org/keycloak/keycloak-server-x-dist
 
       - name: Store Keycloak dist
         uses: actions/upload-artifact@v2
