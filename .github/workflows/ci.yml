@@ -83,5 +83,13 @@ jobs:
       - name: Start server
         run: .github/scripts/start-local-server.sh
 
+      - name: Archive keycloak.log
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: keycloak.log
+          retention-days: 2
+          path: keycloak.log
+
       - name: Run tests
         run: .github/scripts/tests/${{ matrix.testScript }}
