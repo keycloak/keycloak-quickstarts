@@ -76,6 +76,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: keycloak-dist
+          path: keycloak-dist
 
       - name: Prepare Quickstarts
         run: .github/scripts/generate-keycloak-json.sh
