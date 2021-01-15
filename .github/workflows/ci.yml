@@ -26,13 +26,14 @@ jobs:
         run: .github/scripts/generate-keycloak-json.sh
 
       - name: Build Quickstarts
-        run: mvn clean install -Pdistribution -DskipTests -s maven-settings.xml -B
+        run: mvn clean install -DskipTests -s maven-settings.xml -B
 
       - name: Prepare Keycloak dist
         run: |
           mkdir keycloak-dist
           find keycloak/distribution/server-dist/target -maxdepth 1 -type f -name 'keycloak-[[:digit:]]*.tar.gz' -exec tar xzf {} --strip-components=1 -C keycloak-dist \;
           cp authz-js-policies/target/authz-js-policies.jar keycloak-dist/standalone/deployments
+          keycloak-dist/bin/add-user-keycloak.sh -u admin -p admin
 
       - name: Store Maven artifacts
         uses: actions/upload-artifact@v2
