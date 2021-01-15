@@ -1,0 +1,83 @@
+name: Quickstarts tests
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: Checkout Keycloak repo
+        uses: actions/checkout@v2
+        with:
+          repository: keycloak/keycloak
+          ref: master
+          path: keycloak
+
+      - name: Build Keycloak
+        run: mvn clean install -Pdistribution -DskipTests -s maven-settings.xml -f keycloak -B
+
+      - name: Build Quickstarts
+        run: mvn clean install -Pdistribution -DskipTests -s maven-settings.xml -B
+
+      - name: Prepare Keycloak dist
+        run: |
+          mkdir keycloak-dist
+          find keycloak/distribution/server-dist/target -maxdepth 1 -type f -name 'keycloak-[[:digit:]]*.tar.gz' -exec tar xzf {} --strip-components=1 -C keycloak-dist \;
+          cp authz-js-policies/target/authz-js-policies.jar keycloak-dist/standalone/deployments
+
+      - name: Store Maven artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: maven-artifacts
+          retention-days: 2
+          path: |
+            ~/.m2/repository/org/keycloak
+            !~/.m2/repository/org/keycloak/**/*.tar.gz
+            !~/.m2/repository/org/keycloak/keycloak-server-dist
+
+      - name: Store Keycloak dist
+        uses: actions/upload-artifact@v2
+        with:
+          name: keycloak-dist
+          retention-days: 2
+          path: keycloak-dist
+
+  tests-java:
+    name: Quickstarts Java tests
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        testScript:
+          - user-storage.sh
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v2
+        run: .github/scripts/generate-keycloak-json.sh
+
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: Download Maven artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: maven-artifacts
+          path: ~/.m2/repository/org/keycloak/
+
+      - name: Download Keycloak dist
+        uses: actions/download-artifact@v2
+        with:
+          name: keycloak-dist
+
+      - name: Start server
+        run: .github/scripts/start-local-server.sh
+
+      - name: Run tests
+        run: .github/scripts/tests/${{ matrix.testScript }}
