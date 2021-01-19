@@ -11,7 +11,9 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: 1.8
-      - run: cp -f maven-settings.xml ~/.m2/settings.xml
+      - run: |
+          cp -f maven-settings.xml ~/.m2/settings.xml
+          .github/scripts/generate-keycloak-json.sh
 
       - name: Checkout Keycloak repo
         uses: actions/checkout@v2
