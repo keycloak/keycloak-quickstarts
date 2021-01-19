@@ -2,11 +2,13 @@
 
 mkdir test-logs
 
+set -x
 mvn clean test -Pwildfly-managed -f action-token-required-action -B 2>&1 | tee test-logs/action-token-required-action.log
 mvn clean test -Pwildfly-managed -f action-token-authenticator -B 2>&1 | tee test-logs/action-token-authenticator.log
 mvn clean test -Pwildfly-managed -f app-angular2 -B 2>&1 | tee test-logs/app-angular2.log
 mvn clean test -Pkeycloak-remote -f user-storage-simple -B 2>&1 | tee test-logs/user-storage-simple.log
 mvn clean test -Pkeycloak-remote -f user-storage-jpa -B 2>&1 | tee test-logs/user-storage-jpa.log
+set +x
 
 testsWithErrors=()
 
