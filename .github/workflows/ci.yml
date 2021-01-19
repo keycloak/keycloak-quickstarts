@@ -11,6 +11,7 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: 1.8
+      - run: cp -f maven-settings.xml ~/.m2/settings.xml
 
       - name: Checkout Keycloak repo
         uses: actions/checkout@v2
@@ -28,17 +29,9 @@ jobs:
           key: cache-1-${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: cache-1-${{ runner.os }}-m2
 
-      - name: Build Keycloak
-        run: mvn clean install -Pdistribution -DskipTests -s maven-settings.xml -f keycloak -B
-
-      - name: Prepare Quickstarts
-        run: .github/scripts/generate-keycloak-json.sh
-
-      - name: Build Quickstarts
-        run: mvn clean install -DskipTests -s maven-settings.xml -B
-
-      - name: Prepare Keycloak dist
+      - name: Build Keycloak dist
         run: |
+          mvn clean install -Pdistribution -DskipTests -f keycloak -B
           mkdir keycloak-dist
           find keycloak/distribution/server-dist/target -maxdepth 1 -type f -name 'keycloak-[[:digit:]]*.tar.gz' -exec tar xzf {} --strip-components=1 -C keycloak-dist \;
           cp authz-js-policies/target/authz-js-policies.jar keycloak-dist/standalone/deployments
@@ -67,14 +60,21 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        testScript:
-          - user-storage.sh
+        runCmd:
+          - mvn clean test -Pwildfly-managed -f action-token-authenticator -B
+          - mvn clean test -Pwildfly-managed -f action-token-required-action -B
+          - mvn clean test -Pwildfly-managed -f app-angular2 -B
+          - mvn clean test -Pkeycloak-remote -f user-storage-simple -B
+          - mvn clean test -Pkeycloak-remote -f user-storage-jpa -B
       fail-fast: false
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v1
         with:
           java-version: 1.8
+      - run: |
+          cp -f maven-settings.xml ~/.m2/settings.xml
+          .github/scripts/generate-keycloak-json.sh
 
       - name: Cache Maven repo
         uses: actions/cache@v2
@@ -97,8 +97,8 @@ jobs:
           name: keycloak-dist
           path: keycloak-dist
 
-      - name: Prepare Quickstarts
-        run: .github/scripts/generate-keycloak-json.sh
+      - name: Build Quickstarts
+        run: mvn clean install -DskipTests -B
 
       - name: Start server
         run: .github/scripts/start-local-server.sh
@@ -112,4 +112,4 @@ jobs:
           path: keycloak.log
 
       - name: Run tests
-        run: .github/scripts/tests/${{ matrix.testScript }}
+        run: ${{ matrix.runCmd }}
