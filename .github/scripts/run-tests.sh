@@ -49,8 +49,8 @@ run_tests app-profile-saml-jee-jsp -Pwildfly-managed
 run_tests event-listener-sysout -Pkeycloak-remote
 run_tests event-store-mem -Pkeycloak-remote
 run_tests extend-account-console -Pwildfly-managed
-run_tests fuse63
-run_tests fuse70
+run_tests fuse63 # no tests but at least let's try to compile it
+run_tests fuse70 # no tests but at least let's try to compile it
 run_tests service-jee-jaxrs -Pwildfly-managed
 run_tests service-springboot-rest -Pspring-boot
 run_tests user-storage-jpa -Pkeycloak-remote
