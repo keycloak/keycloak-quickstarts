@@ -60,6 +60,7 @@ mvn -f service-springboot-rest spring-boot:run >/dev/null&
 run_tests app-springboot -Pspring-boot
 
 # service-nodejs tests
+npm -C service-nodejs install
 npm -C service-nodejs start >/dev/null&
 if ! npm -C service-nodejs test 2>&1 | tee test-logs/service-nodejs.log; then
   tests_with_errors+=("service-nodejs")
