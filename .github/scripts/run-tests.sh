@@ -29,8 +29,8 @@ print_failed_tests() {
   fi
 }
 
-run_tests action-token-required-action -Pwildfly-managed
 run_tests action-token-authenticator -Pwildfly-managed
+run_tests action-token-required-action -Pwildfly-managed
 run_tests app-angular2 -Pwildfly-managed
 run_tests app-authz-jee-servlet -Pwildfly-managed
 run_tests app-authz-jee-vanilla -Pwildfly-managed
@@ -59,7 +59,7 @@ run_tests user-storage-simple -Pkeycloak-remote
 mvn -f service-springboot-rest spring-boot:run >/dev/null&
 run_tests app-springboot -Pspring-boot
 
-# service-nodejs test
+# service-nodejs tests
 npm -C service-nodejs start >/dev/null&
 if ! npm -C service-nodejs test 2>&1 | tee test-logs/service-nodejs.log; then
   tests_with_errors+=("service-nodejs")
