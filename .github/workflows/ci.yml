@@ -3,8 +3,7 @@ name: Quickstarts tests
 on: [push, pull_request]
 
 jobs:
-  build:
-    name: Build
+  tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -42,66 +41,6 @@ jobs:
           cp authz-js-policies/target/authz-js-policies.jar keycloak-dist/standalone/deployments
           keycloak-dist/bin/add-user-keycloak.sh -u admin -p admin
 
-      - name: Store Maven artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: maven-artifacts
-          retention-days: 2
-          path: |
-            ~/.m2/repository/org/keycloak
-            !~/.m2/repository/org/keycloak/keycloak-server-dist
-            !~/.m2/repository/org/keycloak/keycloak-server-x-dist
-
-      - name: Store Keycloak dist
-        uses: actions/upload-artifact@v2
-        with:
-          name: keycloak-dist
-          retention-days: 2
-          path: keycloak-dist
-
-  tests-java:
-    name: Quickstarts Java tests
-    needs: build
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        runCmd:
-          - mvn clean test -Pwildfly-managed -f action-token-authenticator -B
-          - mvn clean test -Pwildfly-managed -f action-token-required-action -B
-          - mvn clean test -Pwildfly-managed -f app-angular2 -B
-          - mvn clean test -Pkeycloak-remote -f user-storage-simple -B
-          - mvn clean test -Pkeycloak-remote -f user-storage-jpa -B
-      fail-fast: false
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-java@v1
-        with:
-          java-version: 1.8
-      - run: |
-          cp -f maven-settings.xml ~/.m2/settings.xml
-          .github/scripts/generate-keycloak-json.sh
-
-      - name: Cache Maven repo
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.m2/repository
-            !~/.m2/repository/org/keycloak
-          key: cache-1-${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: cache-1-${{ runner.os }}-m2
-
-      - name: Download Maven artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: maven-artifacts
-          path: ~/.m2/repository/org/keycloak/
-
-      - name: Download Keycloak dist
-        uses: actions/download-artifact@v2
-        with:
-          name: keycloak-dist
-          path: keycloak-dist
-
       - name: Start server
         run: .github/scripts/start-local-server.sh
 
@@ -114,4 +53,12 @@ jobs:
           path: keycloak.log
 
       - name: Run tests
-        run: ${{ matrix.runCmd }}
+        run: .github/scripts/run-tests.sh
+
+      - name: Archive logs
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-logs
+          retention-days: 2
+          path: test-logs
