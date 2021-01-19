@@ -31,29 +31,16 @@ jobs:
           key: cache-1-${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: cache-1-${{ runner.os }}-m2
 
-      - name: Build Keycloak dist
-        run: |
-          mvn clean install -Pdistribution -DskipTests -f keycloak -B
-          mkdir keycloak-dist
-          find keycloak/distribution/server-dist/target -maxdepth 1 -type f -name 'keycloak-[[:digit:]]*.tar.gz' -exec tar xzf {} --strip-components=1 -C keycloak-dist \;
-          keycloak-dist/bin/add-user-keycloak.sh -u admin -p admin
+      - name: Get Keycloak
+        run: .github/scripts/prepare-local-server.sh
 
       - name: Build Quickstarts
-        run: mvn clean install -DskipTests -B
+        run: |
+          mvn clean install -DskipTests -B
+          cp authz-js-policies/target/authz-js-policies.jar keycloak-dist/standalone/deployments
 
-      - name: Modify Keycloak dist
-        run: cp authz-js-policies/target/authz-js-policies.jar keycloak-dist/standalone/deployments
-
-      - name: Start server
+      - name: Start Keycloak
         run: .github/scripts/start-local-server.sh
-
-      - name: Archive keycloak.log
-        if: ${{ failure() }}
-        uses: actions/upload-artifact@v2
-        with:
-          name: keycloak.log
-          retention-days: 2
-          path: keycloak.log
 
       - name: Run tests
         run: .github/scripts/run-tests.sh
@@ -64,4 +51,6 @@ jobs:
         with:
           name: test-logs
           retention-days: 2
-          path: test-logs
+          path: |
+            test-logs
+            keycloak.log
