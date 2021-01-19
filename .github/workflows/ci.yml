@@ -29,7 +29,10 @@ jobs:
           key: cache-1-${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: cache-1-${{ runner.os }}-m2
 
-      - name: Build Keycloak dist
+      - name: Build Quickstarts
+        run: mvn clean install -DskipTests -B
+
+      - name: Build and prep Keycloak dist
         run: |
           mvn clean install -Pdistribution -DskipTests -f keycloak -B
           mkdir keycloak-dist
@@ -96,9 +99,6 @@ jobs:
         with:
           name: keycloak-dist
           path: keycloak-dist
-
-      - name: Build Quickstarts
-        run: mvn clean install -DskipTests -B
 
       - name: Start server
         run: .github/scripts/start-local-server.sh
