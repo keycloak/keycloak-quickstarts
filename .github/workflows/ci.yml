@@ -15,13 +15,6 @@ jobs:
           cp -f maven-settings.xml ~/.m2/settings.xml
           .github/scripts/generate-keycloak-json.sh
 
-      - name: Checkout Keycloak repo
-        uses: actions/checkout@v2
-        with:
-          repository: keycloak/keycloak
-          ref: master
-          path: keycloak
-
       - name: Cache Maven repo
         uses: actions/cache@v2
         with:
