@@ -4,7 +4,7 @@ function waitForServer {
   echo -n "Starting Keycloak "
   # Give the server some time to start up. Look for a well-known
   # bit of text in the log file. Try at most 50 times before giving up.
-  C=50
+  C=90
   while :
   do
     grep "Keycloak .* (WildFly Core .*) started" keycloak.log
