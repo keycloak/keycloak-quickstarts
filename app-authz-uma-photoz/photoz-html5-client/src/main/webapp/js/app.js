@@ -203,8 +203,10 @@ module.factory('authInterceptor', function ($q, $injector, $timeout, Identity) {
                         deferred.resolve(rejection);
                     }, function () {
                         document.getElementById("output").innerHTML = 'You can not access or perform the requested operation on this resource.';
+                        return deferred.reject(rejection);
                     }, function () {
                         document.getElementById("output").innerHTML = 'Unexpected error from server.';
+                        return deferred.reject(rejection);
                     });
 
                     var promise = deferred.promise;

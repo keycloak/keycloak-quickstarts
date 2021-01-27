@@ -18,7 +18,7 @@ Basically, it is a project containing three modules:
  
 * **photoz-restful-api**, a simple RESTFul API based on JAX-RS and acting as a resource server.
 * **photoz-html5-client**, a HTML5 + AngularJS client that will consume the RESTful API published by a resource server.
-* **photoz-authz-policy**, a simple project with some rule-based policies using JBoss Drools.
+* **photoz-js-policies**, a simple project with some rule-based policies using JavaScript.
 
 For this application, users can be regular users or administrators. Regular users can create/view/delete their albums 
 and administrators can do anything. Regular users are also allowed to share their albums with other users.
@@ -154,29 +154,26 @@ view the token contents, we will focus on the main functionality of the quicksta
 * Before creating any albums, click on the `My Profile` link. A page will display Alice's id and also the number of albums
 owned by Alice, which should be zero at this point.
 * The next step will be creating a couple of albums. Click on the `Create Album` link to add an album. For example purposes,
-let's crete two albums, named `Italy Vacations` and `Greece Vacations`.
+let's craete two albums, named `Italy Vacations` and `Greece Vacations`.
 * Clicking on the `My Profile` link now should show a total of two albums owned by Alice.
 * It is also possible to delete an album by clicking on the `[X]` link next to it but we won't do it for the moment.
 
 Alice can now manage her albums and share them with other users. Click on the `My Account` link at the top of the page. You
-will be directed to the Keycloak Account page. Next, click on `My Resources`. It will show the two albums created before in
+will be directed to the Keycloak Account page. Next, click on `Resources`. It will show the two albums created before in
 a table. Let's now share the albums with John Doe (jdoe):
 
-* Click on the `Italy Vacations` album. In the `Share with others` section fill the input field with the `jdoe` username
-and click on the `Share` button. By default both the `album:view` and `album:delete` scopes are set as permissions for
-John. 
-* The table at the top of the page now displays information about the shared album: the username with which the album was
-shared with, the permissions (scopes) this username has on the resource, the time and date of the permission grat and a
-`Revoke` buttom that Alice can use at any time to revoke access to her album.
-* Click again on the `My Resources` link in the left panel. Notice how the table of resources now has a shared symbol
-in the `Italy Vacations` album along with the number `1`, indicating the album has been shared with 1 other user.
-* Now click on the `Greece Vacations` album, enter `jdoe` in the input field but before clicking `Share` make sure to remove
-the `album:delete` scope.
-* The table at the top of the page again displays information about the shared resource. Notice how only the `album:view`
-scope has been set in the `Permission` column.
+* Click on the `Share` button for the `Italy Vacations` album. In the `Username or email` field enter the `jdoe` username
+  and click on the `Add` button. Click on the `Select the permissions` field and select both `album:view` and `album:delete`
+  permissions from the drop-down menu. Click `Done` to confirm the changes.
+* Alice can use the kebab menu for the `Italy Vacations` album at any time to view and change the permissions
+  or revoke the access completely.
+* Click the `ˬ` (arrow down) button next to `Italy Vacations` resource name to expand the box. Notice the information that
+  the resource is shared with `jdoe`.
+* Now, click on the `Share` button for the `Greece Vacations` album and enter `jdoe` username again. This time, select
+  only the `album:view` permission and confirm the dialog by clicking on the `Done` button.
 
-So, to summarize, Alice has shared both her albums with John, giving him full permissions on the `Italy Vacations` album
-and only the `album:view` permission on the `Greece Vacation` album.
+So, to summarize, Alice has shared both her albums with John, giving him full permissions (`album:view` and `album:delete`)
+on the `Italy Vacations` album and only the `album:view` permission on the `Greece Vacation` album.
 
 Now click on the `Back to photoz-html5-client` link at the top of the page to return to the application and then click on
 the `Sign Out` link to logout.
@@ -196,14 +193,13 @@ This tells John that he doesn't have the permissions to delete this album and if
 should still be able to see it when he logs (we will cover that part later on) because administrators should be able to
 see all the albums created by all users.
 * The next step is to request Alice the permissions to delete the `Greece Vacations` album. Click on the `Request Delete Access`
-link. The app display the following message:
+link. The app displays the following message:
    ````
    Sent authorization request to resource owner, please, wait for approval.
    ````
-* Next click on the `My Account` link at the top of the page and then click on `My Resources`. Notice how the page shows
-both John's own resources (the `Germany Vacations`) album and also the resources Alice shared with him. At any time John
-can remove the sharing by selecting the shared resource and clicking on the `Remove Sharing` button. This doesn't remove
-the resource, only the sharing.
+* Next click on the `My Account` link at the top of the page and then click on `Resources`. Notice how the page shows
+both John's own resources (the `Germany Vacations`) album and also the resources Alice shared with him (on `Shared with Me`
+tab).
 * We won't be doing anything for now on this page, so let's just logout. For that, simply click on the `Sign Out` link at
 the top of the page.
 
@@ -214,10 +210,10 @@ We know now that John has sent Alice a request to obtain `album:delete` for the 
 in as Alice (username: alice, password: alice). We should be take straight to the Keycloak Account page. If you land at the
 application main page click on the `My Account` link to go to the Keycloak Account page.
 
-Click on the `My Resources` link and now the page looks a little bit different. An extra table is displayed at the top of
-page with the approval requests. It shows that John has requested the `album:delete` permission for the `Greece Vacations`
-album and it also displays two buttons, `Approve` and `Deny`. At this moment we will approve John's request, so click on the
-`Approve` button.
+Click on the `Resources` link and now the page looks a little bit different. A button with `1` badge is displayed next to
+the `Greece Vacations` resource. After clicking that button a modal dialog appears. It shows that John has requested
+the `album:delete` permission for the album and it also displays two buttons, `Accept` and `Deny`. At this moment we will
+approve John's request, so click on the `Accept` button.
 
 Click on the `Back to photoz-html5-client` link at the top of the page and then logout by clicking on the `Sign out` link.
 
@@ -242,9 +238,11 @@ Revoking Permissions
 ---------
 
 As a final exercise let's say that Alice now doesn't trust John anymore so she wants to revoke the permissions she gave him.
-Log in as Alice (username: alice, password: alice) and go to `My Account` and then click on `My Resources`. She has now only
-one album (`Italy Vacations`) as we removed the other one as administrators. Click on the album and now the page shows the
-table of people with access to the resource. Click on the `Revoke` button to revoke the permissions granted to John.
+Log in as Alice (username: alice, password: alice) and go to `My Account` and then click on `Resources`. She has now only
+one album (`Italy Vacations`) as we removed the other one as administrators. Select `Edit` from the kebab menu for this
+resource, remove all permissions from the `Select the permissions` field and confirm the changes by clicking the "check"
+button next to that field. Finally, close the modal dialog by clicking `Done`. Alternatively, select `Unshare all` from
+the kebab menu which would revoke access from all users Alice shared the album with.
 
 Click on the `Back to photoz-html5-client` link and the logout. Log back in as John (username: jdoe, password: jdoe) and
 notice how John has not albums shared with him.
@@ -252,5 +250,11 @@ notice how John has not albums shared with him.
 Summary
 ----------
 
-This quickstart should provides a good overview of some of the core concepts of the Keycloak Authorization Services, such as
+This quickstart should provide a good overview of some of the core concepts of the Keycloak Authorization Services, such as
 user-managed access (privacy control), resource sharing, and asynchronous authorization.
+
+Integration test of the Quickstart
+----------------------------------
+
+1. Make sure you have an Keycloak server running with an admin user in the `master` realm or use the provided docker image.
+2. Run `mvn install -Pwildfly-managed`. Add `-Dbrowser=chrome` to run the tests without the headless browser mode.
