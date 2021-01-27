@@ -51,19 +51,11 @@
 
     <extension qualifier="webdriver">
         <property name="browser">${browser}</property>
-        <property name="downloadBinaries">${webdriverDownloadBinaries}</property>
-
-        <!-- firefox -->
-        <property name="firefox_binary">${firefox_binary}</property>
-        <property name="firefoxLogLevel">OFF</property>
-        <property name="firefoxLegacy">true</property>
-
-        <!-- chrome -->
-        <property name="chromeDriverBinary">${chromeDriverBinary}</property>
+        <property name="chromeArguments">--window-size=1920,1080</property>
     </extension>
 
     <extension qualifier="drone">
-        <property name="instantiationTimeoutInSeconds">${droneInstantiationTimeoutInSeconds}</property>
+        <property name="instantiationTimeoutInSeconds">60</property>
     </extension>
 
     <extension qualifier="graphene">

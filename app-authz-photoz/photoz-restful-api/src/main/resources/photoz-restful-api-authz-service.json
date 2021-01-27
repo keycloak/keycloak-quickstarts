@@ -115,7 +115,6 @@
       "logic": "POSITIVE",
       "decisionStrategy": "UNANIMOUS",
       "config": {
-        "defaultResourceType": "[\"http://photoz.com/album\"]",
         "scopes": "[\"album:view\",\"album:delete\"]",
         "applyPolicies": "[\"Only Owner and Administrators Policy\"]"
       }

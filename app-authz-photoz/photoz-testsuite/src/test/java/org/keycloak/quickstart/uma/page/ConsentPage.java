@@ -47,6 +47,6 @@ public class ConsentPage {
     }
 
     public boolean isCurrent() {
-        return driver.getTitle().equalsIgnoreCase("Log in to photoz");
+        return driver.getTitle().equalsIgnoreCase("Sign in to photoz");
     }
 }

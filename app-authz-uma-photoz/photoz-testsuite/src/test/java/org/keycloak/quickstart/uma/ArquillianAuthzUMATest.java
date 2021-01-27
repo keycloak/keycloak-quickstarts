@@ -17,12 +17,8 @@
 
 package org.keycloak.quickstart.uma;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.URL;
-import java.util.concurrent.TimeUnit;
-
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
@@ -31,6 +27,7 @@ import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.jboss.arquillian.graphene.page.Page;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
+import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.importer.ZipImporter;
@@ -40,13 +37,25 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.keycloak.admin.client.Config;
+import org.keycloak.admin.client.token.TokenManager;
 import org.keycloak.quickstart.uma.page.PhotozPage;
+import org.keycloak.representations.idm.ClientRepresentation;
 import org.keycloak.test.FluentTestsHelper;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import static org.junit.Assert.fail;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.StreamSupport;
 
 /**
  * Tests for the {@code Photoz} quickstart.
@@ -61,6 +70,10 @@ public class ArquillianAuthzUMATest {
     private static final String HTML_CLIENT_APP_NAME = "photoz-html5-client";
     private static final String RESTFUL_API_APP_NAME = "photoz-restful-api";
     private static final String JS_POLICIES = "photoz-js-policies";
+    private static final String DIRECT_GRANT_APP_NAME = "direct-grant";
+    private static final String SECRET = "secret";
+    private static final String VIEW_SCOPE = "album:view";
+    private static final String DELETE_SCOPE = "album:delete";
 
     public static final String TEST_REALM = "photoz";
     public static final String KEYCLOAK_URL = "http://localhost:8180/auth";
@@ -117,6 +130,13 @@ public class ArquillianAuthzUMATest {
     public void setup() {
         try {
             testHelper.importTestRealm("/quickstart-realm.json");
+
+            ClientRepresentation directGrantClient = new ClientRepresentation();
+            directGrantClient.setClientId(DIRECT_GRANT_APP_NAME);
+            directGrantClient.setPublicClient(false);
+            directGrantClient.setSecret(SECRET);
+            directGrantClient.setDirectAccessGrantsEnabled(true);
+            testHelper.getKeycloakInstance().realms().realm(TEST_REALM).clients().create(directGrantClient);
         } catch (Exception e) {
             throw new IllegalStateException("Could not initialize Keycloak", e);
         }
@@ -127,114 +147,189 @@ public class ArquillianAuthzUMATest {
 
     @Test
     public void testCreateDeleteAlbum() {
-        try {
-            photozPage.login("alice", "alice", "Alice In Chains");
+        photozPage.login("alice", "alice", "Alice In Chains");
 
-            // the albums and shared albums lists should be empty.
-            WebElement emptyAlbumsList = webDriver.findElement(By.id("resource-list-empty"));
-            Assert.assertTrue(emptyAlbumsList.isDisplayed());
-            Assert.assertEquals("You don't have any albums, yet.", emptyAlbumsList.getText());
-            WebElement emptySharedList = webDriver.findElement(By.id("share-list-empty"));
-            Assert.assertTrue(emptySharedList.isDisplayed());
-            Assert.assertEquals("You don't have any shares, yet.", emptySharedList.getText());
+        // the albums and shared albums lists should be empty.
+        WebElement emptyAlbumsList = webDriver.findElement(By.id("resource-list-empty"));
+        Assert.assertTrue(emptyAlbumsList.isDisplayed());
+        Assert.assertEquals("You don't have any albums, yet.", emptyAlbumsList.getText());
+        WebElement emptySharedList = webDriver.findElement(By.id("share-list-empty"));
+        Assert.assertTrue(emptySharedList.isDisplayed());
+        Assert.assertEquals("You don't have any shares, yet.", emptySharedList.getText());
 
-            // create an album and check the list of albums in no longer empty.
-            photozPage.createAlbum("France Vacations");
-            Assert.assertFalse(emptyAlbumsList.isDisplayed());
+        // create an album and check the list of albums in no longer empty.
+        photozPage.createAlbum("France Vacations");
+        Assert.assertFalse(emptyAlbumsList.isDisplayed());
 
-            // now delete the created album and verify the list of albums is empty again.
-            photozPage.deleteAlbum("France Vacations");
-            Assert.assertTrue(emptyAlbumsList.isDisplayed());
+        // now delete the created album and verify the list of albums is empty again.
+        photozPage.deleteAlbum("France Vacations");
+        Assert.assertTrue(emptyAlbumsList.isDisplayed());
 
-            photozPage.logout();
-        } catch (Exception e) {
-            debugTest(e);
-            fail("Should display the main page");
-        }
+        photozPage.logout();
     }
 
     @Test
     public void testRequestEntitlements() {
-        try {
-            photozPage.login("admin", "admin", "Admin Istrator");
-            photozPage.requestEntitlements();
-            String pageSource = webDriver.getPageSource();
-            Assert.assertTrue(pageSource.contains("album:view"));
-            Assert.assertTrue(pageSource.contains("album:delete"));
-            Assert.assertTrue(pageSource.contains("admin:manage"));
-            photozPage.logout();
+        photozPage.login("admin", "admin", "Admin Istrator");
+        photozPage.requestEntitlements();
+        String pageSource = webDriver.getPageSource();
+        Assert.assertTrue(pageSource.contains("album:view"));
+        Assert.assertTrue(pageSource.contains("album:delete"));
+        Assert.assertTrue(pageSource.contains("admin:manage"));
+        photozPage.logout();
 
-            photozPage.login("alice", "alice", null);
-            photozPage.requestEntitlements();
-            pageSource = webDriver.getPageSource();
-            Assert.assertTrue(pageSource.contains("profile:view"));
-            Assert.assertFalse(pageSource.contains("album:view"));
-            Assert.assertFalse(pageSource.contains("admin:manage"));
-            photozPage.logout();
-        } catch (Exception e) {
-            debugTest(e);
-            fail("Should display the entitlements");
-        }
+        photozPage.login("alice", "alice", null);
+        photozPage.requestEntitlements();
+        pageSource = webDriver.getPageSource();
+        Assert.assertTrue(pageSource.contains("profile:view"));
+        Assert.assertFalse(pageSource.contains("album:view"));
+        Assert.assertFalse(pageSource.contains("admin:manage"));
+        photozPage.logout();
     }
 
     @Test
     public void testShareResource() {
+        // login as alice, create an album, and share it with jdoe.
+        photozPage.login("alice", "alice", null);
+        photozPage.createAlbum("Germany Vacations");
+        shareResource("alice", "alice", "jdoe", "Germany Vacations", VIEW_SCOPE, DELETE_SCOPE);
+        photozPage.viewAlbum("Germany Vacations");
+        webDriver.navigate().to(contextRoot);
+        photozPage.logout();
+
+        photozPage.login("jdoe", "jdoe", null);
+        // jdoe's album list should be empty, but shared albums list shouldn't.
+        WebElement emptyAlbumsList = webDriver.findElement(By.id("resource-list-empty"));
+        Assert.assertTrue(emptyAlbumsList.isDisplayed());
+        Assert.assertEquals("You don't have any albums, yet.", emptyAlbumsList.getText());
+        WebElement emptySharedList = webDriver.findElement(By.id("share-list-empty"));
+        Assert.assertFalse(emptySharedList.isDisplayed());
+        Assert.assertTrue(webDriver.findElement(By.id("delete-share-Germany Vacations")).isDisplayed());
+
+        // jdoe should be able to delete alice's shared album.
+        photozPage.deleteSharedAlbum("Germany Vacations");
+        Assert.assertTrue(emptySharedList.isDisplayed());
+        photozPage.logout();
+
+        // log back in as alice and this time share the created album without granting delete permissions.
+        photozPage.login("alice", "alice", null);
+        photozPage.createAlbum("Greece Vacations");
+        shareResource("alice", "alice", "jdoe", "Greece Vacations", VIEW_SCOPE);
+        photozPage.logout();
+
+        // log back in as jdoe and attempt to delete the shared album.
+        photozPage.login("jdoe", "jdoe", null);
+        // link to deletion should not be displayed - in its place we should have the link to request delete access.
+        Assert.assertFalse(webDriver.findElement(By.id("delete-share-Greece Vacations")).isDisplayed());
+        Assert.assertTrue(webDriver.findElement(By.id("request-delete-share-Greece Vacations")).isDisplayed());
+        // at this point jdoe can only request delete access for the shared album.
+        photozPage.requestDeleteScope("Greece Vacations");
+
+        // alice can now grant or deny jdoe's request. Let's grant it.
+        grantRequestedPermission("alice", "alice", "Greece Vacations");
+        webDriver.navigate().refresh();
+
+        // jdoe should now be able to remove the shared album.
+        photozPage.deleteSharedAlbum("Greece Vacations");
+        Assert.assertTrue(emptySharedList.isDisplayed());
+        photozPage.logout();
+    }
+
+    private void grantRequestedPermission(String ownerUsername, String ownerPassword, String resourceName) {
+        Client client = ResteasyClientBuilder.newClient();
         try {
-            // login as alice, create an album, and share it with jdoe.
-            photozPage.login("alice", "alice", null);
-            photozPage.createAlbum("Germany Vacations");
-            photozPage.shareResource("Germany Vacations", "jdoe");
-            photozPage.viewAlbum("Germany Vacations");
-            webDriver.navigate().to(contextRoot);
-            photozPage.logout();
+            TokenManager tokenManager = getTokenManager(ownerUsername, ownerPassword, client);
+            String resourceId = getResourceId(resourceName, tokenManager, client);
 
-            photozPage.login("jdoe", "jdoe", null);
-            // jdoe's album list should be empty, but shared albums list shouldn't.
-            WebElement emptyAlbumsList = webDriver.findElement(By.id("resource-list-empty"));
-            Assert.assertTrue(emptyAlbumsList.isDisplayed());
-            Assert.assertEquals("You don't have any albums, yet.", emptyAlbumsList.getText());
-            WebElement emptySharedList = webDriver.findElement(By.id("share-list-empty"));
-            Assert.assertFalse(emptySharedList.isDisplayed());
-            Assert.assertTrue(webDriver.findElement(By.id("delete-share-Germany Vacations")).isDisplayed());
+            // Get permission requests
+            String requestsJson = client
+                    .target(UriBuilder.fromUri(KEYCLOAK_URL).path("realms").path(TEST_REALM).path("account/resources").path(resourceId).path("permissions/requests"))
+                    .request(MediaType.APPLICATION_JSON_TYPE)
+                    .header("Authorization", "Bearer " + tokenManager.getAccessTokenString())
+                    .get(String.class);
 
-            // jdoe should be able to delete alice's shared album.
-            photozPage.deleteSharedAlbum("Germany Vacations");
-            Assert.assertTrue(emptySharedList.isDisplayed());
-            photozPage.logout();
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode requests;
 
-            // log back in as alice and this time share the created album without granting delete permissions.
-            photozPage.login("alice", "alice", null);
-            photozPage.createAlbum("Greece Vacations");
-            photozPage.shareResourceWithExcludedScope("Greece Vacations", "jdoe", "album:delete");
-            photozPage.logout();
+            try {
+                requests = objectMapper.readTree(requestsJson);
 
-            // log back in as jdoe and attempt to delete the shared album.
-            photozPage.login("jdoe", "jdoe", null);
-            // link to deletion should not be displayed - in its place we should have the link to request delete access.
-            Assert.assertFalse(webDriver.findElement(By.id("delete-share-Greece Vacations")).isDisplayed());
-            Assert.assertTrue(webDriver.findElement(By.id("request-delete-share-Greece Vacations")).isDisplayed());
-            // at this point jdoe can only request delete access for the shared album.
-            photozPage.requestDeleteScope("Greece Vacations");
-            photozPage.logout();
+                // Extract details from permission requests
+                Assert.assertTrue(requests.isArray());
+                Assert.assertEquals(1, requests.size());
+                String user = requests.get(0).get("username").asText();
+                String scopesJson = objectMapper.writeValueAsString(requests.get(0).get("scopes"));
 
-            // alice can now grant or deny jdoe's request. Let's grant it.
-            photozPage.login("alice", "alice", null);
-            photozPage.grantRequestedPermission("Greece Vacations", "jdoe");
-            photozPage.logout();
-
-            // jdoe should now be able to remove the shared album.
-            photozPage.login("jdoe", "jdoe", null);
-            photozPage.deleteSharedAlbum("Greece Vacations");
-            Assert.assertTrue(emptySharedList.isDisplayed());
-            photozPage.logout();
-        } catch (Exception e) {
-            debugTest(e);
-            fail("Should have been able to share resource");
+                shareResource(resourceId, user, scopesJson, tokenManager, client);
+            }
+            catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        finally {
+            client.close();
         }
     }
 
-    private void debugTest(Exception e) {
-        System.out.println(webDriver.getPageSource());
-        e.printStackTrace();
+    private void shareResource(String ownerUsername, String ownerPassword, String user, String resourceName, String... scopes) {
+        Client client = ResteasyClientBuilder.newClient();
+        try {
+            TokenManager tokenManager = getTokenManager(ownerUsername, ownerPassword, client);
+            String resourceId = getResourceId(resourceName, tokenManager, client);
+
+            // Permissions in Account API don't have a proper public representation (don't want to depend on whole services module)
+
+            // Prepare new permissions
+            try {
+                String scopesJson = new ObjectMapper().writeValueAsString(scopes);
+
+                shareResource(resourceId, user, scopesJson, tokenManager, client);
+            }
+            catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        finally {
+            client.close();
+        }
+    }
+
+    private void shareResource(String resourceId, String user, String scopesJson, TokenManager tokenManager, Client client) {
+        String permissions = String.format("[{\"username\":\"%s\",\"scopes\":%s}]", user, scopesJson);
+
+        // PUT new permissions
+        Response response = client.target(UriBuilder.fromUri(KEYCLOAK_URL).path("realms").path(TEST_REALM).path("account/resources").path(resourceId).path("permissions"))
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .header("Authorization", "Bearer " + tokenManager.getAccessTokenString())
+                .put(Entity.json(permissions));
+
+        Assert.assertEquals(204, response.getStatus());
+
+        client.close();
+    }
+
+    private String getResourceId(String resourceName, TokenManager tokenManager, Client client) {
+        String jsonResponse = client
+                .target(UriBuilder.fromUri(KEYCLOAK_URL).path("realms").path(TEST_REALM).path("account/resources"))
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .header("Authorization", "Bearer " + tokenManager.getAccessTokenString())
+                .get(String.class);
+
+        try {
+            return StreamSupport.stream(new ObjectMapper().readTree(jsonResponse).spliterator(), false)
+                    .filter(j -> resourceName.equals(j.get("name").asText()))
+                    .map(j -> j.get("_id").asText())
+                    .findFirst().get();
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private TokenManager getTokenManager(String username, String password, Client client) {
+        return new TokenManager(
+                new Config(KEYCLOAK_URL, TEST_REALM, username, password, DIRECT_GRANT_APP_NAME, SECRET),
+                client
+        );
     }
 }
