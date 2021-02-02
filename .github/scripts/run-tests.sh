@@ -12,7 +12,7 @@ run_tests() {
   printf "\n\n\n*****************************************\n"
   echo "Running tests for $module QS"
   echo "*****************************************"
-  if ! mvn clean test -f $module $args -Dwebdriver.chrome.driver=$CHROMEWEBDRIVER/chromedriver -B 2>&1 | tee test-logs/$module.log; then
+  if ! mvn clean install -f $module $args -Dwebdriver.chrome.driver=$CHROMEWEBDRIVER/chromedriver -B 2>&1 | tee test-logs/$module.log; then
     tests_with_errors+=("$module")
   fi
 }
