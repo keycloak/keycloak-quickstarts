@@ -5,6 +5,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AppModule = void 0;
 /*
  * Copyright 2017 Red Hat, Inc. and/or its affiliates
  * and other contributors as indicated by the @author tags.
@@ -27,24 +29,24 @@ var http_1 = require("@angular/http");
 var keycloak_service_1 = require("./keycloak-service/keycloak.service");
 var keycloak_http_1 = require("./keycloak-service/keycloak.http");
 var app_component_1 = require("./app.component");
-var AppModule = (function () {
+var AppModule = /** @class */ (function () {
     function AppModule() {
     }
+    AppModule = __decorate([
+        core_1.NgModule({
+            declarations: [app_component_1.AppComponent],
+            imports: [
+                platform_browser_1.BrowserModule,
+                http_1.HttpModule
+            ],
+            providers: [
+                keycloak_service_1.KeycloakService,
+                keycloak_http_1.KEYCLOAK_HTTP_PROVIDER
+            ],
+            bootstrap: [app_component_1.AppComponent]
+        })
+    ], AppModule);
     return AppModule;
 }());
-AppModule = __decorate([
-    core_1.NgModule({
-        declarations: [app_component_1.AppComponent],
-        imports: [
-            platform_browser_1.BrowserModule,
-            http_1.HttpModule
-        ],
-        providers: [
-            keycloak_service_1.KeycloakService,
-            keycloak_http_1.KEYCLOAK_HTTP_PROVIDER
-        ],
-        bootstrap: [app_component_1.AppComponent]
-    })
-], AppModule);
 exports.AppModule = AppModule;
 //# sourceMappingURL=app.module.js.map

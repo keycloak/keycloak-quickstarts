@@ -1,3 +1,4 @@
+"use strict";
 /*
  * Copyright 2017 Red Hat, Inc. and/or its affiliates
  * and other contributors as indicated by the @author tags.
@@ -14,26 +15,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-/// <reference path="keycloak.d.ts"/>
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.KeycloakService = void 0;
 var core_1 = require("@angular/core");
-var Keycloak = require("./keycloak"); // load keycloak.js locally
-var KeycloakService = KeycloakService_1 = (function () {
+var KeycloakService = /** @class */ (function () {
     function KeycloakService() {
     }
+    KeycloakService_1 = KeycloakService;
     KeycloakService.init = function (options) {
         return new Promise(function (resolve, reject) {
             KeycloakService_1.keycloakAuth.init(options)
-                .success(function () {
-                resolve();
+                .then(function () {
+                resolve("success");
             })
-                .error(function (errorData) {
+                .catch(function (errorData) {
                 reject(errorData);
             });
         });
@@ -55,10 +56,10 @@ var KeycloakService = KeycloakService_1 = (function () {
             if (KeycloakService_1.keycloakAuth.token) {
                 KeycloakService_1.keycloakAuth
                     .updateToken(5)
-                    .success(function () {
+                    .then(function () {
                     resolve(KeycloakService_1.keycloakAuth.token);
                 })
-                    .error(function () {
+                    .catch(function () {
                     reject('Failed to refresh token');
                 });
             }
@@ -67,12 +68,14 @@ var KeycloakService = KeycloakService_1 = (function () {
             }
         });
     };
+    var KeycloakService_1;
+    // TODO: I have no idea how to import keycloak-js. I was always getting 404 error on 127.0.0.1:8080/app-angular2/keycloak-js so I worked it around with import in index.html
+    // @ts-ignore
+    KeycloakService.keycloakAuth = Keycloak();
+    KeycloakService = KeycloakService_1 = __decorate([
+        core_1.Injectable()
+    ], KeycloakService);
     return KeycloakService;
 }());
-KeycloakService.keycloakAuth = Keycloak();
-KeycloakService = KeycloakService_1 = __decorate([
-    core_1.Injectable()
-], KeycloakService);
 exports.KeycloakService = KeycloakService;
-var KeycloakService_1;
 //# sourceMappingURL=keycloak.service.js.map

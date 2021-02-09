@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /*
  * JBoss, Home of Professional Open Source
  * Copyright 2016, Red Hat, Inc. and/or its affiliates, and individual

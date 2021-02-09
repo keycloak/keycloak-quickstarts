@@ -1,3 +1,4 @@
+"use strict";
 /*
  * Copyright 2017 Red Hat, Inc. and/or its affiliates
  * and other contributors as indicated by the @author tags.
@@ -14,12 +15,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-"use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -29,6 +37,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.KEYCLOAK_HTTP_PROVIDER = exports.keycloakHttpFactory = exports.KeycloakHttp = void 0;
 var core_1 = require("@angular/core");
 var http_1 = require("@angular/http");
 var keycloak_service_1 = require("./keycloak.service");
@@ -36,7 +46,7 @@ var Rx_1 = require("rxjs/Rx");
 /**
  * This provides a wrapper over the ng2 Http class that insures tokens are refreshed on each request.
  */
-var KeycloakHttp = (function (_super) {
+var KeycloakHttp = /** @class */ (function (_super) {
     __extends(KeycloakHttp, _super);
     function KeycloakHttp(_backend, _defaultOptions, _keycloakService) {
         var _this = _super.call(this, _backend, _defaultOptions) || this;
@@ -62,12 +72,12 @@ var KeycloakHttp = (function (_super) {
             }).concatMap(function (request) { return _super.prototype.request.call(_this, request); });
         }
     };
+    KeycloakHttp = __decorate([
+        core_1.Injectable(),
+        __metadata("design:paramtypes", [http_1.ConnectionBackend, http_1.RequestOptions, keycloak_service_1.KeycloakService])
+    ], KeycloakHttp);
     return KeycloakHttp;
 }(http_1.Http));
-KeycloakHttp = __decorate([
-    core_1.Injectable(),
-    __metadata("design:paramtypes", [http_1.ConnectionBackend, http_1.RequestOptions, keycloak_service_1.KeycloakService])
-], KeycloakHttp);
 exports.KeycloakHttp = KeycloakHttp;
 function keycloakHttpFactory(backend, defaultOptions, keycloakService) {
     return new KeycloakHttp(backend, defaultOptions, keycloakService);
