@@ -15,24 +15,24 @@
  * limitations under the License.
  */
 
-/// <reference path="keycloak.d.ts"/>
-
 import {Injectable} from '@angular/core';
+import {KeycloakInstance} from "keycloak-js";
 
-var Keycloak = require("./keycloak"); // load keycloak.js locally
-type KeycloakClient = KeycloakModule.KeycloakClient;
 
 @Injectable()
 export class KeycloakService {
-    static keycloakAuth: KeycloakClient = Keycloak();
+    // TODO: remove ts-ignore and import Keycloak.
+    //  I have no idea how to import keycloak-js. I was always getting 404 error on 127.0.0.1:8080/app-angular2/keycloak-js so I worked it around with an import in index.html
+    // @ts-ignore
+    static keycloakAuth: KeycloakInstance = Keycloak();
 
     static init(options?: any): Promise<any> {
         return new Promise((resolve, reject) => {
             KeycloakService.keycloakAuth.init(options)
-                .success(() => {
-                    resolve();
+                .then(() => {
+                    resolve("success");
                 })
-                .error((errorData: any) => {
+                .catch((errorData: any) => {
                     reject(errorData);
                 });
         });
@@ -59,10 +59,10 @@ export class KeycloakService {
             if (KeycloakService.keycloakAuth.token) {
                 KeycloakService.keycloakAuth
                     .updateToken(5)
-                    .success(() => {
+                    .then(() => {
                         resolve(<string>KeycloakService.keycloakAuth.token);
                     })
-                    .error(() => {
+                    .catch(() => {
                         reject('Failed to refresh token');
                     });
             } else {

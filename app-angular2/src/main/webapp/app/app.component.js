@@ -8,6 +8,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AppComponent = void 0;
 /*
  * Copyright 2017 Red Hat, Inc. and/or its affiliates
  * and other contributors as indicated by the @author tags.
@@ -29,7 +31,7 @@ var http_1 = require("@angular/http");
 var keycloak_service_1 = require("./keycloak-service/keycloak.service");
 require("rxjs/add/operator/catch");
 require("rxjs/add/operator/map");
-var AppComponent = (function () {
+var AppComponent = /** @class */ (function () {
     function AppComponent(http, kc) {
         this.http = http;
         this.kc = kc;
@@ -66,15 +68,15 @@ var AppComponent = (function () {
             comp.message = error.status + ' ' + error.statusText;
         }
     };
+    AppComponent = __decorate([
+        core_1.Component({
+            selector: 'app-root',
+            templateUrl: './app.component.html',
+            styleUrls: ['./app.component.css']
+        }),
+        __metadata("design:paramtypes", [http_1.Http, keycloak_service_1.KeycloakService])
+    ], AppComponent);
     return AppComponent;
 }());
-AppComponent = __decorate([
-    core_1.Component({
-        selector: 'app-root',
-        templateUrl: './app.component.html',
-        styleUrls: ['./app.component.css']
-    }),
-    __metadata("design:paramtypes", [http_1.Http, keycloak_service_1.KeycloakService])
-], AppComponent);
 exports.AppComponent = AppComponent;
 //# sourceMappingURL=app.component.js.map
