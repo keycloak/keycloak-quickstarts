@@ -102,7 +102,6 @@ public class ArquillianProfileJeeHtml5Test {
         return ShrinkWrap.create(WebArchive.class, "app-profile-html5.war")
                 .addAsWebResource(new File(WEBAPP_SRC, "app.js"))
                 .addAsWebResource(new File(WEBAPP_SRC, "index.html"))
-                .addAsWebResource(new File(WEBAPP_SRC, "keycloak.js"))
                 .addAsWebResource(new File(WEBAPP_SRC, "styles.css"))
                 .addAsWebResource(new StringAsset(createClient(ClientBuilder.create(APP_NAME)
                         .rootUrl(ROOT_URL)
@@ -122,9 +121,12 @@ public class ArquillianProfileJeeHtml5Test {
     }
 
     @Before
-    public void setup() {
-        webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
+    public void setup() throws InterruptedException {
+        webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         webDriver.navigate().to(contextRoot);
+        waitForPageToLoad();
+
+        waitTillElementIsClickable(By.name("loginBtn"));
     }
 
     @Test
@@ -132,8 +134,13 @@ public class ArquillianProfileJeeHtml5Test {
         try {
             indexPage.clickLogin();
             loginPage.login("test-admin", "password");
+            waitForPageToLoad();
+
             assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.id("username"), "admin")));
             profilePage.clickLogout();
+            waitForPageToLoad();
+
+            waitTillElementIsClickable(By.name("loginBtn"));
         } catch (Exception e) {
             debugTest(e);
             fail("Should display logged in user");
@@ -145,15 +152,23 @@ public class ArquillianProfileJeeHtml5Test {
         try {
             indexPage.clickLogin();
             loginPage.login("test-admin", "password");
+            waitForPageToLoad();
+            
             profilePage.clickToken();
+            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.id("token-content"), "iat")));
+
             JsonObject json = parse(profilePage.getTokenContent());
             assertNotNull("JSON content should not be empty", json);
-            assertEquals(json.get("aud").getAsString(), APP_NAME);
+            assertEquals(json.get("azp").getAsString(), APP_NAME);
             assertFalse(json.get("session_state").isJsonNull());
             webDriver.navigate().to(contextRoot);
-            
+            waitForPageToLoad();
+
             waitTillElementIsClickable(By.name("logoutBtn"));
             profilePage.clickLogout();
+            waitForPageToLoad();
+
+            waitTillElementIsClickable(By.name("loginBtn"));
         } catch (Exception e) {
             debugTest(e);
             fail("Should display logged in user");
@@ -165,11 +180,21 @@ public class ArquillianProfileJeeHtml5Test {
         try {
             indexPage.clickLogin();
             loginPage.login("test-admin", "password");
+            waitForPageToLoad();
+
+            waitTillElementIsClickable(By.name("accountBtn"));
             profilePage.clickAccount();
-            assertEquals("Keycloak Account Management", webDriver.getTitle());
+            waitForPageToLoad();
+            Graphene.waitGui().withTimeout(30, TimeUnit.SECONDS).until(ExpectedConditions.titleContains("Keycloak Account Management"));
+
             webDriver.navigate().to(contextRoot);
+            waitForPageToLoad();
+
             waitTillElementIsClickable(By.name("logoutBtn"));
             profilePage.clickLogout();
+            waitForPageToLoad();
+
+            waitTillElementIsClickable(By.name("loginBtn"));
         } catch (Exception e) {
             debugTest(e);
             fail("Should display account management page");
@@ -178,6 +203,11 @@ public class ArquillianProfileJeeHtml5Test {
     
     private void waitTillElementIsClickable(By locator) {
         Graphene.waitGui().withTimeout(30, TimeUnit.SECONDS).until(ExpectedConditions.elementToBeClickable(locator));
+    }
+    
+    private void waitForPageToLoad() throws InterruptedException {
+        Thread.sleep(200);
+        Graphene.waitGui().withTimeout(30, TimeUnit.SECONDS).until().element(By.tagName("body")).is().visible();
     }
 
     private JsonObject parse(String json) {
