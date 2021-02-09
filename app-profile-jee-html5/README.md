@@ -86,3 +86,11 @@ Undeploy the Quickstart
    ````
    mvn wildfly:undeploy
    ````
+
+Integration test of the Quickstart
+----------------------------------
+
+1. Make sure you have a Keycloak server running with an `admin` user with a password `admin` in the `master` realm running on following url `http://localhost:8180/auth` or use the provided docker image
+2. You need to have Chrome browser installed and updated to the latest version.
+3. Run `mvn clean install -Pwildfly-managed -Denforcer.skip=true`
+
