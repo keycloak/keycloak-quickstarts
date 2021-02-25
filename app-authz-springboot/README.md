@@ -5,7 +5,7 @@ Level: Beginner
 Technologies: SpringBoot, Spring MVC, Spring Security
 Summary: SpringBoot, Spring MVC, Spring Security
 Target Product: <span>Keycloak</span>
-Source: <https://github.com/keycloak/Keycloak-quickstarts>
+Source: <https://github.com/keycloak/keycloak-quickstarts>
 
 
 What is it?

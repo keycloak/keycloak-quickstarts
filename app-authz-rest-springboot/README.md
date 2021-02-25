@@ -5,7 +5,7 @@ Level: Beginner
 Technologies: SpringBoot
 Summary: SpringBoot REST Service Protected Using Keycloak Authorization Services
 Target Product: Keycloak
-Source: <https://github.com/keycloak/Keycloak-quickstarts>
+Source: <https://github.com/keycloak/keycloak-quickstarts>
 
 
 What is it?

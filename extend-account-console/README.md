@@ -1,11 +1,11 @@
 extend-account-console: Learn to extend the Account Console
 ===================================================
 
-Level: Beginner  
-Technologies: PatternFly, React, JSX  
-Summary: "Keycloak Man" theme that extends Account Console  
-Target Product: <span>Keycloak</span>  
-Source: <https://github.com/keycloak/Keycloak-quickstarts>
+Level: Beginner
+Technologies: PatternFly, React, JSX
+Summary: "Keycloak Man" theme that extends Account Console
+Target Product: <span>Keycloak</span>
+Source: <https://github.com/keycloak/keycloak-quickstarts>
 
 
 What is it?

@@ -25,6 +25,8 @@ fi
 
 # Rename Keycloak to Red Hat SSO
 find . -type f \( -name "*README*" -o -name "*getting-started*" -o -name "*test-development*" \) -exec sed -i 's@<span>Keycloak</span>@Red Hat SSO@g' {} +
+# Rename repository links
+find . -type f \( -name "*README*" -o -name "*getting-started*" -o -name "*test-development*" \) -exec sed -i 's@keycloak/keycloak-quickstarts@redhat-developer/redhat-sso-quickstarts@g' {} +
 # Rename WildFly to JBoss EAP
 find . -type f \( -name "*README*" -o -name "*getting-started*" -o -name "*test-development*" \) -exec  sed -i 's@<span>WildFly 10</span>@JBoss EAP 7.1.0@g' {} +
 find . -type f \( -name "*README*" -o -name "*getting-started*" -o -name "*test-development*" \) -exec  sed -i 's@<span>WildFly</span>@JBoss EAP@g' {} +
@@ -83,13 +85,13 @@ git checkout app-springboot/pom.xml
 git checkout app-springboot/README.md
 git checkout event-listener-sysout/pom.xml
 git checkout event-store-mem/pom.xml 
-git rm -r action-token-authenticator
-git rm -r action-token-required-action
-git rm -r app-springboot 
-git rm -r kubernetes-examples
-git rm -r openshift-examples
-git rm -r event-listener-sysout
-git rm -r event-store-mem
+git rm -r -f action-token-authenticator
+git rm -r -f action-token-required-action
+git rm -r -f app-springboot 
+git rm -r -f kubernetes-examples
+git rm -r -f openshift-examples
+git rm -r -f event-listener-sysout
+git rm -r -f event-store-mem
 git status
 
 git commit . -m "Converted to RH-SSO QuickStarts"
