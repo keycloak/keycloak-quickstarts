@@ -5,7 +5,7 @@ Level: Beginner
 Technologies: SpringBoot
 Summary: SpringBoot REST Service
 Target Product: <span>Keycloak</span>
-Source: <https://github.com/keycloak/<span>Keycloak</span>-quickstarts>
+Source: <https://github.com/keycloak/keycloak-quickstarts>
 
 
 What is it?
