@@ -40,6 +40,8 @@ spec:
           value: "admin"
         - name: PROXY_ADDRESS_FORWARDING
           value: "true"
+        - name: DB_VENDOR
+          value: "H2"
         ports:
         - name: http
           containerPort: 8080
