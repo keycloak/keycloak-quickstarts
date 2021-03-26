@@ -21,10 +21,11 @@ import org.keycloak.events.Event;
 import org.keycloak.events.EventQuery;
 import org.keycloak.events.EventType;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author <a href="mailto:sthorger@redhat.com">Stian Thorgersen</a>
@@ -139,12 +140,17 @@ public class MemEventQuery implements EventQuery {
 
     @Override
     public List<Event> getResultList() {
+        return getResultStream().collect(Collectors.toList());
+    }
+
+    @Override
+    public Stream<Event> getResultStream() {
+
         if (events.size() < first) {
-            return Collections.emptyList();
+            return Stream.empty();
         }
         int end = first + max <= events.size() ? first + max : events.size();
 
-        return events.subList(first, end);
+        return events.subList(first, end).stream();
     }
-
 }

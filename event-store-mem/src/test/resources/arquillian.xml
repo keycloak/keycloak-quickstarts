@@ -29,7 +29,7 @@
     </group>
 
     <extension qualifier="webdriver">
-        <property name="browser">phantomjs</property>
+        <property name="browser">chromeheadless</property>
     </extension>
     
     <engine>

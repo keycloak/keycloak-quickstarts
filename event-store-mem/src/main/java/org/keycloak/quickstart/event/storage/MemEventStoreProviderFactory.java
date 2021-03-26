@@ -45,7 +45,7 @@ public class MemEventStoreProviderFactory implements EventStoreProviderFactory {
 
     @Override
     public EventStoreProvider create(KeycloakSession session) {
-        return new MemEventStoreProvider(events, excludedEvents, adminEvents, excludedOperations);
+        return new MemEventStoreProvider(events, excludedEvents, adminEvents, excludedOperations, session);
     }
 
     @Override

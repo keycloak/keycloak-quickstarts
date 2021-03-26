@@ -22,11 +22,12 @@ import org.keycloak.events.admin.AdminEventQuery;
 import org.keycloak.events.admin.OperationType;
 import org.keycloak.events.admin.ResourceType;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author <a href="mailto:giriraj.sharma27@gmail.com">Giriraj Sharma</a>
@@ -185,12 +186,16 @@ public class MemAdminEventQuery implements AdminEventQuery {
 
     @Override
     public List<AdminEvent> getResultList() {
+        return getResultStream().collect(Collectors.toList());
+    }
+
+    @Override
+    public Stream<AdminEvent> getResultStream() {
         if (adminEvents.size() < first) {
-            return Collections.emptyList();
+            return Stream.empty();
         }
         int end = first + max <= adminEvents.size() ? first + max : adminEvents.size();
 
-        return adminEvents.subList(first, end);
+        return adminEvents.subList(first, end).stream();
     }
-        
 }

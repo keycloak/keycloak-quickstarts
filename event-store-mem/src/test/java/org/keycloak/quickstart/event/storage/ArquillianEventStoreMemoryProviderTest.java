@@ -126,6 +126,8 @@ public class ArquillianEventStoreMemoryProviderTest {
     @RunAsClient
     public void init(@ArquillianResource URL url) throws IOException, CliException {
         webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
+        webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+
         keycloakContextRoot = url;
 
         onlineManagementClient = ManagementClient.online(OnlineOptions
@@ -145,7 +147,7 @@ public class ArquillianEventStoreMemoryProviderTest {
     public void testIfEventsAreShowed() throws InterruptedException, IOException, CliException {
         // logout and login to generate some events
         logout();
-        navigateAndLogin("/realms/" + REALM_QS_EVENT_STORE);
+        loginToAdminConsole();
 
         checkIfEventExists(EventType.CODE_TO_TOKEN.name(), EventType.LOGIN.name());
 
@@ -169,7 +171,7 @@ public class ArquillianEventStoreMemoryProviderTest {
         restartRemoteServer();
     }
 
-    private void navigateTo(String path) {
+    private void navigateToAdminConsole(String path) {
         webDriver.navigate().to(format(KEYCLOAK_URL_CONSOLE, keycloakContextRoot.getHost(),
                 keycloakContextRoot.getPort(), REALM_QS_EVENT_STORE, path));
     }
@@ -191,47 +193,25 @@ public class ArquillianEventStoreMemoryProviderTest {
         ADMIN_CLIENT.realm(REALM_QS_EVENT_STORE).updateRealmEventsConfig(realmEventsConfig);
     }
 
-    /**
-     * Navigates to provided path and login. Waits for redirects.
-     * @param path String path to navigate to
-     */
-    private void navigateAndLogin(String path) throws InterruptedException {
-        if (path.endsWith("/")) {
-            path = path.substring(0, path.length() - 1);
-        }
+    private void loginToAdminConsole() throws InterruptedException {
+        final String path = "/realms/" + REALM_QS_EVENT_STORE + "/clients";
 
-        navigateTo(path);
-        String currentUrl = webDriver.getCurrentUrl();
+        navigateToAdminConsole(path);
 
-        // do we need to login?
-        if (!currentUrl.endsWith(path) && !currentUrl.contains(path + "&state=")) {
-            // wait for redirect to login page
-            while (!currentUrl.contains("protocol/openid-connect/auth?client_id=security-admin-console")) {
-                TimeUnit.MILLISECONDS.sleep(50);
-                currentUrl = webDriver.getCurrentUrl();
-            }
+        loginPage.login("test-admin", "password");
 
-            loginPage.login("test-admin", "password");
-            currentUrl = webDriver.getCurrentUrl();
-
-            // wait for redirect to original page
-            while (!currentUrl.contains(path)) {
-                TimeUnit.MILLISECONDS.sleep(50);
-                currentUrl = webDriver.getCurrentUrl();
+        // wait for URL to stop changing
+        while (true) {
+            String previousUrl = webDriver.getCurrentUrl();
+            TimeUnit.SECONDS.sleep(1);
+            if (webDriver.getCurrentUrl().equals(previousUrl)) {
+                break;
             }
         }
     }
 
-    private void logout() throws InterruptedException {
+    private void logout() {
         ADMIN_CLIENT.realm(REALM_QS_EVENT_STORE).users().get(ADMIN_ID).logout();
-
-        navigateTo("");
-        String currentUrl = webDriver.getCurrentUrl();
-
-        while (!currentUrl.contains("protocol/openid-connect/auth?client_id=security-admin-console")) {
-            TimeUnit.MILLISECONDS.sleep(50);
-            currentUrl = webDriver.getCurrentUrl();
-        }
     }
 
     private void addDefaultProvider() throws IOException, CliException {
