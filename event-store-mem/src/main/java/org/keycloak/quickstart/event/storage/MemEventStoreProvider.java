@@ -24,6 +24,7 @@ import org.keycloak.events.EventType;
 import org.keycloak.events.admin.AdminEvent;
 import org.keycloak.events.admin.AdminEventQuery;
 import org.keycloak.events.admin.OperationType;
+import org.keycloak.models.KeycloakSession;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -38,14 +39,17 @@ public class MemEventStoreProvider implements EventStoreProvider {
     private final Set<EventType> excludedEvents;
     private final List<AdminEvent> adminEvents;
     private final Set<OperationType> excludedOperations;
+    private final KeycloakSession session;
 
     public MemEventStoreProvider(List<Event> events, Set<EventType> excludedEvents, 
-            List<AdminEvent> adminEvents, Set<OperationType> excludedOperations) {
+            List<AdminEvent> adminEvents, Set<OperationType> excludedOperations, KeycloakSession session) {
         this.events = events;
         this.excludedEvents = excludedEvents;
         
         this.adminEvents = adminEvents;
         this.excludedOperations = excludedOperations;
+
+        this.session = session;
     }
 
     @Override
@@ -123,6 +127,16 @@ public class MemEventStoreProvider implements EventStoreProvider {
                 }
             }
         }
+    }
+
+    @Override
+    public void clearExpiredEvents() {
+        session.realms().getRealmsStream().forEach(r -> {
+            if (r.getEventsExpiration() > 0) {
+                long olderThan = System.currentTimeMillis() - r.getEventsExpiration() * 1000;
+                clear(r.getId(), olderThan);
+            }
+        });
     }
 
     @Override
