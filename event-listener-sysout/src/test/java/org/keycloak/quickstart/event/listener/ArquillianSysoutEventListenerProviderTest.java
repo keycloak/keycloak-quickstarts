@@ -17,42 +17,47 @@
 
 package org.keycloak.quickstart.event.listener;
 
+import org.hamcrest.Matchers;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.container.test.api.TargetsContainer;
+import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.jboss.arquillian.graphene.page.Page;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
-import org.jboss.arquillian.drone.api.annotation.Drone;
-import org.junit.*;
-
-import org.keycloak.admin.client.Keycloak;
-import org.keycloak.representations.idm.RealmEventsConfigRepresentation;
-import org.wildfly.extras.creaper.core.ManagementClient;
-import org.wildfly.extras.creaper.core.online.*;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.junit.runner.RunWith;
-
+import org.keycloak.admin.client.Keycloak;
 import org.keycloak.events.EventListenerProviderFactory;
+import org.keycloak.events.EventType;
+import org.keycloak.representations.idm.RealmEventsConfigRepresentation;
 import org.keycloak.test.page.LoginPage;
 import org.openqa.selenium.WebDriver;
+import org.wildfly.extras.creaper.core.ManagementClient;
+import org.wildfly.extras.creaper.core.online.CliException;
+import org.wildfly.extras.creaper.core.online.ManagementProtocol;
+import org.wildfly.extras.creaper.core.online.ModelNodeResult;
+import org.wildfly.extras.creaper.core.online.OnlineManagementClient;
+import org.wildfly.extras.creaper.core.online.OnlineOptions;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 import static java.lang.String.format;
-import org.hamcrest.Matchers;
 import static org.keycloak.test.TestsHelper.deleteRealm;
 import static org.keycloak.test.TestsHelper.importTestRealm;
 import static org.keycloak.test.TestsHelper.keycloakBaseUrl;
-
-import org.keycloak.events.EventType;
-
-import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author <a href="mailto:mkanis@redhat.com">Martin Kanis</a>
@@ -115,6 +120,7 @@ public class ArquillianSysoutEventListenerProviderTest {
     @Before
     public void setup() throws IOException {
         webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
+        webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
         registerEventListener();
 
@@ -126,42 +132,44 @@ public class ArquillianSysoutEventListenerProviderTest {
         );
     }
 
+    @After
+    public void cleanup() {
+        removeEventListener();
+        logout();
+    }
+
     @Test
     public void testEventListenerOutput() throws IOException, CliException, InterruptedException {
         // generate some events
-        navigateAndLogin("/realms/" + REALM_QS_EVENT_SYSOUT + "/clients");
+        loginToAdminConsole();
         logout();
-        navigateAndLogin("/realms/" + REALM_QS_EVENT_SYSOUT + "/clients");
+        loginToAdminConsole();
 
         // check all events in the server's log
         String log = getServerLog();
         checkServerLogForEvents(log, EventType.LOGIN, EventType.CODE_TO_TOKEN);
-
-        // clean and logout
-        removeEventListener();
-        logout();
     }
 
     @Test
     public void testEventListenerExcludes() throws IOException, CliException, InterruptedException {
         addExcludes();
 
-        // generate some events
-        navigateAndLogin("/realms/" + REALM_QS_EVENT_SYSOUT);
-        logout();
-        navigateAndLogin("/realms/" + REALM_QS_EVENT_SYSOUT);
+        try {
+            // generate some events
+            loginToAdminConsole();
+            logout();
+            loginToAdminConsole();
 
-        // check all expected events in the server's log
-        String log = getServerLog();
-        checkServerLogForEvents(log, EventType.LOGIN);
+            // check all expected events in the server's log
+            String log = getServerLog();
+            checkServerLogForEvents(log, EventType.LOGIN);
 
-        // check if CODE_TO_TOKEN event was filtered out
-        Assert.assertThat(log, Matchers.not(Matchers.containsString(EventType.CODE_TO_TOKEN.name())));
-
-        // clean and logout
-        removeEventListener();
-        removeSpi();
-        logout();
+            // check if CODE_TO_TOKEN event was filtered out
+            Assert.assertThat(log, Matchers.not(Matchers.containsString(EventType.CODE_TO_TOKEN.name())));
+        }
+        finally {
+            removeSpi();
+        }
     }
 
     private void registerEventListener() {
@@ -176,53 +184,30 @@ public class ArquillianSysoutEventListenerProviderTest {
         ADMIN_CLIENT.realm(REALM_QS_EVENT_SYSOUT).updateRealmEventsConfig(realmEventsConfig);
     }
 
-    private void navigateTo(String path) {
+    private void navigateToAdminConsole(String path) {
         webDriver.navigate().to(format(KEYCLOAK_URL_CONSOLE, keycloakContextRoot.getHost(),
                 keycloakContextRoot.getPort(), REALM_QS_EVENT_SYSOUT, path));
     }
 
-    /**
-     * Navigates to provided path and login. Waits for redirects.
-     * @param path String path to navigate to
-     */
-    private void navigateAndLogin(String path) throws InterruptedException {
-        if (path.endsWith("/")) {
-            path = path.substring(0, path.length() - 1);
-        }
+    private void loginToAdminConsole() throws InterruptedException {
+        final String path = "/realms/" + REALM_QS_EVENT_SYSOUT + "/clients";
 
-        navigateTo(path);
-        String currentUrl = webDriver.getCurrentUrl();
+        navigateToAdminConsole(path);
 
-        // do we need to login?
-        if (!currentUrl.endsWith(path) && !currentUrl.contains(path + "&state=")) {
-            // wait for redirect to login page
-            while (!currentUrl.contains("protocol/openid-connect/auth?client_id=security-admin-console")) {
-                TimeUnit.MILLISECONDS.sleep(50);
-                currentUrl = webDriver.getCurrentUrl();
-            }
+        loginPage.login("test-admin", "password");
 
-            loginPage.login("test-admin", "password");
-            currentUrl = webDriver.getCurrentUrl();
-
-            // wait for redirect to original page
-            while (!currentUrl.contains(path)) {
-                TimeUnit.MILLISECONDS.sleep(50);
-                currentUrl = webDriver.getCurrentUrl();
+        // wait for URL to stop changing
+        while (true) {
+            String previousUrl = webDriver.getCurrentUrl();
+            TimeUnit.SECONDS.sleep(1);
+            if (webDriver.getCurrentUrl().equals(previousUrl)) {
+                break;
             }
         }
     }
 
-    private void logout() throws InterruptedException {
-        ADMIN_CLIENT = Keycloak.getInstance(keycloakBaseUrl, "master", "admin", "admin", "admin-cli");
+    private void logout() {
         ADMIN_CLIENT.realm(REALM_QS_EVENT_SYSOUT).users().get(ADMIN_ID).logout();
-
-        navigateTo("");
-        String currentUrl = webDriver.getCurrentUrl();
-
-        while (!currentUrl.contains("protocol/openid-connect/auth?client_id=security-admin-console")) {
-            TimeUnit.MILLISECONDS.sleep(50);
-            currentUrl = webDriver.getCurrentUrl();
-        }
     }
 
     /**
