@@ -45,8 +45,9 @@ Save the changes afterwards.
 Integration test of the Quickstart
 ----------------------------------
 
-1. Make sure you have a Keycloak server running with an `admin` user and `admin` password in the `master` realm
-2. Run `mvn test -Pkeycloak-remote`
+1. Make sure you have a Keycloak server running with an `admin` user and `admin` password in the `master` realm.
+2. You need to have Chrome browser installed and updated to the latest version.
+3. Run `mvn test -Pkeycloak-remote`.
 
 
 Undeploy the Quickstart
