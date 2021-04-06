@@ -87,7 +87,8 @@ Integration test of the Quickstart
 ----------------------------------
 
 1. Make sure you have an Keycloak server running with an admin user in the `master` realm or use the provided docker image
-2. Run `mvn test -Pwildfly-managed`
+2. You need to have Chrome browser installed and updated to the latest version
+3. Run `mvn test -Pwildfly-managed`
 
 More Information
 ----------------
