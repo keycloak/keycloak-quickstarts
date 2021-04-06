@@ -16,28 +16,32 @@
  */
 package org.keycloak.quickstart.actiontoken.token;
 
+import org.jboss.logging.Logger;
 import org.keycloak.Config.Scope;
 import org.keycloak.TokenVerifier;
 import org.keycloak.TokenVerifier.Predicate;
 import org.keycloak.authentication.actiontoken.AbstractActionTokenHander;
-import org.keycloak.authentication.actiontoken.*;
+import org.keycloak.authentication.actiontoken.ActionTokenContext;
+import org.keycloak.authentication.actiontoken.TokenUtils;
 import org.keycloak.common.VerificationException;
 import org.keycloak.common.util.Base64;
-import org.keycloak.events.*;
-import org.keycloak.quickstart.actiontoken.reqaction.RedirectToExternalApplication;
+import org.keycloak.events.Errors;
+import org.keycloak.events.EventBuilder;
+import org.keycloak.events.EventType;
 import org.keycloak.forms.login.LoginFormsProvider;
 import org.keycloak.models.UserModel;
+import org.keycloak.quickstart.actiontoken.reqaction.RedirectToExternalApplication;
 import org.keycloak.representations.JsonWebToken;
 import org.keycloak.services.managers.AuthenticationManager;
 import org.keycloak.services.managers.AuthenticationSessionManager;
 import org.keycloak.services.messages.Messages;
 import org.keycloak.sessions.AuthenticationSessionCompoundId;
 import org.keycloak.sessions.AuthenticationSessionModel;
-import java.io.IOException;
-import java.util.Collections;
+
 import javax.crypto.spec.SecretKeySpec;
 import javax.ws.rs.core.Response;
-import org.jboss.logging.Logger;
+import java.io.IOException;
+import java.util.Collections;
 
 /**
  * Action token handler for verification of e-mail address.
@@ -132,7 +136,7 @@ public class ExternalApplicationNotificationActionTokenHandler extends AbstractA
         }
 
         // Otherwise continue with next required action (if any)
-        String nextAction = AuthenticationManager.nextRequiredAction(tokenContext.getSession(), authSession, tokenContext.getClientConnection(), tokenContext.getRequest(), tokenContext.getUriInfo(), event);
+        String nextAction = AuthenticationManager.nextRequiredAction(tokenContext.getSession(), authSession, tokenContext.getRequest(), event);
         return AuthenticationManager.redirectToRequiredActions(tokenContext.getSession(), tokenContext.getRealm(), authSession, tokenContext.getUriInfo(), nextAction);
     }
 
