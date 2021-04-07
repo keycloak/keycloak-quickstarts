@@ -41,7 +41,6 @@
         <version.compiler.maven.plugin>3.5.1</version.compiler.maven.plugin>
         <version.hibernate.javax.persistence>1.0.0.Final</version.hibernate.javax.persistence>
         <version.jboss-ejb-api>1.0.0.Final</version.jboss-ejb-api>
-        <jboss.server.port>9990</jboss.server.port>
     </properties>
 
     <dependencies>
@@ -80,10 +79,16 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.jboss.arquillian.extension</groupId>
-            <artifactId>arquillian-phantom-driver</artifactId>
-            <version>${arquillian-phantom.version}</version>
+            <groupId>org.wildfly.extras.creaper</groupId>
+            <artifactId>creaper-core</artifactId>
+            <version>${version.creaper}</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 
@@ -105,6 +110,7 @@
                 <version>${version.wildfly.maven.plugin}</version>
                 <configuration>
                     <skip>false</skip>
+                    <port>${keycloak.management.port}</port>
                 </configuration>
             </plugin>
             <plugin>
@@ -115,6 +121,17 @@
                         <phase>validate</phase>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${version.surefire.plugin}</version>
+                <configuration>
+                    <systemPropertyVariables>
+                        <keycloakManagementPort>${keycloak.management.port}</keycloakManagementPort>
+                        <buildDirectory>${project.build.directory}</buildDirectory>
+                    </systemPropertyVariables>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -141,7 +158,7 @@
                                     <goal>add-resource</goal>
                                 </goals>
                                 <configuration>
-                                    <port>${jboss.server.port}</port>
+                                    <port>${keycloak.management.port}</port>
                                     <force/>
                                     <address>subsystem=datasources</address>
                                     <resources>

@@ -21,54 +21,64 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.jboss.arquillian.graphene.page.Page;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.keycloak.quickstart.page.ConsolePage;
 import org.keycloak.quickstart.storage.user.EjbExampleUserStorageProvider;
 import org.keycloak.quickstart.storage.user.EjbExampleUserStorageProviderFactory;
 import org.keycloak.quickstart.storage.user.UserAdapter;
 import org.keycloak.quickstart.storage.user.UserEntity;
+import org.keycloak.representations.idm.ComponentRepresentation;
+import org.keycloak.representations.idm.UserRepresentation;
+import org.keycloak.test.FluentTestsHelper;
 import org.keycloak.test.page.LoginPage;
-import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.WebDriver;
+import org.wildfly.extras.creaper.core.ManagementClient;
+import org.wildfly.extras.creaper.core.online.ManagementProtocol;
+import org.wildfly.extras.creaper.core.online.OnlineManagementClient;
+import org.wildfly.extras.creaper.core.online.OnlineOptions;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
+import javax.ws.rs.core.Response;
 import java.util.concurrent.TimeUnit;
 
 import static java.lang.String.format;
-import org.jboss.arquillian.graphene.Graphene;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
 
 @RunWith(Arquillian.class)
 public class ArquillianJpaStorageTest {
 
-    private static final String KEYCLOAK_URL = "http://%s:%s/auth%s";
+
+    public static final String KEYCLOAK_URL = "http://localhost:8180/auth";
+    public static final int KEYCLOAK_MGMT_PORT = Integer.parseInt(System.getProperty("keycloakManagementPort"));
+    public static final String PROVIDER_TYPE = "org.keycloak.storage.UserStorageProvider";
 
     @Page
     private LoginPage loginPage;
 
-    @Page
-    private ConsolePage consolePage;
-
     @Drone
     private WebDriver webDriver;
 
-    @ArquillianResource
-    private URL contextRoot;
+    private static FluentTestsHelper testsHelper;
+
+    private static OnlineManagementClient onlineManagementClient;
 
     @Deployment(testable = false)
-    public static Archive<?> createTestArchive() throws IOException {
+    public static Archive<?> createTestArchive() throws Exception {
+        // set storage
+        onlineManagementClient = ManagementClient.online(OnlineOptions
+                .standalone()
+                .hostAndPort("localhost", KEYCLOAK_MGMT_PORT)
+                .protocol(ManagementProtocol.HTTP_REMOTING)
+                .build());
+        onlineManagementClient.execute("xa-data-source add --name=ExampleXADS --driver-name=h2 --jndi-name=java:jboss/datasources/ExampleXADS --xa-datasource-properties={URL=>jdbc:h2:mem:test} --enabled=true");
+        onlineManagementClient.executeCli("reload");
+
         return ShrinkWrap.create(JavaArchive.class, "user-storage-jpa-example.jar")
                 .addClasses(EjbExampleUserStorageProvider.class, EjbExampleUserStorageProviderFactory.class,
                         UserAdapter.class, UserEntity.class)
@@ -77,47 +87,75 @@ public class ArquillianJpaStorageTest {
 
     }
 
+    @BeforeClass
+    public static void beforeClass() {
+        testsHelper = new FluentTestsHelper(KEYCLOAK_URL,
+                "admin", "admin",
+                FluentTestsHelper.DEFAULT_ADMIN_REALM,
+                FluentTestsHelper.DEFAULT_ADMIN_CLIENT,
+                FluentTestsHelper.DEFAULT_TEST_REALM)
+                .init();
+    }
+
+    @AfterClass
+    public static void afterClass() throws Exception {
+        if (testsHelper != null) {
+            testsHelper.close();
+        }
+
+        onlineManagementClient.execute("xa-data-source remove --name=ExampleXADS");
+        onlineManagementClient.executeCli("reload");
+        onlineManagementClient.close();
+    }
 
     @Before
-    public void setup() {
-        webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
-        navigateTo("/admin");
+    public void beforeTest() throws Exception {
+        testsHelper.importTestRealm("/quickstart-realm.json");
+        webDriver.manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
+        webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    }
+
+    @After
+    public void afterTest() {
+        testsHelper.deleteTestRealm();
+    }
+
+    private void navigateTo(String path) {
+        webDriver.navigate().to(testsHelper.getKeycloakBaseUrl() + path);
     }
 
     @Test
-    public void testUserFederationStorageCreation() throws MalformedURLException, InterruptedException {
-        try {
-            waitTillElementPresent(By.id("username"));
-            loginPage.login("admin", "admin");
+    public void testCreateUserInEjbStorage() {
+        final String providerId = addProvider();
+        final String username = "joneill";
+        final String password = "sgc-passwd";
 
-            consolePage.navigateToUserFederationMenu();
-            consolePage.selectUserStorage();
-            consolePage.save();
-            consolePage.navigateToUserFederationMenu();
+        testsHelper.createTestUser(username, password);
+        // The Ejb Storage doesn't implement all methods, e.g. searchForUser using attributes is missing, therefore we
+        // need to use a different interface, in this case using "search" attribute and pagination
+        UserRepresentation fetchedUser = testsHelper.getTestRealmResource().users().search(username, 0, 1).get(0);
 
-            assertNotNull("Storage provider should be created", consolePage.exampleFederationStorageLink());
-            consolePage.delete();
+        // check if the user is created using the storage provider
+        assertEquals(providerId, fetchedUser.getOrigin());
 
-            navigateTo("/realms/master/account");
-            assertEquals("Should display admin", "admin", consolePage.getUser());
-            consolePage.logout();
-        } catch (Exception e) {
-            debugTest(e);
-            fail("Should create a user federation storage");
-        }
+        // test if login works
+        navigateToAccount(username, password);
     }
 
-    private void waitTillElementPresent(By locator) {
-        Graphene.waitGui().withTimeout(60, TimeUnit.SECONDS).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+    private String addProvider() {
+        ComponentRepresentation provider = new ComponentRepresentation();
+        provider.setProviderId(EjbExampleUserStorageProviderFactory.PROVIDER_ID);
+        provider.setProviderType(PROVIDER_TYPE);
+        provider.setName(EjbExampleUserStorageProviderFactory.PROVIDER_ID);
+
+        Response response = testsHelper.getTestRealmResource().components().add(provider);
+        assertEquals(201, response.getStatus());
+
+        return testsHelper.getCreatedId(response);
     }
-    
-    private void navigateTo(String path) {
-        webDriver.navigate().to(format(KEYCLOAK_URL,
-                contextRoot.getHost(), contextRoot.getPort(), path));
-    }
-    
-    private void debugTest(Exception e) {
-        System.out.println(webDriver.getPageSource());
-        e.printStackTrace();
+
+    private void navigateToAccount(String user, String password) {
+        navigateTo(format("/realms/%s/account/#/personal-info", testsHelper.getTestRealmName()));
+        loginPage.login(user, password);
     }
 }
