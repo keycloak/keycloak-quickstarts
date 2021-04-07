@@ -28,8 +28,9 @@ import javax.naming.InitialContext;
  * @version $Revision: 1 $
  */
 public class EjbExampleUserStorageProviderFactory implements UserStorageProviderFactory<EjbExampleUserStorageProvider> {
-    private static final Logger logger = Logger.getLogger(EjbExampleUserStorageProviderFactory.class);
+    public static final String PROVIDER_ID = "example-user-storage-jpa";
 
+    private static final Logger logger = Logger.getLogger(EjbExampleUserStorageProviderFactory.class);
 
     @Override
     public EjbExampleUserStorageProvider create(KeycloakSession session, ComponentModel model) {
@@ -46,7 +47,7 @@ public class EjbExampleUserStorageProviderFactory implements UserStorageProvider
 
     @Override
     public String getId() {
-        return "example-user-storage-jpa";
+        return PROVIDER_ID;
     }
 
     @Override

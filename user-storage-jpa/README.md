@@ -36,12 +36,11 @@ Start up the <span>Keycloak</span> server.  Then in the directory of this exampl
    mvn -Padd-datasource install
    ````
 
-**Note**: If the server runs on different port than `9990`, you have to specify it by setting a
-maven property `jboss.server.port` (f.e. if you've specified the `-Djboss.socket.binding.port-offset=100` 
-before starting of the server, then you should use port `10090`).
+**Note**: If the server runs on different port than `10090`, you have to specify it by setting a
+maven property `keycloak.management.port`.
 
    ````
-   mvn -Padd-datasource install -Djboss.server.port=10090
+   mvn -Padd-datasource install -Dkeycloak.management.port=9990
    ````
 
 You only need to execute this maven command once.  If you execute this again, then you will get an error message that the datasource
@@ -72,8 +71,9 @@ to the Users tab in the Admin Console and create a new user, you'll be able to s
 Integration test of the Quickstart
 ----------------------------------
 
-1. Make sure you have an Keycloak server running with an admin user in the `master` realm or use the provided docker image
-2. Run `mvn test -Pkeycloak-remote`
+1. Make sure you have an Keycloak server running with an admin user in the `master` realm or use the provided docker image.
+2. You need to have Chrome browser installed and updated to the latest version.
+3. Run `mvn test -Pkeycloak-remote`. (The datasource will be deployed automatically.)
 
 More Information
 ----------------
