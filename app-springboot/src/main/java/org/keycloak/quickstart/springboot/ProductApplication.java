@@ -16,16 +16,15 @@
 
 package org.keycloak.quickstart.springboot;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-
+import net.rossillo.spring.web.mvc.CacheControlHandlerInterceptor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import net.rossillo.spring.web.mvc.CacheControlHandlerInterceptor;
+
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
 @SpringBootApplication
 public class ProductApplication {
@@ -36,12 +35,10 @@ public class ProductApplication {
 	protected ServletContextListener listener() {
 		return new ServletContextListener() {
 
-			@Override
 			public void contextInitialized(ServletContextEvent sce) {
 				logger.info("ServletContext initialized");
 			}
 
-			@Override
 			public void contextDestroyed(ServletContextEvent sce) {
 				logger.info("ServletContext destroyed");
 			}
@@ -49,7 +46,7 @@ public class ProductApplication {
 		};
 	}
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 		SpringApplication.run(ProductApplication.class, args);
 	}
         

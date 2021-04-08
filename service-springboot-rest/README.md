@@ -45,7 +45,7 @@ The following steps shows how to create the client required for this quickstart:
 
 Once saved you need to change the `Access Type` to `bearer-only` and click save.
 
-Finally you need to update the adapter using SpringBoot's configuration file (application.properties). If you followed 
+Finally, you need to update the adapter using SpringBoot's configuration file (application.properties). If you followed 
 the steps above it should be:
 
 ````
@@ -64,6 +64,8 @@ keycloak.securityConstraints[0].authRoles[0] = user
 keycloak.securityConstraints[0].securityCollections[0].patterns[0] = /products
 
 ````
+
+Please note the quickstart expects the user to have the `user` realm role assigned. 
 
 
 

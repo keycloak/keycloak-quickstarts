@@ -9,15 +9,11 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.keycloak.test.TestsHelper;
-import org.keycloak.test.builders.ClientBuilder;
+import org.keycloak.test.FluentTestsHelper;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
-
-import static org.keycloak.test.builders.ClientBuilder.AccessType.BEARER_ONLY;
-import static org.keycloak.test.builders.ClientBuilder.AccessType.PUBLIC;
 
 /**
  * Created by sblanc on 3/28/17.
@@ -27,25 +23,30 @@ import static org.keycloak.test.builders.ClientBuilder.AccessType.PUBLIC;
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.DEFINED_PORT, classes = {ProductApplication.class})
 public class ProductAppTest {
 
+    public static final String KEYCLOAK_URL = "http://localhost:8180/auth";
+
     private WebClient webClient = new WebClient(BrowserVersion.CHROME);
+    private static FluentTestsHelper testsHelper;
 
     @BeforeClass
     public static void setup() throws IOException {
-        TestsHelper.baseUrl = "http://localhost:8080";
-        //TestsHelper.keycloakBaseUrl  = "set keycloak server docker IP"
-        TestsHelper.testRealm="quickstart";
-        TestsHelper.initialAccessTokenCount = 3;
-        TestsHelper.importTestRealm("admin","admin","/quickstart-realm.json");
-        TestsHelper.createDirectGrantClient();
-        TestsHelper.createClient(ClientBuilder.create("test-demo").baseUrl(TestsHelper.baseUrl)
-                .rootUrl("http://localhost:8080").accessType(PUBLIC));
-        TestsHelper.createClient(ClientBuilder.create("product-service").accessType(BEARER_ONLY));
+        testsHelper = new FluentTestsHelper(KEYCLOAK_URL,
+                "admin", "admin",
+                FluentTestsHelper.DEFAULT_ADMIN_REALM,
+                FluentTestsHelper.DEFAULT_ADMIN_CLIENT,
+                FluentTestsHelper.DEFAULT_TEST_REALM)
+                .init();
 
+        testsHelper.importTestRealm("/quickstart-realm.json");
     }
 
     @AfterClass
-    public static void cleanUp() throws IOException{
-        TestsHelper.deleteRealm("admin","admin",TestsHelper.testRealm);
+    public static void cleanUp() {
+        testsHelper.deleteTestRealm();
+
+        if (testsHelper != null) {
+            testsHelper.close();
+        }
     }
 
     @Test
