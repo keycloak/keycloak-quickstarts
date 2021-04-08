@@ -1,5 +1,5 @@
 {
-    "realm": "quickstart",
+    "realm": "springboot-quickstart",
     "enabled": true,
     "accessTokenLifespan": 60,
     "accessCodeLifespan": 60,
@@ -55,5 +55,26 @@
                 "description": "Administrator privileges"
             }
         ]
-    }
+    },
+    "clients": [
+        {
+            "clientId": "service-springboot",
+            "enabled": true,
+            "bearerOnly": true,
+            "protocol": "openid-connect"
+        },
+        {
+            "clientId": "test-demo",
+            "rootUrl": "http://localhost:8080",
+            "redirectUris": [
+                "http://localhost:8080/*"
+            ],
+            "webOrigins": [
+                "http://localhost:8080"
+            ],
+            "enabled": true,
+            "publicClient": true,
+            "protocol": "openid-connect"
+        }
+    ]
 }

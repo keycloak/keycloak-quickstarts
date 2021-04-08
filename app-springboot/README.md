@@ -24,7 +24,7 @@ This application also show how to combine Spring Security with <span>Keycloak</s
 System Requirements
 -------------------
 
-The quickstart requires that you have the [SpringBoot Service](../service-springboot/README.md) running. It assumes the
+The quickstart requires that you have the [SpringBoot Service](../service-springboot-rest/README.md) running. It assumes the
 services are located at `http://localhost:8081/products`. If the services are running elsewhere you need to edit
 `resources/application.properties` and replace the value of `product.service.url`.
 
@@ -53,7 +53,7 @@ As an alternative you can create the client by importing the file [client-import
 
 If you deploy the application somewhere else change the hostname and port of the URLs accordingly.
 
-Finally you need to update the adapter using SpringBoot's configuration file (application.properties) :
+Finally, you need to update the adapter using SpringBoot's configuration file (application.properties) :
 
 ````
 server.compression.enabled: true
@@ -91,7 +91,5 @@ Integration test of the Quickstart
 ----------------------------------
 
 1. Make sure you have an <span>Keycloak</span> server running with an admin user in the `master` realm or use the provided docker image
-2. Be sure to set the `TestHelper.keycloakBaseUrl` in the `createArchive` method (default URL is localhost:8180/auth).
-3. Set accordingly the correct url for the `keycloak.auth-server-url` in the test [application.properties](src/test/resources/application.properties).
-4. Maker sure the [service-springboot-rest](../service-springboot-rest) is running
-4. Run `mvn test -Pspring-boot`
+2. Maker sure the [service-springboot-rest](../service-springboot-rest) is running
+3. Run `mvn test -Pspring-boot`
