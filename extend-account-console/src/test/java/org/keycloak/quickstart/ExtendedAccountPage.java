@@ -32,7 +32,7 @@ public class ExtendedAccountPage {
     @Drone
     private WebDriver webDriver;
 
-    private static final String ACCOUNT_URL = "/auth/realms/quickstart/account/#/";
+    private static final String ACCOUNT_URL = "/realms/quickstart/account/#/";
 
     public void clickOverviewHome() {
         this.overviewHomeBtn.click();
@@ -43,10 +43,7 @@ public class ExtendedAccountPage {
     }
 
     public void navigateTo() {
-        String currentHost = webDriver.getCurrentUrl();
-        currentHost = currentHost.split("//")[0] + "//" + currentHost.split("//")[1].split("/")[0];
-
-        webDriver.navigate().to(currentHost + ACCOUNT_URL);
+        webDriver.navigate().to(ExtendAccountConsoleTest.KEYCLOAK_URL + ACCOUNT_URL);
     }
 
     public boolean isLogoPresent() {

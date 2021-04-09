@@ -36,19 +36,6 @@
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}</finalName>
-        
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <excludes>
-                    <exclude>**/keycloak-man/account/resources/content/keycloak-man/KeycloakManLovesJsx.js</exclude>
-                    <exclude>**/keycloak-man/account/resources/content/keycloak-man/KeycloakManLovesJsx.js.map</exclude>
-                    <exclude>**/keycloak-man/account/src/node_modules/**</exclude>
-                    <exclude>**/keycloak-man/account/src/web_modules/**</exclude>
-                    <exclude>**/keycloak-man/account/resources/public/app.css</exclude>
-                </excludes>
-            </resource>
-        </resources>
+        <finalName>keycloak-man-theme</finalName>
     </build>
 </project>
