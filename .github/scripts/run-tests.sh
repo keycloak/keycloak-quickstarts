@@ -32,13 +32,15 @@ print_failed_tests() {
 run_tests action-token-authenticator -Pwildfly-managed
 run_tests action-token-required-action -Pwildfly-managed
 run_tests app-angular2 -Pwildfly-managed
+# we need to run authz springboot tests first as they are the only ones relying on manual js-policies deployment
+# other tests deploy (and the removes) the policies automatically which then later removes even the manually deployed ones
+run_tests app-authz-rest-springboot -Pspring-boot
+run_tests app-authz-spring-security -Pspring-boot
+run_tests app-authz-springboot -Pspring-boot
 run_tests app-authz-jee-servlet -Pwildfly-managed
 run_tests app-authz-jee-vanilla -Pwildfly-managed
 run_tests app-authz-photoz -Pwildfly-managed
 run_tests app-authz-rest-employee -Pwildfly-managed
-run_tests app-authz-rest-springboot -Pwildfly-managed
-run_tests app-authz-spring-security -Pspring-boot
-run_tests app-authz-springboot -Pspring-boot
 run_tests app-authz-uma-photoz -Pwildfly-managed
 run_tests app-jee-html5 -Pwildfly-managed
 run_tests app-jee-jsp -Pwildfly-managed
