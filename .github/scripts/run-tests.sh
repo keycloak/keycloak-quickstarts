@@ -37,7 +37,7 @@ run_tests app-authz-jee-vanilla -Pwildfly-managed
 run_tests app-authz-photoz -Pwildfly-managed
 run_tests app-authz-rest-employee -Pwildfly-managed
 run_tests app-authz-rest-springboot -Pwildfly-managed
-run_tests app-authz-spring-security -Pwildfly-managed
+run_tests app-authz-spring-security -Pspring-boot
 run_tests app-authz-springboot -Pspring-boot
 run_tests app-authz-uma-photoz -Pwildfly-managed
 run_tests app-jee-html5 -Pwildfly-managed
