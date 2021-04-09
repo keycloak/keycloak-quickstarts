@@ -1,0 +1,6 @@
+{
+  "themes": [{
+    "name" : "keycloak-man",
+    "types": [ "account" ]
+  }]
+}
