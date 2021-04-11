@@ -15,6 +15,6 @@ spec:
             name: keycloak
             port:
               number: 8080
-        path: /
+        path: /auth
         pathType: Exact
 
