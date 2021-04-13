@@ -7,10 +7,10 @@ upstream_master() {
 }
 
 latest_release() {
-URL="https://repo1.maven.org/maven2/org/keycloak/keycloak-server-dist/${VERSION}/keycloak-server-dist-${VERSION}.tar.gz"
-echo "Downloading Keycloak from: $URL"
-curl -o keycloak-dist.tar.gz "$URL"
-tar xzf keycloak-dist.tar.gz --strip-components=1 -C keycloak-dist
+  URL="https://repo1.maven.org/maven2/org/keycloak/keycloak-server-dist/${VERSION}/keycloak-server-dist-${VERSION}.tar.gz"
+  echo "Downloading Keycloak from: $URL"
+  curl -o keycloak-dist.tar.gz "$URL"
+  tar xzf keycloak-dist.tar.gz --strip-components=1 -C keycloak-dist
 }
 
 mkdir keycloak-dist

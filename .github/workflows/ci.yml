@@ -11,9 +11,6 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: 1.8
-      - run: |
-          cp -f maven-settings.xml ~/.m2/settings.xml
-          .github/scripts/generate-keycloak-json.sh
 
       - name: Cache Maven repo
         uses: actions/cache@v2
@@ -28,9 +25,7 @@ jobs:
         run: .github/scripts/prepare-local-server.sh
 
       - name: Build Quickstarts
-        run: |
-          mvn clean install -DskipTests -B
-          cp authz-js-policies/target/authz-js-policies.jar keycloak-dist/standalone/deployments
+        run: .github/scripts/build-quickstarts.sh
 
       - name: Start Keycloak
         run: .github/scripts/start-local-server.sh
