@@ -1,8 +1,8 @@
-#!/bin/bash -x
+#!/bin/bash -e
 
-## This is a helper script for generating "keycloak.json" files from "keycloak-example.json".
-## Use this to test your changes against the Enforcer Plugin.
+cp -f maven-settings.xml ~/.m2/settings.xml
 
+# generate keycloak.json
 for f in $(find . -type f -name 'keycloak-example.json'); do
    cp "$f" "${f%-example.json}.json"
 done
@@ -10,3 +10,6 @@ done
 for f in $(find . -type f -name 'keycloak-saml-example.xml'); do
    cp "$f" "${f%-example.xml}.xml"
 done
+
+mvn clean install -DskipTests -B
+cp authz-js-policies/target/authz-js-policies.jar keycloak-dist/standalone/deployments
