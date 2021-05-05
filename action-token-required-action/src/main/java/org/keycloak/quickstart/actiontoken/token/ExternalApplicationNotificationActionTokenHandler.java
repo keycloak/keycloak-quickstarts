@@ -20,7 +20,7 @@ import org.jboss.logging.Logger;
 import org.keycloak.Config.Scope;
 import org.keycloak.TokenVerifier;
 import org.keycloak.TokenVerifier.Predicate;
-import org.keycloak.authentication.actiontoken.AbstractActionTokenHander;
+import org.keycloak.authentication.actiontoken.AbstractActionTokenHandler;
 import org.keycloak.authentication.actiontoken.ActionTokenContext;
 import org.keycloak.authentication.actiontoken.TokenUtils;
 import org.keycloak.common.VerificationException;
@@ -47,7 +47,7 @@ import java.util.Collections;
  * Action token handler for verification of e-mail address.
  * @author hmlnarik
  */
-public class ExternalApplicationNotificationActionTokenHandler extends AbstractActionTokenHander<ExternalApplicationNotificationActionToken> {
+public class ExternalApplicationNotificationActionTokenHandler extends AbstractActionTokenHandler<ExternalApplicationNotificationActionToken> {
 
     public static final String QUERY_PARAM_APP_TOKEN = "app-token";
 
