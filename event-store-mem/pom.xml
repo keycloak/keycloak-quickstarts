@@ -74,6 +74,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>org.wildfly.core</groupId>
+            <artifactId>wildfly-cli</artifactId>
+            <scope>test</scope>
+            <version>${version.wildfly}</version>
+        </dependency>
     </dependencies>
 
     <build>
