@@ -43,12 +43,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import static org.keycloak.test.TestsHelper.createClient;
 import static org.keycloak.test.TestsHelper.deleteRealm;
 import static org.keycloak.test.TestsHelper.importTestRealm;
@@ -118,76 +116,46 @@ public class ArquillianJeeHtml5Test {
     @Before
     public void setup() {
         webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
+        webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         webDriver.navigate().to(contextRoot);
     }
 
     @Test
-    public void testSecuredResource() throws InterruptedException {
-        try {
-            indexPage.clickSecured();
-            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.className("error"), UNAUTHORIZED)));
-        } catch (Exception e) {
-            debugTest(e);
-            fail("Should display an error message");
-        }
+    public void testSecuredResource() {
+        indexPage.clickSecured();
+        assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.className("error"), UNAUTHORIZED)));
     }
 
     @Test
     public void testAdminResource() {
-        try {
-            indexPage.clickAdmin();
-            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.className("error"), UNAUTHORIZED)));
-        } catch (Exception e) {
-            debugTest(e);
-            fail("Should display an error message");
-        }
+        indexPage.clickAdmin();
+        assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.className("error"), UNAUTHORIZED)));
     }
 
     @Test
     public void testPublicResource() {
-        try {
-            indexPage.clickPublic();
-            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(
-                    By.className("message"), "Message: public")));
-        } catch (Exception e) {
-            debugTest(e);
-            fail("Should display an error message");
-        }
+        indexPage.clickPublic();
+        assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(
+                By.className("message"), "Message: public")));
     }
 
     @Test
-    public void testAdminWithAuthAndRole() throws MalformedURLException, InterruptedException {
-        try {
-            indexPage.clickLogin();
-            loginPage.login("test-admin", "password");
-            indexPage.clickAdmin();
-            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(
-                    By.className("message"), "Message: admin")));
-            indexPage.clickLogout();
-        } catch (Exception e) {
-            debugTest(e);
-            fail("Should display logged in user");
-        }
+    public void testAdminWithAuthAndRole() {
+        indexPage.clickLogin();
+        loginPage.login("test-admin", "password");
+        indexPage.clickAdmin();
+        assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(
+                By.className("message"), "Message: admin")));
+        indexPage.clickLogout();
     }
 
     @Test
-    public void testUserWithAuthAndRole() throws MalformedURLException, InterruptedException {
-        try {
-            indexPage.clickLogin();
-            loginPage.login("alice", "password");
-            indexPage.clickSecured();
-            assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(
-                    By.className("message"), "Message: secured")));
-            indexPage.clickLogout();
-        } catch (Exception e) {
-           //  indexPage.clickLogout();
-            debugTest(e);
-            fail("Should display logged in user");
-        }
-    }
-    
-    private void debugTest(Exception e) {
-        System.out.println(webDriver.getPageSource());
-        e.printStackTrace();
+    public void testUserWithAuthAndRole() {
+        indexPage.clickLogin();
+        loginPage.login("alice", "password");
+        indexPage.clickSecured();
+        assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(
+                By.className("message"), "Message: secured")));
+        indexPage.clickLogout();
     }
 }
