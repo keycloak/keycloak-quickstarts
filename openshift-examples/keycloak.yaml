@@ -70,7 +70,7 @@ objects:
                   value: dns.DNS_PING
                 - name: JGROUPS_DISCOVERY_PROPERTIES
                   value: 'dns_query=${APPLICATION_NAME}.${NAMESPACE}.svc.cluster.local'
-              image: quay.io/keycloak/keycloak:13.0.0
+              image: quay.io/keycloak/keycloak:13.0.1
               livenessProbe:
                 failureThreshold: 3
                 httpGet:
