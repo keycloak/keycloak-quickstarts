@@ -10,8 +10,11 @@ spec:
   - host: KEYCLOAK_HOST
     http:
       paths:
-      - backend:
+      - path: /
+        pathType: Prefix
+        backend:
           service:
             name: keycloak
             port:
               number: 8080
+
