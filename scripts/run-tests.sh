@@ -12,7 +12,26 @@ run_tests() {
   printf "\n\n\n*****************************************\n"
   echo "Running tests for $module QS"
   echo "*****************************************"
-  if ! mvn clean install -f $module $args -Dwebdriver.chrome.driver=$CHROMEWEBDRIVER/chromedriver -B 2>&1 | tee test-logs/$module.log; then
+  if [ -n "$PRODUCT" ] && [ "$PRODUCT" == "true" ]; then
+    args="$args -s $PRODUCT_MVN_SETTINGS  -Dmaven.repo.local=$PRODUCT_MVN_REPO"
+    if [ "$module" == "action-token-authenticator" ] \
+        || [ "$module" == "action-token-required-action" ] \
+        || [ "$module" == "app-authz-springboot-multitenancy" ] \
+        || [ "$module" == "event-listener-sysout" ] \
+        || [ "$module" == "event-store-mem" ] \
+        || [ "$module" == "extend-account-console" ] \
+        || [ "$module" == "app-springboot" ]; then
+      return 0
+    fi
+  else
+    args="$args -s maven-settings.xml"
+  fi
+  if [ -n "$CHROMEWEBDRIVER" ]; then
+    args="$args -Dwebdriver.chrome.driver=$CHROMEWEBDRIVER/chromedriver"
+  else
+    args="$args -Dwebdriver.chrome.driver=/usr/local/bin/chromedriver"
+  fi
+  if ! mvn clean install -f $module $args -B 2>&1 | tee test-logs/$module.log; then
     tests_with_errors+=("$module")
   fi
 }
@@ -32,12 +51,16 @@ print_failed_tests() {
 run_tests action-token-authenticator -Pwildfly-managed
 run_tests action-token-required-action -Pwildfly-managed
 
-. .github/scripts/export-keycloak-version.sh
-JS_VERSION_OPTION=""
+. scripts/export-keycloak-version.sh
 
 if [ -n "$KEYCLOAK_VERSION" ]; then
   JS_VERSION_OPTION="-Dkeycloak.js.version=$KEYCLOAK_VERSION"
+elif [ -n "$PRODUCT_VERSION" ]; then
+  JS_VERSION_OPTION="-Dkeycloak.js.version=$PRODUCT_VERSION"
+else
+  JS_VERSION_OPTION=""
 fi
+
 
 run_tests app-angular2 -Pwildfly-managed "$JS_VERSION_OPTION"
 
