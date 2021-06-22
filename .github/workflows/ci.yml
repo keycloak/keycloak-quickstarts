@@ -24,16 +24,16 @@ jobs:
           restore-keys: cache-1-${{ runner.os }}-m2
 
       - name: Get Keycloak
-        run: .github/scripts/prepare-local-server.sh
+        run: scripts/prepare-local-server.sh
 
       - name: Build Quickstarts
-        run: .github/scripts/build-quickstarts.sh
+        run: scripts/build-quickstarts.sh
 
       - name: Start Keycloak
-        run: .github/scripts/start-local-server.sh
+        run: scripts/start-local-server.sh
 
       - name: Run tests
-        run: .github/scripts/run-tests.sh
+        run: scripts/run-tests.sh
 
       - name: Archive logs
         if: ${{ always() }}

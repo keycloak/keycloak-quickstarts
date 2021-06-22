@@ -14,12 +14,18 @@ latest_release() {
 }
 
 mkdir keycloak-dist
-if [ -n "$GITHUB_BASE_REF" ] && [[ "$GITHUB_BASE_REF" == "latest" ]]; then
-  VERSION=$(grep -oPm1 "(?<=<version>)[^<]+" pom.xml)
-  echo "Using corresponding Keycloak version: $VERSION"
-  latest_release
+
+if [ -n "$PRODUCT" ] && [ "$PRODUCT" == "true" ]; then
+  echo "Using RHSSO distribution: $PRODUCT_VERSION"
+  "$PRODUCT_DIST/bin/add-user-keycloak.sh" -u admin -p admin
+  exit 0
+elif [[ ( -n "$GITHUB_BASE_REF" &&  "$GITHUB_BASE_REF" == "latest" ) ]] || [[ ( -n "$QUICKSTART_BRANCH" && "$QUICKSTART_BRANCH" != "master" ) ]]; then
+    VERSION=$(grep -oPm1 "(?<=<version>)[^<]+" pom.xml)
+    echo "Using corresponding Keycloak version: $VERSION"
+    latest_release
 else
   echo "Building Keycloak from upstream/master"
   upstream_master
 fi
+
 keycloak-dist/bin/add-user-keycloak.sh -u admin -p admin
