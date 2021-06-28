@@ -2,10 +2,6 @@ name: Quickstarts tests
 
 on: [push, pull_request]
 
-env:
-  # workaround for Maven >= 3.8.1 (see KEYCLOAK-17812)
-  MVN_MIRRORS: '[{ "id": "jboss-public-repository-group-https", "mirrorOf": "jboss-public-repository-group", "url": "https://repository.jboss.org/nexus/content/groups/public/" }]'
-
 jobs:
   tests:
     name: Quickstarts tests
@@ -15,9 +11,8 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: 1.8
-      - uses: whelk-io/maven-settings-xml-action@v15
-        with:
-          mirrors: ${{ env.MVN_MIRRORS }}
+      - name: Update maven settings
+        run: mkdir -p ~/.m2 ; cp .github/settings.xml ~/.m2/
 
       - name: Cache Maven repo
         uses: actions/cache@v2
