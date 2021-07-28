@@ -97,6 +97,15 @@ run_tests app-springboot -Pspring-boot
 # service-nodejs tests
 npm -C service-nodejs install
 npm -C service-nodejs start >/dev/null&
+# Wait for port 3000 to open for at most 30 seconds
+{
+    I=0
+    while ! curl -sfN -o /dev/null http://localhost:3000/service/public && [[ $I -lt 60 ]]; do
+         sleep 0.5
+         echo -n .
+         I=$[$I + 1]
+    done
+} 2>/dev/null
 if ! npm -C service-nodejs test 2>&1 | tee test-logs/service-nodejs.log; then
   tests_with_errors+=("service-nodejs")
 fi
