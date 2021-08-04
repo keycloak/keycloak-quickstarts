@@ -58,7 +58,7 @@ That said, this quickstart will show you how to use the Keycloak to define polic
 
 This quickstart demonstrates how to enable User-Managed Access (UMA) in an application in order to allow users to manage access
 to their resources using the *Keycloak Account Service*. It also shows how to create resources dynamically and how to
-protecte them using the *Protection API* and the *Authorization Client API*. Here you'll see how to create a resource whose
+protect them using the *Protection API* and the *Authorization Client API*. Here you'll see how to create a resource whose
 owner is the authenticated user.
 
 In addition it provides some background on how one can actually protect JAX-RS endpoints using a *policy enforcer*.
@@ -138,7 +138,7 @@ Now, try to access the client application using the following URL:
 
     http://localhost:8080/photoz-html5-client
 
-If everything is correct, you will be redirect to Keycloak login page. You can login to the application with the following credentials:
+If everything is correct, you will be redirected to the Keycloak login page. You can login to the application with the following credentials:
 
 * username: jdoe / password: jdoe
 * username: alice / password: alice
@@ -154,7 +154,7 @@ view the token contents, we will focus on the main functionality of the quicksta
 * Before creating any albums, click on the `My Profile` link. A page will display Alice's id and also the number of albums
 owned by Alice, which should be zero at this point.
 * The next step will be creating a couple of albums. Click on the `Create Album` link to add an album. For example purposes,
-let's craete two albums, named `Italy Vacations` and `Greece Vacations`.
+let's create two albums, named `Italy Vacations` and `Greece Vacations`.
 * Clicking on the `My Profile` link now should show a total of two albums owned by Alice.
 * It is also possible to delete an album by clicking on the `[X]` link next to it but we won't do it for the moment.
 
@@ -182,7 +182,7 @@ Viewing and Interacting with Shared Resources
 ----------
 
 Now let's login as John (username: jdoe, password: jdoe). The main page now shows that John doesn't own any albums yet but
-he has albums that were shared with him. Clicking on the `My Profile` link will diplay John's id and zero albums.
+he has albums that were shared with him. Clicking on the `My Profile` link will display John's id and zero albums.
 
 The list of albums shared with John displays two entries but notice how only the `Italy Vacations` album has the `[X]` link
 that allows for the deletion of the album. For the `Greece Vacations` albums we have a different link: `Request Delete Access`.
