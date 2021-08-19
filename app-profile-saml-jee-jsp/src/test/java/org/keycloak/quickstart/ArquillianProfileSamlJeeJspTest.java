@@ -140,7 +140,7 @@ public class ArquillianProfileSamlJeeJspTest {
             indexPage.clickLogin();
             loginPage.login("alice", "password");
             profilePage.clickAccount();
-            assertEquals("Keycloak Account Management", webDriver.getTitle());
+            assertEquals("Account Management", webDriver.getTitle());
         } catch (Exception e) {
             debugTest(e);
             fail("Should display account management page");
