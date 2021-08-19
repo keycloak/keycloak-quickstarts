@@ -30,8 +30,6 @@ find . -type f \( -name "*README*" -o -name "*getting-started*" -o -name "*test-
 # Rename WildFly to JBoss EAP
 find . -type f \( -name "*README*" -o -name "*getting-started*" -o -name "*test-development*" \) -exec  sed -i 's@<span>WildFly 10</span>@JBoss EAP 7.1.0@g' {} +
 find . -type f \( -name "*README*" -o -name "*getting-started*" -o -name "*test-development*" \) -exec  sed -i 's@<span>WildFly</span>@JBoss EAP@g' {} +
-# Rename values in tests
-find ./*/src/test/java -type f -name "*Test*" -exec  sed -i 's@Keycloak Account Management@RH-SSO Account Management@g' {} +
 
 # Rename env
 find . -type f \( -name "*README*" -o -name "*getting-started*" -o -name "*test-development*" \) -exec  sed -i 's@<span>KEYCLOAK_HOME</span>@RHSSO_HOME@g' {} +

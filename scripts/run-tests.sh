@@ -55,12 +55,9 @@ run_tests action-token-required-action -Pwildfly-managed
 
 if [ -n "$KEYCLOAK_VERSION" ]; then
   JS_VERSION_OPTION="-Dkeycloak.js.version=$KEYCLOAK_VERSION"
-elif [ -n "$PRODUCT_VERSION" ]; then
-  JS_VERSION_OPTION="-Dkeycloak.js.version=$PRODUCT_VERSION"
 else
   JS_VERSION_OPTION=""
 fi
-
 
 run_tests app-angular2 -Pwildfly-managed "$JS_VERSION_OPTION"
 
