@@ -185,7 +185,7 @@ public class ArquillianProfileJeeHtml5Test {
             waitTillElementIsClickable(By.name("accountBtn"));
             profilePage.clickAccount();
             waitForPageToLoad();
-            Graphene.waitGui().withTimeout(30, TimeUnit.SECONDS).until(ExpectedConditions.titleContains("Keycloak Account Management"));
+            Graphene.waitGui().withTimeout(30, TimeUnit.SECONDS).until(ExpectedConditions.titleContains("Account Management"));
 
             webDriver.navigate().to(contextRoot);
             waitForPageToLoad();
