@@ -48,6 +48,7 @@ import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.keycloak.test.TestsHelper.createClient;
 import static org.keycloak.test.TestsHelper.deleteRealm;
@@ -140,7 +141,7 @@ public class ArquillianProfileSamlJeeJspTest {
             indexPage.clickLogin();
             loginPage.login("alice", "password");
             profilePage.clickAccount();
-            assertEquals("Keycloak Account Management", webDriver.getTitle());
+            assertTrue(webDriver.getTitle().contains("Account Management"));
         } catch (Exception e) {
             debugTest(e);
             fail("Should display account management page");
