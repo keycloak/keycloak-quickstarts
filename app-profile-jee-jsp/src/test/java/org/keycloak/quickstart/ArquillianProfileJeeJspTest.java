@@ -49,8 +49,14 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.*;
-import static org.keycloak.test.TestsHelper.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
+import static org.junit.Assert.assertNotNull;
+import static org.keycloak.test.TestsHelper.createClient;
+import static org.keycloak.test.TestsHelper.importTestRealm;
+import static org.keycloak.test.TestsHelper.deleteRealm;
 import static org.keycloak.test.builders.ClientBuilder.AccessType.BEARER_ONLY;
 import static org.keycloak.test.builders.ClientBuilder.AccessType.PUBLIC;
 
@@ -160,7 +166,7 @@ public class ArquillianProfileJeeJspTest {
             indexPage.clickLogin();
             loginPage.login("test-admin", "password");
             profilePage.clickAccount();
-            assertEquals("Keycloak Account Management", webDriver.getTitle());
+            assertTrue(webDriver.getTitle().contains("Account Management"));
             webDriver.navigate().to(contextRoot);
             profilePage.clickLogout();
         } catch (Exception e) {
