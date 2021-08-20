@@ -20,7 +20,7 @@
     <parent>
         <artifactId>keycloak-quickstart-parent</artifactId>
         <groupId>org.keycloak.quickstarts</groupId>
-        <version>15.0.1</version>
+        <version>15.0.2</version>
     </parent>
 
     <name>Keycloak Quickstart: Event Listener System.out</name>
