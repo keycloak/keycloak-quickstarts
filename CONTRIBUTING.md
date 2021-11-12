@@ -11,11 +11,11 @@ We do have a few guidelines in place to help you be successful with your contrib
 Here's a quick checklist for a good PR, more details below:
 
 1. [Keycloak Dev Mailing List](https://lists.jboss.org/mailman/listinfo/keycloak-dev)
-2. A JIRA associated with the PR
+2. A GitHub Issue with a good description associated with the PR
 3. One feature/change per PR
 4. One commit per PR
 5. PR rebased on main (`git rebase`, not `git pull`)
-5. Commit message is prefixed by JIRA number
+5. Commit message is prefixed by the issue number (for example `#58 Message`)
 6. No changes to code not directly related to your PR
 7. Includes functional/integration test
 8. Includes documentation
@@ -29,8 +29,7 @@ not be able to respond to your PR immediately. The best place to ping us is on t
 ### Finding something to work on
 
 If you would like to contribute to Keycloak, but are not sure exactly what to work on, you can find a number of open
-issues that are awaiting contributions in the
-[Keycloak JIRA](https://issues.jboss.org/projects/KEYCLOAK/versions/12340167).
+issues that are awaiting contributions in the [GitHub Issues](https://github.com/keycloak/keycloak-quickstarts/issues?q=is%3Aopen+is%3Aissue+no%3Aassignee).
 
 ### Open a discussion on Keycloak Dev Mailing List
 
@@ -40,9 +39,9 @@ work on to the [Keycloak Dev Mailing List](https://lists.jboss.org/mailman/listi
 We recommend starting the discussion prior to submitting your PR. Through the mailing list you can get valuable
 feedback both from the core Keycloak team as well as the wider community.
 
-### Create an issue in Keycloak JIRA
+### Create an issue
 
-Take your time to write a proper JIRA including a good summary and description.
+Take your time to write a proper issue including a good summary and description.
 
 Remember this may be the first thing a reviewer of your PR will look at to get an idea of what you are proposing
 and it will also be used by the community in the future to find about what new features and enhancements are included in
@@ -93,5 +92,5 @@ for more details.
 The above helps us review your PR and also makes it easier for us to maintain the repository. It is also required by
 our automatic merging process.
 
-We also require that the commit message is prefixed with the Keycloak JIRA issue number (example commit message
-"KEYCLOAK-9876 My super cool new feature").
+We also require that the commit message is prefixed with the issue number (example commit message
+`#12 My super cool new feature`).

@@ -9,7 +9,6 @@ that can be used as a reference for your own project.
 
 * [Documentation](https://www.keycloak.org/documentation.html)
 * [User Mailing List](https://lists.jboss.org/mailman/listinfo/keycloak-user) - Mailing list for help and general questions about Keycloak
-* [JIRA](https://issues.jboss.org/projects/KEYCLOAK) - Issue tracker for bugs and feature requests
 
 ## Reporting Security Vulnerabilities
 
@@ -17,7 +16,7 @@ If you've found a security vulnerability, please look at the [instructions on ho
 
 ## Reporting an issue
 
-If you believe you have discovered a defect in the quickstarts please open an issue in our [Issue Tracker](https://issues.jboss.org/projects/KEYCLOAK).
+If you believe you have discovered a defect in the quickstarts please open an issue in our [an issue](https://github.com/keycloak/keycloak-quickstarts/issues).
 Please remember to provide a good summary, description as well as steps to reproduce the issue.
 
 ## Getting started
