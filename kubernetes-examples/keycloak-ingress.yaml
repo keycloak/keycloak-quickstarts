@@ -1,8 +1,13 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: keycloak
 spec:
+  defaultBackend:
+    service:
+      name: "keycloak"
+      port:
+        number: 8080
   tls:
     - hosts:
       - KEYCLOAK_HOST
@@ -10,7 +15,11 @@ spec:
   - host: KEYCLOAK_HOST
     http:
       paths:
-      - backend:
-          serviceName: keycloak
-          servicePort: 8080
+      - path: /
+        pathType: Prefix 
+        backend:
+          service:
+            name: "keycloak"
+            port: 
+              number: 8080
 
