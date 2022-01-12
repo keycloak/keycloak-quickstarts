@@ -10,7 +10,7 @@ spec:
   - host: KEYCLOAK_HOST
     http:
       paths:
-      - path: /
+      - path: /auth
         pathType: Prefix
         backend:
           service:
