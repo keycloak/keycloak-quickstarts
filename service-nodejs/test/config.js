@@ -1,4 +1,4 @@
-var baseUrl = 'http://localhost:8180/auth';
+const baseUrl = 'http://localhost:8180/auth';
 
 module.exports = {
   registration: {

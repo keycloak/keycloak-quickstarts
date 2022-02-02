@@ -57,7 +57,7 @@ registration.create(config.registration, config.testClient).then((v) => {
 
   test('Should test secured route with user credentials.', t => {
     tokenRequester(config.baseUrl, config.token).then((token) => {
-      var opt = {
+      const opt = {
         endpoint: 'http://localhost:3000/service/secured',
         headers: {
           Authorization: 'Bearer ' + token
@@ -78,7 +78,7 @@ registration.create(config.registration, config.testClient).then((v) => {
   test('Should test secured route with admin credentials.', t => {
     config.token.username = 'test-admin';
     tokenRequester(config.baseUrl, config.token).then((token) => {
-      var opt = {
+      const opt = {
         endpoint: 'http://localhost:3000/service/admin',
         headers: {
           Authorization: 'Bearer ' + token
