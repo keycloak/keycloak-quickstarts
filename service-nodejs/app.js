@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-var express = require('express');
-var session = require('express-session');
-var bodyParser = require('body-parser');
-var Keycloak = require('keycloak-connect');
-var cors = require('cors');
+const express = require('express');
+const session = require('express-session');
+const bodyParser = require('body-parser');
+const Keycloak = require('keycloak-connect');
+const cors = require('cors');
 
-var app = express();
+const app = express();
 app.use(bodyParser.json());
 
 // Enable CORS support
@@ -30,7 +30,7 @@ app.use(cors());
 // Create a session-store to be used by both the express-session
 // middleware and the keycloak middleware.
 
-var memoryStore = new session.MemoryStore();
+const memoryStore = new session.MemoryStore();
 
 app.use(session({
   secret: 'some secret',
@@ -45,7 +45,7 @@ app.use(session({
 // Additional configuration is read from keycloak.json file
 // installed from the Keycloak web console.
 
-var keycloak = new Keycloak({
+const keycloak = new Keycloak({
   store: memoryStore
 });
 
