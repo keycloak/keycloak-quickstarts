@@ -59,8 +59,6 @@ else
   JS_VERSION_OPTION=""
 fi
 
-run_tests app-angular2 -Pwildfly-managed "$JS_VERSION_OPTION"
-
 # we need to run authz springboot tests first as they are the only ones relying on manual js-policies deployment
 # other tests deploy (and the removes) the policies automatically which then later removes even the manually deployed ones
 run_tests app-authz-rest-springboot -Pspring-boot
