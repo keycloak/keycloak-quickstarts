@@ -125,7 +125,6 @@ The next step is to start <span>WildFly</span> server:
 
 # Examples
 
-* [app-angular2](../app-angular2/README.md) - Angular 2 application that invokes the example service. Requires service example to be deployed.
 * [app-authz-rest-employee](../app-authz-rest-employee/README.md) - SpringBoot REST Service Protected Using Keycloak Authorization Services
 * [app-jee-html5](../app-jee-html5/README.md) - HTML5 application that invokes the example service. Requires service example to be deployed.
 * [app-jee-jsp](../app-jee-jsp/README.md) - JSP application packaged that invokes the example service. Requires service example to be deployed.

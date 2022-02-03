@@ -208,7 +208,6 @@
         <module>app-profile-saml-jee-jsp</module>
         <module>app-jee-html5</module>
         <module>app-jee-jsp</module>
-        <module>app-angular2</module>
         <module>app-authz-jee-servlet</module>
         <module>app-authz-jee-vanilla</module>
         <module>app-authz-uma-photoz</module>
@@ -317,7 +316,6 @@
                 <module>app-profile-saml-jee-jsp</module>
                 <module>app-jee-html5</module>
                 <module>app-jee-jsp</module>
-                <module>app-angular2</module>
                 <module>app-authz-jee-servlet</module>
                 <module>app-authz-jee-vanilla</module>
                 <module>app-authz-rest-employee</module>
