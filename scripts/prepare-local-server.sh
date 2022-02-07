@@ -3,7 +3,7 @@
 upstream_main() {
   git clone https://github.com/keycloak/keycloak
   mvn clean install -Pdistribution -DskipTests -f keycloak -B
-  find keycloak/distribution/server-dist/target -maxdepth 1 -type f -name 'keycloak-[[:digit:]]*.tar.gz' -exec tar xzf {} --strip-components=1 -C keycloak-dist \;
+  find keycloak/distribution/server-dist/target -maxdepth 1 -type f -name 'keycloak-legacy-[[:digit:]]*.tar.gz' -exec tar xzf {} --strip-components=1 -C keycloak-dist \;
 }
 
 latest_release() {
