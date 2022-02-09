@@ -41,6 +41,9 @@ find . -type f \( -name "*README*" -o -name "*getting-started*" -o -name "*test-
 find . -type f \( -name "*README*" -o -name "*getting-started*" -o -name "*test-development*" \) -exec  sed -i 's@WILDFLY_HOME/bin@EAP_HOME/bin@g' {} +
 find . -type f \( -name "*README*" -o -name "*getting-started*" -o -name "*test-development*" \) -exec  sed -i 's@WILDFLY_HOME\\bin@EAP_HOME\\bin@g' {} +
 
+# Overrite files related to the legacy distribution
+cp docs/getting-started-legacy.md docs/getting-started.md
+
 # Remove JBoss Repo
 sed -i '/<repositories>/,/<\/repositories>/ d' pom.xml
 

@@ -48,7 +48,7 @@ Based on these initial settings, you should be able to not only support authenti
 System Requirements
 -------------------
 
-All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
+See the [Getting Started Guide](../docs/getting-started.md) for the minimum requirements and steps to build and run the quickstart.
 
 
 Configuration in <span>Keycloak</span>

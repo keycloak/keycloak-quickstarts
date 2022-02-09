@@ -37,7 +37,7 @@
                 <property name="jbossHome">${basedir}/target/wildfly-${version.wildfly}</property>
             </configuration>
         </container>
-    
+
         <container qualifier="keycloak">
             <configuration>
                 <property name="managementAddress">127.0.0.1</property>

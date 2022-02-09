@@ -28,7 +28,7 @@ The quickstart requires that you have the [SpringBoot Service](../service-spring
 services are located at `http://localhost:8081/products`. If the services are running elsewhere you need to edit
 `resources/application.properties` and replace the value of `product.service.url`.
 
-All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.3.3 or later.
+See the [Getting Started Guide](../docs/getting-started.md) for the minimum requirements and steps to build and run the quickstart.
 
 
 Configuration in <span>Keycloak</span>

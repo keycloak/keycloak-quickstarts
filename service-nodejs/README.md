@@ -27,6 +27,8 @@ System Requirements
 
 All you need to build this project is Node.js 4.0.0 or later.
 
+See the [Getting Started Guide](../docs/getting-started.md) for the minimum requirements and steps to build and run the quickstart.
+
 Configuration in <span>Keycloak</span>
 -----------------------
 

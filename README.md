@@ -8,6 +8,7 @@ that can be used as a reference for your own project.
 ## Help and Documentation
 
 * [Documentation](https://www.keycloak.org/documentation.html)
+* [Server Guides](https://www.keycloak.org/guides#server)
 * [User Mailing List](https://lists.jboss.org/mailman/listinfo/keycloak-user) - Mailing list for help and general questions about Keycloak
 
 ## Reporting Security Vulnerabilities
