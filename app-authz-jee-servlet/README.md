@@ -31,9 +31,7 @@ You'll also learn how to use the `AuthorizationContext` object to obtain permiss
 System Requirements
 -------------------
 
-If you are deploying the application as a WAR you need to have <span>WildFly 10</span> running.
-
-All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.3.3 or later.
+See the [Getting Started Guide](../docs/getting-started.md) for the minimum requirements and steps to build and run the quickstart.
 
 Configure the Client Adapter
 ----------------------------------

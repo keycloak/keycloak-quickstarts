@@ -69,6 +69,11 @@ regular access tokens instead of RPTs. The `photoz-html5-client` application doe
 obtain RPTs from the Keycloak server but just use the access token obtained during the authentication as a bearer token
 when accessing protected resources.
 
+System Requirements
+-------------------
+
+See the [Getting Started Guide](../docs/getting-started.md) for the minimum requirements and steps to build and run the quickstart.
+
 Create the Example Realm and a Resource Server
 -----------
 

@@ -22,9 +22,7 @@ The quickstart requires that you have the [example services](../service-jee-jaxr
 services are located on the same host as the application. If the service is running elsewhere you need to set the URL
 of the service as an environment variable (SERVICE_URL) and restart <span>WildFly</span>.
 
-If you are deploying the application as a WAR you need to have <span>WildFly 10</span> running.
-
-All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.3.3 or later.
+See the [Getting Started Guide](../docs/getting-started.md) for the minimum requirements and steps to build and run the quickstart.
 
 
 Configuration in <span>Keycloak</span>

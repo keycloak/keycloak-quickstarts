@@ -22,32 +22,53 @@ to replace it with the actual path to your installations.
 
 ## System Requirements
 
-The applications these projects produce are designed to be run on <span>WildFly</span> Application Server 10. 
-All you need to build these projects is Java 8 (Java SDK 1.8) and Maven 3.8.2 or later.
+The applications these projects produce are designed to be run on <span>WildFly</span> Application Server 10.
+
+All you need to build these projects is Java 8.0 (Java SDK 1.8) or later and Maven 3.1.1 or later.
+
 
 ## <a id="keycloak"></a>Start the <span>Keycloak</span> Server
 
-To start the <span>Keycloak</span> server as a container, run the following command:
+By default the <span>Keycloak</span> Server uses the same ports as the <span>WildFly</span> Server. To run the quickstarts you can either run the
+<span>Keycloak</span> Server on a separate host (machine, VM, Docker, etc..) or on different ports.
+
+To start the <span>Keycloak</span> server on a separate host:
+
+1. Open a terminal on the separate machine and navigate to the root of the <span>Keycloak</span> server directory.
+
+2. The following shows the command to start the <span>Keycloak</span> server:
 
    ````
-   podman|docker run --name keycloak -p 8180:8180 \
-        -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin \
-        quay.io/keycloak/keycloak:latest \
-        start-dev \
-        --http-port 8180 \
-        --http-relative-path /auth
+   For Linux:   KEYCLOAK_HOME/bin/standalone.sh -b 0.0.0.0
+   For Windows: KEYCLOAK_HOME\bin\standalone.bat -b 0.0.0.0
    ````
 
-The URL of the <span>Keycloak</span> server will be http://localhost:8180/auth.
+3. The URL of the <span>Keycloak</span> server will be http://&lt;HOSTNAME&gt;:8080 (replace &lt;HOSTNAME&gt; with the hostname of the separate host).
+
+To start the <span>Keycloak</span> server on different ports:
+
+1. Open a terminal and navigate to the root of the <span>Keycloak</span> server directory.
+
+2. The following shows the command to start the <span>Keycloak</span> server:
+
+   ````
+   For Linux:   KEYCLOAK_HOME/bin/standalone.sh -Djboss.socket.binding.port-offset=100
+   For Windows: KEYCLOAK_HOME\bin\standalone.bat -Djboss.socket.binding.port-offset=100
+   ````
+
+3. The URL of the <span>Keycloak</span> server will be http://localhost:8180
+
+## <a id="add-admin"></a>Add Admin User
+
+Open the main page for the <span>Keycloak</span> server ([localhost:8180](http://localhost:8180) or http://&lt;HOSTNAME&gt;:8080). If
+this is a new installation of <span>Keycloak</span> server you will be instructed to create an initial admin user. To continue with
+the quickstarts you need to do this prior to continuing.
 
 ## <a id="add-roles-user"></a>Create Roles and User
 
 To be able to use the examples you need to create some roles as well as at least one sample user. To do first this open
-the <span>Keycloak</span> admin console ([localhost:8180/admin](http://localhost:8180/admin) or http://&lt;HOSTNAME&gt;:8080/admin) and
-login with the admin credentials:
-
-* Username: admin
-* Password: admin
+the <span>Keycloak</span> admin console ([localhost:8180/auth/admin](http://localhost:8180/auth/admin) or http://&lt;HOSTNAME&gt;:8080/auth/admin) and
+login with the admin user you created in the [add admin user](#add-admin) section.
 
 Start by creating a user role:
 
@@ -84,9 +105,9 @@ One more step, if you want to access the examples with the admin user you need t
 
 Before starting the <span>WildFly</span> Server start by extracting the <span>Keycloak</span> client adapter into it.
 
-For <span>WildFly</span> extract `keycloak-wildfly-adapter-${project.version}.zip` into <span>WILDFLY_HOME</span>.
+For <span>WildFly 10</span> extract `keycloak-wildfly-adapter-${project.version}.zip` into <span>WILDFLY_HOME</span>.
 
-If you plan to try the SAML examples you also need the SAML <span>WildFly</span> adapter. To do this for <span>WildFly</span>
+If you plan to try the SAML examples you also need the SAML <span>WildFly</span> adapter. To do this for <span>WildFly 10</span>
 `keycloak-saml-wildfly-adapter-dist-${project.version}.zip` into <span>WILDFLY_HOME</span>.
 
 The next step is to start <span>WildFly</span> server:
