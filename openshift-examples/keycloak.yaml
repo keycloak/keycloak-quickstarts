@@ -2,26 +2,25 @@ kind: Template
 apiVersion: template.openshift.io/v1
 metadata:
   name: keycloak
-  namespace: openshift-config
   annotations:
-    description: An example Keycloak server with HTTPS
+    description: An example template for trying out Keycloak on OpenShift
     iconClass: icon-sso
     openshift.io/display-name: Keycloak
     tags: keycloak
-    version: 9.0.4-SNAPSHOT
+    version: 17.0.0-SNAPSHOT
 objects:
   - apiVersion: v1
     kind: Service
     metadata:
       annotations:
-        description: The web server's https port.
+        description: The web server's http port.
       labels:
         application: '${APPLICATION_NAME}'
       name: '${APPLICATION_NAME}'
     spec:
       ports:
-        - port: 8443
-          targetPort: 8443
+        - port: 8080
+          targetPort: 8080
       selector:
         deploymentConfig: '${APPLICATION_NAME}'
   - apiVersion: v1
@@ -29,14 +28,14 @@ objects:
     kind: Route
     metadata:
       annotations:
-        description: Route for application's https service.
+        description: Route for application's service.
       labels:
         application: '${APPLICATION_NAME}'
       name: '${APPLICATION_NAME}'
     spec:
-      host: '${HOSTNAME_HTTPS}'
+      host: '${HOSTNAME}'
       tls:
-        termination: passthrough
+        termination: edge
       to:
         name: '${APPLICATION_NAME}'
   - apiVersion: v1
@@ -60,21 +59,17 @@ objects:
         spec:
           containers:
             - env:
-                - name: KEYCLOAK_USER
-                  value: '${KEYCLOAK_USER}'
-                - name: KEYCLOAK_PASSWORD
-                  value: '${KEYCLOAK_PASSWORD}'
-                - name: DB_VENDOR
-                  value: '${DB_VENDOR}'
-                - name: JGROUPS_DISCOVERY_PROTOCOL
-                  value: dns.DNS_PING
-                - name: JGROUPS_DISCOVERY_PROPERTIES
-                  value: 'dns_query=${APPLICATION_NAME}.${NAMESPACE}.svc.cluster.local'
-              image: quay.io/keycloak/keycloak:18.0.0-SNAPSHOT
+                - name: KEYCLOAK_ADMIN
+                  value: '${KEYCLOAK_ADMIN}'
+                - name: KEYCLOAK_ADMIN_PASSWORD
+                  value: '${KEYCLOAK_ADMIN_PASSWORD}'
+                - name: KC_PROXY
+                  value: 'edge'
+              image: quay.io/keycloak/keycloak:17.0.0
               livenessProbe:
-                failureThreshold: 3
+                failureThreshold: 100
                 httpGet:
-                  path: /auth/realms/master
+                  path: /
                   port: 8080
                   scheme: HTTP
                 initialDelaySeconds: 60
@@ -82,18 +77,22 @@ objects:
               ports:
                 - containerPort: 8080
                   protocol: TCP
-                - containerPort: 8443
-                  name: https
-                  protocol: TCP
               readinessProbe:
-                failureThreshold: 10
+                failureThreshold: 300
                 httpGet:
-                  path: /auth/realms/master
+                  path: /
                   port: 8080
                   scheme: HTTP
                 initialDelaySeconds: 30
               securityContext:
                 privileged: false
+              volumeMounts:
+                - mountPath: /opt/keycloak/data
+                  name: empty
+              args: ["start-dev"]
+          volumes:
+            - name: empty
+              emptyDir: {}
       triggers:
         - type: ConfigChange
 parameters:
@@ -102,27 +101,22 @@ parameters:
     description: The name for the application.
     value: keycloak
     required: true
-  - name: KEYCLOAK_USER
+  - name: KEYCLOAK_ADMIN
     displayName: Keycloak Administrator Username
     description: Keycloak Server administrator username
     generate: expression
     from: '[a-zA-Z0-9]{8}'
     required: true
-  - name: KEYCLOAK_PASSWORD
+  - name: KEYCLOAK_ADMIN_PASSWORD
     displayName: Keycloak Administrator Password
     description: Keycloak Server administrator password
     generate: expression
     from: '[a-zA-Z0-9]{8}'
     required: true
-  - name: DB_VENDOR
-    displayName: DB Vendor
-    description: 'DB vendor (H2, POSTGRES, MYSQL or MARIADB)'
-    value: H2
-    required: true
-  - name: HOSTNAME_HTTPS
-    displayName: Custom https Route Hostname
+  - name: HOSTNAME
+    displayName: Custom Route Hostname
     description: >-
-      Custom hostname for https service route. Leave blank for default hostname,
+      Custom hostname for the service route. Leave blank for default hostname,
       e.g.: <application-name>-<namespace>.<default-domain-suffix>
   - name: NAMESPACE
     displayName: Namespace used for DNS discovery
