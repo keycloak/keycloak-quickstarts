@@ -85,7 +85,7 @@ run_tests fuse63 # no tests but at least let's try to compile it
 run_tests fuse70 # no tests but at least let's try to compile it
 run_tests service-jee-jaxrs -Pwildfly-managed
 run_tests service-springboot-rest -Pspring-boot
-run_tests user-storage-jpa -Pkeycloak-remote
+run_tests user-storage-jpa-legacy -Pkeycloak-remote
 run_tests user-storage-simple -Pkeycloak-remote
 
 mvn -f service-springboot-rest spring-boot:run >/dev/null&

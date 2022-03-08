@@ -27,7 +27,7 @@
     <artifactId>keycloak-user-storage-jpa</artifactId>
     <packaging>jar</packaging>
     <name>Keycloak Quickstart: user-storage-jpa</name>
-    <description>User Storage Provider with EJB and JPA</description>
+    <description>User Storage Provider with JPA</description>
 
     <licenses>
         <license>
@@ -40,7 +40,6 @@
     <properties>
         <version.compiler.maven.plugin>3.5.1</version.compiler.maven.plugin>
         <version.hibernate.javax.persistence>1.0.0.Final</version.hibernate.javax.persistence>
-        <version.jboss-ejb-api>1.0.0.Final</version.jboss-ejb-api>
     </properties>
 
     <dependencies>
@@ -55,6 +54,12 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-model-jpa</artifactId>
+            <version>${version.keycloak}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.jboss.logging</groupId>
             <artifactId>jboss-logging</artifactId>
             <scope>provided</scope>
@@ -65,38 +70,6 @@
             <version>${version.hibernate.javax.persistence}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.jboss.spec.javax.ejb</groupId>
-            <artifactId>jboss-ejb-api_3.2_spec</artifactId>
-            <version>${version.jboss-ejb-api}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian.graphene</groupId>
-            <artifactId>graphene-webdriver</artifactId>
-            <version>${arquillian-graphene.version}</version>
-            <type>pom</type>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.extras.creaper</groupId>
-            <artifactId>creaper-core</artifactId>
-            <version>${version.creaper}</version>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.google.guava</groupId>
-                    <artifactId>guava</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.core</groupId>
-            <artifactId>wildfly-cli</artifactId>
-            <scope>test</scope>
-            <version>${version.wildfly}</version>
-        </dependency>
-
     </dependencies>
 
     <build>
@@ -112,89 +85,15 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.wildfly.plugins</groupId>
-                <artifactId>wildfly-maven-plugin</artifactId>
-                <version>${version.wildfly.maven.plugin}</version>
-                <configuration>
-                    <skip>false</skip>
-                    <port>${keycloak.management.port}</port>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-enforcer-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>enforce-quickstart-realm-file-exist</id>
-                        <phase>validate</phase>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${version.surefire.plugin}</version>
                 <configuration>
                     <systemPropertyVariables>
-                        <keycloakManagementPort>${keycloak.management.port}</keycloakManagementPort>
                         <buildDirectory>${project.build.directory}</buildDirectory>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-    <profiles>
-        <!-- this profile deploys an XA H2 datasource connection.  It is in-memory only, so rebooting the server will lose
-             your changes.  Run type: mvn -Padd-datasource install.  THis can only be run once.  If you run it again
-             you'll get an error that the datasource already exists -->
-        <profile>
-            <id>add-datasource</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.wildfly.plugins</groupId>
-                        <artifactId>wildfly-maven-plugin</artifactId>
-                        <configuration>
-                            <skip>false</skip>
-                            <force>true</force>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>add-datasource</id>
-                                <phase>install</phase>
-                                <goals>
-                                    <goal>add-resource</goal>
-                                </goals>
-                                <configuration>
-                                    <port>${keycloak.management.port}</port>
-                                    <force/>
-                                    <address>subsystem=datasources</address>
-                                    <resources>
-                                        <resource>
-                                            <address>xa-data-source=java:jboss/datasources/ExampleXADS</address>
-                                            <properties>
-                                                <jndi-name>java:jboss/datasources/ExampleXADS</jndi-name>
-                                                <enabled>true</enabled>
-                                                <driver-name>h2</driver-name>
-                                            </properties>
-                                            <resources>
-                                                <resource>
-                                                    <address>
-                                                        xa-datasource-properties=URL
-                                                    </address>
-                                                    <properties>
-                                                        <value>jdbc:h2:mem:test</value>
-                                                    </properties>
-                                                </resource>
-                                            </resources>
-                                        </resource>
-                                    </resources>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-
 </project>
