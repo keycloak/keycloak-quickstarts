@@ -20,7 +20,7 @@
     <parent>
         <artifactId>keycloak-quickstart-parent</artifactId>
         <groupId>org.keycloak.quickstarts</groupId>
-        <version>17.0.0</version>
+        <version>17.0.1</version>
     </parent>
 
     <name>Quickstart: Action Token With Authenticator</name>
