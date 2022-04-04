@@ -39,6 +39,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.keycloak.admin.client.Config;
 import org.keycloak.admin.client.token.TokenManager;
+import org.keycloak.quickstart.uma.page.LogoutConfirmPage;
 import org.keycloak.quickstart.uma.page.PhotozPage;
 import org.keycloak.representations.idm.ClientRepresentation;
 import org.keycloak.test.FluentTestsHelper;
@@ -86,6 +87,9 @@ public class ArquillianAuthzUMATest {
 
     @Page
     private PhotozPage photozPage;
+
+    @Page
+    private LogoutConfirmPage logoutConfirmPage;
 
     @Drone
     private WebDriver webDriver;
@@ -165,7 +169,7 @@ public class ArquillianAuthzUMATest {
         photozPage.deleteAlbum("France Vacations");
         Assert.assertTrue(emptyAlbumsList.isDisplayed());
 
-        photozPage.logout();
+        logout();
     }
 
     @Test
@@ -176,7 +180,7 @@ public class ArquillianAuthzUMATest {
         Assert.assertTrue(pageSource.contains("album:view"));
         Assert.assertTrue(pageSource.contains("album:delete"));
         Assert.assertTrue(pageSource.contains("admin:manage"));
-        photozPage.logout();
+        logout();
 
         photozPage.login("alice", "alice", null);
         photozPage.requestEntitlements();
@@ -184,7 +188,7 @@ public class ArquillianAuthzUMATest {
         Assert.assertTrue(pageSource.contains("profile:view"));
         Assert.assertFalse(pageSource.contains("album:view"));
         Assert.assertFalse(pageSource.contains("admin:manage"));
-        photozPage.logout();
+        logout();
     }
 
     @Test
@@ -195,7 +199,7 @@ public class ArquillianAuthzUMATest {
         shareResource("alice", "alice", "jdoe", "Germany Vacations", VIEW_SCOPE, DELETE_SCOPE);
         photozPage.viewAlbum("Germany Vacations");
         webDriver.navigate().to(contextRoot);
-        photozPage.logout();
+        logout();
 
         photozPage.login("jdoe", "jdoe", null);
         // jdoe's album list should be empty, but shared albums list shouldn't.
@@ -209,13 +213,13 @@ public class ArquillianAuthzUMATest {
         // jdoe should be able to delete alice's shared album.
         photozPage.deleteSharedAlbum("Germany Vacations");
         Assert.assertTrue(emptySharedList.isDisplayed());
-        photozPage.logout();
+        logout();
 
         // log back in as alice and this time share the created album without granting delete permissions.
         photozPage.login("alice", "alice", null);
         photozPage.createAlbum("Greece Vacations");
         shareResource("alice", "alice", "jdoe", "Greece Vacations", VIEW_SCOPE);
-        photozPage.logout();
+        logout();
 
         // log back in as jdoe and attempt to delete the shared album.
         photozPage.login("jdoe", "jdoe", null);
@@ -232,7 +236,7 @@ public class ArquillianAuthzUMATest {
         // jdoe should now be able to remove the shared album.
         photozPage.deleteSharedAlbum("Greece Vacations");
         Assert.assertTrue(emptySharedList.isDisplayed());
-        photozPage.logout();
+        logout();
     }
 
     private void grantRequestedPermission(String ownerUsername, String ownerPassword, String resourceName) {
@@ -331,5 +335,10 @@ public class ArquillianAuthzUMATest {
                 new Config(KEYCLOAK_URL, TEST_REALM, username, password, DIRECT_GRANT_APP_NAME, SECRET),
                 client
         );
+    }
+
+    private void logout() {
+        photozPage.logout();
+        logoutConfirmPage.confirmLogout();
     }
 }
