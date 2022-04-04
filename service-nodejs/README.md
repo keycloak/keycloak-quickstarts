@@ -88,4 +88,4 @@ invoking with a bearer token. To invoke these endpoints use one of the example q
 * [app-jee-html5](../app-jee-html5/README.md) - HTML5 application that invokes the example service.
 * [app-jee-jsp](../app-jee-jsp/README.md) - JSP application packaged that invokes the example service.
 
-For both examples, please make sure that you properly changed the service URL to HTTP port 3000.
+For both examples, please make sure that you properly changed the service URL to HTTP port 3000. For app-jee-html5 you can succeed that by changing the value of `serviceUrl` located on [app.js](../app-jee-html5/src/main/webapp/app.js) and for app-jee-jsp by setting the value of `SERVICE_URL` env variable or the `service.url` system property, pointing to http://localhost:3000 while deployment.
