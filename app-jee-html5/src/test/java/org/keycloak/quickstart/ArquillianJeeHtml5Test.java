@@ -146,7 +146,7 @@ public class ArquillianJeeHtml5Test {
         indexPage.clickAdmin();
         assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(
                 By.className("message"), "Message: admin")));
-        indexPage.clickLogout();
+        logout();
     }
 
     @Test
@@ -156,6 +156,12 @@ public class ArquillianJeeHtml5Test {
         indexPage.clickSecured();
         assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(
                 By.className("message"), "Message: secured")));
+        logout();
+    }
+
+    private void logout() {
         indexPage.clickLogout();
+        assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(
+                By.className("message"), "")));
     }
 }

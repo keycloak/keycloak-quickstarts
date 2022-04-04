@@ -59,3 +59,7 @@ target
 # Node.js #
 ###########
 node_modules
+
+# Keycloak distribution
+keycloak
+keycloak-dist
