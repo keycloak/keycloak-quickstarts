@@ -39,4 +39,46 @@
             </resource>
         </resources>
     </build>
+
+    <!-- Java 15 or later does not contain any javascript engine by default. The profiles below help to add nashorn script engine
+         to server classpath to have script providers working when Keycloak running on Java 15 or later -->
+    <profiles>
+        <profile>
+            <id>keycloak-quarkus-distribution-with-java15-or-later</id>
+            <activation>
+                <jdk>[15,)</jdk>
+            </activation>
+
+            <dependencies>
+                <dependency>
+                    <groupId>org.openjdk.nashorn</groupId>
+                    <artifactId>nashorn-core</artifactId>
+                </dependency>
+            </dependencies>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-dependencies-quarkus</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>copy-dependencies</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${project.build.directory}/keycloak-server-copy/providers</outputDirectory>
+                                    <includeArtifactIds>nashorn-core,asm,asm-util,asm-commons</includeArtifactIds>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+    </profiles>
+
 </project>

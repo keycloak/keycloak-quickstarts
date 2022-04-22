@@ -61,5 +61,4 @@ target
 node_modules
 
 # Keycloak distribution
-keycloak
 keycloak-dist
