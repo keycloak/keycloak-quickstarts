@@ -55,6 +55,9 @@ Finally you need to configure the adapter, this is done by retrieving the adapte
 * Edit `keycloak-saml.xml` and replace `SPECIFY YOUR LOGOUT PAGE!` with `/index.jsp`
 * Move the file `keycloak-saml.xml` to the `config/` directory in the root of the quickstart
 
+> **NOTE**
+> Validate the tag value `SP entityID="XXX"`. This value must be equals to _Client ID_.
+
 As an alternative you can create the client by importing the file [client-import.json](config/client-import.json) and
 copying [config/keycloak-saml-example.xml](config/keycloak-saml-example.xml) to `config/keycloak-saml.xml`. 
 In case you work with a realm that you created, you need to edit `config/keycloak-saml.xml` 
