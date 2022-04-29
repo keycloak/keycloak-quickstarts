@@ -1,3 +1,0 @@
-features:addurl mvn:org.keycloak/keycloak-osgi-features/${version.keycloak}/xml/features
-features:addurl mvn:org.keycloak.quickstarts/keycloak-fuse63-features/${project.version}/xml/features
-features:install keycloak-fuse63-quickstarts
