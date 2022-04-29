@@ -322,8 +322,6 @@
                 <module>app-authz-rest-springboot</module>
                 <module>app-authz-spring-security</module>
                 <module>app-authz-uma-photoz</module>
-                <module>fuse63</module>
-                <module>fuse70</module>
                 <module>user-storage-simple</module>
                 <module>user-storage-jpa</module>
                 <module>user-storage-jpa-legacy</module>
