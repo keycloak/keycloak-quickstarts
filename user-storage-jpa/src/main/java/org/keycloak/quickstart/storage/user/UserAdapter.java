@@ -19,8 +19,10 @@ package org.keycloak.quickstart.storage.user;
 import org.jboss.logging.Logger;
 import org.keycloak.common.util.MultivaluedHashMap;
 import org.keycloak.component.ComponentModel;
+import org.keycloak.credential.LegacySingleUserCredentialManager;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
+import org.keycloak.models.SingleEntityCredentialManager;
 import org.keycloak.storage.StorageId;
 import org.keycloak.storage.adapter.AbstractUserAdapterFederatedStorage;
 
@@ -65,6 +67,11 @@ public class UserAdapter extends AbstractUserAdapterFederatedStorage {
     @Override
     public void setEmail(String email) {
         entity.setEmail(email);
+    }
+
+    @Override
+    public SingleEntityCredentialManager credentialManager() {
+        return new LegacySingleUserCredentialManager(session, realm, this);
     }
 
     @Override
