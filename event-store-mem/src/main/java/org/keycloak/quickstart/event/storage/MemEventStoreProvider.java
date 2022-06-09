@@ -25,6 +25,7 @@ import org.keycloak.events.admin.AdminEvent;
 import org.keycloak.events.admin.AdminEventQuery;
 import org.keycloak.events.admin.OperationType;
 import org.keycloak.models.KeycloakSession;
+import org.keycloak.models.RealmModel;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -63,11 +64,11 @@ public class MemEventStoreProvider implements EventStoreProvider {
     }
 
     @Override
-    public void clear(String realmId) {
+    public void clear(RealmModel realm) {
         synchronized(events) {
             Iterator<Event> itr = events.iterator();
             while (itr.hasNext()) {
-                if (itr.next().getRealmId().equals(realmId)) {
+                if (itr.next().getRealmId().equals(realm.getId())) {
                     itr.remove();
                 }
             }
@@ -75,12 +76,12 @@ public class MemEventStoreProvider implements EventStoreProvider {
     }
 
     @Override
-    public void clear(String realmId, long olderThan) {
+    public void clear(RealmModel realm, long olderThan) {
         synchronized(events) {
             Iterator<Event> itr = events.iterator();
             while (itr.hasNext()) {
                 Event e = itr.next();
-                if (e.getRealmId().equals(realmId) && e.getTime() < olderThan) {
+                if (e.getRealmId().equals(realm.getId()) && e.getTime() < olderThan) {
                     itr.remove();
                 }
             }
@@ -105,11 +106,11 @@ public class MemEventStoreProvider implements EventStoreProvider {
     }
 
     @Override
-    public void clearAdmin(String realmId) {
+    public void clearAdmin(RealmModel realm) {
         synchronized(adminEvents) {
             Iterator<AdminEvent> itr = adminEvents.iterator();
             while (itr.hasNext()) {
-                if (itr.next().getRealmId().equals(realmId)) {
+                if (itr.next().getRealmId().equals(realm.getId())) {
                     itr.remove();
                 }
             }
@@ -117,12 +118,12 @@ public class MemEventStoreProvider implements EventStoreProvider {
     }
 
     @Override
-    public void clearAdmin(String realmId, long olderThan) {
+    public void clearAdmin(RealmModel realm, long olderThan) {
         synchronized(adminEvents) {
             Iterator<AdminEvent> itr = adminEvents.iterator();
             while (itr.hasNext()) {
                 AdminEvent e = itr.next();
-                if (e.getRealmId().equals(realmId) && e.getTime() < olderThan) {
+                if (e.getRealmId().equals(realm.getId()) && e.getTime() < olderThan) {
                     itr.remove();
                 }
             }
@@ -134,7 +135,7 @@ public class MemEventStoreProvider implements EventStoreProvider {
         session.realms().getRealmsStream().forEach(r -> {
             if (r.getEventsExpiration() > 0) {
                 long olderThan = System.currentTimeMillis() - r.getEventsExpiration() * 1000;
-                clear(r.getId(), olderThan);
+                clear(r, olderThan);
             }
         });
     }
