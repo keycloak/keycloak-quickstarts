@@ -182,5 +182,34 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>wildfly-managed</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>${version.antrun.maven.plugin}</version>
+                        <executions>
+                            <execution>
+                                <id>install-saml</id>
+                                <phase>process-test-classes</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target name="run">
+                                        <exec dir="target/wildfly-${version.wildfly}/bin"
+                                              executable="${jboss-cli.executable}" inputstring="">
+                                            <arg value="--file=adapter-elytron-install-saml-offline.cli"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 </project>

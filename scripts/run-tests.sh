@@ -34,6 +34,9 @@ run_tests() {
   if ! mvn clean install -f $module $args -B 2>&1 | tee test-logs/$module.log; then
     tests_with_errors+=("$module")
   fi
+  printf "\n\n\n*****************************************\n"
+  echo "Completed tests for $module QS"
+  echo "*****************************************"
 }
 
 print_failed_tests() {
