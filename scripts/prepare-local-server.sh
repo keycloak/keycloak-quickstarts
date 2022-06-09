@@ -1,9 +1,10 @@
 #!/bin/bash -e
 
 upstream_main() {
-  git clone https://github.com/keycloak/keycloak
-  mvn clean install -Pdistribution -DskipTests -f keycloak -B
-  find keycloak/distribution/server-dist/target -maxdepth 1 -type f -name 'keycloak-legacy-[[:digit:]]*.tar.gz' -exec tar xzf {} --strip-components=1 -C keycloak-dist \;
+  URL="https://github.com/keycloak/keycloak/releases/download/nightly/keycloak-legacy-999-SNAPSHOT.tar.gz"
+  echo "Downloading Keycloak from: $URL"
+  curl -L -o keycloak-dist.tar.gz "$URL"
+  tar xzf keycloak-dist.tar.gz --strip-components=1 -C keycloak-dist
 }
 
 latest_release() {
@@ -13,6 +14,7 @@ latest_release() {
   tar xzf keycloak-dist.tar.gz --strip-components=1 -C keycloak-dist
 }
 
+if [ -d keycloak-dist ]; then rm -Rf keycloak-dist; fi
 mkdir keycloak-dist
 
 if [ -n "$PRODUCT" ] && [ "$PRODUCT" == "true" ]; then
