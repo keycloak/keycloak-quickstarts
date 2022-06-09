@@ -24,6 +24,7 @@ import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.jboss.arquillian.graphene.page.Page;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
+import org.jboss.logging.Logger;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.Filters;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -61,6 +62,7 @@ import static org.keycloak.test.builders.ClientBuilder.AccessType.BEARER_ONLY;
 @RunWith(Arquillian.class)
 @RunAsClient
 public class ArquillianProfileSamlJeeJspTest {
+    private final static Logger log = Logger.getLogger(ArquillianProfileSamlJeeJspTest.class);
 
     private static final String WEBAPP_SRC = "src/main/webapp";
     private static final String APP_NAME = "app-profile-saml";
@@ -68,6 +70,9 @@ public class ArquillianProfileSamlJeeJspTest {
 
     @Page
     private IndexPage indexPage;
+
+    @Page
+    private PageHelper pageHelper;
 
     @Page
     private LoginPage loginPage;
@@ -78,8 +83,10 @@ public class ArquillianProfileSamlJeeJspTest {
     static {
         try {
             importTestRealm("admin", "admin", "/quickstart-realm.json");
-        } catch (IOException e) {
+        } catch (Exception e) {
+            // print stacktrace here as an exception in a static initializer will lead to a class initialization problem
             e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -127,6 +134,13 @@ public class ArquillianProfileSamlJeeJspTest {
         try {
             indexPage.clickLogin();
             loginPage.login("alice", "password");
+            // due to https://issues.redhat.com/browse/KEYCLOAK-14103 a second click to login is required
+            // need to upgrade to Wildfly 19.1.0 to support a solution to this
+            if (pageHelper.isOnStartPage()) {
+                log.info("found myself on the login page after login, clicking login again");
+                indexPage.clickLogin();
+            }
+            pageHelper.waitForAccountBtn();
             assertEquals(profilePage.getUsername(), "alice");
             profilePage.clickLogout();
         } catch (Exception e) {
@@ -140,6 +154,13 @@ public class ArquillianProfileSamlJeeJspTest {
         try {
             indexPage.clickLogin();
             loginPage.login("alice", "password");
+            // due to https://issues.redhat.com/browse/KEYCLOAK-14103 a second click to login is required
+            // need to upgrade to Wildfly 19.1.0 to support a solution to this
+            if (pageHelper.isOnStartPage()) {
+                log.info("found myself on the login page after login, clicking login again");
+                indexPage.clickLogin();
+            }
+            pageHelper.waitForAccountBtn();
             profilePage.clickAccount();
             assertTrue(webDriver.getTitle().contains("Account Management"));
         } catch (Exception e) {

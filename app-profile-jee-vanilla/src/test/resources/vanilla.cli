@@ -1,0 +1,9 @@
+embed-server --server-config=${server.config:standalone.xml}
+
+/subsystem=keycloak/secure-deployment="vanilla.war"/:add( \
+    realm="quickstart", \
+    resource="vanilla", \
+    auth-server-url=http://localhost:8180/auth, \
+    ssl-required=EXTERNAL)
+
+/subsystem=keycloak/secure-deployment="vanilla.war"/credential=secret:add(value=secret)

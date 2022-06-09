@@ -83,8 +83,10 @@ public class ArquillianProfileJeeVanillaTest {
                     .rootUrl(ROOT_URL)
                     .secret("secret")
                     .accessType(CONFIDENTIAL));
-        } catch (IOException e) {
+        } catch (Exception e) {
+            // print stacktrace here as an exception in a static initializer will lead to a class initialization problem
             e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
