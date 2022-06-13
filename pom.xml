@@ -138,6 +138,11 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
+                <groupId>org.keycloak</groupId>
+                <artifactId>keycloak-model-legacy</artifactId>
+                <version>${version.keycloak}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.wildfly.bom</groupId>
                 <artifactId>wildfly-javaee8</artifactId>
                 <version>${version.wildfly}</version>

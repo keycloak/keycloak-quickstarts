@@ -22,8 +22,10 @@ import org.keycloak.credential.CredentialInput;
 import org.keycloak.credential.CredentialInputUpdater;
 import org.keycloak.credential.CredentialInputValidator;
 import org.keycloak.credential.CredentialModel;
+import org.keycloak.credential.LegacyUserCredentialManager;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
+import org.keycloak.models.SubjectCredentialManager;
 import org.keycloak.models.UserCredentialModel;
 import org.keycloak.models.UserModel;
 import org.keycloak.storage.ReadOnlyException;
@@ -80,6 +82,11 @@ public class PropertyFileUserStorageProvider implements
             @Override
             public String getUsername() {
                 return username;
+            }
+
+            @Override
+            public SubjectCredentialManager credentialManager() {
+                return new LegacyUserCredentialManager(session, realm, this);
             }
         };
     }

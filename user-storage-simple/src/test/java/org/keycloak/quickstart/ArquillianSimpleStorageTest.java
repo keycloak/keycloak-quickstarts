@@ -41,6 +41,7 @@ import org.keycloak.test.page.LoginPage;
 import org.openqa.selenium.WebDriver;
 
 import javax.ws.rs.core.Response;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
@@ -83,7 +84,8 @@ public class ArquillianSimpleStorageTest {
                         org.keycloak.quickstart.writeable.PropertyFileUserStorageProviderFactory.class)
                 .addAsResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsResource("META-INF/services/org.keycloak.storage.UserStorageProviderFactory")
-                .addAsResource("users.properties");
+                .addAsResource("users.properties")
+                .addAsManifestResource(new File("src/test/resources", "MANIFEST.MF"));
 
     }
 
