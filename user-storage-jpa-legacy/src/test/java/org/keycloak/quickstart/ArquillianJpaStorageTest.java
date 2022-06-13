@@ -45,6 +45,7 @@ import org.wildfly.extras.creaper.core.online.OnlineManagementClient;
 import org.wildfly.extras.creaper.core.online.OnlineOptions;
 
 import javax.ws.rs.core.Response;
+import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import static java.lang.String.format;
@@ -83,7 +84,8 @@ public class ArquillianJpaStorageTest {
                 .addClasses(EjbExampleUserStorageProvider.class, EjbExampleUserStorageProviderFactory.class,
                         UserAdapter.class, UserEntity.class)
                 .addAsResource("META-INF/services/org.keycloak.storage.UserStorageProviderFactory")
-                .addAsResource("META-INF/persistence.xml");
+                .addAsResource("META-INF/persistence.xml")
+                .addAsManifestResource(new File("src/test/resources", "MANIFEST.MF"));
 
     }
 
