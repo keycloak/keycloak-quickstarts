@@ -33,6 +33,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.keycloak.test.FluentTestsHelper;
 import org.keycloak.test.page.LoginPage;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 
 import java.io.File;
@@ -83,7 +84,9 @@ public class ExtendAccountConsoleTest {
 
     @AfterClass
     public static void cleanUp() {
-        testsHelper.deleteTestRealm();
+        if (testsHelper != null) {
+            testsHelper.deleteTestRealm();
+        }
     }
 
     @Before
@@ -91,6 +94,7 @@ public class ExtendAccountConsoleTest {
         testsHelper.importTestRealm("/quickstart-realm.json");
         webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
         webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        webDriver.manage().window().setSize(new Dimension(1280,720));
     }
 
     @Test
