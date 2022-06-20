@@ -28,11 +28,11 @@
 
 <body>
     <div class="wrapper">
-        <div id="not-authenticated" class="menu">
+        <div id="not-authenticated" style="display: none" class="menu">
             <button name="loginBtn" onclick="keycloak.login()">Login</button>
         </div>
 
-        <div id="authenticated" class="menu">
+        <div id="authenticated" style="display: none" class="menu">
             <button name="logoutBtn" onclick="keycloak.logout()">Logout</button>
             <button name="accountBtn" onclick="keycloak.accountManagement()">Account</button>
         </div>
