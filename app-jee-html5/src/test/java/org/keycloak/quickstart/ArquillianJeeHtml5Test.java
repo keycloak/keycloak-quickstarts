@@ -31,19 +31,29 @@ import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.keycloak.test.TestsHelper;
 import org.keycloak.test.builders.ClientBuilder;
 import org.keycloak.test.page.IndexPage;
 import org.keycloak.test.page.LoginPage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertTrue;
@@ -72,6 +82,9 @@ public class ArquillianJeeHtml5Test {
     @Page
     private LoginPage loginPage;
 
+    @Drone
+    WebDriver browser;
+
     static {
         try {
             importTestRealm("admin", "admin", "/quickstart-realm.json");
@@ -81,7 +94,7 @@ public class ArquillianJeeHtml5Test {
     }
 
     @Deployment(name = APP_SERVICE, order = 1, testable = false)
-    public static Archive<?> createTestArchive1() throws IOException {
+    public static Archive<?> createTestArchive1() {
         return ShrinkWrap.createFromZipFile(WebArchive.class,
                 new File("../service-jee-jaxrs/target/service.war"))
                 .addAsWebInfResource(
@@ -90,7 +103,7 @@ public class ArquillianJeeHtml5Test {
     }
 
     @Deployment(name = APP_NAME, order = 2, testable = false)
-    public static Archive<?> createTestArchive2() throws IOException {
+    public static Archive<?> createTestArchive2() {
         return ShrinkWrap.create(WebArchive.class, "app-html5.war")
                 .addAsWebResource(new File(WEBAPP_SRC, "app.js"))
                 .addAsWebResource(new File(WEBAPP_SRC, "index.html"))
@@ -118,34 +131,50 @@ public class ArquillianJeeHtml5Test {
         webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
         webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         webDriver.navigate().to(contextRoot);
+        logoutIfLoggedIn();
+        waitForAppToInitializeForLogin();
+    }
+
+    private void logoutIfLoggedIn() {
+        List<WebElement> logoutBtn = browser.findElements(By.name("logoutBtn"));
+        if (logoutBtn.size() > 0 && logoutBtn.get(0).isDisplayed()) {
+            logout();
+        }
+    }
+
+    private void waitForAppToInitializeForLogin() {
+        Graphene.waitAjax().until(ExpectedConditions.elementToBeClickable(By.name("loginBtn")));
+    }
+
+    private void waitForAppToInitializeAfterLogin() {
+        Graphene.waitAjax().until(ExpectedConditions.elementToBeClickable(By.name("logoutBtn")));
     }
 
     @Test
     public void testSecuredResource() {
         indexPage.clickSecured();
-        assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.className("error"), UNAUTHORIZED)));
+        assertTextInControl("error", UNAUTHORIZED);
     }
 
     @Test
     public void testAdminResource() {
         indexPage.clickAdmin();
-        assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(By.className("error"), UNAUTHORIZED)));
+        assertTextInControl("error", UNAUTHORIZED);
     }
 
     @Test
     public void testPublicResource() {
         indexPage.clickPublic();
-        assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(
-                By.className("message"), "Message: public")));
+        assertTextInControl("message", "Message: public");
     }
 
     @Test
     public void testAdminWithAuthAndRole() {
         indexPage.clickLogin();
         loginPage.login("test-admin", "password");
+        waitForAppToInitializeAfterLogin();
         indexPage.clickAdmin();
-        assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(
-                By.className("message"), "Message: admin")));
+        assertTextInControl("message", "Message: admin");
         logout();
     }
 
@@ -153,15 +182,40 @@ public class ArquillianJeeHtml5Test {
     public void testUserWithAuthAndRole() {
         indexPage.clickLogin();
         loginPage.login("alice", "password");
+        waitForAppToInitializeAfterLogin();
         indexPage.clickSecured();
-        assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(
-                By.className("message"), "Message: secured")));
+        assertTextInControl("message", "Message: secured");
         logout();
     }
 
     private void logout() {
         indexPage.clickLogout();
-        assertTrue(Graphene.waitGui().until(ExpectedConditions.textToBePresentInElementLocated(
-                By.className("message"), "")));
+        assertTextInControl("message", "");
     }
+
+    @Rule
+    public TestName name = new TestName();
+
+    private void assertTextInControl(String control, String text) {
+        try {
+            assertTrue(Graphene.waitAjax().until(ExpectedConditions.textToBePresentInElementLocated(
+                    By.className(control), text)));
+        } catch (TimeoutException ex) {
+            File screenshotAs = ((TakesScreenshot) browser).getScreenshotAs(OutputType.FILE);
+            try {
+                Path target = Paths.get("target", "surefire-reports", name.getMethodName() + ".png");
+                Files.createDirectories(target.getParent());
+                Files.copy(screenshotAs.toPath(), target);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            WebElement element = browser.findElement(By.className(control));
+            if (element == null) {
+                throw new TimeoutException("element not found", ex);
+            } else {
+                throw new TimeoutException("found text '" + element.getText() + "' when expecting text '" + text + "'");
+            }
+        }
+    }
+
 }
