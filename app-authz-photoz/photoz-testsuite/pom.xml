@@ -25,7 +25,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>photoz-testsuite</artifactId>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
     <name>Keycloak Quickstarts: Photoz Testsuite</name>
     <description>Photoz Testsuite</description>
 
@@ -84,6 +84,28 @@
                 <configuration>
                     <skip>false</skip>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${version.enforcer.maven.plugin}</version>
+                <executions>
+                    <execution>
+                        <id>enforce-files-exist</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireFilesExist>
+                                    <files>
+                                        <file>${basedir}/src/test/resources/quickstart-realm.json</file>
+                                    </files>
+                                </requireFilesExist>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

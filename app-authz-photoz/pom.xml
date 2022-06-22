@@ -47,29 +47,6 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-enforcer-plugin</artifactId>
-                <version>${version.enforcer.maven.plugin}</version>
-                <executions>
-                    <execution>
-                        <id>enforce-files-exist</id>
-                        <goals>
-                            <goal>enforce</goal>
-                        </goals>
-                        <configuration>
-                            <rules>
-                                <requireFilesExist>
-                                    <files>
-                                        <file>${basedir}/src/test/resources/quickstart-realm.json</file>
-                                    </files>
-                                </requireFilesExist>
-                            </rules>
-                            <fail>false</fail>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>${version.war.maven.plugin}</version>
                 <configuration>
