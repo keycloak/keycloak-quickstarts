@@ -73,6 +73,7 @@
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencyManagement>
@@ -545,6 +546,20 @@
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+        <profile>
+            <id>built-with-jdk-9-or-later</id>
+            <activation>
+                <!-- only activate this on JDK 9 or later as this option is unknown for JDK 8, and as it is not necessary for JDK 8 -->
+                <!-- support for running with JDK 8 is still necessary for some downstream integration tests -->
+                <jdk>[9,)</jdk>
+            </activation>
+            <properties>
+                <!-- Minimum Java version supported for running Keycloak -->
+                <!-- maven.compiler.target and maven.compiler.source already set to 1.8 in the parent pom -->
+                <!-- other modules will configure a higher Java version (for example, Quarkus) -->
+                <maven.compiler.release>8</maven.compiler.release>
+            </properties>
         </profile>
     </profiles>
 </project>
