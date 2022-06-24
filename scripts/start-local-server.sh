@@ -18,6 +18,7 @@ function waitForServer {
       sleep 1
     else
       echo " timeout!"
+      cat keycloak.log
       exit 1
     fi
   done
