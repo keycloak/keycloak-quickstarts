@@ -32,6 +32,6 @@ else
   chmod +x keycloak-dist/bin/standalone.sh
 
   # Start the server
-  keycloak-dist/bin/standalone.sh -Djava.net.preferIPv4Stack=true -Djboss.socket.binding.port-offset=100 > keycloak.log 2>&1 &
+  keycloak-dist/bin/kc.sh start-dev --hostname-port=8180 --http-relative-path="/auth" > keycloak.log 2>&1 &
   waitForServer "Keycloak"
 fi
