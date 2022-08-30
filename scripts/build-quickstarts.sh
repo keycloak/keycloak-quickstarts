@@ -15,11 +15,11 @@ for f in $(find . -type f -name 'keycloak-saml-example.xml'); do
    cp "$f" "${f%-example.xml}.xml"
 done
 
-mvn clean install $args -DskipTests -B
+mvn clean install $args -DskipTests -B -Dnightly
 if [ -n "$PRODUCT" ] && [ "$PRODUCT" == "true" ]; then
   dist=$PRODUCT_DIST
 else
   dist="keycloak-dist"
 fi
 
-cp authz-js-policies/target/authz-js-policies.jar $dist/standalone/deployments
+cp authz-js-policies/target/authz-js-policies.jar $dist/providers

@@ -31,7 +31,7 @@ run_tests() {
   else
     args="$args -Dwebdriver.chrome.driver=/usr/local/bin/chromedriver"
   fi
-  if ! mvn clean install -f $module $args -B 2>&1 | tee test-logs/$module.log; then
+  if ! mvn clean install -Dnightly -f $module $args -B 2>&1 | tee test-logs/$module.log; then
     tests_with_errors+=("$module")
   fi
   printf "\n\n\n*****************************************\n"
@@ -51,8 +51,9 @@ print_failed_tests() {
   fi
 }
 
-run_tests action-token-authenticator -Pwildfly-managed
-run_tests action-token-required-action -Pwildfly-managed
+# TODO Update for Quarkus dist
+#run_tests action-token-authenticator -Pwildfly-managed
+#run_tests action-token-required-action -Pwildfly-managed
 
 . scripts/export-keycloak-version.sh
 
@@ -78,14 +79,17 @@ run_tests app-jee-jsp -Pwildfly-managed
 run_tests app-profile-jee-html5 -Pwildfly-managed
 run_tests app-profile-jee-jsp -Pwildfly-managed
 run_tests app-profile-jee-vanilla -Pwildfly-managed
-run_tests app-profile-saml-jee-jsp -Pwildfly-managed
-run_tests event-listener-sysout -Pkeycloak-remote
-run_tests event-store-mem -Pkeycloak-remote
-run_tests extend-account-console -Pkeycloak-remote
-run_tests service-jee-jaxrs -Pwildfly-managed
-run_tests service-springboot-rest -Pspring-boot
-run_tests user-storage-jpa-legacy -Pkeycloak-remote
-run_tests user-storage-simple -Pkeycloak-remote
+# TODO Not working with Quarkus dist (or not working?)
+#run_tests app-profile-saml-jee-jsp -Pwildfly-managed
+
+# TODO Update for Quarkus dist
+#run_tests event-listener-sysout -Pkeycloak-remote
+#run_tests event-store-mem -Pkeycloak-remote
+#run_tests extend-account-console -Pkeycloak-remote
+#run_tests service-jee-jaxrs -Pwildfly-managed
+#run_tests service-springboot-rest -Pspring-boot
+#run_tests user-storage-jpa-legacy -Pkeycloak-remote
+#run_tests user-storage-simple -Pkeycloak-remote
 
 mvn -f service-springboot-rest spring-boot:run >/dev/null&
 run_tests app-springboot -Pspring-boot
