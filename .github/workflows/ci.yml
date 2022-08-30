@@ -6,6 +6,7 @@ on:
   pull_request:
   schedule:
     - cron: '0 4 * * *'
+  workflow_dispatch:
 
 jobs:
   tests:
