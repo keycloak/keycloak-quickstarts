@@ -1,6 +1,6 @@
 # Getting started
 
-These quickstarts run on <span>WildFly 10</span>.
+These quickstarts run on <span>WildFly 23</span> onwards.
 
 Prior to running the quickstarts you should read this entire document and have completed the following steps:
 
@@ -97,7 +97,7 @@ The next step is to start <span>WildFly</span> server:
    For Linux:   WILDFLY_HOME/bin/standalone.sh
    For Windows: WILDFLY_HOME\bin\standalone.bat
    ````
-3. To install the <span>Keycloak</span> adapter run the following commands:
+3. To install the <span>Keycloak</span> adapter run the following commands if using a Wildfly version earlier than Wildfly 25:
    ````
    For Linux:
 
@@ -109,6 +109,19 @@ The next step is to start <span>WildFly</span> server:
     WILDFLY_HOME\bin\jboss-cli.bat -c --file=WILDFLY_HOME\bin\adapter-install.cli
     WILDFLY_HOME\bin\jboss-cli.bat -c --command=:reload
    ````
+   If you are using Wildfly 25 or a later version of Wildfly use the below commands to install the updated adapter.
+   
+   ````
+   For Linux:
+
+     WILDFLY_HOME/bin/jboss-cli.sh -c --file=WILDFLY_HOME/bin/adapter-elytron-install.cli
+     WILDFLY_HOME/bin/jboss-cli.sh -c --command=:reload
+
+   For Windows:
+
+    WILDFLY_HOME\bin\jboss-cli.bat -c --file=WILDFLY_HOME\bin\adapter-elytron-install.cli
+    WILDFLY_HOME\bin\jboss-cli.bat -c --command=:reload
+   ````   
 4. If you plan to try the SAML examples you also need to install <span>Keycloak</span> SAML adapter:
 
    ````
