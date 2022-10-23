@@ -32,6 +32,12 @@ Configuration in <span>Keycloak</span>
 
 Prior to running the quickstart you need to create a client in <span>Keycloak</span> and download the installation file.
 
+For Keycloak 19.x or later it is best to import the client due to changes with the UI and bearer-only options.
+You can create the client by importing the file [service-jaxrs.json](config/service-jaxrs.json).
+
+Once the client is created the adapter must be installed as before.
+
+For Keycloak 18.x or earlier.
 The following steps shows how to create the client required for this quickstart:
 
 * Open the <span>Keycloak</span> admin console

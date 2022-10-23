@@ -43,6 +43,10 @@ The following steps show how to create the client required for this quickstart:
 
 Once saved you need to change the Access Type to `confidential` and click `Save`.
 
+This applies to version 18.x and previous versions. 
+
+In version 19.x Client authentication must be turned on for the same result.
+
 If you deploy the application somewhere else change the hostname and port of the URLs accordingly.
 
 Finally you need to configure the adapter, this is done by retrieving the adapter configuration file:
