@@ -45,6 +45,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
@@ -75,19 +76,6 @@ public class PropertyFileUserStorageProvider implements
 
     // UserLookupProvider methods
 
-    @Override
-    public UserModel getUserByUsername(String username, RealmModel realm) {
-        UserModel adapter = loadedUsers.get(username);
-        if (adapter == null) {
-            String password = properties.getProperty(username);
-            if (password != null) {
-                adapter = createAdapter(realm, username);
-                loadedUsers.put(username, adapter);
-            }
-        }
-        return adapter;
-    }
-
     protected UserModel createAdapter(RealmModel realm, String username) {
         return new AbstractUserAdapterFederatedStorage(session, realm, model) {
             @Override
@@ -107,96 +95,29 @@ public class PropertyFileUserStorageProvider implements
     }
 
     @Override
-    public UserModel getUserById(String id, RealmModel realm) {
-        StorageId storageId = new StorageId(id);
-        String username = storageId.getExternalId();
-        return getUserByUsername(username, realm);
-    }
-
-    @Override
-    public UserModel getUserByEmail(String email, RealmModel realm) {
-        return null;
-    }
-
-    // UserQueryProvider methods
-
-    @Override
     public int getUsersCount(RealmModel realm) {
         return properties.size();
     }
 
     @Override
-    public List<UserModel> getUsers(RealmModel realm) {
-        return getUsers(realm, 0, Integer.MAX_VALUE);
+    public Stream<UserModel> searchForUserStream(RealmModel realmModel, String s, Integer integer, Integer integer1) {
+        return null;
     }
 
     @Override
-    public List<UserModel> getUsers(RealmModel realm, int firstResult, int maxResults) {
-        List<UserModel> users = new LinkedList<>();
-        int i = 0;
-        for (Object obj : properties.keySet()) {
-            if (i++ < firstResult) continue;
-            String username = (String)obj;
-            UserModel user = getUserByUsername(username, realm);
-            users.add(user);
-            if (users.size() >= maxResults) break;
-        }
-        return users;
-    }
-
-    // UserQueryProvider method implementations
-
-    @Override
-    public List<UserModel> searchForUser(String search, RealmModel realm) {
-        return searchForUser(search, realm, 0, Integer.MAX_VALUE);
+    public Stream<UserModel> searchForUserStream(RealmModel realmModel, Map<String, String> map, Integer integer, Integer integer1) {
+        return null;
     }
 
     @Override
-    public List<UserModel> searchForUser(String search, RealmModel realm, int firstResult, int maxResults) {
-        List<UserModel> users = new LinkedList<>();
-        int i = 0;
-        for (Object obj : properties.keySet()) {
-            String username = (String)obj;
-            if (!username.contains(search)) continue;
-            if (i++ < firstResult) continue;
-            UserModel user = getUserByUsername(username, realm);
-            users.add(user);
-            if (users.size() >= maxResults) break;
-        }
-        return users;
+    public Stream<UserModel> getGroupMembersStream(RealmModel realmModel, GroupModel groupModel, Integer integer, Integer integer1) {
+        return null;
     }
 
     @Override
-    public List<UserModel> searchForUser(Map<String, String> params, RealmModel realm) {
-        return searchForUser(params, realm, 0, Integer.MAX_VALUE);
+    public Stream<UserModel> searchForUserByUserAttributeStream(RealmModel realmModel, String s, String s1) {
+        return null;
     }
-
-    @Override
-    public List<UserModel> searchForUser(Map<String, String> params, RealmModel realm, int firstResult, int maxResults) {
-        // only support searching by username
-        String usernameSearchString = params.get("username");
-        if (usernameSearchString == null) return Collections.EMPTY_LIST;
-        return searchForUser(usernameSearchString, realm, firstResult, maxResults);
-    }
-
-    @Override
-    public List<UserModel> getGroupMembers(RealmModel realm, GroupModel group, int firstResult, int maxResults) {
-        // runtime automatically handles querying UserFederatedStorage
-        return Collections.EMPTY_LIST;
-    }
-
-    @Override
-    public List<UserModel> getGroupMembers(RealmModel realm, GroupModel group) {
-        // runtime automatically handles querying UserFederatedStorage
-        return Collections.EMPTY_LIST;
-    }
-
-    @Override
-    public List<UserModel> searchForUserByUserAttribute(String attrName, String attrValue, RealmModel realm) {
-        // runtime automatically handles querying UserFederatedStorage
-        return Collections.EMPTY_LIST;
-    }
-
 
     // UserRegistrationProvider method implementations
 
@@ -281,6 +202,11 @@ public class PropertyFileUserStorageProvider implements
 
     }
 
+    @Override
+    public Stream<String> getDisableableCredentialTypesStream(RealmModel realmModel, UserModel userModel) {
+        return null;
+    }
+
     private static final Set<String> disableableTypes = new HashSet<>();
 
     static {
@@ -288,12 +214,24 @@ public class PropertyFileUserStorageProvider implements
     }
 
     @Override
-    public Set<String> getDisableableCredentialTypes(RealmModel realm, UserModel user) {
-
-        return disableableTypes;
-    }
-    @Override
     public void close() {
 
+    }
+
+    @Override
+    public UserModel getUserById(RealmModel realm, String id) {
+        StorageId storageId = new StorageId(id);
+        String username = storageId.getExternalId();
+        return getUserByUsername(realm, username);
+    }
+
+    @Override
+    public UserModel getUserByUsername(RealmModel realmModel, String s) {
+        return null;
+    }
+
+    @Override
+    public UserModel getUserByEmail(RealmModel realmModel, String s) {
+        return null;
     }
 }

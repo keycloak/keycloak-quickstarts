@@ -34,11 +34,10 @@ import org.keycloak.storage.UserStorageProvider;
 import org.keycloak.storage.adapter.AbstractUserAdapter;
 import org.keycloak.storage.user.UserLookupProvider;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
@@ -61,22 +60,6 @@ public class PropertyFileUserStorageProvider implements
         this.model = model;
         this.properties = properties;
     }
-
-    // UserLookupProvider methods
-
-    @Override
-    public UserModel getUserByUsername(String username, RealmModel realm) {
-        UserModel adapter = loadedUsers.get(username);
-        if (adapter == null) {
-            String password = properties.getProperty(username);
-            if (password != null) {
-                adapter = createAdapter(realm, username);
-                loadedUsers.put(username, adapter);
-            }
-        }
-        return adapter;
-    }
-
     protected UserModel createAdapter(RealmModel realm, String username) {
         return new AbstractUserAdapter(session, realm, model) {
             @Override
@@ -90,21 +73,6 @@ public class PropertyFileUserStorageProvider implements
             }
         };
     }
-
-    @Override
-    public UserModel getUserById(String id, RealmModel realm) {
-        StorageId storageId = new StorageId(id);
-        String username = storageId.getExternalId();
-        return getUserByUsername(username, realm);
-    }
-
-    @Override
-    public UserModel getUserByEmail(String email, RealmModel realm) {
-        return null;
-    }
-
-
-    // CredentialInputValidator methods
 
     @Override
     public boolean isConfiguredFor(RealmModel realm, UserModel user, String credentialType) {
@@ -142,13 +110,37 @@ public class PropertyFileUserStorageProvider implements
     }
 
     @Override
-    public Set<String> getDisableableCredentialTypes(RealmModel realm, UserModel user) {
-        return Collections.EMPTY_SET;
+    public Stream<String> getDisableableCredentialTypesStream(RealmModel realmModel, UserModel userModel) {
+        return null;
     }
-
 
     @Override
     public void close() {
 
+    }
+
+    @Override
+    public UserModel getUserById(RealmModel realm, String id) {
+        StorageId storageId = new StorageId(id);
+        String username = storageId.getExternalId();
+        return getUserByUsername(realm, username);
+    }
+
+    @Override
+    public UserModel getUserByUsername(RealmModel realm, String username) {
+        UserModel adapter = loadedUsers.get(username);
+        if (adapter == null) {
+            String password = properties.getProperty(username);
+            if (password != null) {
+                adapter = createAdapter(realm, username);
+                loadedUsers.put(username, adapter);
+            }
+        }
+        return adapter;
+    }
+
+    @Override
+    public UserModel getUserByEmail(RealmModel realmModel, String s) {
+        return null;
     }
 }
