@@ -80,7 +80,7 @@ public class Controller {
     private String findKeycloakServerPath(HttpServletRequest req) {
         String bindingUrl = getBindingUrl(req);
         // bindingUrl looks like http://localhost:8080/auth/realms/master/protocol/saml
-        return bindingUrl.substring(0, bindingUrl.indexOf("/auth")) + "/auth";
+        return bindingUrl.substring(0, bindingUrl.indexOf("/realms"));
     }
 
     private String getBindingUrl(HttpServletRequest req) {
