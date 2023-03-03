@@ -8,7 +8,7 @@ if [[ ( -n "$GITHUB_BASE_REF" &&  "$GITHUB_BASE_REF" == "latest" ) ]] || [[ ( -n
   URL="https://github.com/keycloak/keycloak/releases/download/${VERSION}/keycloak-${VERSION}.tar.gz"
 else
   echo "Downloading nightly Keycloak release"
-  URL="https://github.com/keycloak/keycloak/releases/download/nightly/keycloak-999-SNAPSHOT.tar.gz"
+  URL="https://github.com/keycloak/keycloak/releases/download/nightly/keycloak-999.0.0-SNAPSHOT.tar.gz"
 fi
 
 wget -q -O keycloak-dist.tar.gz "$URL"
