@@ -33,7 +33,7 @@
     </security-constraint>
 
     <login-config>
-        <auth-method>BASIC</auth-method>
+        <auth-method>OIDC</auth-method>
     </login-config>
 
     <security-role>

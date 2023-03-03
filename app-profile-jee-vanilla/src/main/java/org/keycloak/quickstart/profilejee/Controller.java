@@ -16,8 +16,8 @@
  */
 package org.keycloak.quickstart.profilejee;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Controller simplifies access to the server environment from the JSP.
