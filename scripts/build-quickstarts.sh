@@ -23,3 +23,4 @@ else
 fi
 
 cp authz-js-policies/target/authz-js-policies.jar $dist/providers
+cp user-storage-simple/target/user-storage-properties-example.jar $dist/providers

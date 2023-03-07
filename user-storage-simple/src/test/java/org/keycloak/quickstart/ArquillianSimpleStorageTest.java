@@ -17,15 +17,9 @@
 
 package org.keycloak.quickstart;
 
-import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.jboss.arquillian.graphene.page.Page;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
-import org.jboss.shrinkwrap.api.Archive;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.EmptyAsset;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -34,16 +28,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.keycloak.common.util.MultivaluedHashMap;
 import org.keycloak.quickstart.page.ConsolePage;
-import org.keycloak.quickstart.util.StorageManager;
 import org.keycloak.representations.idm.ComponentRepresentation;
 import org.keycloak.test.FluentTestsHelper;
 import org.keycloak.test.page.LoginPage;
 import org.openqa.selenium.WebDriver;
 
 import javax.ws.rs.core.Response;
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import static java.lang.String.format;
@@ -68,26 +59,7 @@ public class ArquillianSimpleStorageTest {
     @Drone
     private WebDriver webDriver;
 
-    @ArquillianResource
-    private URL contextRoot;
-
     private static FluentTestsHelper testsHelper;
-
-    @Deployment(testable = false)
-    public static Archive<?> createTestArchive() throws IOException {
-        return ShrinkWrap.create(JavaArchive.class, "user-storage-simple-example.jar")
-                .addClasses(
-                        StorageManager.class,
-                        org.keycloak.quickstart.readonly.PropertyFileUserStorageProvider.class,
-                        org.keycloak.quickstart.readonly.PropertyFileUserStorageProviderFactory.class,
-                        org.keycloak.quickstart.writeable.PropertyFileUserStorageProvider.class,
-                        org.keycloak.quickstart.writeable.PropertyFileUserStorageProviderFactory.class)
-                .addAsResource(EmptyAsset.INSTANCE, "beans.xml")
-                .addAsResource("META-INF/services/org.keycloak.storage.UserStorageProviderFactory")
-                .addAsResource("users.properties")
-                .addAsManifestResource(new File("src/test/resources", "MANIFEST.MF"));
-
-    }
 
     @BeforeClass
     public static void beforeTestClass() throws IOException {
