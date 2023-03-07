@@ -17,27 +17,8 @@
 
 package org.keycloak.quickstart.writeable;
 
-import org.keycloak.common.util.EnvUtil;
-import org.keycloak.component.ComponentModel;
-import org.keycloak.credential.CredentialInput;
-import org.keycloak.credential.CredentialInputUpdater;
-import org.keycloak.credential.CredentialInputValidator;
-import org.keycloak.credential.CredentialModel;
-import org.keycloak.models.GroupModel;
-import org.keycloak.models.KeycloakSession;
-import org.keycloak.models.RealmModel;
-import org.keycloak.models.UserCredentialModel;
-import org.keycloak.models.UserModel;
-import org.keycloak.storage.StorageId;
-import org.keycloak.storage.UserStorageProvider;
-import org.keycloak.storage.adapter.AbstractUserAdapterFederatedStorage;
-import org.keycloak.storage.user.UserLookupProvider;
-import org.keycloak.storage.user.UserQueryProvider;
-import org.keycloak.storage.user.UserRegistrationProvider;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -45,6 +26,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.stream.Stream;
+
+import org.keycloak.common.util.EnvUtil;
+import org.keycloak.component.ComponentModel;
+import org.keycloak.credential.CredentialInput;
+import org.keycloak.credential.CredentialInputUpdater;
+import org.keycloak.credential.CredentialInputValidator;
+import org.keycloak.models.GroupModel;
+import org.keycloak.models.KeycloakSession;
+import org.keycloak.models.RealmModel;
+import org.keycloak.models.UserCredentialModel;
+import org.keycloak.models.UserModel;
+import org.keycloak.models.credential.PasswordCredentialModel;
+import org.keycloak.storage.StorageId;
+import org.keycloak.storage.UserStorageProvider;
+import org.keycloak.storage.adapter.AbstractUserAdapterFederatedStorage;
+import org.keycloak.storage.user.UserLookupProvider;
+import org.keycloak.storage.user.UserQueryProvider;
+import org.keycloak.storage.user.UserRegistrationProvider;
 
 /**
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
@@ -76,7 +76,7 @@ public class PropertyFileUserStorageProvider implements
     // UserLookupProvider methods
 
     @Override
-    public UserModel getUserByUsername(String username, RealmModel realm) {
+    public UserModel getUserByUsername(RealmModel realm, String username) {
         UserModel adapter = loadedUsers.get(username);
         if (adapter == null) {
             String password = properties.getProperty(username);
@@ -87,6 +87,7 @@ public class PropertyFileUserStorageProvider implements
         }
         return adapter;
     }
+    
 
     protected UserModel createAdapter(RealmModel realm, String username) {
         return new AbstractUserAdapterFederatedStorage(session, realm, model) {
@@ -107,14 +108,14 @@ public class PropertyFileUserStorageProvider implements
     }
 
     @Override
-    public UserModel getUserById(String id, RealmModel realm) {
+    public UserModel getUserById(RealmModel realm, String id) {
         StorageId storageId = new StorageId(id);
         String username = storageId.getExternalId();
-        return getUserByUsername(username, realm);
+        return getUserByUsername(realm, username);
     }
 
     @Override
-    public UserModel getUserByEmail(String email, RealmModel realm) {
+    public UserModel getUserByEmail(RealmModel realm, String email) {
         return null;
     }
 
@@ -125,76 +126,49 @@ public class PropertyFileUserStorageProvider implements
         return properties.size();
     }
 
-    @Override
-    public List<UserModel> getUsers(RealmModel realm) {
-        return getUsers(realm, 0, Integer.MAX_VALUE);
-    }
-
-    @Override
-    public List<UserModel> getUsers(RealmModel realm, int firstResult, int maxResults) {
-        List<UserModel> users = new LinkedList<>();
-        int i = 0;
-        for (Object obj : properties.keySet()) {
-            if (i++ < firstResult) continue;
-            String username = (String)obj;
-            UserModel user = getUserByUsername(username, realm);
-            users.add(user);
-            if (users.size() >= maxResults) break;
-        }
-        return users;
-    }
-
     // UserQueryProvider method implementations
 
     @Override
-    public List<UserModel> searchForUser(String search, RealmModel realm) {
-        return searchForUser(search, realm, 0, Integer.MAX_VALUE);
-    }
-
-    @Override
-    public List<UserModel> searchForUser(String search, RealmModel realm, int firstResult, int maxResults) {
+    public Stream<UserModel> searchForUserStream(RealmModel realm, String search, Integer firstResult,
+            Integer maxResults) {
         List<UserModel> users = new LinkedList<>();
         int i = 0;
         for (Object obj : properties.keySet()) {
             String username = (String)obj;
             if (!username.contains(search)) continue;
             if (i++ < firstResult) continue;
-            UserModel user = getUserByUsername(username, realm);
+            UserModel user = getUserByUsername(realm, username);
             users.add(user);
             if (users.size() >= maxResults) break;
         }
-        return users;
+        return users.stream();
     }
 
     @Override
-    public List<UserModel> searchForUser(Map<String, String> params, RealmModel realm) {
-        return searchForUser(params, realm, 0, Integer.MAX_VALUE);
-    }
-
-    @Override
-    public List<UserModel> searchForUser(Map<String, String> params, RealmModel realm, int firstResult, int maxResults) {
+    public Stream<UserModel> searchForUserStream(RealmModel realm, Map<String, String> params, Integer firstResult,
+            Integer maxResults) {
         // only support searching by username
         String usernameSearchString = params.get("username");
-        if (usernameSearchString == null) return Collections.EMPTY_LIST;
-        return searchForUser(usernameSearchString, realm, firstResult, maxResults);
+        if (usernameSearchString == null) return Stream.empty();
+        return searchForUserStream(realm, usernameSearchString, firstResult, maxResults);
     }
 
     @Override
-    public List<UserModel> getGroupMembers(RealmModel realm, GroupModel group, int firstResult, int maxResults) {
+    public Stream<UserModel> getGroupMembersStream(RealmModel realm, GroupModel group, Integer firstResult, Integer maxResults) {
         // runtime automatically handles querying UserFederatedStorage
-        return Collections.EMPTY_LIST;
+        return Stream.empty();
     }
 
     @Override
-    public List<UserModel> getGroupMembers(RealmModel realm, GroupModel group) {
+    public Stream<UserModel> getGroupMembersStream(RealmModel realm, GroupModel group) {
         // runtime automatically handles querying UserFederatedStorage
-        return Collections.EMPTY_LIST;
+        return Stream.empty();
     }
 
     @Override
-    public List<UserModel> searchForUserByUserAttribute(String attrName, String attrValue, RealmModel realm) {
+    public Stream<UserModel> searchForUserByUserAttributeStream(RealmModel realm, String attrName, String attrValue) {
         // runtime automatically handles querying UserFederatedStorage
-        return Collections.EMPTY_LIST;
+        return Stream.empty();
     }
 
 
@@ -239,12 +213,12 @@ public class PropertyFileUserStorageProvider implements
     @Override
     public boolean isConfiguredFor(RealmModel realm, UserModel user, String credentialType) {
         String password = properties.getProperty(user.getUsername());
-        return credentialType.equals(CredentialModel.PASSWORD) && password != null;
+        return credentialType.equals(PasswordCredentialModel.TYPE) && password != null;
     }
 
     @Override
     public boolean supportsCredentialType(String credentialType) {
-        return credentialType.equals(CredentialModel.PASSWORD);
+        return credentialType.equals(PasswordCredentialModel.TYPE);
     }
 
     @Override
@@ -262,7 +236,7 @@ public class PropertyFileUserStorageProvider implements
     @Override
     public boolean updateCredential(RealmModel realm, UserModel user, CredentialInput input) {
         if (!(input instanceof UserCredentialModel)) return false;
-        if (!input.getType().equals(CredentialModel.PASSWORD)) return false;
+        if (!input.getType().equals(PasswordCredentialModel.TYPE)) return false;
         UserCredentialModel cred = (UserCredentialModel)input;
         synchronized (properties) {
             properties.setProperty(user.getUsername(), cred.getValue());
@@ -273,7 +247,7 @@ public class PropertyFileUserStorageProvider implements
 
     @Override
     public void disableCredentialType(RealmModel realm, UserModel user, String credentialType) {
-        if (!credentialType.equals(CredentialModel.PASSWORD)) return;
+        if (!credentialType.equals(PasswordCredentialModel.TYPE)) return;
         synchronized (properties) {
             properties.setProperty(user.getUsername(), UNSET_PASSWORD);
             save();
@@ -284,14 +258,14 @@ public class PropertyFileUserStorageProvider implements
     private static final Set<String> disableableTypes = new HashSet<>();
 
     static {
-        disableableTypes.add(CredentialModel.PASSWORD);
+        disableableTypes.add(PasswordCredentialModel.TYPE);
     }
 
     @Override
-    public Set<String> getDisableableCredentialTypes(RealmModel realm, UserModel user) {
-
-        return disableableTypes;
+    public Stream<String> getDisableableCredentialTypesStream(RealmModel realm, UserModel user) {
+        return disableableTypes.stream();
     }
+
     @Override
     public void close() {
 

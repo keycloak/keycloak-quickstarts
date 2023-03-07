@@ -231,6 +231,7 @@
         <module>app-authz-photoz</module>
         <module>authz-js-policies</module>
         <module>extend-account-console</module>
+        <module>user-storage-simple</module>
     </modules>
 
     <repositories>
