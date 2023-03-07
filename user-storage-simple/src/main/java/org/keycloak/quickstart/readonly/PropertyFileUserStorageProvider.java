@@ -17,28 +17,27 @@
 
 package org.keycloak.quickstart.readonly;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.stream.Stream;
+
 import org.keycloak.component.ComponentModel;
 import org.keycloak.credential.CredentialInput;
 import org.keycloak.credential.CredentialInputUpdater;
 import org.keycloak.credential.CredentialInputValidator;
-import org.keycloak.credential.CredentialModel;
 import org.keycloak.credential.LegacyUserCredentialManager;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.SubjectCredentialManager;
 import org.keycloak.models.UserCredentialModel;
 import org.keycloak.models.UserModel;
+import org.keycloak.models.credential.PasswordCredentialModel;
 import org.keycloak.storage.ReadOnlyException;
 import org.keycloak.storage.StorageId;
 import org.keycloak.storage.UserStorageProvider;
 import org.keycloak.storage.adapter.AbstractUserAdapter;
 import org.keycloak.storage.user.UserLookupProvider;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
 
 /**
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
@@ -65,7 +64,7 @@ public class PropertyFileUserStorageProvider implements
     // UserLookupProvider methods
 
     @Override
-    public UserModel getUserByUsername(String username, RealmModel realm) {
+    public UserModel getUserByUsername(RealmModel realm, String username) {
         UserModel adapter = loadedUsers.get(username);
         if (adapter == null) {
             String password = properties.getProperty(username);
@@ -92,14 +91,14 @@ public class PropertyFileUserStorageProvider implements
     }
 
     @Override
-    public UserModel getUserById(String id, RealmModel realm) {
+    public UserModel getUserById(RealmModel realm, String id) {
         StorageId storageId = new StorageId(id);
         String username = storageId.getExternalId();
-        return getUserByUsername(username, realm);
+        return getUserByUsername(realm, username);
     }
 
     @Override
-    public UserModel getUserByEmail(String email, RealmModel realm) {
+    public UserModel getUserByEmail(RealmModel realm, String email) {
         return null;
     }
 
@@ -109,12 +108,12 @@ public class PropertyFileUserStorageProvider implements
     @Override
     public boolean isConfiguredFor(RealmModel realm, UserModel user, String credentialType) {
         String password = properties.getProperty(user.getUsername());
-        return credentialType.equals(CredentialModel.PASSWORD) && password != null;
+        return credentialType.equals(PasswordCredentialModel.TYPE) && password != null;
     }
 
     @Override
     public boolean supportsCredentialType(String credentialType) {
-        return credentialType.equals(CredentialModel.PASSWORD);
+        return credentialType.equals(PasswordCredentialModel.TYPE);
     }
 
     @Override
@@ -131,7 +130,7 @@ public class PropertyFileUserStorageProvider implements
 
     @Override
     public boolean updateCredential(RealmModel realm, UserModel user, CredentialInput input) {
-        if (input.getType().equals(CredentialModel.PASSWORD)) throw new ReadOnlyException("user is read only for this update");
+        if (input.getType().equals(PasswordCredentialModel.TYPE)) throw new ReadOnlyException("user is read only for this update");
 
         return false;
     }
@@ -142,8 +141,8 @@ public class PropertyFileUserStorageProvider implements
     }
 
     @Override
-    public Set<String> getDisableableCredentialTypes(RealmModel realm, UserModel user) {
-        return Collections.EMPTY_SET;
+    public Stream<String> getDisableableCredentialTypesStream(RealmModel realm, UserModel user) {
+        return Stream.empty();
     }
 
 

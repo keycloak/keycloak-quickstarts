@@ -39,12 +39,19 @@ All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven
 Build and Deploy the Quickstart
 -------------------------------
 
-To deploy this provider you must have <span>Keycloak</span> running in standalone or standalone-ha mode. Then type the follow maven command:
+To build the provider, run the following maven command:
 
    ````
-   mvn clean install wildfly:deploy
+   mvn clean install
    ````
-If you want to play with and modify the example, simply rerun the maven deploy command above and the new version will be hot deployed.
+
+To install the provider, copy the target/user-storage-properties-example.jar JAR file to the `providers` directory of the server distribution.
+
+Finally, start the server as follows:
+
+```
+kc.[sh|bat] start-dev
+```
 
 Enable the Provider for a Realm
 -------------------------------
@@ -63,7 +70,12 @@ edit the file yourself to add the username/password pairs you want.
 Integration test of the Quickstart
 ----------------------------------
 
-1. Make sure you have an Keycloak server running with an admin user in the `master` realm or use the provided docker image
+1. Make sure you have an Keycloak server running with an admin user in the `master` realm or use the provided docker image. Your <span>Keycloak</span> should be listening on `http://localhost:8180/auth`. You can archive this by running:
+
+```
+./kc.sh start-dev --http-port=8180 --http-relative-path="/auth"
+```
+
 2. You need to have Chrome browser installed and updated to the latest version.
 3. Run `mvn test -Pkeycloak-remote`
 
