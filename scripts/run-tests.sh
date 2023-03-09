@@ -106,7 +106,7 @@ npm -C service-nodejs start >/dev/null&
          I=$[$I + 1]
     done
 } 2>/dev/null
-if ! npm -C service-nodejs test 2>&1 | tee test-logs/service-nodejs.log; then
+if ! NODE_OPTIONS=--dns-result-order=ipv4first npm -C service-nodejs test 2>&1 | tee test-logs/service-nodejs.log; then
   tests_with_errors+=("service-nodejs")
 fi
 
