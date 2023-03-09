@@ -232,6 +232,7 @@
         <module>authz-js-policies</module>
         <module>extend-account-console</module>
         <module>user-storage-simple</module>
+        <module>user-storage-jpa</module>
     </modules>
 
     <repositories>
@@ -364,7 +365,6 @@
                 <module>app-authz-uma-photoz</module>
                 <module>user-storage-simple</module>
                 <module>user-storage-jpa</module>
-                <module>user-storage-jpa-legacy</module>
                 <module>event-listener-sysout</module>
                 <module>event-store-mem</module>
                 <module>extend-account-console</module>

@@ -22,7 +22,6 @@ import org.keycloak.connections.jpa.JpaConnectionProvider;
 import org.keycloak.credential.CredentialInput;
 import org.keycloak.credential.CredentialInputUpdater;
 import org.keycloak.credential.CredentialInputValidator;
-import org.keycloak.credential.CredentialModel;
 import org.keycloak.models.GroupModel;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
@@ -31,6 +30,7 @@ import org.keycloak.models.UserCredentialModel;
 import org.keycloak.models.UserModel;
 import org.keycloak.models.cache.CachedUserModel;
 import org.keycloak.models.cache.OnUserCache;
+import org.keycloak.models.credential.PasswordCredentialModel;
 import org.keycloak.storage.StorageId;
 import org.keycloak.storage.UserStorageProvider;
 import org.keycloak.storage.user.UserLookupProvider;
@@ -39,13 +39,13 @@ import org.keycloak.storage.user.UserRegistrationProvider;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 /**
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
@@ -93,7 +93,7 @@ public class MyUserStorageProvider implements UserStorageProvider,
     }
 
     @Override
-    public UserModel getUserById(String id, RealmModel realm) {
+    public UserModel getUserById(RealmModel realm, String id) {
         logger.info("getUserById: " + id);
         String persistenceId = StorageId.externalId(id);
         UserEntity entity = em.find(UserEntity.class, persistenceId);
@@ -105,7 +105,7 @@ public class MyUserStorageProvider implements UserStorageProvider,
     }
 
     @Override
-    public UserModel getUserByUsername(String username, RealmModel realm) {
+    public UserModel getUserByUsername(RealmModel realm, String username) {
         logger.info("getUserByUsername: " + username);
         TypedQuery<UserEntity> query = em.createNamedQuery("getUserByUsername", UserEntity.class);
         query.setParameter("username", username);
@@ -119,7 +119,7 @@ public class MyUserStorageProvider implements UserStorageProvider,
     }
 
     @Override
-    public UserModel getUserByEmail(String email, RealmModel realm) {
+    public UserModel getUserByEmail(RealmModel realm, String email) {
         TypedQuery<UserEntity> query = em.createNamedQuery("getUserByEmail", UserEntity.class);
         query.setParameter("email", email);
         List<UserEntity> result = query.getResultList();
@@ -156,7 +156,7 @@ public class MyUserStorageProvider implements UserStorageProvider,
 
     @Override
     public boolean supportsCredentialType(String credentialType) {
-        return CredentialModel.PASSWORD.equals(credentialType);
+        return PasswordCredentialModel.TYPE.equals(credentialType);
     }
 
     @Override
@@ -170,13 +170,11 @@ public class MyUserStorageProvider implements UserStorageProvider,
     }
 
     public UserAdapter getUserAdapter(UserModel user) {
-        UserAdapter adapter = null;
         if (user instanceof CachedUserModel) {
-            adapter = (UserAdapter)((CachedUserModel)user).getDelegateForUpdate();
+            return (UserAdapter)((CachedUserModel) user).getDelegateForUpdate();
         } else {
-            adapter = (UserAdapter)user;
+            return (UserAdapter) user;
         }
-        return adapter;
     }
 
     @Override
@@ -188,13 +186,13 @@ public class MyUserStorageProvider implements UserStorageProvider,
     }
 
     @Override
-    public Set<String> getDisableableCredentialTypes(RealmModel realm, UserModel user) {
+    public Stream<String> getDisableableCredentialTypesStream(RealmModel realm, UserModel user) {
         if (getUserAdapter(user).getPassword() != null) {
             Set<String> set = new HashSet<>();
-            set.add(CredentialModel.PASSWORD);
-            return set;
+            set.add(PasswordCredentialModel.TYPE);
+            return set.stream();
         } else {
-            return Collections.emptySet();
+            return Stream.empty();
         }
     }
 
@@ -229,12 +227,7 @@ public class MyUserStorageProvider implements UserStorageProvider,
     }
 
     @Override
-    public List<UserModel> getUsers(RealmModel realm) {
-        return getUsers(realm, -1, -1);
-    }
-
-    @Override
-    public List<UserModel> getUsers(RealmModel realm, int firstResult, int maxResults) {
+    public Stream<UserModel> getUsersStream(RealmModel realm, Integer firstResult, Integer maxResults) {
 
         TypedQuery<UserEntity> query = em.createNamedQuery("getAllUsers", UserEntity.class);
         if (firstResult != -1) {
@@ -246,16 +239,11 @@ public class MyUserStorageProvider implements UserStorageProvider,
         List<UserEntity> results = query.getResultList();
         List<UserModel> users = new LinkedList<>();
         for (UserEntity entity : results) users.add(new UserAdapter(session, realm, model, entity));
-        return users;
+        return users.stream();
     }
 
     @Override
-    public List<UserModel> searchForUser(String search, RealmModel realm) {
-        return searchForUser(search, realm, -1, -1);
-    }
-
-    @Override
-    public List<UserModel> searchForUser(String search, RealmModel realm, int firstResult, int maxResults) {
+    public Stream<UserModel> searchForUserStream(RealmModel realm, String search, Integer firstResult, Integer maxResults) {
         TypedQuery<UserEntity> query = em.createNamedQuery("searchForUser", UserEntity.class);
         query.setParameter("search", "%" + search.toLowerCase() + "%");
         if (firstResult != -1) {
@@ -267,31 +255,21 @@ public class MyUserStorageProvider implements UserStorageProvider,
         List<UserEntity> results = query.getResultList();
         List<UserModel> users = new LinkedList<>();
         for (UserEntity entity : results) users.add(new UserAdapter(session, realm, model, entity));
-        return users;
+        return users.stream();
     }
 
     @Override
-    public List<UserModel> searchForUser(Map<String, String> params, RealmModel realm) {
-        return Collections.EMPTY_LIST;
+    public Stream<UserModel> searchForUserStream(RealmModel realm, Map<String, String> params, Integer firstResult, Integer maxResults) {
+        return Stream.empty();
     }
 
     @Override
-    public List<UserModel> searchForUser(Map<String, String> params, RealmModel realm, int firstResult, int maxResults) {
-        return Collections.EMPTY_LIST;
+    public Stream<UserModel> getGroupMembersStream(RealmModel realm, GroupModel group, Integer firstResult, Integer maxResults) {
+        return Stream.empty();
     }
 
     @Override
-    public List<UserModel> getGroupMembers(RealmModel realm, GroupModel group, int firstResult, int maxResults) {
-        return Collections.EMPTY_LIST;
-    }
-
-    @Override
-    public List<UserModel> getGroupMembers(RealmModel realm, GroupModel group) {
-        return Collections.EMPTY_LIST;
-    }
-
-    @Override
-    public List<UserModel> searchForUserByUserAttribute(String attrName, String attrValue, RealmModel realm) {
-        return Collections.EMPTY_LIST;
+    public Stream<UserModel> searchForUserByUserAttributeStream(RealmModel realm, String attrName, String attrValue) {
+        return Stream.empty();
     }
 }
