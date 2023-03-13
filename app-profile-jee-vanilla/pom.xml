@@ -38,9 +38,15 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.jboss.spec.javax.servlet</groupId>
-            <artifactId>jboss-servlet-api_3.0_spec</artifactId>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>5.0.0</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>jakarta.el</artifactId>
+            <version>4.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.arquillian.graphene</groupId>
@@ -54,6 +60,16 @@
             <artifactId>keycloak-client-registration-api</artifactId>
             <version>${version.keycloak}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.taglibs</groupId>
+            <artifactId>taglibs-standard-impl</artifactId>
+            <version>1.2.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.taglibs</groupId>
+            <artifactId>taglibs-standard-spec</artifactId>
+            <version>1.2.5</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.arquillian.extension</groupId>
@@ -72,7 +88,6 @@
                     <skip>false</skip>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.jboss.as.plugins</groupId>
                 <artifactId>jboss-as-maven-plugin</artifactId>
@@ -120,5 +135,4 @@
             </build>
         </profile>
     </profiles>
-
 </project>

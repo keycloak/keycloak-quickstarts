@@ -1,0 +1,10 @@
+{
+  "realm": "master",
+  "auth-server-url": "http://localhost:8180/",
+  "ssl-required": "external",
+  "resource": "app-profile-vanilla",
+  "credentials": {
+    "secret": "QIVU4YX5STISsUSPVQmBqHj6RQMijNsU"
+  },
+  "confidential-port": 0
+}
