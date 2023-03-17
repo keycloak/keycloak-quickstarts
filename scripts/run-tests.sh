@@ -80,6 +80,7 @@ run_tests app-profile-jee-html5 -Pwildfly-managed
 run_tests app-profile-jee-jsp -Pwildfly-managed
 run_tests app-profile-jee-vanilla -Pwildfly-managed
 run_tests user-storage-simple -Pkeycloak-remote
+run_tests user-storage-jpa -Pkeycloak-remote
 # TODO Not working with Quarkus dist (or not working?)
 #run_tests app-profile-saml-jee-jsp -Pwildfly-managed
 
@@ -89,7 +90,6 @@ run_tests user-storage-simple -Pkeycloak-remote
 #run_tests extend-account-console -Pkeycloak-remote
 #run_tests service-jee-jaxrs -Pwildfly-managed
 #run_tests service-springboot-rest -Pspring-boot
-#run_tests user-storage-jpa-legacy -Pkeycloak-remote
 
 mvn -f service-springboot-rest spring-boot:run >/dev/null&
 run_tests app-springboot -Pspring-boot

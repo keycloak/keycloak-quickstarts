@@ -24,3 +24,5 @@ fi
 
 cp authz-js-policies/target/authz-js-policies.jar $dist/providers
 cp user-storage-simple/target/user-storage-properties-example.jar $dist/providers
+cp user-storage-jpa/conf/quarkus.properties $dist/conf
+cp user-storage-jpa/target/user-storage-jpa-example.jar $dist/providers

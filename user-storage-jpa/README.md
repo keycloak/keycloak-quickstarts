@@ -1,4 +1,4 @@
-user-storage-jpa: User Storage Provider with EJB and JPA
+user-storage-jpa: User Storage Provider with JPA
 ========================================================
 
 Level: Beginner  
@@ -49,6 +49,18 @@ Login to the <span>Keycloak</span> Admin Console and got to the User Federation 
 Add the provider, save it.  This will now enable the provider for the 'master' realm.  Because this provider implements the UserRegistrationProvider interface, any new user you create in the
 admin console or on the registration pages of <span>Keycloak</span>, will be created in the custom store used by the provider.  If you go
 to the Users tab in the Admin Console and create a new user, you'll be able to see the provider in action.
+
+Integration test of the Quickstart
+----------------------------------
+
+1. Make sure you have a Keycloak server running with the installed provider, the `quarkus.properties` file and with an administration user with username `admin` and password `admin` in the `master` realm. Your Keycloak server should be listening on `http://localhost:8180/auth`. You can archive this by running:
+
+```
+./kc.sh start-dev --http-port=8180 --http-relative-path="/auth"
+```
+
+2. You need to have Chrome browser installed and updated to the latest version.
+3. Run `mvn test -Pkeycloak-remote`
 
 More Information
 ----------------
