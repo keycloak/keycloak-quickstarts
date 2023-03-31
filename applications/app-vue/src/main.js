@@ -9,7 +9,7 @@ let initOptions = {
   url: 'http://127.0.0.1:8080/auth', realm: 'keycloak-demo', clientId: 'app-vue', onLoad: 'login-required'
 }
 
-let keycloak = Keycloak(initOptions);
+let keycloak = new Keycloak(initOptions);
 
 keycloak.init({ onLoad: initOptions.onLoad }).then((auth) => {
   if (!auth) {

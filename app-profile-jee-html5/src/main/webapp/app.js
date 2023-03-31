@@ -43,7 +43,7 @@ function show(id) {
 keycloak.onAuthLogout = welcome;
 
 window.onload = function () {
-    keycloak.init({ onLoad: 'check-sso', checkLoginIframeInterval: 1 }).success(function () {
+    keycloak.init({ onLoad: 'check-sso', checkLoginIframeInterval: 1 }).then(function () {
         if (keycloak.authenticated) {
             showProfile();
         } else {
