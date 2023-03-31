@@ -54,14 +54,14 @@ function request(endpoint) {
     };
 
     if (keycloak.authenticated) {
-        keycloak.updateToken(30).success(req);
+        keycloak.updateToken(30).then(req);
     } else {
         req();
     }
 }
 
 window.onload = function () {
-    keycloak.init({ onLoad: 'check-sso', checkLoginIframeInterval: 1 }).success(function () {
+    keycloak.init({ onLoad: 'check-sso', checkLoginIframeInterval: 1 }).then(function () {
         if (keycloak.authenticated) {
             authenticated();
         } else {

@@ -5,7 +5,7 @@ var apiUrl = window.location.origin + '/' + resourceServerId;
 
 angular.element(document).ready(function ($http) {
     var keycloak = new Keycloak('keycloak.json');
-    keycloak.init({onLoad: 'login-required'}).success(function () {
+    keycloak.init({onLoad: 'login-required'}).then(function () {
         console.log('User is now authenticated.');
 
         module.factory('Identity', function () {
@@ -13,7 +13,7 @@ angular.element(document).ready(function ($http) {
         });
 
         angular.bootstrap(document, ["photoz"]);
-    }).error(function () {
+    }).catch(function () {
         window.location.reload();
     });
 });
