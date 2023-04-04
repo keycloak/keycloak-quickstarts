@@ -116,30 +116,6 @@ Click on the `Select file` button, which means you want to import a resource ser
     
 Now click `Upload` and the resource server will be updated accordingly.
 
-Deploy the script engine on Java 15 or later
------------
-In case your Keycloak server is running on Java 15 or later, you need to install script engine to your Keycloak server.
-Otherwise JavaScript policies won't work.
-
-If you use Keycloak server running on Wildfly, you can install script engine by adding new module nashorn-core to your Keycloak server.
-When server is up and running, you can run commands similar to these in the KEYCLOAK_HOME/bin directory:
-
-```
-export NASHORN_VERSION=15.3
-wget https://repo1.maven.org/maven2/org/openjdk/nashorn/nashorn-core/$NASHORN_VERSION/nashorn-core-$NASHORN_VERSION.jar
-./jboss-cli.sh -c --command="module add --module-root-dir=../modules/system/layers/keycloak/ --name=org.openjdk.nashorn.nashorn-core --resources=./nashorn-core-$NASHORN_VERSION.jar --dependencies=asm.asm,jdk.dynalink"
-rm nashorn-core-$NASHORN_VERSION.jar
-``` 
- 
-If you use Keycloak server running on Quarkus, you can install script engine by copying the nashorn script engine JAR together
-with it's dependencies directly to the `KEYCLOAK_HOME/providers` directory. First make sure to rebuild the `photoz-js-policies` module of this quickstart with Java 15 or later.
-Then copy the dependencies with the command similar to this:
-```
-cp target/keycloak-server-copy/providers/*.jar KEYCLOAK_HOME/providers/
-``` 
-This works due the maven profile, which adds dependencies into the `target` directory during build. Then stop Keycloak
-server, re-augment it with `./kc.sh build` to make sure new dependencies are available and finally start again. 
-
 Deploy and Run the quickstart applications
 -----------
 
