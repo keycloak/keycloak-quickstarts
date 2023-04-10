@@ -35,7 +35,6 @@
     </licenses>
 
     <properties>
-        <version.wildfly>17.0.1.Final</version.wildfly>
         <version.keycloak>${project.version}</version.keycloak>
 
         <version.wildfly.maven.plugin>1.2.2.Final</version.wildfly.maven.plugin>
@@ -51,21 +50,17 @@
         <version.resources.maven.plugin>3.0.2</version.resources.maven.plugin>
         <version.compiler.maven.plugin>3.1</version.compiler.maven.plugin>
 
-        <arquillian-graphene.version>2.3.2</arquillian-graphene.version>
         <arquillian-phantom.version>1.2.1.Final</arquillian-phantom.version>
         <arquillian-screenshooter.version>2.3.2</arquillian-screenshooter.version>
-        <version.wildfly.arquillian.container>2.1.1.Final</version.wildfly.arquillian.container>
         <version.junit>4.12</version.junit>
         <version.hamcrest>1.3</version.hamcrest>
         <version.creaper>1.6.1</version.creaper>
-        <version.jackson>2.9.5</version.jackson>
         <version.shrinkwrap.resolvers>3.1.4</version.shrinkwrap.resolvers>
 
         <arquillian-managed>true</arquillian-managed>
         <jboss-cli.executable>./jboss-cli.sh</jboss-cli.executable>
         <keycloak.management.port>10090</keycloak.management.port>
         <selenium-bom.version>3.11.0</selenium-bom.version>
-        <arquillian-bom.version>1.4.0.Final</arquillian-bom.version>
         <arquillian-drone-bom.version>2.5.1</arquillian-drone-bom.version>
         <version.json.javax>1.1.2</version.json.javax>
         <version.yasson>1.0.8</version.yasson>
@@ -119,13 +114,6 @@
             </dependency>
             <dependency>
                 <groupId>org.keycloak.bom</groupId>
-                <artifactId>keycloak-adapter-bom</artifactId>
-                <version>${version.keycloak}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.keycloak.bom</groupId>
                 <artifactId>keycloak-misc-bom</artifactId>
                 <version>${version.keycloak}</version>
                 <type>pom</type>
@@ -144,13 +132,6 @@
                 <version>${version.keycloak}</version>
             </dependency>
             <dependency>
-                <groupId>org.wildfly.bom</groupId>
-                <artifactId>wildfly-javaee8</artifactId>
-                <version>${version.wildfly}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
                 <groupId>org.hamcrest</groupId>
                 <artifactId>hamcrest-all</artifactId>
                 <version>${version.hamcrest}</version>
@@ -160,16 +141,6 @@
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
                 <version>${version.jackson}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.spec.javax.servlet</groupId>
-                <artifactId>jboss-servlet-api_3.0_spec</artifactId>
-                <version>${servlet.api.30.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.spec.javax.ws.rs</groupId>
-                <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>
-                <version>${jboss-jaxrs-api_2.1_spec}</version>
             </dependency>
             <dependency>
                 <groupId>org.glassfish</groupId>
@@ -216,24 +187,6 @@
             <artifactId>jackson-databind</artifactId>
         </dependency>
     </dependencies>
-
-    <modules>
-        <module>service-jee-jaxrs</module>
-        <module>app-profile-jee-html5</module>
-        <module>app-profile-jee-jsp</module>
-        <module>app-profile-jee-vanilla</module>
-        <module>app-profile-saml-jee-jsp</module>
-        <module>app-jee-html5</module>
-        <module>app-jee-jsp</module>
-        <module>app-authz-jee-servlet</module>
-        <module>app-authz-jee-vanilla</module>
-        <module>app-authz-uma-photoz</module>
-        <module>app-authz-photoz</module>
-        <module>authz-js-policies</module>
-        <module>extend-account-console</module>
-        <module>user-storage-simple</module>
-        <module>user-storage-jpa</module>
-    </modules>
 
     <repositories>
         <repository>
@@ -419,65 +372,6 @@
                             <skipTests>false</skipTests>
                         </configuration>
                     </plugin>
-
-                    <plugin>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>unpack-wildfly-and-oidc-adapter</id>
-                                <phase>process-test-classes</phase>
-                                <goals>
-                                    <goal>unpack</goal>
-                                </goals>
-                                <configuration>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>org.wildfly</groupId>
-                                            <artifactId>wildfly-dist</artifactId>
-                                            <version>${version.wildfly}</version>
-                                            <type>zip</type>
-                                            <outputDirectory>target</outputDirectory>
-                                        </artifactItem>
-                                        <artifactItem>
-                                            <groupId>org.keycloak</groupId>
-                                            <artifactId>keycloak-wildfly-adapter-dist</artifactId>
-                                            <version>${version.keycloak}</version>
-                                            <type>zip</type>
-                                            <outputDirectory>target/wildfly-${version.wildfly}</outputDirectory>
-                                        </artifactItem>
-                                        <artifactItem>
-                                            <groupId>org.keycloak</groupId>
-                                            <artifactId>keycloak-saml-wildfly-adapter-dist</artifactId>
-                                            <version>${version.keycloak}</version>
-                                            <type>zip</type>
-                                            <outputDirectory>target/wildfly-${version.wildfly}</outputDirectory>
-                                        </artifactItem>
-                                    </artifactItems>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <version>${version.antrun.maven.plugin}</version>
-                        <executions>
-                            <execution>
-                                <id>install-adapters</id>
-                                <phase>process-test-classes</phase>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                                <configuration>
-                                    <target name="run">
-                                        <exec dir="target/wildfly-${version.wildfly}/bin" executable="${jboss-cli.executable}" inputstring="">
-                                            <arg value="--file=adapter-elytron-install-offline.cli" />
-                                        </exec>
-                                    </target>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
                 </plugins>
             </build>
         </profile>
@@ -583,6 +477,194 @@
                 <!-- other modules will configure a higher Java version (for example, Quarkus) -->
                 <maven.compiler.release>8</maven.compiler.release>
             </properties>
+        </profile>
+        <profile>
+            <id>jakarta</id>
+            <activation>
+                <property>
+                    <name>jakarta</name>
+                </property>
+            </activation>
+            <properties>
+                <version.wildfly>28.0.0.Beta1</version.wildfly>
+                <arquillian-graphene.version>2.5.4</arquillian-graphene.version>
+                <version.wildfly.arquillian.container>4.0.0.Alpha6</version.wildfly.arquillian.container>
+                <arquillian-bom.version>1.7.0.Alpha14</arquillian-bom.version>
+                <version.jackson>2.14.2</version.jackson>
+            </properties>
+            <modules>
+                <module>app-authz-jakarta-servlet</module>
+            </modules>
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.wildfly.bom</groupId>
+                        <artifactId>wildfly-ee-with-tools</artifactId>
+                        <version>28.0.0.Beta1</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>unpack-wildfly-and-oidc-adapter</id>
+                                <phase>process-test-classes</phase>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>org.wildfly</groupId>
+                                            <artifactId>wildfly-dist</artifactId>
+                                            <version>${version.wildfly}</version>
+                                            <type>zip</type>
+                                            <outputDirectory>target</outputDirectory>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>javaee</id>
+            <activation>
+                <property>
+                    <name>!jakarta</name>
+                </property>
+            </activation>
+            <properties>
+                <version.wildfly>17.0.1.Final</version.wildfly>
+                <arquillian-graphene.version>2.3.2</arquillian-graphene.version>
+                <version.wildfly.arquillian.container>2.1.1.Final</version.wildfly.arquillian.container>
+                <arquillian-bom.version>1.4.0.Final</arquillian-bom.version>
+                <version.jackson>2.9.5</version.jackson>
+            </properties>
+            <modules>
+                <module>service-jee-jaxrs</module>
+                <module>app-profile-jee-html5</module>
+                <module>app-profile-jee-jsp</module>
+                <module>app-profile-jee-vanilla</module>
+                <module>app-profile-saml-jee-jsp</module>
+                <module>app-jee-html5</module>
+                <module>app-jee-jsp</module>
+                <module>app-authz-jee-servlet</module>
+                <module>app-authz-jee-vanilla</module>
+                <module>app-authz-uma-photoz</module>
+                <module>app-authz-photoz</module>
+                <module>authz-js-policies</module>
+                <module>extend-account-console</module>
+                <module>user-storage-simple</module>
+                <module>user-storage-jpa</module>
+            </modules>
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.wildfly.bom</groupId>
+                        <artifactId>wildfly-javaee8</artifactId>
+                        <version>17.0.1.Final</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.keycloak.bom</groupId>
+                        <artifactId>keycloak-adapter-bom</artifactId>
+                        <version>${version.keycloak}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jboss.spec.javax.servlet</groupId>
+                        <artifactId>jboss-servlet-api_3.0_spec</artifactId>
+                        <version>${servlet.api.30.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jboss.spec.javax.ws.rs</groupId>
+                        <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>
+                        <version>${jboss-jaxrs-api_2.1_spec}</version>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+            <dependencies>
+                <dependency>
+                    <groupId>org.wildfly.bom</groupId>
+                    <artifactId>wildfly-javaee8</artifactId>
+                    <version>17.0.1.Final</version>
+                    <type>pom</type>
+                    <scope>import</scope>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>unpack-wildfly-and-oidc-adapter</id>
+                                <phase>process-test-classes</phase>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>org.wildfly</groupId>
+                                            <artifactId>wildfly-dist</artifactId>
+                                            <version>${version.wildfly}</version>
+                                            <type>zip</type>
+                                            <outputDirectory>target</outputDirectory>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>org.keycloak</groupId>
+                                            <artifactId>keycloak-wildfly-adapter-dist</artifactId>
+                                            <version>${version.keycloak}</version>
+                                            <type>zip</type>
+                                            <outputDirectory>target/wildfly-${version.wildfly}</outputDirectory>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>org.keycloak</groupId>
+                                            <artifactId>keycloak-saml-wildfly-adapter-dist</artifactId>
+                                            <version>${version.keycloak}</version>
+                                            <type>zip</type>
+                                            <outputDirectory>target/wildfly-${version.wildfly}</outputDirectory>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>${version.antrun.maven.plugin}</version>
+                        <executions>
+                            <execution>
+                                <id>install-adapters</id>
+                                <phase>process-test-classes</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target name="run">
+                                        <exec dir="target/wildfly-${version.wildfly}/bin" executable="${jboss-cli.executable}" inputstring="">
+                                            <arg value="--file=adapter-elytron-install-offline.cli" />
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 </project>
