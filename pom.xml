@@ -162,6 +162,16 @@
                 <artifactId>commons-logging</artifactId>
                 <version>1.2</version>
             </dependency>
+            <dependency>
+                <groupId>org.keycloak</groupId>
+                <artifactId>keycloak-policy-enforcer</artifactId>
+                <version>${version.keycloak}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.keycloak</groupId>
+                <artifactId>keycloak-common</artifactId>
+                <version>${version.keycloak}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -310,7 +320,6 @@
                 <module>app-profile-saml-jee-jsp</module>
                 <module>app-jee-html5</module>
                 <module>app-jee-jsp</module>
-                <module>app-authz-jee-servlet</module>
                 <module>app-authz-jee-vanilla</module>
                 <module>app-authz-rest-employee</module>
                 <module>app-authz-rest-springboot</module>
@@ -492,6 +501,9 @@
                 <arquillian-bom.version>1.7.0.Alpha14</arquillian-bom.version>
                 <version.jackson>2.14.2</version.jackson>
             </properties>
+            <modules>
+                <module>app-authz-jakarta-servlet</module>
+            </modules>
             <dependencyManagement>
                 <dependencies>
                     <dependency>
@@ -510,8 +522,8 @@
                         <artifactId>maven-dependency-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>unpack-wildfly-and-oidc-adapter</id>
-                                <phase>process-test-classes</phase>
+                                <id>unpack-wildfly</id>
+                                <phase>pre-integration-test</phase>
                                 <goals>
                                     <goal>unpack</goal>
                                 </goals>
@@ -528,6 +540,30 @@
                                 </configuration>
                             </execution>
                         </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <skipTests>true</skipTests>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <failIfNoSpecifiedTests>false</failIfNoSpecifiedTests>
+                            <includes>
+                                <include>**/*Test</include>
+                            </includes>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
@@ -554,7 +590,6 @@
                 <module>app-profile-saml-jee-jsp</module>
                 <module>app-jee-html5</module>
                 <module>app-jee-jsp</module>
-                <module>app-authz-jee-servlet</module>
                 <module>app-authz-jee-vanilla</module>
                 <module>app-authz-uma-photoz</module>
                 <module>app-authz-photoz</module>
