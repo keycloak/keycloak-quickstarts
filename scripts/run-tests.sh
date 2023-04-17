@@ -69,7 +69,6 @@ run_tests app-authz-rest-springboot -Pspring-boot
 run_tests app-authz-spring-security -Pspring-boot
 run_tests app-authz-springboot -Pspring-boot
 run_tests app-authz-springboot-multitenancy -Pspring-boot
-run_tests app-authz-jee-servlet -Pwildfly-managed
 run_tests app-authz-jee-vanilla -Pwildfly-managed
 run_tests app-authz-photoz -Pwildfly-managed
 run_tests app-authz-rest-employee -Pwildfly-managed
