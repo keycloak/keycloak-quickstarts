@@ -16,11 +16,9 @@ run_tests() {
     args="$args -s $PRODUCT_MVN_SETTINGS  -Dmaven.repo.local=$PRODUCT_MVN_REPO"
     if [ "$module" == "action-token-authenticator" ] \
         || [ "$module" == "action-token-required-action" ] \
-        || [ "$module" == "app-authz-springboot-multitenancy" ] \
         || [ "$module" == "event-listener-sysout" ] \
         || [ "$module" == "event-store-mem" ] \
-        || [ "$module" == "extend-account-console" ] \
-        || [ "$module" == "app-springboot" ]; then
+        || [ "$module" == "extend-account-console" ]; then
       return 0
     fi
   else
@@ -66,18 +64,7 @@ fi
 # we need to run authz springboot tests first as they are the only ones relying on manual js-policies deployment
 # other tests deploy (and the removes) the policies automatically which then later removes even the manually deployed ones
 run_tests app-authz-rest-springboot -Pspring-boot
-run_tests app-authz-spring-security -Pspring-boot
-run_tests app-authz-springboot -Pspring-boot
-run_tests app-authz-springboot-multitenancy -Pspring-boot
-run_tests app-authz-jee-vanilla -Pwildfly-managed
-run_tests app-authz-photoz -Pwildfly-managed
 run_tests app-authz-rest-employee -Pwildfly-managed
-run_tests app-authz-uma-photoz -Pwildfly-managed
-run_tests app-jee-html5 -Pwildfly-managed
-run_tests app-jee-jsp -Pwildfly-managed
-run_tests app-profile-jee-html5 -Pwildfly-managed
-run_tests app-profile-jee-jsp -Pwildfly-managed
-run_tests app-profile-jee-vanilla -Pwildfly-managed
 run_tests user-storage-simple -Pkeycloak-remote
 run_tests user-storage-jpa -Pkeycloak-remote
 # TODO Not working with Quarkus dist (or not working?)
@@ -88,10 +75,6 @@ run_tests user-storage-jpa -Pkeycloak-remote
 #run_tests event-store-mem -Pkeycloak-remote
 #run_tests extend-account-console -Pkeycloak-remote
 #run_tests service-jee-jaxrs -Pwildfly-managed
-#run_tests service-springboot-rest -Pspring-boot
-
-mvn -f service-springboot-rest spring-boot:run >/dev/null&
-run_tests app-springboot -Pspring-boot
 
 # service-nodejs tests
 npm -C service-nodejs install

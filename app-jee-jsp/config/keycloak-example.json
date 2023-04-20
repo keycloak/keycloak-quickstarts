@@ -1,9 +1,0 @@
-{
-  "realm": "quickstart",
-  "auth-server-url": "http://localhost:8180/auth",
-  "ssl-required": "external",
-  "resource": "app-jsp",
-  "credentials": {
-    "secret": "5bad43ac-0dac-4272-a723-ab7a3cef49b9"
-  }
-}
