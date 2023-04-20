@@ -21,11 +21,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.keycloak.common.util.EnvUtil;
@@ -131,17 +130,13 @@ public class PropertyFileUserStorageProvider implements
     @Override
     public Stream<UserModel> searchForUserStream(RealmModel realm, String search, Integer firstResult,
             Integer maxResults) {
-        List<UserModel> users = new LinkedList<>();
-        int i = 0;
-        for (Object obj : properties.keySet()) {
-            String username = (String)obj;
-            if (!username.contains(search)) continue;
-            if (i++ < firstResult) continue;
-            UserModel user = getUserByUsername(realm, username);
-            users.add(user);
-            if (users.size() >= maxResults) break;
-        }
-        return users.stream();
+        Predicate<String> predicate = "*".equals(search) ? username -> true : username -> username.contains(search);
+        return properties.keySet().stream()
+                .map(String.class::cast)
+                .filter(predicate)
+                .skip(firstResult)
+                .map(username -> getUserByUsername(realm, username))
+                .limit(maxResults);
     }
 
     @Override
@@ -149,8 +144,11 @@ public class PropertyFileUserStorageProvider implements
             Integer maxResults) {
         // only support searching by username
         String usernameSearchString = params.get("username");
-        if (usernameSearchString == null) return Stream.empty();
-        return searchForUserStream(realm, usernameSearchString, firstResult, maxResults);
+        if (usernameSearchString != null)
+            return searchForUserStream(realm, usernameSearchString, firstResult, maxResults);
+
+        // if we are not searching by username, return all users
+        return searchForUserStream(realm, "*", firstResult, maxResults);
     }
 
     @Override

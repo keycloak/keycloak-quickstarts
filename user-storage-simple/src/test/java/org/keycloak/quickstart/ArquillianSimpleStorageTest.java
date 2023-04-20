@@ -29,12 +29,14 @@ import org.junit.runner.RunWith;
 import org.keycloak.common.util.MultivaluedHashMap;
 import org.keycloak.quickstart.page.ConsolePage;
 import org.keycloak.representations.idm.ComponentRepresentation;
+import org.keycloak.representations.idm.UserRepresentation;
 import org.keycloak.test.FluentTestsHelper;
 import org.keycloak.test.page.LoginPage;
 import org.openqa.selenium.WebDriver;
 
 import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static java.lang.String.format;
@@ -107,6 +109,8 @@ public class ArquillianSimpleStorageTest {
 
     @Test
     public void testUserWritableFederationStorage() {
+        assertEquals("There should be two users", 2, (long) testsHelper.getTestRealmResource().users().count());
+        assertEquals("There should be two users listed", 2, testsHelper.getTestRealmResource().users().list().size());
         assertEquals("There should be no malcom user", 0, testsHelper.getTestRealmResource().users().search("malcom").size());
         assertEquals("There should be no rob user", 0, testsHelper.getTestRealmResource().users().search("rob").size());
 
@@ -122,6 +126,14 @@ public class ArquillianSimpleStorageTest {
         navigateToAccount("rob", "gronkowski");
         assertEquals("Should display the user from storage provider", "rob", consolePage.getUser());
         consolePage.logout();
+
+        assertEquals("There should be two users", 4, (long) testsHelper.getTestRealmResource().users().count());
+        assertEquals("There should be two users listed", 4, testsHelper.getTestRealmResource().users().list().size());
+
+        List<UserRepresentation> list = testsHelper.getTestRealmResource().users().list(2, 2);
+        assertEquals("There should be two users listed", 2, list.size());
+        assertEquals("First user should be malcom", "malcom", list.get(0).getUsername());
+        assertEquals("Second user should be rob", "rob", list.get(1).getUsername());
     }
 
     private void addProvider(String providerId) {
