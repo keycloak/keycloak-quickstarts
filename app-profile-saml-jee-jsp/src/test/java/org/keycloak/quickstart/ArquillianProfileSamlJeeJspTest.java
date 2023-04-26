@@ -66,7 +66,6 @@ public class ArquillianProfileSamlJeeJspTest {
 
     private static final String WEBAPP_SRC = "src/main/webapp";
     private static final String APP_NAME = "app-profile-saml";
-    private static final String APP_SERVICE = "service-jaxrs";
 
     @Page
     private IndexPage indexPage;
@@ -88,15 +87,6 @@ public class ArquillianProfileSamlJeeJspTest {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-    }
-
-    @Deployment(name = APP_SERVICE, order = 1, testable = false)
-    public static Archive<?> createTestArchive1() throws IOException {
-        return ShrinkWrap.createFromZipFile(WebArchive.class,
-                new File("../service-jee-jaxrs/target/service.war"))
-                .addAsWebInfResource(
-                        new StringAsset(createClient(
-                                ClientBuilder.create(APP_SERVICE).accessType(BEARER_ONLY))), "keycloak.json");
     }
 
     @Deployment(name = APP_NAME, order = 2, testable = false)

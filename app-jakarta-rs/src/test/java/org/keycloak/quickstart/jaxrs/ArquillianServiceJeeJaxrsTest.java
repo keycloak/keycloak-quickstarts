@@ -18,25 +18,33 @@
 package org.keycloak.quickstart.jaxrs;
 
 import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.Filters;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.asset.StringAsset;
+import org.jboss.shrinkwrap.api.importer.ZipImporter;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.keycloak.admin.client.Keycloak;
 import org.keycloak.test.TestsHelper;
 import org.keycloak.test.builders.ClientBuilder;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 import static org.keycloak.test.TestsHelper.createClient;
 import static org.keycloak.test.TestsHelper.createDirectGrantClient;
+import static org.keycloak.test.TestsHelper.deleteRealm;
 import static org.keycloak.test.TestsHelper.importTestRealm;
 import static org.keycloak.test.builders.ClientBuilder.AccessType.BEARER_ONLY;
 
@@ -44,32 +52,35 @@ import static org.keycloak.test.builders.ClientBuilder.AccessType.BEARER_ONLY;
 @RunWith(Arquillian.class)
 public class ArquillianServiceJeeJaxrsTest {
 
-    static {
+    @ArquillianResource
+    private URL contextRoot;
+
+    @Deployment(testable = false)
+    public static Archive<?> createTestArchive() throws IOException {
+        return ShrinkWrap.create(ZipImporter.class, "service-rs.war").importFrom(
+                        new File("target/service-rs.war")).as(WebArchive.class)
+                .addAsWebInfResource("oidc.json");
+
+    }
+
+    @AfterClass
+    public static void cleanUp() throws Exception {
+        deleteRealm("admin", "admin", "quickstart");
+    }
+
+    @BeforeClass
+    public static void onBeforeClass() {
         try {
-            TestsHelper.appName = "test-demo";
-            TestsHelper.baseUrl = "http://localhost:8080/test-demo";
-            //TestsHelper.keycloakBaseUrl  = "set keycloak server docker IP"
             importTestRealm("admin", "admin", "/quickstart-realm.json");
-            createDirectGrantClient();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    @Deployment(testable = false)
-    public static Archive<?> createTestArchive() throws IOException {
-        return ShrinkWrap.create(WebArchive.class, "test-demo.war")
-                .addPackages(true, Filters.exclude(".*Test.*"), Application.class.getPackage())
-                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-                .addAsWebInfResource(new StringAsset(createClient(ClientBuilder.create("test-demo")
-                                .baseUrl(TestsHelper.baseUrl).accessType(BEARER_ONLY))), "keycloak.json")
-                .setWebXML(new File("src/main/webapp", "WEB-INF/web.xml"));
-
-    }
-
-    @AfterClass
-    public static void cleanUp() throws IOException {
-        TestsHelper.deleteRealm("admin", "admin", TestsHelper.testRealm);
+    @Before
+    public void onBefore() {
+        TestsHelper.baseUrl = contextRoot.toString();
+        TestsHelper.testRealm = "quickstart";
     }
 
     @Test
@@ -102,7 +113,7 @@ public class ArquillianServiceJeeJaxrsTest {
     @Test
     public void testSecuredEndpointWithAuth() {
         try {
-            Assert.assertTrue(TestsHelper.testGetWithAuth("/secured", TestsHelper.getToken("alice", "password", TestsHelper.testRealm)));
+            Assert.assertTrue(TestsHelper.testGetWithAuth("/secured", getToken("alice", "password")));
         } catch (IOException e) {
             Assert.fail();
         }
@@ -111,7 +122,7 @@ public class ArquillianServiceJeeJaxrsTest {
     @Test
     public void testAdminEndpointWithAuthButNoRole() {
         try {
-            Assert.assertFalse(TestsHelper.testGetWithAuth("/admin", TestsHelper.getToken("alice", "password", TestsHelper.testRealm)));
+            Assert.assertFalse(TestsHelper.testGetWithAuth("/admin", getToken("alice", "password")));
         } catch (IOException e) {
             Assert.fail();
         }
@@ -120,9 +131,21 @@ public class ArquillianServiceJeeJaxrsTest {
     @Test
     public void testAdminEndpointWithAuthAndRole() {
         try {
-            Assert.assertTrue(TestsHelper.testGetWithAuth("/admin", TestsHelper.getToken("test-admin", "password", TestsHelper.testRealm)));
+            Assert.assertTrue(TestsHelper.testGetWithAuth("/admin", getToken("test-admin", "password")));
         } catch (IOException e) {
             Assert.fail();
         }
+    }
+
+    public String getToken(String username, String password) {
+        Keycloak keycloak = Keycloak.getInstance(
+                TestsHelper.keycloakBaseUrl,
+                TestsHelper.testRealm,
+                username,
+                password,
+                "service-rs",
+                "secret");
+        return keycloak.tokenManager().getAccessTokenString();
+
     }
 }

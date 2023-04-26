@@ -74,7 +74,6 @@ run_tests user-storage-jpa -Pkeycloak-remote
 #run_tests event-listener-sysout -Pkeycloak-remote
 #run_tests event-store-mem -Pkeycloak-remote
 #run_tests extend-account-console -Pkeycloak-remote
-#run_tests service-jee-jaxrs -Pwildfly-managed
 
 # service-nodejs tests
 npm -C service-nodejs install

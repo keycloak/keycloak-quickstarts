@@ -16,8 +16,36 @@
  */
 package org.keycloak.quickstart.jaxrs;
 
-import javax.ws.rs.ApplicationPath;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
-@ApplicationPath("/")
-public class Application extends javax.ws.rs.core.Application {
+@Path("/")
+public class Resource {
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("public")
+    public Response getPublic(){
+        return Response.ok(new Message("public")).header("Access-Control-Allow-Origin", "*").build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("secured")
+    public Message getSecured() {
+        return new Message("secured");
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("admin")
+    public Message getAdmin() {
+        return new Message("admin");
+    }
+
 }
