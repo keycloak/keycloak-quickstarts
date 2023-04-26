@@ -313,7 +313,6 @@
             <modules>
                 <module>action-token-authenticator</module>
                 <module>action-token-required-action</module>
-                <module>service-jee-jaxrs</module>
                 <module>app-profile-saml-jee-jsp</module>
                 <module>app-authz-rest-employee</module>
                 <module>app-authz-rest-springboot</module>
@@ -485,6 +484,7 @@
             </activation>
             <properties>
                 <version.wildfly>28.0.0.Beta1</version.wildfly>
+                <version.jakarta.ws.rs-api>3.1.0</version.jakarta.ws.rs-api>
                 <arquillian-graphene.version>2.5.4</arquillian-graphene.version>
                 <version.wildfly.arquillian.container>4.0.0.Alpha6</version.wildfly.arquillian.container>
                 <arquillian-bom.version>1.7.0.Alpha14</arquillian-bom.version>
@@ -492,6 +492,7 @@
             </properties>
             <modules>
                 <module>app-authz-jakarta-servlet</module>
+                <module>app-jakarta-rs</module>
             </modules>
             <dependencyManagement>
                 <dependencies>
@@ -501,6 +502,11 @@
                         <version>28.0.0.Beta1</version>
                         <type>pom</type>
                         <scope>import</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>jakarta.ws.rs</groupId>
+                        <artifactId>jakarta.ws.rs-api</artifactId>
+                        <version>${version.jakarta.ws.rs-api}</version>
                     </dependency>
                 </dependencies>
             </dependencyManagement>
@@ -572,7 +578,6 @@
                 <version.jackson>2.9.5</version.jackson>
             </properties>
             <modules>
-                <module>service-jee-jaxrs</module>
                 <module>app-profile-saml-jee-jsp</module>
                 <module>authz-js-policies</module>
                 <module>extend-account-console</module>
