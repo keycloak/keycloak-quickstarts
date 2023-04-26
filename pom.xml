@@ -314,26 +314,15 @@
                 <module>action-token-authenticator</module>
                 <module>action-token-required-action</module>
                 <module>service-jee-jaxrs</module>
-                <module>app-profile-jee-html5</module>
-                <module>app-profile-jee-jsp</module>
-                <module>app-profile-jee-vanilla</module>
                 <module>app-profile-saml-jee-jsp</module>
-                <module>app-jee-html5</module>
-                <module>app-jee-jsp</module>
-                <module>app-authz-jee-vanilla</module>
                 <module>app-authz-rest-employee</module>
                 <module>app-authz-rest-springboot</module>
-                <module>app-authz-spring-security</module>
-                <module>app-authz-uma-photoz</module>
                 <module>user-storage-simple</module>
                 <module>user-storage-jpa</module>
                 <module>event-listener-sysout</module>
                 <module>event-store-mem</module>
                 <module>extend-account-console</module>
                 <module>service-springboot-rest</module>
-                <module>app-springboot</module>
-                <module>app-authz-springboot</module>
-                <module>app-authz-springboot-multitenancy</module>
             </modules>
         </profile>
         <profile>
@@ -584,15 +573,7 @@
             </properties>
             <modules>
                 <module>service-jee-jaxrs</module>
-                <module>app-profile-jee-html5</module>
-                <module>app-profile-jee-jsp</module>
-                <module>app-profile-jee-vanilla</module>
                 <module>app-profile-saml-jee-jsp</module>
-                <module>app-jee-html5</module>
-                <module>app-jee-jsp</module>
-                <module>app-authz-jee-vanilla</module>
-                <module>app-authz-uma-photoz</module>
-                <module>app-authz-photoz</module>
                 <module>authz-js-policies</module>
                 <module>extend-account-console</module>
                 <module>user-storage-simple</module>
