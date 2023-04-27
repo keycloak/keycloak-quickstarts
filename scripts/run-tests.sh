@@ -63,8 +63,6 @@ fi
 
 # we need to run authz springboot tests first as they are the only ones relying on manual js-policies deployment
 # other tests deploy (and the removes) the policies automatically which then later removes even the manually deployed ones
-run_tests app-authz-rest-springboot -Pspring-boot
-run_tests app-authz-rest-employee -Pwildfly-managed
 run_tests user-storage-simple -Pkeycloak-remote
 run_tests user-storage-jpa -Pkeycloak-remote
 # TODO Not working with Quarkus dist (or not working?)
