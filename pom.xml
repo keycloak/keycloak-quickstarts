@@ -314,7 +314,6 @@
                 <module>action-token-authenticator</module>
                 <module>action-token-required-action</module>
                 <module>app-profile-saml-jee-jsp</module>
-                <module>app-authz-rest-employee</module>
                 <module>app-authz-rest-springboot</module>
                 <module>user-storage-simple</module>
                 <module>user-storage-jpa</module>
@@ -493,6 +492,12 @@
             <modules>
                 <module>app-authz-jakarta-servlet</module>
                 <module>app-jakarta-rs</module>
+                <!--
+                WIP
+                Spring requires JDK 17 and we are not yet ready to build on top of this version
+                To build spring quickstarts use the 'jakarta' profile
+                <module>app-authz-rest-springboot</module>
+                -->
             </modules>
             <dependencyManagement>
                 <dependencies>
