@@ -64,7 +64,6 @@
         <arquillian-drone-bom.version>2.5.1</arquillian-drone-bom.version>
         <version.json.javax>1.1.2</version.json.javax>
         <version.yasson>1.0.8</version.yasson>
-        <version.nashorn>15.3</version.nashorn>
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -151,11 +150,6 @@
                 <groupId>org.eclipse</groupId>
                 <artifactId>yasson</artifactId>
                 <version>${version.yasson}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openjdk.nashorn</groupId>
-                <artifactId>nashorn-core</artifactId>
-                <version>${version.nashorn}</version>
             </dependency>
             <dependency>
                 <groupId>commons-logging</groupId>
