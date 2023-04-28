@@ -1,0 +1,2 @@
+import{j as s}from"./index-a3421f29.js";import{F as e}from"./FileUploadForm-96efeae2.js";import{L as t}from"./CodeEditor-2fb93648.js";const p=({onChange:o,...n})=>{const r=a=>{try{o(JSON.parse(a))}catch{o({}),console.warn("Invalid json, ignoring value using {}")}};return s.jsx(e,{...n,language:t.json,extension:".json",onChange:r})};export{p as J};
+//# sourceMappingURL=JsonFileUpload-a913d52f.js.map
