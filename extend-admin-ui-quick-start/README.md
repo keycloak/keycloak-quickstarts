@@ -10,20 +10,24 @@ With themes, it is possible to configure the Admin UI's look and feel. To ensure
 
 The recommended folder structure for a custom Keycloak theme is as follows:
 
-├── mytheme/
+├── theme/
 │ ├── admin/
 │ │ ├── resources/
 │ │ | ├── css/
 │ │ | | ├── styles.css
 │ │ ├── theme.properties
 
-In order to create a custom theme, there is a `theme.properties` file, along with a `resources` sub-folder that encompasses directories for CSS files, JavaScript files, and images. Within the `css` sub-folder, there is a `styles.css` file, which allows the addition of customized PatternFly styles. The `theme.properties` is a configuration file defines attributes such as the parent theme, and theme css, theme parent and title. The `theme.properties` file is used to register the theme with the Keycloak server and integrate it with the Keycloak user interface.
+Please make sure to place this custom theme into the 'themes' folder of your Keycloak server.
 
 ### Customizing with PatternFly Best Practices
 
 Overrides to PatternFly variables should be made at the `:root` level for global variables or at the top-level component selector for component variables (for example, `.pf-c-\*`), as these overrides will cascade down to children elements accordingly. The examples are provided in the `styles.css` file.
 
-If you utilize the provided stylesheet, upon logging in, the following will be visible to you.
+### Applying a Customized Theme
+
+Start the Keycloak server with `./kc.sh` or `./kc.bat` navigate to `http://localhost:8180/` to view the style being applied.
+
+This is what you will see when you log in, if you use the stylesheet provided.
 
 ![Keycloak Info Page](./img/keycloakInfo.png "Keycloak Info Page")
 
