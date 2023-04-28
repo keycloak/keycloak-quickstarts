@@ -78,6 +78,13 @@
             <groupId>org.jboss.arquillian.graphene</groupId>
             <artifactId>arquillian-browser-screenshooter</artifactId>
         </dependency>
+        <!-- Only needed for testing by arquillian (ExporterRegistrationHandler requires JEE JAXB) -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>${version.jee.jaxb.api}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

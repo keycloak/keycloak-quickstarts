@@ -17,6 +17,7 @@
 
 package org.keycloak.quickstart;
 
+import jakarta.ws.rs.core.Response;
 import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.jboss.arquillian.graphene.page.Page;
 import org.jboss.arquillian.junit.Arquillian;
@@ -33,7 +34,6 @@ import org.keycloak.test.page.LoginPage;
 import org.keycloak.quickstart.storage.user.MyExampleUserStorageProviderFactory;
 import org.openqa.selenium.WebDriver;
 
-import javax.ws.rs.core.Response;
 import java.util.concurrent.TimeUnit;
 
 import static java.lang.String.format;

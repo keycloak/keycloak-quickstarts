@@ -56,6 +56,7 @@
         <version.hamcrest>1.3</version.hamcrest>
         <version.creaper>1.6.1</version.creaper>
         <version.shrinkwrap.resolvers>3.1.4</version.shrinkwrap.resolvers>
+        <version.jee.jaxb.api>2.3.1</version.jee.jaxb.api>
 
         <arquillian-managed>true</arquillian-managed>
         <jboss-cli.executable>./jboss-cli.sh</jboss-cli.executable>
@@ -486,6 +487,8 @@
             <modules>
                 <module>app-authz-jakarta-servlet</module>
                 <module>app-jakarta-rs</module>
+                <module>user-storage-simple</module>
+                <module>user-storage-jpa</module>
                 <!--
                 WIP
                 Spring requires JDK 17 and we are not yet ready to build on top of this version
@@ -498,7 +501,7 @@
                     <dependency>
                         <groupId>org.wildfly.bom</groupId>
                         <artifactId>wildfly-ee-with-tools</artifactId>
-                        <version>28.0.0.Beta1</version>
+                        <version>${version.wildfly}</version>
                         <type>pom</type>
                         <scope>import</scope>
                     </dependency>
@@ -580,8 +583,6 @@
                 <module>app-profile-saml-jee-jsp</module>
                 <module>authz-js-policies</module>
                 <module>extend-account-console</module>
-                <module>user-storage-simple</module>
-                <module>user-storage-jpa</module>
             </modules>
             <dependencyManagement>
                 <dependencies>

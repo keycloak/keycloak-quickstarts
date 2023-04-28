@@ -63,30 +63,37 @@ fi
 
 # we need to run authz springboot tests first as they are the only ones relying on manual js-policies deployment
 # other tests deploy (and the removes) the policies automatically which then later removes even the manually deployed ones
-run_tests user-storage-simple -Pkeycloak-remote
-run_tests user-storage-jpa -Pkeycloak-remote
-# TODO Not working with Quarkus dist (or not working?)
-#run_tests app-profile-saml-jee-jsp -Pwildfly-managed
 
-# TODO Update for Quarkus dist
-#run_tests event-listener-sysout -Pkeycloak-remote
-#run_tests event-store-mem -Pkeycloak-remote
-#run_tests extend-account-console -Pkeycloak-remote
+if [ "$1" = "jakarta" ]; then
+  echo "Running tests with jakarta profile"
+  run_tests user-storage-simple -Djakarta -Pkeycloak-remote
+  run_tests user-storage-jpa -Djakarta -Pkeycloak-remote
+  run_tests app-authz-jakarta-servlet -Djakarta -Pwildfly-managed
+  run_tests app-jakarta-rs -Djakarta -Pwildfly-managed
+else
+  # TODO Not working with Quarkus dist (or not working?)
+  #run_tests app-profile-saml-jee-jsp -Pwildfly-managed
 
-# service-nodejs tests
-npm -C service-nodejs install
-npm -C service-nodejs start >/dev/null&
-# Wait for port 3000 to open for at most 30 seconds
-{
+  # TODO Update for Quarkus dist
+  #run_tests event-listener-sysout -Pkeycloak-remote
+  #run_tests event-store-mem -Pkeycloak-remote
+  #run_tests extend-account-console -Pkeycloak-remote
+
+  # service-nodejs tests
+  npm -C service-nodejs install
+  npm -C service-nodejs start >/dev/null&
+  # Wait for port 3000 to open for at most 30 seconds
+  {
     I=0
     while ! curl -sfN -o /dev/null http://localhost:3000/service/public && [[ $I -lt 60 ]]; do
          sleep 0.5
          echo -n .
          I=$[$I + 1]
     done
-} 2>/dev/null
-if ! NODE_OPTIONS=--dns-result-order=ipv4first npm -C service-nodejs test 2>&1 | tee test-logs/service-nodejs.log; then
-  tests_with_errors+=("service-nodejs")
+  } 2>/dev/null
+  if ! NODE_OPTIONS=--dns-result-order=ipv4first npm -C service-nodejs test 2>&1 | tee test-logs/service-nodejs.log; then
+    tests_with_errors+=("service-nodejs")
+  fi
 fi
 
 print_failed_tests
