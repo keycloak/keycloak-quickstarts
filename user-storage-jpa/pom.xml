@@ -65,16 +65,17 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.1-api</artifactId>
-            <version>${version.hibernate.javax.persistence}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>org.jboss.arquillian.graphene</groupId>
             <artifactId>graphene-webdriver</artifactId>
             <version>${arquillian-graphene.version}</version>
             <type>pom</type>
+            <scope>test</scope>
+        </dependency>
+        <!-- Only needed for testing by arquillian (ExporterRegistrationHandler requires JEE JAXB) -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>${version.jee.jaxb.api}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

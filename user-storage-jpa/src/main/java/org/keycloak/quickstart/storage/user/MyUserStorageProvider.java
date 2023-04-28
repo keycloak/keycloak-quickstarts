@@ -16,6 +16,8 @@
  */
 package org.keycloak.quickstart.storage.user;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import org.jboss.logging.Logger;
 import org.keycloak.component.ComponentModel;
 import org.keycloak.connections.jpa.JpaConnectionProvider;
@@ -37,8 +39,6 @@ import org.keycloak.storage.user.UserLookupProvider;
 import org.keycloak.storage.user.UserQueryProvider;
 import org.keycloak.storage.user.UserRegistrationProvider;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;

@@ -17,6 +17,7 @@
 
 package org.keycloak.quickstart;
 
+import jakarta.ws.rs.core.Response;
 import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.jboss.arquillian.graphene.page.Page;
 import org.jboss.arquillian.junit.Arquillian;
@@ -34,7 +35,6 @@ import org.keycloak.test.FluentTestsHelper;
 import org.keycloak.test.page.LoginPage;
 import org.openqa.selenium.WebDriver;
 
-import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;

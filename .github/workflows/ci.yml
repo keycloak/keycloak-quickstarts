@@ -83,12 +83,14 @@ jobs:
       - name: Get Keycloak
         run: scripts/prepare-local-server.sh
 
+      - name: Build Quickstarts
+        run: scripts/build-quickstarts.sh jakarta
+
       - name: Start Keycloak
         run: scripts/start-local-server.sh
 
       - name: Run unit tests
-        run: |
-          mvn -Djakarta -Pwildfly-managed clean package verify
+        run: scripts/run-tests.sh jakarta
 
   tests-spring:
     name: Spring Quickstarts Tests
@@ -117,6 +119,9 @@ jobs:
 
       - name: Get Keycloak
         run: scripts/prepare-local-server.sh
+
+      - name: Build Quickstarts
+        run: scripts/build-quickstarts.sh jakarta
 
       - name: Start Keycloak
         run: scripts/start-local-server.sh
