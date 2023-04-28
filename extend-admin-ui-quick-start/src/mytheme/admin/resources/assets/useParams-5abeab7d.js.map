@@ -1,1 +1,0 @@
-{"version":3,"file":"useParams-5abeab7d.js","sources":["../../src/utils/useParams.ts"],"sourcesContent":["import { useParams as useParamsRR } from \"react-router-dom\";\n\nexport const useParams = <T extends Record<string, string>>() =>\n  useParamsRR<T>() as T;\n"],"names":["useParams","useParamsRR"],"mappings":"wCAEa,MAAAA,EAAY,IACvBC,EAAe"}

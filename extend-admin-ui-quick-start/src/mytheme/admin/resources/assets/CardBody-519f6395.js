@@ -1,2 +1,0 @@
-import{_ as n,r as c,i as d}from"./index-a3421f29.js";import{s as e}from"./Card-aa3ba03c.js";const m=s=>{var{children:r=null,className:o="",component:a="div",isFilled:t=!0}=s,l=n(s,["children","className","component","isFilled"]);const i=a;return c.createElement(i,Object.assign({className:d(e.cardBody,!t&&e.modifiers.noFill,o)},l),r)};m.displayName="CardBody";export{m as C};
-//# sourceMappingURL=CardBody-519f6395.js.map
