@@ -25,7 +25,7 @@ Overrides to PatternFly variables should be made at the `:root` level for global
 
 ### Applying a Customized Theme
 
-Start the Keycloak server with `./kc.sh` or `./kc.bat` navigate to `http://localhost:8180/` to view the style being applied.
+Start the Keycloak server with `./kc.sh` or `./kc.bat` and navigate to `http://localhost:8180/` to view the style being applied.
 
 This is what you will see when you log in, if you use the stylesheet provided.
 
