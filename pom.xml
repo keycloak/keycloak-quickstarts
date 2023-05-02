@@ -169,7 +169,7 @@
             </dependency>
             <dependency>
                 <groupId>org.keycloak</groupId>
-                <artifactId>keycloak-admin-client</artifactId>
+                <artifactId>keycloak-admin-client-jee</artifactId>
                 <version>${version.keycloak}</version>
             </dependency>
         </dependencies>
