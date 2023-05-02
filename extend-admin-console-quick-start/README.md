@@ -10,12 +10,14 @@ With themes, it is possible to configure the Admin Console's look and feel. To e
 
 The recommended folder structure for a custom Keycloak theme is as follows:
 
-├── theme/
-│ ├── admin/
-│ │ ├── resources/
-│ │ | ├── css/
-│ │ | | ├── styles.css
-│ │ ├── theme.properties
+    ├── theme
+    │   ├── admin
+    │   │   ├── resources
+    │   │   │   ├── css
+    │   │   │   │   ├── styles.css
+    │   │   └── theme.properties
+    │   └── ...
+    ├── ...
 
 ### Customizing with PatternFly Best Practices
 
