@@ -74,8 +74,7 @@
         <!-- Test Dependencies -->
         <dependency>
             <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-admin-client-jakarta</artifactId>
-            <version>21.0.2</version>
+            <artifactId>keycloak-admin-client</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
