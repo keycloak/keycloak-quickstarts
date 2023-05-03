@@ -14,11 +14,11 @@ run_tests() {
   echo "*****************************************"
   if [ -n "$PRODUCT" ] && [ "$PRODUCT" == "true" ]; then
     args="$args -s $PRODUCT_MVN_SETTINGS  -Dmaven.repo.local=$PRODUCT_MVN_REPO"
-    if [ "$module" == "action-token-authenticator" ] \
-        || [ "$module" == "action-token-required-action" ] \
-        || [ "$module" == "event-listener-sysout" ] \
-        || [ "$module" == "event-store-mem" ] \
-        || [ "$module" == "extend-account-console" ]; then
+    if [ "$module" == "extension/action-token-authenticator" ] \
+        || [ "$module" == "extension/action-token-required-action" ] \
+        || [ "$module" == "extension/event-listener-sysout" ] \
+        || [ "$module" == "extension/event-store-mem" ] \
+        || [ "$module" == "extension/extend-account-console" ]; then
       return 0
     fi
   else
@@ -29,7 +29,8 @@ run_tests() {
   else
     args="$args -Dwebdriver.chrome.driver=/usr/local/bin/chromedriver"
   fi
-  if ! mvn clean install -Dnightly -f $module $args -B 2>&1 | tee test-logs/$module.log; then
+  log_file=${module////_}.log
+  if ! mvn clean install -Dnightly -f $module $args -B 2>&1 | tee test-logs/$log_file; then
     tests_with_errors+=("$module")
   fi
   printf "\n\n\n*****************************************\n"
@@ -66,10 +67,10 @@ fi
 
 if [ "$1" = "jakarta" ]; then
   echo "Running tests with jakarta profile"
-  run_tests user-storage-simple -Djakarta -Pkeycloak-remote
-  run_tests user-storage-jpa -Djakarta -Pkeycloak-remote
-  run_tests app-authz-jakarta-servlet -Djakarta -Pwildfly-managed
-  run_tests app-jakarta-rs -Djakarta -Pwildfly-managed
+  run_tests extension/user-storage-simple -Djakarta -Pkeycloak-remote
+  run_tests extension/user-storage-jpa -Djakarta -Pkeycloak-remote
+  run_tests jakarta/app-authz-jakarta-servlet -Djakarta -Pwildfly-managed
+  run_tests jakarta/app-jakarta-rs -Djakarta -Pwildfly-managed
 else
   # TODO Not working with Quarkus dist (or not working?)
   #run_tests app-profile-saml-jee-jsp -Pwildfly-managed
@@ -80,8 +81,8 @@ else
   #run_tests extend-account-console -Pkeycloak-remote
 
   # service-nodejs tests
-  npm -C service-nodejs install
-  npm -C service-nodejs start >/dev/null&
+  npm -C nodejs/service-nodejs install
+  npm -C nodejs/service-nodejs start >/dev/null&
   # Wait for port 3000 to open for at most 30 seconds
   {
     I=0
@@ -91,8 +92,8 @@ else
          I=$[$I + 1]
     done
   } 2>/dev/null
-  if ! NODE_OPTIONS=--dns-result-order=ipv4first npm -C service-nodejs test 2>&1 | tee test-logs/service-nodejs.log; then
-    tests_with_errors+=("service-nodejs")
+  if ! NODE_OPTIONS=--dns-result-order=ipv4first npm -C nodejs/service-nodejs test 2>&1 | tee test-logs/nodejs_service-nodejs.log; then
+    tests_with_errors+=("nodejs/service-nodejs")
   fi
 fi
 
