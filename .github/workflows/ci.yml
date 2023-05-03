@@ -128,5 +128,5 @@ jobs:
 
       - name: Run unit tests
         run: |
-          mvn -f app-authz-rest-springboot -Djakarta clean package verify
+          mvn -f springframework/app-authz-rest-springboot -Djakarta clean package verify
 

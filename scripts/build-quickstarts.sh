@@ -28,10 +28,10 @@ else
 fi
 
 if [ "$1" != "jakarta" ]; then
-  cp authz-js-policies/target/authz-js-policies.jar $dist/providers
+  cp extension/authz-js-policies/target/authz-js-policies.jar $dist/providers
 else
-  cp user-storage-simple/target/user-storage-properties-example.jar $dist/providers
-  cp user-storage-jpa/conf/quarkus.properties $dist/conf
-  cp user-storage-jpa/target/user-storage-jpa-example.jar $dist/providers
+  cp extension/user-storage-simple/target/user-storage-properties-example.jar $dist/providers
+  cp extension/user-storage-jpa/conf/quarkus.properties $dist/conf
+  cp extension/user-storage-jpa/target/user-storage-jpa-example.jar $dist/providers
 fi
 
