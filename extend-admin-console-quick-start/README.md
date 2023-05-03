@@ -10,7 +10,7 @@ With themes, it is possible to configure the Admin Console's look and feel. To e
 
 The recommended folder structure for a custom Keycloak theme is as follows:
 
-    ├── theme
+    ├── my-cool-theme-name
     │   ├── admin
     │   │   ├── resources
     │   │   │   ├── css
