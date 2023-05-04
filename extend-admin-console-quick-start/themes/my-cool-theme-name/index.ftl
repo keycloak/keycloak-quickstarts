@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <base href="${resourceUrl}/" />
-    <link rel="icon" type="image/svg+xml" href="${resourceUrl}/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href="${resourceUrl}/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Web site to manage keycloak" />
     <title>Keycloak Administration UI</title>
@@ -40,18 +40,20 @@
         padding-top: 32px;
       }
     </style>
-    <script type="module" crossorigin src="${resourceUrl}/assets/index-4ebbb58c.js"></script>
-    <link rel="stylesheet" href="${resourceUrl}/assets/style-49afc14b.css">
   
-
     <#if properties.styles?has_content>
       <#list properties.styles?split(' ') as style>
       <link href="${resourceUrl}/${style}" rel="stylesheet"/>
       </#list>
     </#if>
+
+    <#if properties.logo?has_content>
+      var brandImg = resourceUrl + '${properties.logo}';
+    <#else>
+      var brandImg = resourceUrl + '/public/logo.svg';
+    </#if>
   </head>
 	
-
   <body>
     <div id="app">
       <div class="container">
@@ -69,22 +71,18 @@
     </div>
 
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    
-  
 
-  <script id="environment" type="application/json">
-    {
-      "loginRealm": "${loginRealm!"master"}",
-      "authServerUrl": "${authServerUrl}",
-      "authUrl": "${authUrl}",
-      "consoleBaseUrl": "${consoleBaseUrl}",
-      "resourceUrl": "${resourceUrl}",
-      "masterRealm": "${masterRealm}",
-      "resourceVersion": "${resourceVersion}",
-      "isRunningAsTheme": true
-    }
-  </script>
-</body>
-
-
+    <script id="environment" type="application/json">
+      {
+        "loginRealm": "${loginRealm!"master"}",
+        "authServerUrl": "${authServerUrl}",
+        "authUrl": "${authUrl}",
+        "consoleBaseUrl": "${consoleBaseUrl}",
+        "resourceUrl": "${resourceUrl}",
+        "masterRealm": "${masterRealm}",
+        "resourceVersion": "${resourceVersion}",
+        "isRunningAsTheme": true
+      }
+    </script>
+  </body>
 </html>
