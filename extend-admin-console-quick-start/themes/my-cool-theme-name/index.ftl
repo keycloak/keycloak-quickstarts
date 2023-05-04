@@ -49,8 +49,6 @@
 
     <#if properties.logo?has_content>
       var brandImg = resourceUrl + '${properties.logo}';
-    <#else>
-      var brandImg = resourceUrl + '/public/logo.svg';
     </#if>
   </head>
 	
