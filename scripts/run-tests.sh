@@ -72,8 +72,7 @@ if [ "$1" = "jakarta" ]; then
   run_tests jakarta/app-authz-jakarta-servlet -Djakarta -Pwildfly-managed
   run_tests jakarta/app-jakarta-rs -Djakarta -Pwildfly-managed
 else
-  # TODO Not working with Quarkus dist (or not working?)
-  #run_tests app-profile-saml-jee-jsp -Pwildfly-managed
+  run_tests javaee/app-profile-saml-jee-jsp -Pwildfly-managed
 
   # TODO Update for Quarkus dist
   #run_tests event-listener-sysout -Pkeycloak-remote
