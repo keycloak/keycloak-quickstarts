@@ -172,6 +172,11 @@
                 <artifactId>keycloak-admin-client</artifactId>
                 <version>${version.keycloak}</version>
             </dependency>
+            <dependency>
+                <groupId>org.keycloak</groupId>
+                <artifactId>keycloak-admin-client-jee</artifactId>
+                <version>${version.keycloak}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
