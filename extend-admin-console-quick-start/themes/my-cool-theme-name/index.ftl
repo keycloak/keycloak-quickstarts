@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <base href="${resourceUrl}/" />
-    <link rel="icon" type="image/svg+xml" href="${resourceUrl}/favicon.svg" />
+    <link rel="icon" type="image/x-icon" href="${resourceUrl}/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Web site to manage keycloak" />
     <title>Keycloak Administration UI</title>
@@ -49,6 +49,8 @@
 
     <#if properties.logo?has_content>
       var brandImg = resourceUrl + '${properties.logo}';
+    <#else>
+      var brandImg = resourceUrl + '/public/logo.svg';
     </#if>
   </head>
 	
