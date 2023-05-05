@@ -22,6 +22,7 @@ import org.keycloak.events.admin.AdminEventQuery;
 import org.keycloak.events.admin.OperationType;
 import org.keycloak.events.admin.ResourceType;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -185,11 +186,6 @@ public class MemAdminEventQuery implements AdminEventQuery {
     }
 
     @Override
-    public List<AdminEvent> getResultList() {
-        return getResultStream().collect(Collectors.toList());
-    }
-
-    @Override
     public Stream<AdminEvent> getResultStream() {
         if (adminEvents.size() < first) {
             return Stream.empty();
@@ -197,5 +193,17 @@ public class MemAdminEventQuery implements AdminEventQuery {
         int end = first + max <= adminEvents.size() ? first + max : adminEvents.size();
 
         return adminEvents.subList(first, end).stream();
+    }
+
+    @Override
+    public AdminEventQuery orderByDescTime() {
+        adminEvents.sort((event1, event2) -> MemEventQuery.signum(event1.getTime() - event2.getTime()));
+        return this;
+    }
+
+    @Override
+    public AdminEventQuery orderByAscTime() {
+        adminEvents.sort((event1, event2) -> -MemEventQuery.signum(event1.getTime() - event2.getTime()));
+        return this;
     }
 }

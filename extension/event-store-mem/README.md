@@ -13,13 +13,10 @@ What is it?
 This example shows how to implement and deploy an event store provider that stores events in memory.
 You can extend the server's functionality in this way by implementing your own provider. For more information see our server developer guide.
 
-To configure and enable the event store provider manually add default provider to `eventsStore` SPI in `standalone/configuration/standalone.xml`:
+To configure and enable the event store provider manually add default provider to `eventsStore` SPI as `in-mem` as described below.
+This is needed because `eventsStore` SPI can have only one "active" provider in Keycloak. And by default, the `eventsStore` provider is 
+configured to store events in the Keycloak Storage DB. But for the illustration purpose, we will do it in this example to store them in memory only.
 
-    ````
-    <spi name="eventsStore">
-        <default-provider>in-mem</default-provider>
-    </spi>
-    ````
 Then go to [Events Config](http://localhost:8180/auth/admin/master/console/#/realms/master/events-settings) tab in the admin console and enable login events and admin events by a toggle buttons. You can configure what event types should be stored. Save the changes afterwards.
 
 To apply changes in the configuration file restart the server.
@@ -35,39 +32,57 @@ Alternatively you can configure and deploy the example by maven command mentione
 System Requirements
 -------------------
 
-You need to have Keycloak running with an initial user created. The example requires that Keycloak server is running on port 8180 (management port 10090). See the parent [README](https://github.com/keycloak/keycloak-quickstarts#start-the-keycloak-server) for more details.
+You need to have <span>Keycloak</span> running. It is recommended to use Keycloak 22 or later.
 
-All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.3.3 or later.
+All you need to build this project is Java 11 (Java SDK 11) or later and Maven 3.6.3 or later.
 
 
 Build and Deploy the Quickstart
 -------------------------------
 
-To build, configure and deploy the example to Keycloak run:
+To build the provider, run the following maven command:
 
-    mvn install -DskipTests wildfly:deploy wildfly:execute-commands
-    
-Alternatively you can deploy the example manually by copying the example's jar to:
+   ````
+   mvn clean install
+   ````
 
-    ````
-    KEYCLOAK_HOME/standalone/deployments (for Linux)
-    KEYCLOAK_HOME\standalone\deployments (for Windows)
-    ````  
+To install the provider, copy the target/event-store-mem.jar JAR file to the `providers` directory of the server distribution.
+
+Finally, start the server as follows:
+
+    ```
+    kc.[sh|bat] start-dev --http-port=8180 --http-relative-path="/auth" --spi-events-store-provider=in-mem
+    ```
+
+Then go to [Events Config](http://localhost:8180/auth/admin/master/console/#/master/realm-settings/events) tab in the admin console and enable
+login events and admin events by a toggle buttons `Save events` in the subtabs `User event settings` and `Admin event settings`. You can configure
+what event types should be stored and expiration of events. Save the changes afterwards.
+
+To apply changes in the configuration file restart the server.
+
+When you have the example deployed and configured go to [Login Events](http://localhost:8180/auth/admin/master/console/#/master/events/user-events) tab in the admin console where you can see login events showed from the Event store provider.
+Similarly in [Admin Events](http://localhost:8180/auth/admin/master/console/#/master/events/admin-events) tab you can see generated admin events. To generate an admin event you can for example create a user.
+
+If you restart the server again all the events will be gone because they haven't been persisted in the database but stored only in memory.
 
 
 Integration test of the Quickstart
 ----------------------------------
 
-1. Make sure you have a Keycloak server running with an `admin` user and `admin` password in the `master` realm.
+1. Make sure you have an Keycloak server running with an admin user in the `master` realm or use the provided docker image.
+   Your <span>Keycloak</span> should be listening on `http://localhost:8180/auth` and should have set `in-mem` as the default `eventsStore` provider.
+   See in the previous section how the startup command for the server should look like.
+
 2. You need to have Chrome browser installed and updated to the latest version.
-3. Run `mvn test -Pkeycloak-remote`.
+3. Run `mvn clean install -Djakarta -Pkeycloak-remote`
 
 
-Undeploy the Quickstart
+Undeploy the quickstart
 -----------------------
+Delete file `providers/event-store-mem.jar` and restart the server without option to set the default event store provider, which means Keycloak
+will again use the default built-in Keycloak provider for storing events.
 
-To undeploy the example run:
-
-    mvn clean wildfly:undeploy
-
-Don't forget to remove default *in-mem* provider from `standalone/configuration/standalone.xml` and restart the server if you want to revert back to *jpa* provider.
+More Information
+----------------
+This particular example is discussed in detail in the Event Listener SPI chapter of the server developer guide.  Each line of code is dissected
+to show you how the Event Listener SPI works.

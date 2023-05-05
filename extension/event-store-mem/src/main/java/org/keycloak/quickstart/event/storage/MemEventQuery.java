@@ -21,6 +21,7 @@ import org.keycloak.events.Event;
 import org.keycloak.events.EventQuery;
 import org.keycloak.events.EventType;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -139,11 +140,6 @@ public class MemEventQuery implements EventQuery {
     }
 
     @Override
-    public List<Event> getResultList() {
-        return getResultStream().collect(Collectors.toList());
-    }
-
-    @Override
     public Stream<Event> getResultStream() {
 
         if (events.size() < first) {
@@ -152,5 +148,22 @@ public class MemEventQuery implements EventQuery {
         int end = first + max <= events.size() ? first + max : events.size();
 
         return events.subList(first, end).stream();
+    }
+
+    @Override
+    public EventQuery orderByDescTime() {
+        events.sort((event1, event2) -> signum(event1.getTime() - event2.getTime()));
+        return this;
+    }
+
+    @Override
+    public EventQuery orderByAscTime() {
+        events.sort((event1, event2) -> -signum(event1.getTime() - event2.getTime()));
+        return this;
+    }
+
+    static int signum(long l1) {
+        if (l1 == 0) return 0;
+        return (l1 > 0) ? 1 : -1;
     }
 }
