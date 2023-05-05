@@ -18,16 +18,10 @@
 package org.keycloak.quickstart.event.listener;
 
 import org.hamcrest.Matchers;
-import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.arquillian.container.test.api.OperateOnDeployment;
-import org.jboss.arquillian.container.test.api.TargetsContainer;
 import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.jboss.arquillian.graphene.page.Page;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
-import org.jboss.shrinkwrap.api.Archive;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.jboss.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -36,22 +30,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.keycloak.admin.client.Keycloak;
-import org.keycloak.events.EventListenerProviderFactory;
 import org.keycloak.events.EventType;
 import org.keycloak.representations.idm.RealmEventsConfigRepresentation;
 import org.keycloak.test.page.LoginPage;
 import org.openqa.selenium.WebDriver;
-import org.wildfly.extras.creaper.core.ManagementClient;
-import org.wildfly.extras.creaper.core.online.CliException;
-import org.wildfly.extras.creaper.core.online.ManagementProtocol;
-import org.wildfly.extras.creaper.core.online.ModelNodeResult;
-import org.wildfly.extras.creaper.core.online.OnlineManagementClient;
-import org.wildfly.extras.creaper.core.online.OnlineOptions;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import java.util.Arrays;
+import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 
 import static java.lang.String.format;
@@ -65,21 +50,17 @@ import static org.keycloak.test.TestsHelper.keycloakBaseUrl;
 @RunWith(Arquillian.class)
 public class ArquillianSysoutEventListenerProviderTest {
 
-    public static final String PROVIDER_JAR = "event-listener-sysout";
+    private static final Logger logger = Logger.getLogger(ArquillianSysoutEventListenerProviderTest.class);
 
-    public static final String RESOURCES_SRC = "src/test/resources";
+    public static final String KEYCLOAK_URL = "http://localhost:8180/auth";
 
     public static final String REALM_QS_EVENT_SYSOUT = "event-listener-sysout";
 
-    public static final String KEYCLOAK_URL_CONSOLE = "http://%s:%s/auth/admin/%s/console/#%s";
+    public static final String KEYCLOAK_URL_CONSOLE = KEYCLOAK_URL + "/admin/%s/console/#%s";
 
     public static Keycloak ADMIN_CLIENT;
 
-    public static int keycloakManagementPort;
-
     public static String ADMIN_ID;
-
-    private OnlineManagementClient onlineManagementClient;
 
     @Page
     private LoginPage loginPage;
@@ -87,26 +68,12 @@ public class ArquillianSysoutEventListenerProviderTest {
     @Drone
     private WebDriver webDriver;
 
-    @ArquillianResource
-    @OperateOnDeployment(PROVIDER_JAR)
-    public static URL keycloakContextRoot;
+    private LogReaderHelper logReader;
 
-    @Deployment(testable=false, name=PROVIDER_JAR)
-    @TargetsContainer("keycloak-remote")
-    public static Archive<?> createProviderArchive() {
-        return ShrinkWrap.create(JavaArchive.class, PROVIDER_JAR + ".jar")
-                .addClasses(
-                        SysoutEventListenerProvider.class,
-                        SysoutEventListenerProviderFactory.class)
-                .addAsManifestResource(new File(RESOURCES_SRC, "MANIFEST.MF"))
-                .addAsServiceProvider(EventListenerProviderFactory.class, SysoutEventListenerProviderFactory.class);
-    }
 
     @BeforeClass
     public static void setupClass() throws IOException {
         importTestRealm("admin", "admin", "/quickstart-realm.json");
-
-        keycloakManagementPort = Integer.parseInt(System.getProperty("keycloakManagementPort"));
 
         ADMIN_CLIENT = Keycloak.getInstance(keycloakBaseUrl, "master", "admin", "admin", "admin-cli");
         ADMIN_ID = ADMIN_CLIENT.realm(REALM_QS_EVENT_SYSOUT).users().search("test-admin").get(0).getId();
@@ -122,55 +89,43 @@ public class ArquillianSysoutEventListenerProviderTest {
         webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
         webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
-        registerEventListener();
+        String basedir = System.getProperty("basedir");
+        logger.infof("Basedir: %s", basedir);
 
-        onlineManagementClient = ManagementClient.online(OnlineOptions
-                .standalone()
-                .hostAndPort(keycloakContextRoot.getHost(), keycloakManagementPort)
-                .protocol(ManagementProtocol.HTTP_REMOTING)
-                .build()
-        );
+        String logFileName = Paths.get(Paths.get(basedir).getParent().getParent().toString(), "keycloak.log").toString();
+        logger.infof("Using log file %s", logFileName);
+
+        logReader = new LogReaderHelper(logFileName);
+        logReader.start();
+
+        registerEventListener();
     }
 
     @After
     public void cleanup() {
+        logReader.close();
+
         removeEventListener();
         logout();
     }
 
     @Test
-    public void testEventListenerOutput() throws IOException, CliException, InterruptedException {
+    public void testEventListenerOutput() throws IOException, InterruptedException {
+        logReader.clear();
+
         // generate some events
         loginToAdminConsole();
+        assertUserEvent(EventType.LOGIN, false);
+        assertUserEvent(EventType.CODE_TO_TOKEN, true);
+
         logout();
+        assertAdminEvent("ACTION", false);
+
         loginToAdminConsole();
-
-        // check all events in the server's log
-        String log = getServerLog();
-        checkServerLogForEvents(log, EventType.LOGIN, EventType.CODE_TO_TOKEN);
+        assertUserEvent(EventType.LOGIN, false);
+        assertUserEvent(EventType.CODE_TO_TOKEN, true);
     }
 
-    @Test
-    public void testEventListenerExcludes() throws IOException, CliException, InterruptedException {
-        addExcludes();
-
-        try {
-            // generate some events
-            loginToAdminConsole();
-            logout();
-            loginToAdminConsole();
-
-            // check all expected events in the server's log
-            String log = getServerLog();
-            checkServerLogForEvents(log, EventType.LOGIN);
-
-            // check if CODE_TO_TOKEN event was filtered out
-            Assert.assertThat(log, Matchers.not(Matchers.containsString(EventType.CODE_TO_TOKEN.name())));
-        }
-        finally {
-            removeSpi();
-        }
-    }
 
     private void registerEventListener() {
         RealmEventsConfigRepresentation realmEventsConfig = ADMIN_CLIENT.realm(REALM_QS_EVENT_SYSOUT).getRealmEventsConfig();
@@ -185,8 +140,7 @@ public class ArquillianSysoutEventListenerProviderTest {
     }
 
     private void navigateToAdminConsole(String path) {
-        webDriver.navigate().to(format(KEYCLOAK_URL_CONSOLE, keycloakContextRoot.getHost(),
-                keycloakContextRoot.getPort(), REALM_QS_EVENT_SYSOUT, path));
+        webDriver.navigate().to(format(KEYCLOAK_URL_CONSOLE, REALM_QS_EVENT_SYSOUT, path));
     }
 
     private void loginToAdminConsole() throws InterruptedException {
@@ -210,35 +164,44 @@ public class ArquillianSysoutEventListenerProviderTest {
         ADMIN_CLIENT.realm(REALM_QS_EVENT_SYSOUT).users().get(ADMIN_ID).logout();
     }
 
-    /**
-     * Returns last 10 lines (default) from the server log.
-     * @return String last 10 lines of the log as JSON string
-     */
-    private String getServerLog() throws IOException, CliException {
-        ModelNodeResult result = onlineManagementClient.execute("/subsystem=logging/log-file=server.log:read-log-file");
-        result.assertSuccess();
-        return result.get("result").toJSONString(false);
+
+    private void assertUserEvent(EventType expectedEventType, boolean expectExcluded) {
+        String prefix;
+        if (expectExcluded) {
+            prefix = "USER EVENT EXCLUDED: ";
+        } else {
+            prefix = "USER EVENT: ";
+        }
+
+        String line = logReader.pollLine();
+        if (line == null) {
+            Assert.fail("Not line present in the server log when waiting for eventType " + expectedEventType);
+        }
+
+        if (expectExcluded) {
+            Assert.assertEquals(line, prefix + expectedEventType);
+        } else {
+            Assert.assertThat(line, Matchers.containsString(prefix + "type=" + expectedEventType));
+        }
     }
 
-    private void addExcludes() throws IOException, CliException {
-        ModelNodeResult result = onlineManagementClient.execute("/subsystem=keycloak-server/spi=eventsListener/provider=sysout/:add(properties={exclude-events => \"[\\\"REFRESH_TOKEN\\\",\\\"CODE_TO_TOKEN\\\"]\"},enabled=true)");
-        result.assertSuccess();
-        onlineManagementClient.executeCli("reload");
+    private void assertAdminEvent(String expectedEventType, boolean expectExcluded) {
+        String prefix;
+        if (expectExcluded) {
+            prefix = "ADMIN EVENT EXCLUDED: ";
+        } else {
+            prefix = "ADMIN EVENT: ";
+        }
 
-        // reconnect admin client
-        ADMIN_CLIENT = Keycloak.getInstance(keycloakBaseUrl, "master", "admin", "admin", "admin-cli");
-    }
+        String line = logReader.pollLine();
+        if (line == null) {
+            Assert.fail("Not line present in the server log when waiting for eventType " + expectedEventType);
+        }
 
-    private void removeSpi() throws IOException, CliException {
-        ModelNodeResult result = onlineManagementClient.execute("/subsystem=keycloak-server/spi=eventsListener/:remove");
-        result.assertSuccess();
-        onlineManagementClient.executeCli("reload");
-
-        // reconnect admin client
-        ADMIN_CLIENT = Keycloak.getInstance(keycloakBaseUrl, "master", "admin", "admin", "admin-cli");
-    }
-
-    private void checkServerLogForEvents(String log, EventType... events) {
-        Arrays.stream(events).forEach(event -> Assert.assertThat(log, Matchers.containsString(event.name())));
+        if (expectExcluded) {
+            Assert.assertEquals(line, prefix + expectedEventType);
+        } else {
+            Assert.assertThat(line, Matchers.containsString(prefix + "operationType=" + expectedEventType));
+        }
     }
 }
