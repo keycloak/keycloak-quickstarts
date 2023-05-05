@@ -41,21 +41,21 @@ public class SysoutEventListenerProvider implements EventListenerProvider {
 
     @Override
     public void onEvent(Event event) {
-        // Ignore excluded events
         if (excludedEvents != null && excludedEvents.contains(event.getType())) {
-            return;
+            // Ignore excluded events. Just log them for illustration purposes without any details.
+            System.out.println("USER EVENT EXCLUDED: " + event.getType());
         } else {
-            System.out.println("EVENT: " + toString(event));
+            System.out.println("USER EVENT: " + toString(event));
         }
     }
 
     @Override
     public void onEvent(AdminEvent event, boolean includeRepresentation) {
-        // Ignore excluded operations
         if (excludedAdminOperations != null && excludedAdminOperations.contains(event.getOperationType())) {
-            return;
+            // Ignore excluded events. Just log them for illustration purposes without any details.
+            System.out.println("ADMIN EVENT EXCLUDED: " + event.getOperationType());
         } else {
-            System.out.println("EVENT: " + toString(event));
+            System.out.println("ADMIN EVENT: " + toString(event));
         }
     }
 
