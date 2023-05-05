@@ -1,20 +1,17 @@
 {
+  "type": "module",
   "name": "service-nodejs",
   "version": "0.0.1",
   "scripts": {
     "start": "node app.js",
-    "test": "tape test/*.js"
+    "test": "node test/utils/create-realm.js && node test/*.js && node test/utils/delete-realm.js"
   },
   "dependencies": {
-    "keycloak-connect": "keycloak/keycloak-nodejs-connect",
-    "body-parser": "^1.13.3",
+    "@keycloak/keycloak-admin-client": "^21.1.1",
     "express": "^4.13.3",
-    "express-session": "^1.14.2",
-    "cors": "^2.8.1"
+    "keycloak-connect": "keycloak/keycloak-nodejs-connect"
   },
   "devDependencies": {
-    "keycloak-request-token": "^0.1.0",
-    "keycloak-client-registration": "^0.1.0",
     "eslint": "^3.3.1",
     "eslint-config-semistandard": "^7.0.0-beta.0",
     "eslint-config-standard": "^6.0.0",
@@ -24,7 +21,8 @@
     "ink-docstrap": "^1.1.4",
     "jsdoc": "^3.4.0",
     "jshint": "^2.9.1",
-    "tape": "^4.5.1",
-    "roi": "^0.15.0"
+    "keycloak-request-token": "^0.1.0",
+    "roi": "^0.15.0",
+    "tape": "^4.5.1"
   }
 }

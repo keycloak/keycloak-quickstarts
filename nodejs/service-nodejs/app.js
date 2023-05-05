@@ -15,44 +15,15 @@
  * limitations under the License.
  */
 
-const express = require('express');
-const session = require('express-session');
-const bodyParser = require('body-parser');
-const Keycloak = require('keycloak-connect');
-const cors = require('cors');
+import express from 'express';
+import Keycloak from 'keycloak-connect';
 
 const app = express();
-app.use(bodyParser.json());
 
-// Enable CORS support
-app.use(cors());
+// Middleware configuration loaded from keycloak.json file
+const keycloak = new Keycloak({});
 
-// Create a session-store to be used by both the express-session
-// middleware and the keycloak middleware.
-
-const memoryStore = new session.MemoryStore();
-
-app.use(session({
-  secret: 'some secret',
-  resave: false,
-  saveUninitialized: true,
-  store: memoryStore
-}));
-
-// Provide the session store to the Keycloak so that sessions
-// can be invalidated from the Keycloak console callback.
-//
-// Additional configuration is read from keycloak.json file
-// installed from the Keycloak web console.
-
-const keycloak = new Keycloak({
-  store: memoryStore
-});
-
-app.use(keycloak.middleware({
-  logout: '/logout',
-  admin: '/'
-}));
+app.use(keycloak.middleware());
 
 app.get('/service/public', function (req, res) {
   res.json({message: 'public'});

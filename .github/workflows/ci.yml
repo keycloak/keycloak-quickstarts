@@ -129,4 +129,30 @@ jobs:
       - name: Run unit tests
         run: |
           mvn -f springframework/app-authz-rest-springboot -Djakarta clean package verify
+  tests-nodejs:
+    name: NodeJS Quickstarts Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        if: ${{ github.event_name != 'schedule' }}
+      - uses: actions/checkout@v2
+        if: ${{ github.event_name == 'schedule' }}
+        with:
+          ref: 'main'
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Get Keycloak
+        run: scripts/prepare-local-server.sh
+
+      - name: Start Keycloak
+        run: scripts/start-local-server.sh
+
+      - name: Run unit tests
+        run: |
+          cd nodejs/service-nodejs
+          npm install
+          npm start&
+          npm test
 
