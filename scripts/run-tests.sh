@@ -68,6 +68,7 @@ fi
 if [ "$1" = "jakarta" ]; then
   echo "Running tests with jakarta profile"
   run_tests extension/event-listener-sysout -Djakarta -Pkeycloak-remote
+  run_tests extension/event-store-mem -Djakarta -Pkeycloak-remote
   run_tests extension/user-storage-simple -Djakarta -Pkeycloak-remote
   run_tests extension/user-storage-jpa -Djakarta -Pkeycloak-remote
   run_tests jakarta/app-authz-jakarta-servlet -Djakarta -Pwildfly-managed
@@ -76,7 +77,6 @@ else
   run_tests javaee/app-profile-saml-jee-jsp -Pwildfly-managed
 
   # TODO Update for Quarkus dist
-  #run_tests event-store-mem -Pkeycloak-remote
   #run_tests extend-account-console -Pkeycloak-remote
 
   # service-nodejs tests

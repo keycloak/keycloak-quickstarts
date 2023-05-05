@@ -87,7 +87,7 @@ jobs:
         run: scripts/build-quickstarts.sh jakarta
 
       - name: Start Keycloak
-        run: scripts/start-local-server.sh
+        run: scripts/start-local-server.sh add-providers-config
 
       - name: Run unit tests
         run: scripts/run-tests.sh jakarta

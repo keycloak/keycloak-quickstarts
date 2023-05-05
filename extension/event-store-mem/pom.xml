@@ -31,6 +31,10 @@
     <artifactId>event-store-mem</artifactId>
     <packaging>jar</packaging>
 
+    <properties>
+        <version.compiler.maven.plugin>3.5.1</version.compiler.maven.plugin>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.keycloak</groupId>
@@ -47,11 +51,7 @@
             <version>${version.keycloak}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian.protocol</groupId>
-            <artifactId>arquillian-protocol-servlet</artifactId>
-            <scope>test</scope>
-        </dependency>
+
         <dependency>
             <groupId>org.jboss.arquillian.graphene</groupId>
             <artifactId>graphene-webdriver</artifactId>
@@ -60,20 +60,24 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.jboss.arquillian.extension</groupId>
+            <artifactId>arquillian-phantom-driver</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.graphene</groupId>
+            <artifactId>arquillian-browser-screenshooter</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-all</artifactId>
         </dependency>
+        <!-- Only needed for testing by arquillian (ExporterRegistrationHandler requires JEE JAXB) -->
         <dependency>
-            <groupId>org.wildfly.extras.creaper</groupId>
-            <artifactId>creaper-core</artifactId>
-            <version>${version.creaper}</version>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>${version.jee.jaxb.api}</version>
             <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.google.guava</groupId>
-                    <artifactId>guava</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
     </dependencies>
 
@@ -88,33 +92,6 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${version.surefire.plugin}</version>
-                <configuration>
-                    <systemPropertyVariables>
-                        <keycloakManagementPort>${keycloak.management.port}</keycloakManagementPort>
-                        <buildDirectory>${project.build.directory}</buildDirectory>
-                    </systemPropertyVariables>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.wildfly.plugins</groupId>
-                <artifactId>wildfly-maven-plugin</artifactId>
-                <version>1.2.2.Final</version>
-                <configuration>
-                    <skip>${wildfly.skip}</skip>
-                    <filename>${project.build.finalName}.jar</filename>
-                    <port>${keycloak.management.port}</port>
-                    <commands>
-                        <command>if (outcome != success) of /subsystem=keycloak-server/spi=eventsStore:write-attribute(name=default-provider,value=in-mem)</command>
-                        <command>end-if</command>
-
-                        <command>reload</command>
-                    </commands>
                 </configuration>
             </plugin>
             <plugin>

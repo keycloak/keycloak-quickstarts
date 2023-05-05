@@ -33,7 +33,7 @@ To build the provider, run the following maven command:
    mvn clean install
    ````
 
-To install the provider, copy the target/user-storage-properties-example.jar JAR file to the `providers` directory of the server distribution.
+To install the provider, copy the target/event-listener-sysout.jar JAR file to the `providers` directory of the server distribution.
 
 Finally, start the server as follows:
 
