@@ -21,7 +21,9 @@ runtime. Before using this example, you should probably read the User Storage SP
 System Requirements
 -------------------
 
-All you need to build this project is Java 11 (Java SDK 11) or later and Maven 3.3.3 or later.
+You need to have <span>Keycloak</span> running. It is recommended to use Keycloak 22 or later.
+
+All you need to build this project is Java 11 (Java SDK 11) or later and Maven 3.6.3 or later.
 
 Build and Deploy the Quickstart
 -------------------------------
@@ -60,7 +62,7 @@ Integration test of the Quickstart
 ```
 
 2. You need to have Chrome browser installed and updated to the latest version.
-3. Run `mvn test -Pkeycloak-remote`
+3. Run `mvn clean install -Djakarta -Pkeycloak-remote`
 
 More Information
 ----------------
