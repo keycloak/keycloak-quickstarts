@@ -1,0 +1,56 @@
+{
+    "realm": "event-listener-sysout",
+    "enabled": true,
+    "accessTokenLifespan": 60,
+    "accessCodeLifespan": 60,
+    "accessCodeLifespanUserAction": 300,
+    "ssoSessionIdleTimeout": 600,
+    "ssoSessionMaxLifespan": 36000,
+    "sslRequired": "external",
+    "registrationAllowed": false,
+    "users" : [
+        {
+            "username" : "alice",
+            "enabled": true,
+            "email" : "alice@keycloak.org",
+            "firstName": "Alice",
+            "lastName": "Liddel",
+            "credentials" : [
+                { "type" : "password",
+                    "value" : "password" }
+            ],
+            "realmRoles": [ "user", "offline_access"  ],
+            "clientRoles": {
+                "account": [ "manage-account" ]
+            }
+        },
+        {
+            "username" : "test-admin",
+            "enabled": true,
+            "email" : "test@admin.org",
+            "firstName": "Admin",
+            "lastName": "Test",
+            "credentials" : [
+                { "type" : "password",
+                    "value" : "password" }
+            ],
+            "realmRoles": [ "user","admin" ],
+            "clientRoles": {
+                "realm-management": [ "realm-admin" ],
+                "account": [ "manage-account" ]
+            }
+        }
+    ],
+    "roles" : {
+        "realm" : [
+            {
+                "name": "user",
+                "description": "User privileges"
+            },
+            {
+                "name": "admin",
+                "description": "Administrator privileges"
+            }
+        ]
+    }
+}

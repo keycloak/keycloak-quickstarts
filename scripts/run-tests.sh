@@ -14,13 +14,11 @@ run_tests() {
   echo "*****************************************"
   if [ -n "$PRODUCT" ] && [ "$PRODUCT" == "true" ]; then
     args="$args -s $PRODUCT_MVN_SETTINGS  -Dmaven.repo.local=$PRODUCT_MVN_REPO"
-    if [ "$module" == "action-token-authenticator" ] \
-        || [ "$module" == "action-token-required-action" ] \
-        || [ "$module" == "app-authz-springboot-multitenancy" ] \
-        || [ "$module" == "event-listener-sysout" ] \
-        || [ "$module" == "event-store-mem" ] \
-        || [ "$module" == "extend-account-console" ] \
-        || [ "$module" == "app-springboot" ]; then
+    if [ "$module" == "extension/action-token-authenticator" ] \
+        || [ "$module" == "extension/action-token-required-action" ] \
+        || [ "$module" == "extension/event-listener-sysout" ] \
+        || [ "$module" == "extension/event-store-mem" ] \
+        || [ "$module" == "extension/extend-account-console" ]; then
       return 0
     fi
   else
@@ -31,7 +29,8 @@ run_tests() {
   else
     args="$args -Dwebdriver.chrome.driver=/usr/local/bin/chromedriver"
   fi
-  if ! mvn clean install -Dnightly -f $module $args -B 2>&1 | tee test-logs/$module.log; then
+  log_file=${module////_}.log
+  if ! mvn clean install -Dnightly -f $module $args -B 2>&1 | tee test-logs/$log_file; then
     tests_with_errors+=("$module")
   fi
   printf "\n\n\n*****************************************\n"
@@ -65,49 +64,36 @@ fi
 
 # we need to run authz springboot tests first as they are the only ones relying on manual js-policies deployment
 # other tests deploy (and the removes) the policies automatically which then later removes even the manually deployed ones
-run_tests app-authz-rest-springboot -Pspring-boot
-run_tests app-authz-spring-security -Pspring-boot
-run_tests app-authz-springboot -Pspring-boot
-run_tests app-authz-springboot-multitenancy -Pspring-boot
-run_tests app-authz-jee-servlet -Pwildfly-managed
-run_tests app-authz-jee-vanilla -Pwildfly-managed
-run_tests app-authz-photoz -Pwildfly-managed
-run_tests app-authz-rest-employee -Pwildfly-managed
-run_tests app-authz-uma-photoz -Pwildfly-managed
-run_tests app-jee-html5 -Pwildfly-managed
-run_tests app-jee-jsp -Pwildfly-managed
-run_tests app-profile-jee-html5 -Pwildfly-managed
-run_tests app-profile-jee-jsp -Pwildfly-managed
-run_tests app-profile-jee-vanilla -Pwildfly-managed
-run_tests user-storage-simple -Pkeycloak-remote
-run_tests user-storage-jpa -Pkeycloak-remote
-# TODO Not working with Quarkus dist (or not working?)
-#run_tests app-profile-saml-jee-jsp -Pwildfly-managed
 
-# TODO Update for Quarkus dist
-#run_tests event-listener-sysout -Pkeycloak-remote
-#run_tests event-store-mem -Pkeycloak-remote
-#run_tests extend-account-console -Pkeycloak-remote
-#run_tests service-jee-jaxrs -Pwildfly-managed
-#run_tests service-springboot-rest -Pspring-boot
+if [ "$1" = "jakarta" ]; then
+  echo "Running tests with jakarta profile"
+  run_tests extension/event-listener-sysout -Djakarta -Pkeycloak-remote
+  run_tests extension/user-storage-simple -Djakarta -Pkeycloak-remote
+  run_tests extension/user-storage-jpa -Djakarta -Pkeycloak-remote
+  run_tests jakarta/app-authz-jakarta-servlet -Djakarta -Pwildfly-managed
+  run_tests jakarta/app-jakarta-rs -Djakarta -Pwildfly-managed
+else
+  run_tests javaee/app-profile-saml-jee-jsp -Pwildfly-managed
 
-mvn -f service-springboot-rest spring-boot:run >/dev/null&
-run_tests app-springboot -Pspring-boot
+  # TODO Update for Quarkus dist
+  #run_tests event-store-mem -Pkeycloak-remote
+  #run_tests extend-account-console -Pkeycloak-remote
 
-# service-nodejs tests
-npm -C service-nodejs install
-npm -C service-nodejs start >/dev/null&
-# Wait for port 3000 to open for at most 30 seconds
-{
+  # service-nodejs tests
+  npm -C nodejs/service-nodejs install
+  npm -C nodejs/service-nodejs start >/dev/null&
+  # Wait for port 3000 to open for at most 30 seconds
+  {
     I=0
     while ! curl -sfN -o /dev/null http://localhost:3000/service/public && [[ $I -lt 60 ]]; do
          sleep 0.5
          echo -n .
          I=$[$I + 1]
     done
-} 2>/dev/null
-if ! NODE_OPTIONS=--dns-result-order=ipv4first npm -C service-nodejs test 2>&1 | tee test-logs/service-nodejs.log; then
-  tests_with_errors+=("service-nodejs")
+  } 2>/dev/null
+  if ! NODE_OPTIONS=--dns-result-order=ipv4first npm -C nodejs/service-nodejs test 2>&1 | tee test-logs/nodejs_service-nodejs.log; then
+    tests_with_errors+=("nodejs/service-nodejs")
+  fi
 fi
 
 print_failed_tests

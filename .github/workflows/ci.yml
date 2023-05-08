@@ -8,8 +8,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  tests:
-    name: Quickstarts tests
+  tests-legacy:
+    name: Legacy Quickstarts Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -54,3 +54,79 @@ jobs:
           path: |
             test-logs
             keycloak.log
+
+  tests:
+    name: Quickstarts Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        if: ${{ github.event_name != 'schedule' }}
+      - uses: actions/checkout@v2
+        if: ${{ github.event_name == 'schedule' }}
+        with:
+          ref: 'main'
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Update maven settings
+        run: mkdir -p ~/.m2 ; cp .github/settings.xml ~/.m2/
+
+      - name: Cache Maven repo
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.m2/repository
+            !~/.m2/repository/org/keycloak
+          key: cache-1-${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: cache-1-${{ runner.os }}-m2
+
+      - name: Get Keycloak
+        run: scripts/prepare-local-server.sh
+
+      - name: Build Quickstarts
+        run: scripts/build-quickstarts.sh jakarta
+
+      - name: Start Keycloak
+        run: scripts/start-local-server.sh
+
+      - name: Run unit tests
+        run: scripts/run-tests.sh jakarta
+
+  tests-spring:
+    name: Spring Quickstarts Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        if: ${{ github.event_name != 'schedule' }}
+      - uses: actions/checkout@v2
+        if: ${{ github.event_name == 'schedule' }}
+        with:
+          ref: 'main'
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 17
+      - name: Update maven settings
+        run: mkdir -p ~/.m2 ; cp .github/settings.xml ~/.m2/
+
+      - name: Cache Maven repo
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.m2/repository
+            !~/.m2/repository/org/keycloak
+          key: cache-1-${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: cache-1-${{ runner.os }}-m2
+
+      - name: Get Keycloak
+        run: scripts/prepare-local-server.sh
+
+      - name: Build Quickstarts
+        run: scripts/build-quickstarts.sh jakarta
+
+      - name: Start Keycloak
+        run: scripts/start-local-server.sh
+
+      - name: Run unit tests
+        run: |
+          mvn -f springframework/app-authz-rest-springboot -Djakarta clean package verify
+
