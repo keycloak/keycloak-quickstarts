@@ -74,17 +74,15 @@ if [ "$1" = "jakarta" ]; then
   run_tests jakarta/app-authz-jakarta-servlet -Djakarta -Pwildfly-managed
   run_tests jakarta/app-jakarta-rs -Djakarta -Pwildfly-managed
 elif [ "$1" = "nodejs" ]; then
-  cd nodejs/service-nodejs
   npm -C nodejs/service-nodejs install
   npm -C nodejs/service-nodejs start&
   if npm -C nodejs/service-nodejs test 2>&1 | tee test-logs/nodejs_service-nodejs.log; then
     tests_with_errors+=("nodejs/service-nodejs")
   fi
 
-  cd ../spa
-  npm install
-  npx playwright install-deps chromium
-  npx playwright install chromium
+  npm -C nodejs/service-nodejs install
+  npx -C nodejs/service-nodejs playwright install-deps chromium
+  npx -C nodejs/service-nodejs playwright install chromium
   if npm -C nodejs/spa test 2>&1 | tee test-logs/nodejs_spa.log; then
     tests_with_errors+=("nodejs/spa")
   fi
