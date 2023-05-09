@@ -157,5 +157,6 @@ jobs:
           npm test
           cd ../spa
           npm install
+          npx playwright install chromium
           npm test
 
