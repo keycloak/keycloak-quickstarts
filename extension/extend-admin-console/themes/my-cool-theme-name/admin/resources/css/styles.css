@@ -1,0 +1,109 @@
+/*
+ * Copyright 2016 Red Hat, Inc. and/or its affiliates
+ * and other contributors as indicated by the @author tags.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@import "~@patternfly/patternfly/patternfly.css";
+
+/* Overrides to PatternFly variables should be made at the :root level 
+ * for global variables or at the top-level component selector 
+ * for component variables (for example, .pf-c-button), as these overrides 
+ * will cascade down to children elements accordingly.
+*/
+
+/* Overrides the global light-200 colour to white and blue-500 colour to black */
+:root {
+  --pf-global--Color--light-100: var(--pf-global--Color--light-200);
+  --pf-global--palette--black-1000: var(--pf-global--palette--blue-500);
+}
+
+/* Overrides the top-level component selectors for component variables */
+.pf-c-page__header,
+.pf-c-page__sidebar,
+.pf-c-dropdown__toggle.keycloak__realm_selector_dropdown__toggle {
+  background-color: var(--pf-global--palette--black-1000);
+}
+
+.pf-c-dropdown__menu,
+.pf-c-table,
+.pf-c-data-list__item,
+.pf-c-card,
+.pf-c-wizard__nav,
+.pf-c-wizard__main,
+.pf-c-wizard__footer,
+.pf-c-toolbar,
+.pf-c-pagination.pf-m-bottom,
+.pf-c-input-group,
+.pf-c-modal-box.pf-m-md,
+.pf-c-modal-box.pf-m-sm,
+.pf-c-modal-box.pf-m-lg,
+.pf-c-form {
+  background-color: var(--pf-global--Color--light-100);
+}
+
+.pf-c-page__main-breadcrumb,
+.pf-c-page__main-section,
+.pf-c-drawer__panel-main,
+.pf-c-drawer__content,
+.pf-c-toolbar.pf-u-p-0,
+.pf-c-form__group.pf-m-action.keycloak__form_actions {
+  background-color: var(--pf-global--Color--light-300);
+}
+
+.pf-c-tabs {
+  --pf-c-tabs--before--BorderColor: var(--pf-global--Color--light-200);
+}
+
+.pf-c-tabs__list {
+  background-color: var(--pf-global--Color--light-100);
+}
+
+a {
+  color: var(--pf-global--link--Color--dark);
+}
+
+.pf-c-button:disabled {
+  border: 1px solid var(--pf-global--Color--light-300);
+}
+
+.pf-c-form {
+  padding: var(--pf-global--spacer--md);
+}
+
+input[type="text"],
+input[type="password"] {
+  color: var(--pf-global--Color--200);
+  font-size: var(--pf-global--FontSize--md);
+  background-color: var(--pf-global--Color--light-100);
+  border: 1px solid var(--pf-global--Color--light-300);
+  width: 296px;
+}
+
+input[type="text"]:hover,
+input[type="password"]:hover {
+  background-color: var(--pf-global--Color--light-100);
+}
+
+input[type="submit"] {
+  border: none;
+  background-color: var(--pf-global--Color--primary-300);
+  color: var(--pf-global--Color--light-100);
+  font-size: var(--pf-global--FontSize--md);
+  font-weight: var(--pf-global--FontWeight--bold);
+  margin-top: var(--pf-global--spacer--lg);
+  margin-right: var(--pf-global--spacer--md);
+  width: 150px;
+  transition: background-color 0.3s ease-in-out;
+}
