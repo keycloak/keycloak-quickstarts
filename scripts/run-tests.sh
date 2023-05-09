@@ -80,9 +80,9 @@ elif [ "$1" = "nodejs" ]; then
     tests_with_errors+=("nodejs/service-nodejs")
   fi
 
-  npm -C nodejs/service-nodejs install
-  npx -C nodejs/service-nodejs playwright install-deps chromium
-  npx -C nodejs/service-nodejs playwright install chromium
+  npm -C nodejs/spa install
+  npx -C nodejs/spa playwright install-deps chromium
+  npx -C nodejs/spa playwright install chromium
   if npm -C nodejs/spa test 2>&1 | tee test-logs/nodejs_spa.log; then
     tests_with_errors+=("nodejs/spa")
   fi
