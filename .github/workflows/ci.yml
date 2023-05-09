@@ -150,13 +150,5 @@ jobs:
         run: scripts/start-local-server.sh
 
       - name: Run unit tests
-        run: |
-          cd nodejs/service-nodejs
-          npm install
-          npm start&
-          npm test
-          cd ../spa
-          npm install
-          npx playwright install chromium
-          npm test
+        run: scripts/run-tests.sh nodejs
 

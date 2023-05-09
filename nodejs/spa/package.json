@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node app.js",
-    "test": "node tests/utils/create-realm.js && npx playwright test --project=chromium && node tests/utils/delete-realm.js"
+    "test": "node test/utils/create-realm.js && npx playwright test --project=chromium && node test/utils/delete-realm.js"
   },
   "repository": {
     "type": "git",
