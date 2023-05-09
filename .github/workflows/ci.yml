@@ -155,4 +155,7 @@ jobs:
           npm install
           npm start&
           npm test
+          cd ../spa
+          npm install
+          npm test
 
