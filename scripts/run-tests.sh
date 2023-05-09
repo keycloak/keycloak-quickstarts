@@ -73,7 +73,7 @@ if [ "$1" = "jakarta" ]; then
   run_tests extension/user-storage-jpa -Djakarta -Pkeycloak-remote
   run_tests jakarta/app-authz-jakarta-servlet -Djakarta -Pwildfly-managed
   run_tests jakarta/app-jakarta-rs -Djakarta -Pwildfly-managed
-else if [ "$1" = "nodejs" ]; then
+elif [ "$1" = "nodejs" ]; then
   npm -C nodejs/service-nodejs install && npm -C nodejs/service-nodejs start >/dev/null& npm -C nodejs/service-nodejs test
   npm -C nodejs/spa install && npm -C nodejs/spa test
 else
