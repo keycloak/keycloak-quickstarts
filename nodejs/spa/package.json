@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node app.js",
-    "test": "npx playwright test --project=chromium"
+    "test": "node tests/utils/create-realm.js && npx playwright test --project=chromium && node tests/utils/delete-realm.js"
   },
   "repository": {
     "type": "git",
@@ -25,7 +25,8 @@
   "homepage": "https://github.com/keycloak/keycloak-quickstarts#readme",
   "dependencies": {
     "express": "^4.17.2",
-    "string-replace-middleware": "^1.0.2"
+    "string-replace-middleware": "^1.0.2",
+    "@keycloak/keycloak-admin-client": "^21.1.1"
   },
   "devDependencies": {
     "@playwright/test": "^1.33.0"
