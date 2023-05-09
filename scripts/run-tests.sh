@@ -78,7 +78,7 @@ elif [ "$1" = "nodejs" ]; then
   npm install && npm start >/dev/null& npm test
 
   cd ../spa
-  npm install && npx playwright install-deps chromium && npm test
+  npm install && npx playwright install-deps chromium && npx playwright install chromium && npm test
 else
   run_tests javaee/app-profile-saml-jee-jsp -Pwildfly-managed
 fi
