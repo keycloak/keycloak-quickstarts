@@ -1,0 +1,33 @@
+{
+  "name": "spa",
+  "version": "0.0.1",
+  "description": "Keycloak Single-Page Application Example",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "start": "node app.js",
+    "test": "npx playwright test --project=chromium"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/keycloak/keycloak-quickstarts.git"
+  },
+  "keywords": [
+    "keycloack",
+    "node.js",
+    "express"
+  ],
+  "author": "Red Hat Inc.",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/keycloak/keycloak-quickstarts/issues"
+  },
+  "homepage": "https://github.com/keycloak/keycloak-quickstarts#readme",
+  "dependencies": {
+    "express": "^4.17.2",
+    "string-replace-middleware": "^1.0.2"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.33.0"
+  }
+}

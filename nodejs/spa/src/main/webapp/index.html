@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Keycloak Single-Page Application Example</title>
+    <script type="text/javascript" src="KC_URL/js/keycloak.js"></script>
+    <script type="text/javascript">
+        function output(content) {
+            if (typeof content === 'object') {
+                content = JSON.stringify(content, null, 2)
+            }
+            document.getElementById('output').textContent = content;
+        }
+
+        function profile() {
+            if (keycloak.idTokenParsed.name) {
+                document.getElementById('name').textContent = 'Hello ' + keycloak.idTokenParsed.name;
+            } else {
+                document.getElementById('name').textContent = 'Hello ' + keycloak.idTokenParsed.preferred_username;
+            }
+            document.getElementById('user').style.display = 'block';
+        }
+
+        keycloak = new Keycloak({ realm: 'quickstart', clientId: 'spa' });
+        keycloak.init({onLoad: 'login-required'}).then(function () {
+            console.log('User is now authenticated.');
+            profile();
+        }).error(function () {
+            window.location.reload();
+        });
+    </script>
+</head>
+<body>
+
+<div id="user" style="display: none">
+    <button id="logout" onclick="window.keycloak.logout()">Logout</button>
+    <button id="showIdToken" onclick="output(keycloak.idTokenParsed)">Show ID Token</button>
+    <button id="showAccessToken" onclick="output(keycloak.tokenParsed)">Show Access Token</button>
+    <button id="refreshToken" onclick="window.keycloak.updateToken(-1).then(function() { output(keycloak.idTokenParsed); profile() })">Refresh</button>
+    <hr/>
+    <h2 id="name"></h2>
+    <pre id="output"></pre>
+</div>
+
+</body>
+</html>
