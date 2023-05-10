@@ -69,6 +69,7 @@ if [ "$1" = "jakarta" ]; then
   echo "Running tests with jakarta profile"
   run_tests extension/event-listener-sysout -Djakarta -Pkeycloak-remote
   run_tests extension/event-store-mem -Djakarta -Pkeycloak-remote
+  run_tests extension/extend-account-console -Djakarta -Pkeycloak-remote
   run_tests extension/user-storage-simple -Djakarta -Pkeycloak-remote
   run_tests extension/user-storage-jpa -Djakarta -Pkeycloak-remote
   run_tests jakarta/app-authz-jakarta-servlet -Djakarta -Pwildfly-managed

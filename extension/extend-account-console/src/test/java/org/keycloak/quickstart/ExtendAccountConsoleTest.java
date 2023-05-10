@@ -17,14 +17,10 @@
 
 package org.keycloak.quickstart;
 
-import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.jboss.arquillian.graphene.page.Page;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.shrinkwrap.api.Archive;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
@@ -33,10 +29,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.keycloak.test.FluentTestsHelper;
 import org.keycloak.test.page.LoginPage;
-import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 
-import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -58,12 +52,6 @@ public class ExtendAccountConsoleTest {
     private WebDriver webDriver;
 
     private static FluentTestsHelper testsHelper;
-
-    @Deployment(testable = false)
-    public static Archive<?> createTestArchive() {
-        return ShrinkWrap.create(JavaArchive.class, "keycloak-man-theme.jar")
-                .addAsResource(new File("src/main/resources/"), "");
-    }
 
     @BeforeClass
     public static void beforeClass() {
@@ -94,7 +82,6 @@ public class ExtendAccountConsoleTest {
         testsHelper.importTestRealm("/quickstart-realm.json");
         webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
         webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        webDriver.manage().window().setSize(new Dimension(1280,720));
     }
 
     @Test

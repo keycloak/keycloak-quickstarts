@@ -23,7 +23,11 @@ The theme is based on Keycloak Man, the retired mascot of the Keycloak project.
 System Requirements
 -------------------
 
-There is nothing required to build this project.  However, if you want to do the JSX example, you will need to install npm on your system.
+You need to have <span>Keycloak</span> running. It is recommended to use Keycloak 22 or later.
+
+All you need to build this project is Java 11 (Java SDK 11) or later and Maven 3.6.3 or later.
+
+If you want to do the JSX example, you will need to install npm on your system.
 
 It is also recommended that you read about Keycloak themes in the Server Developer guide. 
 
@@ -31,14 +35,23 @@ It is also recommended that you read about Keycloak themes in the Server Develop
 Configuration in <span>Keycloak</span>
 -----------------------
 
-1. Do one of the following:
-   * Deploy the theme as a JAR (recommended): run ``mvn clean install`` and copy ``target/keycloak-man-theme.jar``
-     to ``<keycloak install>/standalone/deployments``.
-   * Copy the [``keycloak-man``](src/main/resources/theme/keycloak-man) folder to your ``<keycloak install>/themes`` directory.
+To build the provider, run the following maven command:
+
+   ````
+   mvn clean install
+   ````
+
+To install the provider, copy the `target/keycloak-man-theme.jar` JAR file to the `providers` directory of the server distribution.
+
+Finally, start the server as follows:
+
+    ```
+    kc.[sh|bat] start-dev
+    ```
 1. Open Keycloak Admin Console.
-1. Go to the ``Realm Settings-->Themes`` tab.
-1. Set Account Theme to ``keycloak-man``
-1. Go to the account console.
+2. Go to the ``Realm Settings-->Themes`` tab. 
+3. Set Account Theme to ``keycloak-man``
+4. Go to the account console.
 
 Access the Quickstart
 ---------------------
@@ -48,6 +61,11 @@ You can access the account console with a URL like: <http://localhost:8080/auth/
 Integration test of the Quickstart
 ----------------------------------
 
-1. Make sure you have a Keycloak server running with an `admin` user and `admin` password in the `master` realm.
+1. Make sure you have an Keycloak server running with an admin user in the `master` realm or use the provided docker image. Your <span>Keycloak</span> should be listening on `http://localhost:8180/auth`. You can archive this by running:
+
+```
+./kc.sh start-dev --http-port=8180 --http-relative-path="/auth"
+```
+
 2. You need to have Chrome browser installed and updated to the latest version.
-3. Run `mvn test -Pkeycloak-remote`.
+3. Run `mvn clean install -Djakarta -Pkeycloak-remote`
