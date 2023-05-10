@@ -1,0 +1,58 @@
+{
+  "realm": "quickstart",
+  "enabled": true,
+  "clients": [
+    {
+      "clientId": "spa",
+      "enabled": true,
+      "publicClient": true,
+      "directAccessGrantsEnabled": true,
+      "redirectUris": [ "http://localhost:8080/*" ]
+    }
+  ],
+  "users" : [
+    {
+      "username" : "alice",
+      "enabled": true,
+      "email" : "alice@keycloak.org",
+      "firstName": "Alice",
+      "lastName": "Liddel",
+      "credentials" : [
+        { "type" : "password",
+          "value" : "password" }
+      ],
+      "realmRoles": [ "user", "offline_access"  ],
+      "clientRoles": {
+        "account": [ "manage-account" ]
+      }
+    },
+    {
+      "username" : "test-admin",
+      "enabled": true,
+      "email" : "test@admin.org",
+      "firstName": "Admin",
+      "lastName": "Test",
+      "credentials" : [
+        { "type" : "password",
+          "value" : "password" }
+      ],
+      "realmRoles": [ "user","admin" ],
+      "clientRoles": {
+        "realm-management": [ "realm-admin" ],
+        "account": [ "manage-account" ]
+      }
+    }
+  ],
+  "roles" : {
+    "realm" : [
+      {
+        "name": "user",
+        "description": "User privileges"
+      },
+      {
+        "name": "admin",
+        "description": "Administrator privileges"
+      }
+    ]
+  }
+}

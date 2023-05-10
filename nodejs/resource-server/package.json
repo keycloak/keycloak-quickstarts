@@ -1,0 +1,20 @@
+{
+  "type": "module",
+  "name": "keycloak-resource-server",
+  "scripts": {
+    "start": "node app.js",
+    "test": "tape test/utils/create-realm.js && tape test/*.js && tape test/utils/delete-realm.js",
+    "create-realm": "node test/utils/create-realm.js",
+    "delete-realm": "node test/utils/delete-realm.js"
+  },
+  "dependencies": {
+    "@keycloak/keycloak-admin-client": "^21.1.1",
+    "express": "^4.13.3",
+    "keycloak-connect": "keycloak/keycloak-nodejs-connect"
+  },
+  "devDependencies": {
+    "keycloak-request-token": "^0.1.0",
+    "roi": "^0.15.0",
+    "tape": "^5.6.3"
+  }
+}
