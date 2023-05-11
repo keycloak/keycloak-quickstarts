@@ -3,47 +3,42 @@ import test from 'tape';
 import roi from 'roi';
 import tokenRequester from 'keycloak-request-token';
 
-test('Should test public route with no credentials.', async function (t) {
+test('Should test public route with no credentials.', async (t) => {
   const options = {
     'endpoint': 'http://localhost:3000/service/public'
   };
 
   let response = await roi.get(options);
   t.equal(JSON.parse(response.body).message, 'public');
-  t.end();
 });
 
-test('Should test secured route with no credentials.', t => {
+test('Should test secured route with no credentials.', async (t) => {
   const options = {
     'endpoint': 'http://localhost:3000/service/secured'
   };
 
-  roi.get(options)
-    .then(x => {
-      t.fail('Should never reach this block');
-    })
-    .catch(e => {
-      t.equal(e.toString(), 'Access denied');
-      t.end();
-    });
+  try {
+    await roi.get(options);
+    t.fail('Should never reach this block');
+  } catch (error) {
+    t.equal(error.toString(), 'Access denied');
+  }
 });
 
-test('Should test admin route with no credentials.', t => {
+test('Should test admin route with no credentials.', async (t) => {
   const options = {
     'endpoint': 'http://localhost:3000/service/admin'
   };
 
-  roi.get(options)
-    .then(x => {
-      t.fail('Should never reach this block');
-    })
-    .catch(e => {
-      t.equal(e.toString(), 'Access denied');
-      t.end();
-    });
+  try {
+    await roi.get(options);
+    t.fail('Should never reach this block');
+  } catch (error) {
+    t.equal(error.toString(), 'Access denied');
+  }
 });
 
-test('Should test secured route with user credentials.', async function (t) {
+test('Should test secured route with user credentials.', async (t) => {
   const options = {
     endpoint: 'http://localhost:3000/service/secured',
     headers: {
@@ -53,10 +48,9 @@ test('Should test secured route with user credentials.', async function (t) {
 
   let response = await roi.get(options);
   t.equal(JSON.parse(response.body).message, 'secured');
-  t.end();
 });
 
-test('Should test secured route with admin credentials.', async function (t) {
+test('Should test secured route with admin credentials.', async (t) => {
   config.token.username = 'test-admin';
   const options = {
     endpoint: 'http://localhost:3000/service/admin',
@@ -67,5 +61,4 @@ test('Should test secured route with admin credentials.', async function (t) {
 
   let response = await roi.get(options);
   t.equal(JSON.parse(response.body).message, 'admin');
-  t.end();
 });
