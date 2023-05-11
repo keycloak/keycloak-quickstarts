@@ -5,7 +5,7 @@ const app = express();
 const port = 3000;
 
 // Middleware configuration loaded from keycloak.json file.
-const keycloak = new Keycloak();
+const keycloak = new Keycloak({});
 
 app.use(keycloak.middleware());
 
