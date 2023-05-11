@@ -27,7 +27,6 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -38,14 +37,10 @@ import org.keycloak.Token;
 import org.keycloak.TokenCategory;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.RealmResource;
-import org.keycloak.authentication.AuthenticatorFactory;
-import org.keycloak.authentication.actiontoken.ActionTokenHandlerFactory;
 import org.keycloak.common.util.Base64;
 import org.keycloak.jose.jws.JWSInput;
 import org.keycloak.quickstart.actiontoken.authenticator.ExternalAppAuthenticator;
 import org.keycloak.quickstart.actiontoken.authenticator.ExternalAppAuthenticatorFactory;
-import org.keycloak.quickstart.actiontoken.token.ExternalApplicationNotificationActionToken;
-import org.keycloak.quickstart.actiontoken.token.ExternalApplicationNotificationActionTokenHandler;
 import org.keycloak.quickstart.page.ExternalActionPage;
 import org.keycloak.representations.JsonWebToken;
 import org.keycloak.representations.idm.AuthenticationExecutionInfoRepresentation;
@@ -78,15 +73,13 @@ import static org.keycloak.test.TestsHelper.keycloakBaseUrl;
 @RunWith(Arquillian.class)
 public class ArquillianActionTokenWithAuthenticatorTest {
 
-    private static final String PROVIDER_JAR = "action-token-provider";
     private static final String EXTERNAL_APP = "action-token-responder-example";
 
     private static Keycloak ADMIN_CLIENT;
-    private static final String KEYCLOAK_URL = "http://%s:%s/auth%s";
+    private static final String KEYCLOAK_URL = keycloakBaseUrl + "%s";
     private static final String REALM_QUICKSTART_ACTION_TOKEN = "quickstart-action-token";
 
     private static final String WEBAPP_SRC = "src/main/webapp";
-    private static final String RESOURCES_SRC = "src/test/resources";
 
     @Page
     private LoginPage loginPage;
@@ -100,24 +93,6 @@ public class ArquillianActionTokenWithAuthenticatorTest {
     @ArquillianResource
     @OperateOnDeployment(EXTERNAL_APP)
     private URL externalAppContextRoot;
-
-    @ArquillianResource
-    @OperateOnDeployment(PROVIDER_JAR)
-    private URL keycloakContextRoot;
-
-    @Deployment(testable=false, name=PROVIDER_JAR)
-    @TargetsContainer("keycloak-remote")
-    public static Archive<?> createProviderArchive() throws IOException {
-        return ShrinkWrap.create(JavaArchive.class, "action-token-provider.jar")
-                .addClasses(
-                  ExternalApplicationNotificationActionToken.class,
-                  ExternalApplicationNotificationActionTokenHandler.class,
-                  ExternalAppAuthenticator.class,
-                  ExternalAppAuthenticatorFactory.class)
-                .addAsManifestResource(new File(RESOURCES_SRC, "MANIFEST.MF"))
-                .addAsServiceProvider(AuthenticatorFactory.class, ExternalAppAuthenticatorFactory.class)
-                .addAsServiceProvider(ActionTokenHandlerFactory.class, ExternalApplicationNotificationActionTokenHandler.class);
-    }
 
     @Deployment(testable=false, name=EXTERNAL_APP)
     @TargetsContainer("wildfly")
@@ -209,6 +184,6 @@ public class ArquillianActionTokenWithAuthenticatorTest {
     }
 
     private void navigateTo(String path) {
-        webDriver.navigate().to(format(KEYCLOAK_URL, keycloakContextRoot.getHost(), keycloakContextRoot.getPort(), path));
+        webDriver.navigate().to(format(KEYCLOAK_URL, path));
     }
 }
