@@ -5,8 +5,6 @@ Level: Beginner
 Technologies: Jakarta EE  
 Summary: Servlet Application Using Fine-grained Authorization  
 Target Product: <span>Keycloak</span>, <span>WildFly</span>
-Source: <https://github.com/keycloak/keycloak-quickstarts>  
-
 
 What is it?
 -----------
@@ -31,26 +29,44 @@ You'll also learn how to use the `AuthorizationContext` object to obtain permiss
 System Requirements
 -------------------
 
-See the [Getting Started Guide](../docs/getting-started.md) for the minimum requirements and steps to build and run the quickstart.
+To compile and run this quickstart you will need:
 
-Configure the Client Adapter
-----------------------------------
+* JDK 11
+* Apache Maven 3.8.6
+* Wildfly 28+
+* Keycloak 21+
+* Docker 20+
 
-Before configuring the adapter you need to create a `realm` in <span>Keycloak</span> with all the necessary configuration to deploy and run the quickstart.
+Starting and Configuring the Keycloak Server
+-------------------
 
-The following steps show how to create the realm required for this quickstart:
+To start a Keycloak Server you can use Docker and just run the following command in the root directory of this quickstart:
 
-* Open the <span>Keycloak</span> admin console
-* In the top left corner dropdown menu that is titled Master, click Add Realm. If you are logged in to the master realm this dropdown menu lists all the realms created.
-* For this quickstart we are not going to manually create the realm, but import all configuration from a JSON file. Click on `Select File` and import the [config/realm-import.json](config/realm-import.json).
-* Click `Create`
+```shell
+docker run --name keycloak \
+  -e KEYCLOAK_ADMIN=admin \
+  -e KEYCLOAK_ADMIN_PASSWORD=admin \
+  --network=host \
+  quay.io/keycloak/keycloak:{KC_VERSION} \
+  start-dev \
+  --http-relative-path=/auth --http-port=8180
+```
 
-The steps above will result on a new `quickstart` realm.
+where `KC_VERSION` should be set to 21.0.0 or higher.
 
-[NOTE]
-If you deploy the application somewhere else change the hostname and port of the URLs accordingly.
+You should be able to access your Keycloak Server at http://localhost:8180/auth.
 
-Finally, you need to configure the adapter, this is done by the [WEB-INF/oidc.json](src/main/webapp/WEB-INF/oidc.json) and [WEB-INF/policy-enforcer.json](src/main/webapp/WEB-INF/policy-enforcer.json) configuration files.
+Log in as the admin user to access the Keycloak Administration Console. Username should be `admin` and password `admin`.
+
+Import the [realm configuration file](config/realm-import.json) to create a new realm called `quickstart`.
+For more details, see the Keycloak documentation about how to [create a new realm](https://www.keycloak.org/docs/latest/server_admin/index.html#_create-realm).
+
+Starting the Wildfly Server
+-------------------
+
+In order to deploy the example application, you need a Wildfly Server up and running. For more details, see the Wildfly documentation about how to [install the server](https://docs.wildfly.org/).
+
+Make sure the server is accessible from `localhost` and listening on port `8080`. 
 
 Build and Deploy the Quickstart
 -------------------------------
@@ -60,10 +76,8 @@ Build and Deploy the Quickstart
 2. The following shows the command to deploy the quickstart:
 
    ````
-   mvn clean wildfly:deploy
-
+   mvn -Djakarta clean wildfly:deploy
    ````
-
 
 Access the Quickstart
 ----------------------
@@ -100,10 +114,25 @@ For more information, please consult the Authorization Services documentation.
 Undeploy the Quickstart
 --------------------
 
-1. Open a terminal and navigate to the root of the <span>Keycloak</span> server directory.
+1. Open a terminal and navigate to the root directory of this quickstart.
 
-2. The following shows the command to undeploy the quickstart:
+2. The following shows the command to deploy the quickstart:
 
    ````
-mvn wildfly:undeploy
+   mvn -Djakarta clean wildfly:undeploy
+   ````
+
+Running tests
+--------------------
+
+Make sure Keycloak is [running](#starting-and-configuring-the-keycloak-server).
+
+You don't need Wildfly running because a temporary server is started during test execution.
+
+1. Open a terminal and navigate to the root directory of this quickstart.
+
+2. Run the following command to build and run tests:
+
+   ````
+   mvn -Djakarta -Pwildfly-managed clean verify
    ````
