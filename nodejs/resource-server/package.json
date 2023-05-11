@@ -1,6 +1,6 @@
 {
-  "type": "module",
   "name": "keycloak-resource-server",
+  "type": "module",
   "scripts": {
     "start": "node app.js",
     "test": "npm run create-realm && node --test && npm run delete-realm",
