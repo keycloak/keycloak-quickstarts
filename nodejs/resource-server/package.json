@@ -3,7 +3,7 @@
   "name": "keycloak-resource-server",
   "scripts": {
     "start": "node app.js",
-    "test": "npm run create-realm && tape test/*.js && npm run delete-realm",
+    "test": "npm run create-realm && node --test test/*.js && npm run delete-realm",
     "create-realm": "node test/utils/create-realm.js",
     "delete-realm": "node test/utils/delete-realm.js"
   },
@@ -13,7 +13,6 @@
     "keycloak-connect": "keycloak/keycloak-nodejs-connect"
   },
   "devDependencies": {
-    "keycloak-request-token": "^0.1.0",
-    "tape": "^5.6.3"
+    "keycloak-request-token": "^0.1.0"
   }
 }
