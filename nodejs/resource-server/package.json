@@ -14,7 +14,6 @@
   },
   "devDependencies": {
     "keycloak-request-token": "^0.1.0",
-    "roi": "^0.18.0",
     "tape": "^5.6.3"
   }
 }

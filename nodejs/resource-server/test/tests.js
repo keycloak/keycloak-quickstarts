@@ -1,64 +1,40 @@
-import config from './utils/config.js';
-import test from 'tape';
-import roi from 'roi';
 import tokenRequester from 'keycloak-request-token';
+import test from 'tape';
+import config from './utils/config.js';
 
 test('Should test public route with no credentials.', async (t) => {
-  const options = {
-    'endpoint': 'http://localhost:3000/service/public'
-  };
+  const response = await fetch('http://localhost:3000/service/public');
+  const data = await response.json();
 
-  let response = await roi.get(options);
-  t.equal(JSON.parse(response.body).message, 'public');
+  t.equal(data.message, 'public');
 });
 
 test('Should test secured route with no credentials.', async (t) => {
-  const options = {
-    'endpoint': 'http://localhost:3000/service/secured'
-  };
+  const response = await fetch('http://localhost:3000/service/secured');
 
-  try {
-    await roi.get(options);
-    t.fail('Should never reach this block');
-  } catch (error) {
-    t.equal(error.toString(), 'Access denied');
-  }
+  t.equal(response.statusText, 'Forbidden');
 });
 
 test('Should test admin route with no credentials.', async (t) => {
-  const options = {
-    'endpoint': 'http://localhost:3000/service/admin'
-  };
+  const response = await fetch('http://localhost:3000/service/admin');
 
-  try {
-    await roi.get(options);
-    t.fail('Should never reach this block');
-  } catch (error) {
-    t.equal(error.toString(), 'Access denied');
-  }
+  t.equal(response.statusText, 'Forbidden');
 });
 
 test('Should test secured route with user credentials.', async (t) => {
-  const options = {
-    endpoint: 'http://localhost:3000/service/secured',
-    headers: {
-      Authorization: 'Bearer ' + await tokenRequester(config.baseUrl, config.token)
-    }
-  };
+  const headers = { authorization: `Bearer ${await tokenRequester(config.baseUrl, config.token)}` };
+  const response = await fetch('http://localhost:3000/service/secured', { headers });
+  const data = await response.json();
 
-  let response = await roi.get(options);
-  t.equal(JSON.parse(response.body).message, 'secured');
+  t.equal(data.message, 'secured');
 });
 
 test('Should test secured route with admin credentials.', async (t) => {
   config.token.username = 'test-admin';
-  const options = {
-    endpoint: 'http://localhost:3000/service/admin',
-    headers: {
-      Authorization: 'Bearer ' + await tokenRequester(config.baseUrl, config.token)
-    }
-  };
 
-  let response = await roi.get(options);
-  t.equal(JSON.parse(response.body).message, 'admin');
+  const headers = { authorization: `Bearer ${await tokenRequester(config.baseUrl, config.token)}` };
+  const response = await fetch('http://localhost:3000/service/admin', { headers });
+  const data = await response.json();
+
+  t.equal(data.message, 'admin');
 });
