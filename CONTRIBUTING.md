@@ -1,43 +1,34 @@
 # Keycloak Community
 
-The Keycloak Quickstarts is an Open Source adapter solution to protect modern Node.js Applications and Services.
+Keycloak is an Open Source Identity and Access Management solution for modern Applications and Services.
 
-## Contributing to the Quickstarts
-
-The Quickstarts is an Open Source community-driven project and we welcome contributions as well as feedback from the community.
-
-We do have a few guidelines in place to help you be successful with your contribution to the Quickstarts.
+## Contributing to Keycloak Quickstarts
 
 Here's a quick checklist for a good PR, more details below:
 
-1. [Keycloak Dev Mailing List](https://lists.jboss.org/mailman/listinfo/keycloak-dev)
 2. A GitHub Issue with a good description associated with the PR
 3. One feature/change per PR
 4. One commit per PR
 5. PR rebased on main (`git rebase`, not `git pull`)
-6. Commit message is prefixed by the issue number (for example `#58 Message`)
-7. No changes to code not directly related to your PR
-8. Includes functional/integration test
-9. Includes documentation
+5. [Good descriptive commit message, with link to issue](#commit-messages-and-issue-linking)
+6. No changes to code not directly related to your PR
+7. Includes functional/integration test
+8. Includes documentation
+
+If you are contributing a new quickstart, please wait for feedback from our maintainers before doing any implementation. 
+Make sure to describe in the issue the purpose of the quickstart and how it can help others with similar use cases.
 
 Once you have submitted your PR please monitor it for comments/feedback. We reserve the right to close inactive PRs if
 you do not respond within 2 weeks (bear in mind you can always open a new PR if it is closed due to inactivity).
 
 Also, please remember that we do receive a fairly large amount of PRs and also have code to write ourselves, so we may
-not be able to respond to your PR immediately. The best place to ping us is on the thread you started on the dev mailing list.
+not be able to respond to your PR immediately.
 
 ### Finding something to work on
 
 If you would like to contribute to Keycloak, but are not sure exactly what to work on, you can find a number of open
-issues that are awaiting contributions in the [GitHub Issues](https://github.com/keycloak/keycloak-quickstarts/issues?q=is%3Aopen+is%3Aissue+no%3Aassignee).
-
-### Open a discussion on Keycloak Dev Mailing List
-
-As Keycloak is a community-driven project we require contributors to send a description of what they are planning to
-work on to the [Keycloak Dev Mailing List](https://lists.jboss.org/mailman/listinfo/keycloak-dev).
-
-We recommend starting the discussion prior to submitting your PR. Through the mailing list you can get valuable
-feedback both from the core Keycloak team as well as the wider community.
+issues that are awaiting contributions in  
+[issues](https://github.com/keycloak/keycloak-quickstarts/issues).
 
 ### Create an issue
 
@@ -49,8 +40,7 @@ new releases.
 
 ### Implementing
 
-Details for building from source and working with the codebase are provided in the
-[building and working with the code base](docs/getting-started.md) guide.
+Make sure the quickstart is simple enough and understandable by developers not so experienced as you.
 
 Do not format or refactor code that is not directly related to your contribution. If you do this it will significantly
 increase our effort in reviewing your PR. If you have a strong need to refactor code then submit a separate PR for the
@@ -58,24 +48,13 @@ refactoring.
 
 ### Testing
 
-Details for implementing tests are provided in the [writing tests](docs/test-development.md) guide.
+You must provide tests for a quickstart and make sure they are running in our CI. 
 
-Do not add mock frameworks or other testing frameworks that are not already part of the testsuite. Please write tests
-in the same way as we have written our tests.
+The tests should be written in its simplest form so that they can be maintained by us. 
 
 ### Documentation
 
-We require contributions to include relevant documentation. Alongside your PR for code changes, prepare a PR to the [Keycloak Documentation](https://github.com/keycloak/keycloak-documentation).
-
-In the description of your PR include a link to the PR to [Keycloak Documentation](https://github.com/keycloak/keycloak-documentation).
-
-### Picking correct branch for your PR
-
-Quickstarts are organized into the following branches:
-* `main` contains the latest state of the development on par with latest Keycloak.
-  This is destination for your PR.
-* `latest` is the branch that corresponds to the latest _released_ version of Keycloak.
-  You should *not* open PRs to this branch unless there is proper justification.
+Make sure the quickstart is properly documented from a `README.md` file that must be located at the root of the quickstart.
 
 ### Submitting your PR
 
@@ -92,5 +71,43 @@ for more details.
 The above helps us review your PR and also makes it easier for us to maintain the repository. It is also required by
 our automatic merging process.
 
-We also require that the commit message is prefixed with the issue number (example commit message
-`#12 My super cool new feature`).
+Please, also provide a good description [commit message, with a link to the issue](#commit-messages-and-issue-linking).
+We also require that the commit message includes a link to the issue ([linking a pull request to an issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue)).
+
+### Commit messages and issue linking
+
+The format for a commit message should look like:
+
+```
+A brief descriptive summary
+
+Optionally, more details around how it was implemented
+
+Closes #1234
+``` 
+
+The very last part of the commit message should be a link to the GitHub issue, when done correctly GitHub will automatically link the issue with the PR. There are 3 alternatives provided by GitHub here:
+
+* Closes: Issues in the same repository
+* Fixes: Issues in a different repository (this shouldn't be used, as issues should be created in the correct repository instead)
+* Resolves: When multiple issues are resolved (this should be avoided)
+
+Although, GitHub allows alternatives (close, closed, fix, fixed), please only use the above formats.
+
+Creating multi line commit messages with `git` can be done with:
+
+```
+git commit -m "Summary" -m "Optional description" -m "Closes #1234"
+```
+
+Alternatively, `shift + enter` can be used to add line breaks:
+
+```
+$ git commit -m "Summary
+> 
+> Optional description
+> 
+> Closes #1234"
+```
+
+For more information linking PRs to issues refer to the [GitHub Documentation](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue).

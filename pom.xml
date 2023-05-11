@@ -594,7 +594,7 @@
             </properties>
             <modules>
                 <module>javaee/app-profile-saml-jee-jsp</module>
-                <module>extension/authz-js-policies</module>
+                <module>extension/extend-account-console</module>
             </modules>
             <dependencyManagement>
                 <dependencies>
