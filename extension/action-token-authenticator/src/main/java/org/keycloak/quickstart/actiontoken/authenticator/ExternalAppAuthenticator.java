@@ -31,14 +31,13 @@ import org.keycloak.quickstart.actiontoken.token.ExternalApplicationNotification
 import org.keycloak.representations.JsonWebToken;
 import org.keycloak.services.Urls;
 import org.keycloak.services.messages.Messages;
-import org.keycloak.sessions.AuthenticationSessionCompoundId;
 import org.keycloak.sessions.AuthenticationSessionModel;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.Objects;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 import org.jboss.logging.Logger;
 import static org.keycloak.quickstart.actiontoken.token.ExternalApplicationNotificationActionTokenHandler.QUERY_PARAM_APP_TOKEN;
 
@@ -79,7 +78,7 @@ public class ExternalAppAuthenticator implements Authenticator {
         String token = new ExternalApplicationNotificationActionToken(
           context.getUser().getId(),
           absoluteExpirationInSecs,
-          clientId,
+          authSession.getParentSession().getId(),
           applicationId
         ).serialize(
           context.getSession(),
