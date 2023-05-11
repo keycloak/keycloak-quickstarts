@@ -8,7 +8,7 @@ app.use(stringReplace({
   KC_URL: process.env.KC_URL || "http://localhost:8180/auth"
 }));
 
-app.use('/', express.static('src/main/webapp/'));
+app.use('/', express.static('public'));
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
