@@ -3,9 +3,9 @@
   "name": "keycloak-resource-server",
   "scripts": {
     "start": "node app.js",
-    "test": "npm run create-realm && node --test test/*.js && npm run delete-realm",
-    "create-realm": "node test/utils/create-realm.js",
-    "delete-realm": "node test/utils/delete-realm.js"
+    "test": "npm run create-realm && node --test && npm run delete-realm",
+    "create-realm": "node scripts/create-realm.js",
+    "delete-realm": "node scripts/delete-realm.js"
   },
   "dependencies": {
     "@keycloak/keycloak-admin-client": "^21.1.1",

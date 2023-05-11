@@ -1,7 +1,7 @@
 import tokenRequester from 'keycloak-request-token';
 import assert from 'node:assert';
 import test from 'node:test';
-import config from './utils/config.js';
+import config from '../config/config.js';
 
 test('accesses the \'public\' route without credentials.', async () => {
   const response = await fetch('http://localhost:3000/service/public');

@@ -1,11 +1,8 @@
 import KcAdminClient from '@keycloak/keycloak-admin-client';
-import config from './config.js';
+import config from '../config/config.js';
 
 const adminClient = new KcAdminClient(config.adminClient)
-async function auth() {
-    return adminClient.auth(config.adminClient);
-}
 
-await auth();
+await adminClient.auth(config.adminClient);
 
 export default adminClient;
