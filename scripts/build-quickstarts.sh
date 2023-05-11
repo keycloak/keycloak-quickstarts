@@ -27,9 +27,7 @@ else
   dist="keycloak-dist"
 fi
 
-if [ "$1" != "jakarta" ]; then
-  cp extension/authz-js-policies/target/authz-js-policies.jar $dist/providers
-else
+if [ "$1" == "jakarta" ]; then
   cp extension/event-listener-sysout/target/event-listener-sysout.jar $dist/providers
   cp extension/event-store-mem/target/event-store-mem.jar $dist/providers
   cp extension/extend-account-console/target/keycloak-man-theme.jar $dist/providers
