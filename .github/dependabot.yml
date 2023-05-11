@@ -1,0 +1,20 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /nodejs/resource-server
+    schedule:
+      interval: weekly
+      day: saturday
+    open-pull-requests-limit: 999
+    rebase-strategy: disabled
+    labels:
+      - area/dependencies
+  - package-ecosystem: npm
+    directory: /nodejs/spa
+    schedule:
+      interval: weekly
+      day: saturday
+    open-pull-requests-limit: 999
+    rebase-strategy: disabled
+    labels:
+      - area/dependencies
