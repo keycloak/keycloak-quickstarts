@@ -3,12 +3,12 @@
   "type": "module",
   "scripts": {
     "start": "node app.js",
-    "test": "node test/utils/create-realm.js && npx playwright test --project=chromium && node test/utils/delete-realm.js",
-    "create-realm": "node test/utils/create-realm.js",
-    "delete-realm": "node test/utils/delete-realm.js"
+    "test": "npm run create-realm && npx playwright test --project=chromium && npm run delete-realm",
+    "create-realm": "node scripts/create-realm.js",
+    "delete-realm": "node scripts/delete-realm.js"
   },
   "dependencies": {
-    "express": "^4.17.2",
+    "express": "^4.18.2",
     "string-replace-middleware": "^1.0.2",
     "@keycloak/keycloak-admin-client": "^21.1.1"
   },
