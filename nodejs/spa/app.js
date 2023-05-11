@@ -11,5 +11,5 @@ app.use(stringReplace({
 app.use('/', express.static('src/main/webapp/'));
 
 app.listen(port, () => {
-  console.log(`Single-Page Application listening on port ${port}`);
+  console.log(`Listening on port ${port}`);
 });

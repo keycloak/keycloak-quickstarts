@@ -2,6 +2,7 @@ import express from 'express';
 import Keycloak from 'keycloak-connect';
 
 const app = express();
+const port = 3000;
 
 // Middleware configuration loaded from keycloak.json file.
 const keycloak = new Keycloak();
@@ -24,6 +25,6 @@ app.use('*', (req, res) => {
   res.send('Not found!');
 });
 
-app.listen(3000, () => {
-  console.log('Started at port 3000');
+app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
 });
