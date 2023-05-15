@@ -29,6 +29,7 @@ fi
 
 if [ "$1" == "jakarta" ]; then
   cp extension/action-token-authenticator/target/action-token-example.jar $dist/providers
+  cp extension/action-token-required-action/target/action-token-req-action-example.jar $dist/providers
   cp extension/event-listener-sysout/target/event-listener-sysout.jar $dist/providers
   cp extension/event-store-mem/target/event-store-mem.jar $dist/providers
   cp extension/extend-account-console/target/keycloak-man-theme.jar $dist/providers

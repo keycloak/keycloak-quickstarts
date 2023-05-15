@@ -50,9 +50,6 @@ print_failed_tests() {
   fi
 }
 
-# TODO Update for Quarkus dist
-#run_tests action-token-required-action -Pwildfly-managed
-
 . scripts/export-keycloak-version.sh
 
 if [ -n "$KEYCLOAK_VERSION" ]; then
@@ -67,6 +64,7 @@ fi
 if [ "$1" = "jakarta" ]; then
   echo "Running tests with jakarta profile"
   run_tests extension/action-token-authenticator -Djakarta -Pwildfly-managed
+  run_tests extension/action-token-required-action -Djakarta -Pwildfly-managed
   run_tests extension/event-listener-sysout -Djakarta -Pkeycloak-remote
   run_tests extension/event-store-mem -Djakarta -Pkeycloak-remote
   run_tests extension/extend-account-console -Djakarta -Pkeycloak-remote

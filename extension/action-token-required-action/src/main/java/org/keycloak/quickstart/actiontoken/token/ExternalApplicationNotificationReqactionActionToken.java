@@ -24,21 +24,21 @@ import org.keycloak.authentication.actiontoken.DefaultActionToken;
  *
  * @author hmlnarik
  */
-public class ExternalApplicationNotificationActionToken extends DefaultActionToken {
+public class ExternalApplicationNotificationReqactionActionToken extends DefaultActionToken {
 
-    public static final String TOKEN_TYPE = "external-app-notification";
+    public static final String TOKEN_TYPE = "external-app-reqaction-notification";
 
     private static final String JSON_FIELD_APP_ID = "app-id";
 
     @JsonProperty(value = JSON_FIELD_APP_ID)
     private String applicationId;
 
-    public ExternalApplicationNotificationActionToken(String userId, int absoluteExpirationInSecs, String authenticationSessionId, String applicationId) {
+    public ExternalApplicationNotificationReqactionActionToken(String userId, int absoluteExpirationInSecs, String authenticationSessionId, String applicationId) {
         super(userId, TOKEN_TYPE, absoluteExpirationInSecs, null, authenticationSessionId);
         this.applicationId = applicationId;
     }
 
-    private ExternalApplicationNotificationActionToken() {
+    private ExternalApplicationNotificationReqactionActionToken() {
     }
 
     public String getApplicationId() {

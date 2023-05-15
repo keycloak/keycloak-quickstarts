@@ -8,6 +8,8 @@
 </head>
 
 <body>
+    After submit, you will be redirected back to Keycloak as authenticated user. Then as an administrator, open the corresponding user in the Keycloak admin console
+    and see in the "Attributes" tab in the admin console that he has two attributes set on himself based on what you just filled.
     <form action="submit-back.jsp" accept-charset="UTF-8">
         <input name="_tokenUrl" type="hidden" value="<%= request.getParameter("token") %>">
         Field 1: <input name="field_1">
