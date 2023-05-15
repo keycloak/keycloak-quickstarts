@@ -21,16 +21,16 @@ import org.keycloak.authentication.RequiredActionContext;
 import org.keycloak.authentication.RequiredActionFactory;
 import org.keycloak.authentication.RequiredActionProvider;
 import org.keycloak.common.util.Time;
-import org.keycloak.quickstart.actiontoken.token.ExternalApplicationNotificationActionToken;
-import org.keycloak.quickstart.actiontoken.token.ExternalApplicationNotificationActionTokenHandler;
+import org.keycloak.quickstart.actiontoken.token.ExternalApplicationNotificationReqactionActionToken;
+import org.keycloak.quickstart.actiontoken.token.ExternalApplicationNotificationReqactionActionTokenHandler;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
 import org.keycloak.services.Urls;
 import org.keycloak.sessions.AuthenticationSessionModel;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 import org.jboss.logging.Logger;
 
 /**
@@ -61,7 +61,7 @@ public class RedirectToExternalApplication implements RequiredActionProvider, Re
         final String clientId = authSession.getClient().getClientId();
 
         // Create a token used to return back to the current authentication flow
-        String token = new ExternalApplicationNotificationActionToken(
+        String token = new ExternalApplicationNotificationReqactionActionToken(
           context.getUser().getId(),
           absoluteExpirationInSecs,
           clientId,
@@ -76,7 +76,7 @@ public class RedirectToExternalApplication implements RequiredActionProvider, Re
         String submitActionTokenUrl;
         submitActionTokenUrl = Urls
           .actionTokenBuilder(context.getUriInfo().getBaseUri(), token, clientId, authSession.getTabId())
-          .queryParam(ExternalApplicationNotificationActionTokenHandler.QUERY_PARAM_APP_TOKEN, "{tokenParameterName}")
+          .queryParam(ExternalApplicationNotificationReqactionActionTokenHandler.QUERY_PARAM_APP_TOKEN, "{tokenParameterName}")
           .build(context.getRealm().getName(), "{APP_TOKEN}")
           .toString();
 

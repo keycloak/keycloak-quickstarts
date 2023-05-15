@@ -39,7 +39,7 @@ import org.keycloak.sessions.AuthenticationSessionCompoundId;
 import org.keycloak.sessions.AuthenticationSessionModel;
 
 import javax.crypto.spec.SecretKeySpec;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.Collections;
 
@@ -47,16 +47,16 @@ import java.util.Collections;
  * Action token handler for verification of e-mail address.
  * @author hmlnarik
  */
-public class ExternalApplicationNotificationActionTokenHandler extends AbstractActionTokenHandler<ExternalApplicationNotificationActionToken> {
+public class ExternalApplicationNotificationReqactionActionTokenHandler extends AbstractActionTokenHandler<ExternalApplicationNotificationReqactionActionToken> {
 
-    public static final String QUERY_PARAM_APP_TOKEN = "app-token";
+    public static final String QUERY_PARAM_APP_TOKEN = "app-token-reqaction";
 
     private SecretKeySpec hmacSecretKeySpec = null;
 
-    public ExternalApplicationNotificationActionTokenHandler() {
+    public ExternalApplicationNotificationReqactionActionTokenHandler() {
         super(
-          ExternalApplicationNotificationActionToken.TOKEN_TYPE,
-          ExternalApplicationNotificationActionToken.class,
+          ExternalApplicationNotificationReqactionActionToken.TOKEN_TYPE,
+          ExternalApplicationNotificationReqactionActionToken.class,
           Messages.INVALID_REQUEST,
           EventType.EXECUTE_ACTION_TOKEN,
           Errors.INVALID_REQUEST
@@ -64,8 +64,8 @@ public class ExternalApplicationNotificationActionTokenHandler extends AbstractA
     }
 
     private boolean isApplicationTokenValid(
-      ExternalApplicationNotificationActionToken token,
-      ActionTokenContext<ExternalApplicationNotificationActionToken> tokenContext
+      ExternalApplicationNotificationReqactionActionToken token,
+      ActionTokenContext<ExternalApplicationNotificationReqactionActionToken> tokenContext
     ) throws VerificationException {
         String appTokenString = tokenContext.getUriInfo().getQueryParameters().getFirst(QUERY_PARAM_APP_TOKEN);
 
@@ -77,7 +77,7 @@ public class ExternalApplicationNotificationActionTokenHandler extends AbstractA
     }
 
     @Override
-    public Predicate<? super ExternalApplicationNotificationActionToken>[] getVerifiers(ActionTokenContext<ExternalApplicationNotificationActionToken> tokenContext) {
+    public Predicate<? super ExternalApplicationNotificationReqactionActionToken>[] getVerifiers(ActionTokenContext<ExternalApplicationNotificationReqactionActionToken> tokenContext) {
         return TokenUtils.predicates(
           // Check that the app token is set in query parameters
           t -> tokenContext.getUriInfo().getQueryParameters().getFirst(QUERY_PARAM_APP_TOKEN) != null,
@@ -87,11 +87,11 @@ public class ExternalApplicationNotificationActionTokenHandler extends AbstractA
         );
     }
 
-    private static final Logger LOG = Logger.getLogger(ExternalApplicationNotificationActionTokenHandler.class);
+    private static final Logger LOG = Logger.getLogger(ExternalApplicationNotificationReqactionActionTokenHandler.class);
 
     @Override
-    public String getAuthenticationSessionIdFromToken(ExternalApplicationNotificationActionToken token, ActionTokenContext<ExternalApplicationNotificationActionToken> tokenContext,
-      AuthenticationSessionModel currentAuthSession) {
+    public String getAuthenticationSessionIdFromToken(ExternalApplicationNotificationReqactionActionToken token, ActionTokenContext<ExternalApplicationNotificationReqactionActionToken> tokenContext,
+                                                      AuthenticationSessionModel currentAuthSession) {
         // always join current authentication session
         final String id = currentAuthSession == null
           ? null
@@ -103,7 +103,7 @@ public class ExternalApplicationNotificationActionTokenHandler extends AbstractA
     }
 
     @Override
-    public Response handleToken(ExternalApplicationNotificationActionToken token, ActionTokenContext<ExternalApplicationNotificationActionToken> tokenContext) {
+    public Response handleToken(ExternalApplicationNotificationReqactionActionToken token, ActionTokenContext<ExternalApplicationNotificationReqactionActionToken> tokenContext) {
         UserModel user = tokenContext.getAuthenticationSession().getAuthenticatedUser();
         EventBuilder event = tokenContext.getEvent();
 

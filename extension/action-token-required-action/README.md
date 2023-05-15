@@ -34,18 +34,34 @@ flow. It is implemented by cooperation of required action and action token:
 System Requirements
 -------------------
 
-You need to have Keycloak 3.2.0.Final running.
+You need to have <span>Keycloak</span> running. It is recommended to use Keycloak 22 or later.
 
-All you need to build this project is Java 8.0 (Java SDK 1.8) or later and Maven 3.3.3 or later.
+All you need to build this project is Java 11 (Java SDK 11) or later and Maven 3.6.3 or later.
 
 
 Build and Deploy the Quickstart
 -------------------------------
 
-If you open the pom.xml file you'll see that the add-spi-configurations execution creates
+To build the provider, run the following maven command:
+
+   ````
+   mvn clean install
+   ````
+
+To install the provider, copy the `target/action-token-req-action-example.jar` JAR file to the `providers` directory of the server distribution.
+
+Finally, start the server as follows:
+
+    ```
+    kc.[sh|bat] start-dev --http-port=8180 --http-relative-path="/auth" \
+      --spi-action-token-handler-external-app-reqaction-notification-hmac-secret=aSqzP4reFgWR4j94BDT1r+81QYp/NYbY9SBwXtqV1ko= \
+      --spi-required-action-redirect-to-external-application-external-application-url=http://127.0.0.1:8080/action-token-responder-example/external-action.jsp?token={TOKEN}
+    ```
+
+If you see this startup command, you can notice the last two configuration parameters, which are used for
 a configuration of two custom SPIs implemented in this example:
 
- *  `external-app-notification` action token handler is given a secret key that
+ *  `external-app-reqaction-notification` action token handler is given a secret key that
     is used in step 5 to verify that the invocation comes from the correct app.
 
  *  `redirect-to-external-application` required action is provided with a URL
@@ -54,41 +70,60 @@ a configuration of two custom SPIs implemented in this example:
     URL with action token. That URL is used by the external application to
     redirect back to Keycloak once its own flow is completed.
 
-To deploy the provider to Keycloak server, run the following maven command (optionally
-specifying Keycloak management port with `-Dwildfly.port=_port_`):
-
-    ````
-    mvn -Pwildfly-managed clean wildfly:deploy
-    ````
-
-If you want to play with and modify the example, simply rerun the maven deploy
-command above and the new version will be hot deployed.
+NOTE: In production environment, you don't need to use the "confidential" parameters sent in the server startup command, which in this case
+applies especially for the `hmac-secret` configuration parameter. It might be better to use configuration properties file for it, or even use
+the Keycloak Valve capabilities. See the Keycloak documentation for more details about provider options and for the details about how to use the valve.
 
 Note that you need to deploy the responder application into WildFly. A sample responder
-application is part of the tests and after running the above command will be located in
+application is part of the tests, so you first need to run the tests in order to have the WAR archive
+with the application, which would then be deployed to the Wildfly server. See next steps for the details.
+
+Integration test of the Quickstart
+----------------------------------
+
+1. Make sure you have an Keycloak server running with an admin user in the `master` realm or use the provided docker image. Also make sure that server
+   was started with the parameters as described above
+2. You need to have Chrome browser installed and updated to the latest version
+3. Run `mvn clean install -Djakarta -Pwildfly-managed`
+
+After running the above command, the WAR file will be located in
 `target/deployments/wildfly_action-token-responder-example_action-token-responder-example.war`.
+
+Among other things, the test did 2 things:
+- Deployed the WAR application to the Wildfly server, then started this Wildfly server with the example application. After the test, it stopped the Wildfly server.
+- Imported new realm and configured authentication flows in it to contain new authenticator.
+
+We will describe how you can do those steps manually in your environment.
+
+Prepare and start Wildfly server
+----------------------
+You can download latest Wildfly server. If you run the mvn command as described above, you can already have one in the `target` directory.
+We also need to deploy simple WAR application to it and start the server. In Linux, the commands to do all of that could be for example like this:
+
+```
+export WILDFY_VERSION=wildfly-28.0.0.Beta1
+cp -r target/$WILDFY_VERSION /tmp/
+cp target/deployments/wildfly_action-token-responder-example_action-token-responder-example.war /tmp/$WILDFY_VERSION/standalone/deployments/action-token-responder-example.war
+cd /tmp/$WILDFY_VERSION/bin
+./standalone.sh
+```
 
 Enable the Provider for a Realm
 -------------------------------
+Open [Keycloak admin console](http://localhost:8180/auth/admin)
 Login to the Keycloak Admin Console and go to the Authentication section,
-Required Actions tab. You should now see your deployed required action once you
-click `Register` button. Add the required action, save it. This will now enable
+Required Actions tab. You should now see your deployed required action `Redirect to external application`.
+You can enable required action by switching `Enabled` to `ON`. This will now enable
 the provider for the 'master' realm. Now you can set the required actions as
 a default action (mandatory for any new user) or mandate user to execute this
-action via admin interface.
+action via admin interface. You can do that by click to some user in the admin console and make sure
+that required action `redirect to external application` is added to `Required user actions`.
 
 If you logout and login as a new user or a user you mandated to execute that
 action (depending on the option you choose above, you would be redirected to
 the external application requiring you to fill a form, whose values will be sent
 back to Keycloak upon completion. There they will be stored as user attributes
 and authentication flow will continue.
-
-Integration test of the Quickstart
-----------------------------------
-
-1. Make sure you have an Keycloak server running with an admin user in the `master` realm or use the provided docker image
-2. You need to have Chrome browser installed and updated to the latest version
-3. Run `mvn test -Pwildfly-managed`
 
 More Information
 ----------------

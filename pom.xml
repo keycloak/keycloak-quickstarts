@@ -498,6 +498,7 @@
                 <module>jakarta/app-authz-jakarta-servlet</module>
                 <module>jakarta/app-jakarta-rs</module>
                 <module>extension/action-token-authenticator</module>
+                <module>extension/action-token-required-action</module>
                 <module>extension/event-listener-sysout</module>
                 <module>extension/event-store-mem</module>
                 <module>extension/extend-account-console</module>
