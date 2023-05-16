@@ -1,0 +1,8 @@
+{
+  "realm": "quickstart",
+  "auth-server-url": "http://localhost:8180/auth",
+  "ssl-required": "external",
+  "resource": "jakarta-jaxrs-resource-server",
+  "bearer-only": true,
+  "enable-cors": true
+}

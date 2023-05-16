@@ -1,0 +1,7 @@
+{
+  "path-cache": {
+    "lifespan": 0,
+    "max-entries": 0
+  },
+  "on-deny-redirect-to" : "/jakarta-servlet-authz-client/accessDenied.jsp"
+}

@@ -495,8 +495,8 @@
                 <version.jackson>2.14.2</version.jackson>
             </properties>
             <modules>
-                <module>jakarta/app-authz-jakarta-servlet</module>
-                <module>jakarta/app-jakarta-rs</module>
+                <module>jakarta/servlet-authz-client</module>
+                <module>jakarta/jaxrs-resource-server</module>
                 <module>extension/action-token-authenticator</module>
                 <module>extension/event-listener-sysout</module>
                 <module>extension/event-store-mem</module>
