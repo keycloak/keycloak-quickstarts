@@ -1,0 +1,58 @@
+{
+    "realm": "quickstart",
+    "enabled": true,
+    "clients": [
+        {
+            "clientId": "jakarta-jaxrs-resource-server",
+            "enabled": true,
+            "bearerOnly": false,
+            "secret": "secret",
+            "directAccessGrantsEnabled": true
+        }
+    ],
+    "users" : [
+        {
+            "username" : "alice",
+            "enabled": true,
+            "email" : "alice@keycloak.org",
+            "firstName": "Alice",
+            "lastName": "Liddel",
+            "credentials" : [
+                { "type" : "password",
+                    "value" : "alice" }
+            ],
+            "realmRoles": [ "user", "offline_access"  ],
+            "clientRoles": {
+                "account": [ "manage-account" ]
+            }
+        },
+        {
+            "username" : "admin",
+            "enabled": true,
+            "email" : "test@admin.org",
+            "firstName": "Admin",
+            "lastName": "Test",
+            "credentials" : [
+                { "type" : "password",
+                    "value" : "admin" }
+            ],
+            "realmRoles": [ "user","admin" ],
+            "clientRoles": {
+                "realm-management": [ "realm-admin" ],
+                "account": [ "manage-account" ]
+            }
+        }
+    ],
+    "roles" : {
+        "realm" : [
+            {
+                "name": "user",
+                "description": "User privileges"
+            },
+            {
+                "name": "admin",
+                "description": "Administrator privileges"
+            }
+        ]
+    }
+}

@@ -70,8 +70,8 @@ if [ "$1" = "jakarta" ]; then
   run_tests extension/extend-account-console -Djakarta -Pkeycloak-remote
   run_tests extension/user-storage-simple -Djakarta -Pkeycloak-remote
   run_tests extension/user-storage-jpa -Djakarta -Pkeycloak-remote
-  run_tests jakarta/app-authz-jakarta-servlet -Djakarta -Pwildfly-managed
-  run_tests jakarta/app-jakarta-rs -Djakarta -Pwildfly-managed
+  run_tests jakarta/servlet-authz-client -Djakarta -Pwildfly-managed
+  run_tests jakarta/jaxrs-resource-server -Djakarta -Pwildfly-managed
 elif [ "$1" = "nodejs" ]; then
   npm -C nodejs/resource-server ci
   npm -C nodejs/resource-server start&
