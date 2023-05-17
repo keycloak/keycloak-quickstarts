@@ -5,8 +5,7 @@
     {
       "clientId": "resource-server",
       "enabled": true,
-      "bearerOnly": false,
-      "secret": "secret"
+      "bearerOnly": false
     },
     {
       "clientId": "test-cli",
@@ -24,7 +23,7 @@
       "lastName": "Liddel",
       "credentials" : [
         { "type" : "password",
-          "value" : "password" }
+          "value" : "alice" }
       ],
       "realmRoles": [ "user", "offline_access"  ],
       "clientRoles": {
@@ -32,14 +31,14 @@
       }
     },
     {
-      "username" : "test-admin",
+      "username" : "admin",
       "enabled": true,
       "email" : "test@admin.org",
       "firstName": "Admin",
       "lastName": "Test",
       "credentials" : [
         { "type" : "password",
-          "value" : "password" }
+          "value" : "admin" }
       ],
       "realmRoles": [ "user","admin" ],
       "clientRoles": {

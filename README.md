@@ -12,6 +12,7 @@ They are organized in this repository under different categories (or directories
 |-----------------|---------------------------------------------------------------------------------------|
 | extension       | Examples about how to extend the server capabilities using some of the Keycloak SPIs. |
 | jakarta         | Examples about how secure Jakarta Applications                                        |
+| js              | Examples about how to secure JavaScript Applications                                  |
 | nodejs          | Examples about how to secure NodeJS Applications                                      |
 | springframework | Examples about how to secure Spring Applications                                      |
 

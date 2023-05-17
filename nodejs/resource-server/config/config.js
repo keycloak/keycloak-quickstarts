@@ -4,7 +4,7 @@ export default {
   baseUrl: baseUrl,
   token: {
     username: 'alice',
-    password: 'password',
+    password: 'alice',
     grant_type: 'password',
     client_id: 'test-cli',
     realmName: 'quickstart'

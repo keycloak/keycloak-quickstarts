@@ -3,7 +3,7 @@ import assert from 'node:assert';
 import test from 'node:test';
 import config from '../config/config.js';
 
-const baseUrl = 'http://localhost:3000';
+const baseUrl = 'http://127.0.0.1:3000';
 
 test('accesses the \'public\' route without credentials.', async () => {
   const response = await fetch(`${baseUrl}/public`);
@@ -33,7 +33,8 @@ test('accesses the \'secured\' route with credentials.', async () => {
 });
 
 test('accesses the \'admin\' route with credentials.', async () => {
-  config.token.username = 'test-admin';
+  config.token.username = 'admin';
+  config.token.password = 'admin';
 
   const headers = { authorization: `Bearer ${await tokenRequester(config.baseUrl, config.token)}` };
   const response = await fetch(`${baseUrl}/admin`, { headers });
