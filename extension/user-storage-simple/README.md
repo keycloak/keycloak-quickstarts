@@ -77,7 +77,7 @@ Integration test of the Quickstart
 ```
 
 2. You need to have Chrome browser installed and updated to the latest version.
-3. Run `mvn clean install -Djakarta -Pkeycloak-remote`
+3. Run `mvn clean install -Djakarta`
 
 More Information
 ----------------

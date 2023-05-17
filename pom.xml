@@ -425,30 +425,6 @@
                 </plugins>
             </build>
         </profile>
-        <!-- Arquillian WildFly remote profile -->
-        <profile>
-            <id>keycloak-remote</id>
-            <dependencies>
-                <dependency>
-                    <groupId>org.wildfly.arquillian</groupId>
-                    <artifactId>wildfly-arquillian-container-remote</artifactId>
-                    <version>${version.wildfly.arquillian.container}</version>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>${version.surefire.plugin}</version>
-                        <configuration>
-                            <redirectTestOutputToFile>false</redirectTestOutputToFile>
-                            <skipTests>false</skipTests>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
         <!-- Springboot profile -->
         <profile>
             <id>spring-boot</id>
@@ -571,6 +547,8 @@
                             </execution>
                         </executions>
                         <configuration>
+                            <!-- Needed when running tests on OpenJDK 17 -->
+                            <argLine>--add-opens=java.base/java.lang=ALL-UNNAMED</argLine>
                             <failIfNoSpecifiedTests>false</failIfNoSpecifiedTests>
                             <includes>
                                 <include>**/*Test</include>

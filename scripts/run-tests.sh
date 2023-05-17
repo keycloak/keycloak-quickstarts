@@ -65,11 +65,11 @@ if [ "$1" = "jakarta" ]; then
   echo "Running tests with jakarta profile"
   run_tests extension/action-token-authenticator -Djakarta -Pwildfly-managed
   run_tests extension/action-token-required-action -Djakarta -Pwildfly-managed
-  run_tests extension/event-listener-sysout -Djakarta -Pkeycloak-remote
-  run_tests extension/event-store-mem -Djakarta -Pkeycloak-remote
-  run_tests extension/extend-account-console -Djakarta -Pkeycloak-remote
-  run_tests extension/user-storage-simple -Djakarta -Pkeycloak-remote
-  run_tests extension/user-storage-jpa -Djakarta -Pkeycloak-remote
+  run_tests extension/event-listener-sysout -Djakarta
+  run_tests extension/event-store-mem -Djakarta
+  run_tests extension/extend-account-console -Djakarta
+  run_tests extension/user-storage-simple -Djakarta
+  run_tests extension/user-storage-jpa -Djakarta
   run_tests jakarta/servlet-authz-client -Djakarta -Pwildfly-managed
   run_tests jakarta/jaxrs-resource-server -Djakarta -Pwildfly-managed
 elif [ "$1" = "nodejs" ]; then
