@@ -74,7 +74,7 @@ Integration test of the Quickstart
    See in the previous section how the startup command for the server should look like.
 
 2. You need to have Chrome browser installed and updated to the latest version.
-3. Run `mvn clean install -Djakarta -Pkeycloak-remote`
+3. Run `mvn clean install -Djakarta`
 
 
 Undeploy the quickstart
