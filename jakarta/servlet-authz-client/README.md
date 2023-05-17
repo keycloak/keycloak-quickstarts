@@ -3,7 +3,7 @@ jakarta-servlet-authz-client: Servlet Application Using Fine-grained Authorizati
 
 Level: Beginner  
 Technologies: Jakarta EE
-Summary: Servlet Application Using Fine-grained Authorization  
+Summary: Servlet application protected with Elytron OIDC and Keycloak Authorization Services  
 Target Product: <span>Keycloak</span>, <span>WildFly</span>
 
 What is it?
@@ -141,4 +141,5 @@ References
 --------------------
 
 * [Wildfly Elytron OpenID Connect](https://docs.wildfly.org/28/Admin_Guide.html#Elytron_OIDC_Client)
+* [Keycloak Authorization Services](https://www.keycloak.org/docs/latest/authorization_services/)
 * [Keycloak Documentation](https://www.keycloak.org/documentation)

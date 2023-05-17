@@ -15,7 +15,7 @@ for f in $(find . -type f -name 'keycloak-saml-example.xml'); do
    cp "$f" "${f%-example.xml}.xml"
 done
 
-if [ "$1" = "jakarta" ]; then
+if [ "$1" = "jakarta" ] || [ "$1" = "extension" ]; then
   echo "Using jakarta profile when building maven artifacts"
   args="$args -Djakarta"
 fi
@@ -27,7 +27,7 @@ else
   dist="keycloak-dist"
 fi
 
-if [ "$1" == "jakarta" ]; then
+if [ "$1" == "extension" ]; then
   cp extension/action-token-authenticator/target/action-token-example.jar $dist/providers
   cp extension/action-token-required-action/target/action-token-req-action-example.jar $dist/providers
   cp extension/event-listener-sysout/target/event-listener-sysout.jar $dist/providers

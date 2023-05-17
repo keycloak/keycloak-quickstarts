@@ -7,6 +7,7 @@
   <body>
     <div id="user" style="display: none;">
       <button id="logout" type="button">Logout</button>
+      <button id="showMyAccount" type="button">My Account</button>
       <button id="showIdToken" type="button">Show ID Token</button>
       <button id="showAccessToken" type="button">Show Access Token</button>
       <button id="refreshToken" type="button">Refresh</button>
@@ -57,6 +58,12 @@
           await keycloak.updateToken(-1);
           output(keycloak.idTokenParsed);
           showProfile();
+        });
+
+      document
+        .getElementById("showMyAccount")
+        .addEventListener("click", async () => {
+          await keycloak.accountManagement()
         });
 
       const keycloak = new Keycloak();

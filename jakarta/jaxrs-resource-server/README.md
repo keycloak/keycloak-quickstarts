@@ -3,7 +3,7 @@ jakarta-jaxrs-resource-server: JAX-RS Resource Server
 
 Level: Beginner
 Technologies: Jakarta EE
-Summary: Jakarta RESTful Web Services (JAX-RS)
+Summary: A JAX-RS resource server protected with Wildfly Elytron OIDC
 Target Product: <span>Keycloak</span>, <span>WildFly</span>
 
 What is it?

@@ -63,6 +63,9 @@ fi
 
 if [ "$1" = "jakarta" ]; then
   echo "Running tests with jakarta profile"
+  run_tests jakarta/servlet-authz-client -Djakarta -Pwildfly-managed
+  run_tests jakarta/jaxrs-resource-server -Djakarta -Pwildfly-managed
+elif [ "$1" = "extension" ]; then
   run_tests extension/action-token-authenticator -Djakarta -Pwildfly-managed
   run_tests extension/action-token-required-action -Djakarta -Pwildfly-managed
   run_tests extension/event-listener-sysout -Djakarta
@@ -70,20 +73,18 @@ if [ "$1" = "jakarta" ]; then
   run_tests extension/extend-account-console -Djakarta
   run_tests extension/user-storage-simple -Djakarta
   run_tests extension/user-storage-jpa -Djakarta
-  run_tests jakarta/servlet-authz-client -Djakarta -Pwildfly-managed
-  run_tests jakarta/jaxrs-resource-server -Djakarta -Pwildfly-managed
 elif [ "$1" = "nodejs" ]; then
   npm -C nodejs/resource-server ci
   npm -C nodejs/resource-server start&
   if ! npm -C nodejs/resource-server test 2>&1 | tee test-logs/nodejs_resource-server.log; then
     tests_with_errors+=("nodejs/resource-server")
   fi
-
-  npm -C nodejs/spa ci
-  npx -C nodejs/spa playwright install-deps chromium
-  npx -C nodejs/spa playwright install chromium
-  if ! npm -C nodejs/spa test 2>&1 | tee test-logs/nodejs_spa.log; then
-    tests_with_errors+=("nodejs/spa")
+elif [ "$1" = "js" ]; then
+  npm -C js/spa ci
+  npx -C js/spa playwright install-deps chromium
+  npx -C js/spa playwright install chromium
+  if ! npm -C js/spa test 2>&1 | tee test-logs/js_spa.log; then
+    tests_with_errors+=("js/spa")
   fi
 else
   run_tests javaee/app-profile-saml-jee-jsp -Pwildfly-managed

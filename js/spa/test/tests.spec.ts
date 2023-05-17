@@ -24,10 +24,19 @@ test('Show Access Token', async ({ page }) => {
   await expect(await page.locator('id=output')).toContainText('"preferred_username": "alice"');
 });
 
+test('Show My Account', async ({ page }) => {
+  await page.goto('http://localhost:8080/');
+
+  await login(page)
+
+  await page.locator('id=showMyAccount').click();
+  await expect(page).toHaveTitle('Keycloak Account Management');
+});
+
 async function login(page) {
   await expect(page).toHaveTitle('Sign in to quickstart');
   await page.locator('id=username').fill('alice')
-  await page.locator('id=password').fill('password')
+  await page.locator('id=password').fill('alice')
   await page.locator('id=kc-login').click()
 }
 

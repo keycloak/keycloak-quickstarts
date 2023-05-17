@@ -1,4 +1,4 @@
-name: Quickstarts tests
+name: Keycloak Integration CI
 
 on: 
   push:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   tests-legacy:
-    name: Legacy Quickstarts Tests
+    name: Legacy
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -56,7 +56,7 @@ jobs:
             keycloak.log
 
   tests:
-    name: Quickstarts Tests
+    name: Jakarta
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -87,13 +87,13 @@ jobs:
         run: scripts/build-quickstarts.sh jakarta
 
       - name: Start Keycloak
-        run: scripts/start-local-server.sh add-providers-config
+        run: scripts/start-local-server.sh
 
       - name: Run unit tests
         run: scripts/run-tests.sh jakarta
 
   tests-spring:
-    name: Spring Quickstarts Tests
+    name: Spring Framework
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -130,7 +130,7 @@ jobs:
         run: |
           mvn -f springframework/app-authz-rest-springboot -Djakarta clean package verify
   tests-nodejs:
-    name: NodeJS Quickstarts Tests
+    name: Node.js
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -151,4 +151,64 @@ jobs:
 
       - name: Run unit tests
         run: scripts/run-tests.sh nodejs
+
+  tests-js:
+    name: JavaScript
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        if: ${{ github.event_name != 'schedule' }}
+      - uses: actions/checkout@v3
+        if: ${{ github.event_name == 'schedule' }}
+        with:
+          ref: 'main'
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Get Keycloak
+        run: scripts/prepare-local-server.sh
+
+      - name: Start Keycloak
+        run: scripts/start-local-server.sh
+
+      - name: Run unit tests
+        run: scripts/run-tests.sh js
+
+  tests-extension:
+    name: Extension
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        if: ${{ github.event_name != 'schedule' }}
+      - uses: actions/checkout@v3
+        if: ${{ github.event_name == 'schedule' }}
+        with:
+          ref: 'main'
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Update maven settings
+        run: mkdir -p ~/.m2 ; cp .github/settings.xml ~/.m2/
+
+      - name: Cache Maven repo
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.m2/repository
+            !~/.m2/repository/org/keycloak
+          key: cache-1-${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: cache-1-${{ runner.os }}-m2
+
+      - name: Get Keycloak
+        run: scripts/prepare-local-server.sh
+
+      - name: Build Quickstarts
+        run: scripts/build-quickstarts.sh extension
+
+      - name: Start Keycloak
+        run: scripts/start-local-server.sh extension
+
+      - name: Run unit tests
+        run: scripts/run-tests.sh extension
 

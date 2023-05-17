@@ -10,7 +10,7 @@ updates:
     labels:
       - area/dependencies
   - package-ecosystem: npm
-    directory: /nodejs/spa
+    directory: /js/spa
     schedule:
       interval: weekly
       day: saturday

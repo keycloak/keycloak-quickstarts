@@ -1,17 +1,15 @@
-service-nodejs: Node.js Service
+nodejs-resource-server: Node.js Resource Server
 ===================================================
 
 Level: Beginner  
 Technologies: Node.js  
 Summary: Node.js Service  
-Target Product: <span>Keycloak</span>, <span>WildFly</span>  
-Source: <https://github.com/keycloak/keycloak-quickstarts>
-
+Target Product: <span>Keycloak</span>
 
 What is it?
 -----------
 
-The `service-nodejs` quickstart demonstrates how to write a RESTful service with Node.js that is secured with <span>Keycloak</span>.
+This quickstart demonstrates how to write a RESTful service with Node.js that is secured with <span>Keycloak</span>.
 
 There are 3 endpoints exposed by the service:
 
@@ -21,45 +19,44 @@ There are 3 endpoints exposed by the service:
 
 The endpoints are very simple and will only return a simple message stating what endpoint was invoked.
 
-
 System Requirements
 -------------------
 
-All you need to build this project is Node.js 4.0.0 or later.
+To compile and run this quickstart you will need:
 
-See the [Getting Started Guide](../docs/getting-started.md) for the minimum requirements and steps to build and run the quickstart.
+* Node.js 18.16.0+
+* Keycloak 21+
+* Docker 20+
 
-Configuration in <span>Keycloak</span>
------------------------
+Starting and Configuring the Keycloak Server
+-------------------
 
-Prior to running the quickstart you need to import the *quickstart* realm. Clicking on the below link will bring you to the create realm page in the Admin UI.
+To start a Keycloak Server you can use OpenJDK on Bare Metal, Docker, Openshift or any other option described in [Keycloak Getting Started guides]https://www.keycloak.org/guides#getting-started. For example when using Docker just run the following command in the root directory of this quickstart:
 
-[http://localhost:8180/auth/admin/master/console/#/create/realm](http://localhost:8180/auth/admin/master/console/#/create/realm)
+```shell
+docker run --name keycloak \
+  -e KEYCLOAK_ADMIN=admin \
+  -e KEYCLOAK_ADMIN_PASSWORD=admin \
+  --network=host \
+  quay.io/keycloak/keycloak:{KC_VERSION} \
+  start-dev \
+  --http-relative-path=/auth --http-port=8180
+```
 
-Import the quickstart-realm.json file that is in the *keycloak-quickstarts/* directory.
+where `KC_VERSION` should be set to 21.0.0 or higher.
 
-Next thing you have to do is create a client in <span>Keycloak</span> and download the installation file.
+You should be able to access your Keycloak Server at http://localhost:8180/auth.
 
-The following steps shows how to create the client required for this quickstart:
+Log in as the admin user to access the Keycloak Administration Console. Username should be `admin` and password `admin`.
 
-* Open the <span>Keycloak</span> admin console
-* Select `Clients` from the menu
-* Click `Create`
-* Add the following values:
-  * Client ID: You choose (for example `service-nodejs`)
-  * Client Protocol: `openid-connect`
-* Click `Save`
+Import the [realm configuration file](config/realm-import.json) to create a new realm called `quickstart`.
+For more details, see the Keycloak documentation about how to [create a new realm](https://www.keycloak.org/docs/latest/server_admin/index.html#_create-realm).
 
-Once saved you need to change the `Access Type` to `bearer-only` and click save.
+Alternatively, you can create the realm using the following command:
 
-Finally you need to configure the adapter, this is done by retrieving the adapter configuration file:
-
-* Click on `Installation` in the tab for the client you created
-* Select `Keycloak OIDC JSON`
-* Click `Download`
-* Move the file `keycloak.json` to the root folder of the quickstart
-
-Because Java and Node.js apps are often deployed in separated environments, CORS is enabled by default for this service, it allows invocations from HTML5 applications deployed to a different host.
+```shell
+npm run create-realm
+```
 
 Build and Deploy the Quickstart
 -------------------------------
@@ -70,22 +67,74 @@ Build and Deploy the Quickstart
 
    ````
    npm install
-   node app
+   npm start
    ````
 
 Access the Quickstart
 ---------------------
 
-The endpoints for the service are:
+There are 3 endpoints exposed by the service:
 
-* public - <http://localhost:3000/service/public>
-* secured - <http://localhost:3000/service/secured>
-* admin - <http://localhost:3000/service/admin>
+* http://localhost:8080/public - requires no authentication
+* http://localhost:8080/secured - can be invoked by users with the `user` role
+* http://localhost:8080/admin - can be invoked by users with the `admin` role
 
-You can open the public endpoint directly in the browser to test the service. The two other endpoints require
-invoking with a bearer token. To invoke these endpoints use one of the example quickstarts:
+You can open the public endpoint directly in the browser to test the service. The two other endpoints are protected and require
+invoking them with a bearer token.
 
-* [app-jee-html5](../app-jee-html5/README.md) - HTML5 application that invokes the example service.
-* [app-jee-jsp](../app-jee-jsp/README.md) - JSP application packaged that invokes the example service.
+To invoke the protected endpoints using a bearer token, your client needs to obtain an OAuth2 access token from a Keycloak server.
+In this example, we are going to obtain tokens using the resource owner password grant type so that the client can act on behalf of any user available from
+the realm.
 
-For both examples, please make sure that you properly changed the service URL to HTTP port 3000. For app-jee-html5 you can succeed that by changing the value of `serviceUrl` located on [app.js](../app-jee-html5/src/main/webapp/app.js) and for app-jee-jsp by setting the value of `SERVICE_URL` env variable or the `service.url` system property, pointing to http://localhost:3000 while deployment.
+You should be able to obtain tokens for any of these users:
+
+| Username | Password | Roles              |
+|----------|----------|--------------------|
+| alice    | alice    | user               |
+| admin    | admin    | admin              |
+
+To obtain the bearer token, run the following command:
+
+```shell
+export access_token=$(\
+curl -X POST http://127.0.0.1:8180/auth/realms/quickstart/protocol/openid-connect/token \
+-H 'content-type: application/x-www-form-urlencoded' \
+-d 'client_id=test-cli' \
+-d 'username=alice&password=alice&grant_type=password' | jq --raw-output '.access_token' \
+)
+```
+
+You can use the same command to obtain tokens on behalf of user `admin`, just make sure to change both `username` and `password` request parameters.
+
+After running the command above, you can now access the `http://127.0.0.1:3000/secured` endpoint
+because the user `alice` has the `user` role.
+
+```shell
+curl http://localhost:3000/secured \
+  -H "Authorization: Bearer "$access_token
+```
+
+As a result, you will see the following response from the service:
+
+```json
+{"message":"secured"}
+```
+
+Running tests
+--------------------
+
+Make sure Keycloak is [running](#starting-and-configuring-the-keycloak-server).
+
+1. Open a terminal and navigate to the root directory of this quickstart.
+
+2. Run the following command to build and run tests:
+
+   ````
+   npm test
+   ````
+
+References
+--------------------
+
+* [Keycloak Node.js Adapter](https://www.keycloak.org/docs/latest/securing_apps/#_nodejs_adapter)
+* [Keycloak Documentation](https://www.keycloak.org/documentation)
