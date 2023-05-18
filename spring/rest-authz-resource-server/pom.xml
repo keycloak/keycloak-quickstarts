@@ -24,10 +24,8 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>keycloak-app-authz-rest-springboot</artifactId>
+    <artifactId>spring-rest-authz-resource-server</artifactId>
     <packaging>jar</packaging>
-    <name>Keycloak Quickstart: app-authz-rest-springboot</name>
-    <description>app-authz-jakarta-servlet</description>
 
     <licenses>
         <license>
@@ -70,6 +68,10 @@
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-policy-enforcer</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-core</artifactId>
+        </dependency>
 
         <!-- Test Dependencies -->
         <dependency>
@@ -87,5 +89,19 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-test-helper</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>

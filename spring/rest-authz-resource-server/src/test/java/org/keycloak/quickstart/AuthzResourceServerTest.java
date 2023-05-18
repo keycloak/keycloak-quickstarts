@@ -47,7 +47,7 @@ public class AuthzResourceServerTest {
 
 	@AfterAll
 	public static void cleanUp() throws Exception {
-		deleteRealm("admin", "admin", "quickstart-authz-servlet");
+		deleteRealm("admin", "admin", "quickstart");
 	}
 
 	@BeforeAll
@@ -100,7 +100,7 @@ public class AuthzResourceServerTest {
 	public String getToken(String username, String password) {
 		Keycloak keycloak = Keycloak.getInstance(
 				"http://localhost:8180/auth",
-				"quickstart-authz-servlet",
+				"quickstart",
 				username,
 				password,
 				"authz-servlet",

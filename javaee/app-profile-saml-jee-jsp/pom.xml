@@ -99,10 +99,22 @@
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-admin-client-jee</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.wildfly.arquillian</groupId>
+            <artifactId>wildfly-arquillian-container-managed</artifactId>
+            <version>${version.wildfly.arquillian.container}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
         <finalName>app-profile-saml</finalName>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>true</filtering>
+            </testResource>
+        </testResources>
         <plugins>
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
@@ -111,7 +123,28 @@
                     <skip>false</skip>
                 </configuration>
             </plugin>
-
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>${version.antrun.maven.plugin}</version>
+                <executions>
+                    <execution>
+                        <id>install-saml</id>
+                        <phase>process-test-classes</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target name="run">
+                                <exec dir="target/wildfly-${version.wildfly}/bin"
+                                      executable="${jboss-cli.executable}" inputstring="">
+                                    <arg value="--file=adapter-elytron-install-saml-offline.cli"/>
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.jboss.as.plugins</groupId>
                 <artifactId>jboss-as-maven-plugin</artifactId>
@@ -192,35 +225,6 @@
                         <configuration>
                             <failOnMissingWebXml>false</failOnMissingWebXml>
                         </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>wildfly-managed</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <version>${version.antrun.maven.plugin}</version>
-                        <executions>
-                            <execution>
-                                <id>install-saml</id>
-                                <phase>process-test-classes</phase>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                                <configuration>
-                                    <target name="run">
-                                        <exec dir="target/wildfly-${version.wildfly}/bin"
-                                              executable="${jboss-cli.executable}" inputstring="">
-                                            <arg value="--file=adapter-elytron-install-saml-offline.cli"/>
-                                        </exec>
-                                    </target>
-                                </configuration>
-                            </execution>
-                        </executions>
                     </plugin>
                 </plugins>
             </build>

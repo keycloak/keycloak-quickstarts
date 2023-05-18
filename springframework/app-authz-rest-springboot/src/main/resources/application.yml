@@ -1,6 +1,0 @@
-spring:
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-uri: http://localhost:8180/auth/realms/quickstart-authz-servlet/protocol/openid-connect/certs

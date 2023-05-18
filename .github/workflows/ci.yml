@@ -37,13 +37,13 @@ jobs:
         run: scripts/prepare-local-server.sh
 
       - name: Build Quickstarts
-        run: scripts/build-quickstarts.sh
+        run: scripts/build-quickstarts.sh legacy
 
       - name: Start Keycloak
         run: scripts/start-local-server.sh
 
       - name: Run tests
-        run: scripts/run-tests.sh
+        run: scripts/run-tests.sh legacy
 
       - name: Archive logs
         if: ${{ always() }}
@@ -67,7 +67,7 @@ jobs:
           ref: 'main'
       - uses: actions/setup-java@v1
         with:
-          java-version: 11
+          java-version: 17
       - name: Update maven settings
         run: mkdir -p ~/.m2 ; cp .github/settings.xml ~/.m2/
 
@@ -93,7 +93,7 @@ jobs:
         run: scripts/run-tests.sh jakarta
 
   tests-spring:
-    name: Spring Framework
+    name: Spring
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -128,7 +128,8 @@ jobs:
 
       - name: Run unit tests
         run: |
-          mvn -f springframework/app-authz-rest-springboot -Djakarta clean package verify
+          mvn -f spring/rest-authz-resource-server -Djakarta clean package verify
+
   tests-nodejs:
     name: Node.js
     runs-on: ubuntu-latest
@@ -187,7 +188,7 @@ jobs:
           ref: 'main'
       - uses: actions/setup-java@v1
         with:
-          java-version: 11
+          java-version: 17
       - name: Update maven settings
         run: mkdir -p ~/.m2 ; cp .github/settings.xml ~/.m2/
 
