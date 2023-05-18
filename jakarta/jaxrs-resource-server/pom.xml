@@ -46,13 +46,20 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
+            <groupId>org.wildfly.arquillian</groupId>
+            <artifactId>wildfly-arquillian-container-managed</artifactId>
+            <version>${version.wildfly.arquillian.container}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
         <finalName>jakarta-jaxrs-resource-server</finalName>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>true</filtering>
+            </testResource>
+        </testResources>
         <plugins>
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>

@@ -36,14 +36,13 @@
 
     <properties>
         <version.keycloak>${project.version}</version.keycloak>
-
-        <version.wildfly.maven.plugin>1.2.2.Final</version.wildfly.maven.plugin>
         <servlet.api.30.version>1.0.2.Final</servlet.api.30.version>
         <jboss-jaxrs-api_2.1_spec>1.0.1.Final</jboss-jaxrs-api_2.1_spec>
         <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
         <version.war.maven.plugin>3.3.2</version.war.maven.plugin>
         <version.enforcer.maven.plugin>1.4.1</version.enforcer.maven.plugin>
-        <version.surefire.plugin>2.19.1</version.surefire.plugin>
+        <version.surefire.plugin>3.0.0-M7</version.surefire.plugin>
+        <version.failsafe.plugin>3.0.0-M7</version.failsafe.plugin>
         <version.exec.maven.plugin>1.6.0</version.exec.maven.plugin>
         <version.antrun.maven.plugin>1.8</version.antrun.maven.plugin>
         <version.frontend.maven.plugin>1.4</version.frontend.maven.plugin>
@@ -59,104 +58,22 @@
         <version.jee.jaxb.api>2.3.1</version.jee.jaxb.api>
 
         <arquillian-managed>true</arquillian-managed>
+        <version.wildfly.maven.plugin>1.2.2.Final</version.wildfly.maven.plugin>
         <jboss-cli.executable>./jboss-cli.sh</jboss-cli.executable>
         <keycloak.management.port>10090</keycloak.management.port>
         <selenium-bom.version>3.11.0</selenium-bom.version>
         <arquillian-drone-bom.version>2.5.1</arquillian-drone-bom.version>
         <version.json.javax>1.1.2</version.json.javax>
         <version.yasson>1.0.8</version.yasson>
+        <version.jackson>2.14.2</version.jackson>
 
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>org.jboss.arquillian</groupId>
-                <artifactId>arquillian-bom</artifactId>
-                <version>${arquillian-bom.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.arquillian.selenium</groupId>
-                <artifactId>selenium-bom</artifactId>
-                <version>${selenium-bom.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.arquillian.extension</groupId>
-                <artifactId>arquillian-drone-bom</artifactId>
-                <version>${arquillian-drone-bom.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.arquillian.extension</groupId>
-                <artifactId>arquillian-phantom-driver</artifactId>
-                <version>${arquillian-phantom.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.arquillian.graphene</groupId>
-                <artifactId>arquillian-browser-screenshooter</artifactId>
-                <version>${arquillian-screenshooter.version}</version>
-                <scope>test</scope>
-                <exclusions>
-                    <exclusion>
-                        <groupId>commons-io</groupId>
-                        <artifactId>commons-io</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.keycloak.bom</groupId>
-                <artifactId>keycloak-misc-bom</artifactId>
-                <version>${version.keycloak}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.keycloak.bom</groupId>
-                <artifactId>keycloak-spi-bom</artifactId>
-                <version>${version.keycloak}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.keycloak</groupId>
-                <artifactId>keycloak-model-legacy</artifactId>
-                <version>${version.keycloak}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.hamcrest</groupId>
-                <artifactId>hamcrest-all</artifactId>
-                <version>${version.hamcrest}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>${version.jackson}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.glassfish</groupId>
-                <artifactId>javax.json</artifactId>
-                <version>${version.json.javax}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse</groupId>
-                <artifactId>yasson</artifactId>
-                <version>${version.yasson}</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-logging</groupId>
-                <artifactId>commons-logging</artifactId>
-                <version>1.2</version>
-            </dependency>
             <dependency>
                 <groupId>org.keycloak</groupId>
                 <artifactId>keycloak-policy-enforcer</artifactId>
@@ -169,6 +86,11 @@
             </dependency>
             <dependency>
                 <groupId>org.keycloak</groupId>
+                <artifactId>keycloak-core</artifactId>
+                <version>${version.keycloak}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.keycloak</groupId>
                 <artifactId>keycloak-admin-client</artifactId>
                 <version>${version.keycloak}</version>
             </dependency>
@@ -177,31 +99,13 @@
                 <artifactId>keycloak-admin-client-jee</artifactId>
                 <version>${version.keycloak}</version>
             </dependency>
+            <dependency>
+                <groupId>org.keycloak</groupId>
+                <artifactId>keycloak-test-helper</artifactId>
+                <version>${version.keycloak}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.jboss.arquillian.junit</groupId>
-            <artifactId>arquillian-junit-container</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${version.junit}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-test-helper</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-        </dependency>
-    </dependencies>
 
     <repositories>
         <repository>
@@ -216,36 +120,6 @@
     <build>
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <groupId>org.wildfly.plugins</groupId>
-                    <artifactId>wildfly-maven-plugin</artifactId>
-                    <version>${version.wildfly.maven.plugin}</version>
-                    <configuration>
-                        <skip>true</skip>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.jboss.as.plugins</groupId>
-                    <artifactId>jboss-as-maven-plugin</artifactId>
-                    <version>${version.jboss.maven.plugin}</version>
-                    <configuration>
-                        <skip>true</skip>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>com.github.eirslett</groupId>
-                    <artifactId>frontend-maven-plugin</artifactId>
-                    <version>${version.frontend.maven.plugin}</version>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${version.surefire.plugin}</version>
-                    <configuration>
-                        <redirectTestOutputToFile>false</redirectTestOutputToFile>
-                        <!-- See KEYCLOAK-6341 -->
-                        <skipTests>true</skipTests>
-                    </configuration>
-                </plugin>
                 <plugin>
                     <artifactId>maven-enforcer-plugin</artifactId>
                     <version>${version.enforcer.maven.plugin}</version>
@@ -286,6 +160,14 @@
                         </execution>
                     </executions>
                 </plugin>
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${version.surefire.plugin}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>${version.failsafe.plugin}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
@@ -314,146 +196,15 @@
             </repositories>
         </profile>
         <profile>
-            <id>bump-version</id>
-            <modules>
-                <module>extension/action-token-authenticator</module>
-                <module>extension/action-token-required-action</module>
-                <module>javaee/app-profile-saml-jee-jsp</module>
-                <module>springframework/app-authz-rest-springboot</module>
-                <module>extension/user-storage-simple</module>
-                <module>extension/user-storage-jpa</module>
-                <module>extension/event-listener-sysout</module>
-                <module>extension/event-store-mem</module>
-                <module>extension/extend-account-console</module>
-                <module>springframework/service-springboot-rest</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>jboss-cli-executable</id>
-            <properties>
-                <jboss-cli.executable>set nopause=true &amp; call ./jboss-cli.bat</jboss-cli.executable>
-            </properties>
-            <activation>
-                <os>
-                    <family>Windows</family>
-                </os>
-            </activation>
-        </profile>
-        <profile>
-            <!-- Run with: mvn clean test -Pwildfly-managed-->
-            <id>wildfly-managed</id>
-            <activation>
-                <property>
-                    <name>arquillian-managed</name>
-                    <value>true</value>
-                </property>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>org.wildfly.arquillian</groupId>
-                    <artifactId>wildfly-arquillian-container-managed</artifactId>
-                    <version>${version.wildfly.arquillian.container}</version>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
-            <build>
-                <testResources>
-                    <testResource>
-                        <directory>src/test/resources</directory>
-                        <filtering>true</filtering>
-                    </testResource>
-                </testResources>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>${version.surefire.plugin}</version>
-                        <configuration>
-                            <redirectTestOutputToFile>false</redirectTestOutputToFile>
-                            <!-- See KEYCLOAK-6341 -->
-                            <skipTests>false</skipTests>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>json</id>
-            <activation>
-                <property>
-                    <name>!subsystem</name>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-war-plugin</artifactId>
-                        <version>${version.war.maven.plugin}</version>
-                        <configuration>
-                            <failOnMissingWebXml>false</failOnMissingWebXml>
-                            <webResources>
-                                <resource>
-                                    <directory>${basedir}/config</directory>
-                                    <includes>
-                                        <include>keycloak.json</include>
-                                    </includes>
-                                    <targetPath>WEB-INF</targetPath>
-                                </resource>
-                            </webResources>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>subsystem</id>
-            <activation>
-                <property>
-                    <name>subsystem</name>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-war-plugin</artifactId>
-                        <version>${version.war.maven.plugin}</version>
-                        <configuration>
-                            <failOnMissingWebXml>false</failOnMissingWebXml>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <!-- Springboot profile -->
-        <profile>
             <id>spring-boot</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>${version.surefire.plugin}</version>
-                        <configuration>
-                            <redirectTestOutputToFile>false</redirectTestOutputToFile>
-                            <skipTests>false</skipTests>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>built-with-jdk-9-or-later</id>
             <activation>
-                <!-- only activate this on JDK 9 or later as this option is unknown for JDK 8, and as it is not necessary for JDK 8 -->
-                <!-- support for running with JDK 8 is still necessary for some downstream integration tests -->
-                <jdk>[9,)</jdk>
+                <property>
+                    <name>spring-boot</name>
+                </property>
             </activation>
-            <properties>
-                <!-- Minimum Java version supported for running Keycloak -->
-                <!-- maven.compiler.target and maven.compiler.source already set to 1.8 in the parent pom -->
-                <!-- other modules will configure a higher Java version (for example, Quarkus) -->
-                <maven.compiler.release>8</maven.compiler.release>
-            </properties>
+            <modules>
+                <module>spring/rest-authz-resource-server</module>
+            </modules>
         </profile>
         <profile>
             <id>jakarta</id>
@@ -468,24 +219,10 @@
                 <arquillian-graphene.version>2.5.4</arquillian-graphene.version>
                 <version.wildfly.arquillian.container>4.0.0.Alpha6</version.wildfly.arquillian.container>
                 <arquillian-bom.version>1.7.0.Alpha14</arquillian-bom.version>
-                <version.jackson>2.14.2</version.jackson>
             </properties>
             <modules>
                 <module>jakarta/servlet-authz-client</module>
                 <module>jakarta/jaxrs-resource-server</module>
-                <module>extension/action-token-authenticator</module>
-                <module>extension/action-token-required-action</module>
-                <module>extension/event-listener-sysout</module>
-                <module>extension/event-store-mem</module>
-                <module>extension/extend-account-console</module>
-                <module>extension/user-storage-simple</module>
-                <module>extension/user-storage-jpa</module>
-                <!--
-                WIP
-                Spring requires JDK 17 and we are not yet ready to build on top of this version
-                To build spring quickstarts use the 'jakarta' profile
-                <module>app-authz-rest-springboot</module>
-                -->
             </modules>
             <dependencyManagement>
                 <dependencies>
@@ -501,11 +238,90 @@
                         <artifactId>jakarta.ws.rs-api</artifactId>
                         <version>${version.jakarta.ws.rs-api}</version>
                     </dependency>
+                    <dependency>
+                        <groupId>org.jboss.arquillian</groupId>
+                        <artifactId>arquillian-bom</artifactId>
+                        <version>${arquillian-bom.version}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jboss.arquillian.selenium</groupId>
+                        <artifactId>selenium-bom</artifactId>
+                        <version>${selenium-bom.version}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jboss.arquillian.extension</groupId>
+                        <artifactId>arquillian-drone-bom</artifactId>
+                        <version>${arquillian-drone-bom.version}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jboss.arquillian.extension</groupId>
+                        <artifactId>arquillian-phantom-driver</artifactId>
+                        <version>${arquillian-phantom.version}</version>
+                        <scope>test</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jboss.arquillian.graphene</groupId>
+                        <artifactId>arquillian-browser-screenshooter</artifactId>
+                        <version>${arquillian-screenshooter.version}</version>
+                        <scope>test</scope>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>commons-io</groupId>
+                                <artifactId>commons-io</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.hamcrest</groupId>
+                        <artifactId>hamcrest-all</artifactId>
+                        <version>${version.hamcrest}</version>
+                        <scope>test</scope>
+                    </dependency>
                 </dependencies>
             </dependencyManagement>
-
+            <dependencies>
+                <dependency>
+                    <groupId>org.jboss.arquillian.junit</groupId>
+                    <artifactId>arquillian-junit-container</artifactId>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                    <version>${version.junit}</version>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.keycloak</groupId>
+                    <artifactId>keycloak-test-helper</artifactId>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </dependency>
+            </dependencies>
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>${version.war.maven.plugin}</version>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.wildfly.plugins</groupId>
+                        <artifactId>wildfly-maven-plugin</artifactId>
+                        <version>${version.wildfly.maven.plugin}</version>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </plugin>
                     <plugin>
                         <artifactId>maven-dependency-plugin</artifactId>
                         <executions>
@@ -559,10 +375,10 @@
             </build>
         </profile>
         <profile>
-            <id>javaee</id>
+            <id>legacy</id>
             <activation>
                 <property>
-                    <name>!jakarta</name>
+                    <name>legacy</name>
                 </property>
             </activation>
             <properties>
@@ -571,10 +387,11 @@
                 <version.wildfly.arquillian.container>2.1.1.Final</version.wildfly.arquillian.container>
                 <arquillian-bom.version>1.4.0.Final</arquillian-bom.version>
                 <version.jackson>2.9.5</version.jackson>
+                <maven.compiler.source>11</maven.compiler.source>
+                <maven.compiler.target>11</maven.compiler.target>
             </properties>
             <modules>
                 <module>javaee/app-profile-saml-jee-jsp</module>
-                <module>extension/extend-account-console</module>
             </modules>
             <dependencyManagement>
                 <dependencies>
@@ -602,6 +419,110 @@
                         <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>
                         <version>${jboss-jaxrs-api_2.1_spec}</version>
                     </dependency>
+                    <dependency>
+                        <groupId>org.jboss.arquillian</groupId>
+                        <artifactId>arquillian-bom</artifactId>
+                        <version>${arquillian-bom.version}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jboss.arquillian.selenium</groupId>
+                        <artifactId>selenium-bom</artifactId>
+                        <version>${selenium-bom.version}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jboss.arquillian.extension</groupId>
+                        <artifactId>arquillian-drone-bom</artifactId>
+                        <version>${arquillian-drone-bom.version}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jboss.arquillian.extension</groupId>
+                        <artifactId>arquillian-phantom-driver</artifactId>
+                        <version>${arquillian-phantom.version}</version>
+                        <scope>test</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jboss.arquillian.graphene</groupId>
+                        <artifactId>arquillian-browser-screenshooter</artifactId>
+                        <version>${arquillian-screenshooter.version}</version>
+                        <scope>test</scope>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>commons-io</groupId>
+                                <artifactId>commons-io</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.keycloak.bom</groupId>
+                        <artifactId>keycloak-misc-bom</artifactId>
+                        <version>${version.keycloak}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.keycloak.bom</groupId>
+                        <artifactId>keycloak-spi-bom</artifactId>
+                        <version>${version.keycloak}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.keycloak</groupId>
+                        <artifactId>keycloak-model-legacy</artifactId>
+                        <version>${version.keycloak}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.hamcrest</groupId>
+                        <artifactId>hamcrest-all</artifactId>
+                        <version>${version.hamcrest}</version>
+                        <scope>test</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-databind</artifactId>
+                        <version>${version.jackson}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.glassfish</groupId>
+                        <artifactId>javax.json</artifactId>
+                        <version>${version.json.javax}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.eclipse</groupId>
+                        <artifactId>yasson</artifactId>
+                        <version>${version.yasson}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                        <version>1.2</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.keycloak</groupId>
+                        <artifactId>keycloak-policy-enforcer</artifactId>
+                        <version>${version.keycloak}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.keycloak</groupId>
+                        <artifactId>keycloak-common</artifactId>
+                        <version>${version.keycloak}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.keycloak</groupId>
+                        <artifactId>keycloak-admin-client</artifactId>
+                        <version>${version.keycloak}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.keycloak</groupId>
+                        <artifactId>keycloak-admin-client-jee</artifactId>
+                        <version>${version.keycloak}</version>
+                    </dependency>
                 </dependencies>
             </dependencyManagement>
             <dependencies>
@@ -612,9 +533,37 @@
                     <type>pom</type>
                     <scope>import</scope>
                 </dependency>
+                <dependency>
+                    <groupId>org.jboss.arquillian.junit</groupId>
+                    <artifactId>arquillian-junit-container</artifactId>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                    <version>${version.junit}</version>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.keycloak</groupId>
+                    <artifactId>keycloak-test-helper</artifactId>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </dependency>
             </dependencies>
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>org.wildfly.plugins</groupId>
+                        <artifactId>wildfly-maven-plugin</artifactId>
+                        <version>${version.wildfly.maven.plugin}</version>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </plugin>
                     <plugin>
                         <artifactId>maven-dependency-plugin</artifactId>
                         <executions>
@@ -672,6 +621,246 @@
                                 </configuration>
                             </execution>
                         </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>extension</id>
+            <activation>
+                <property>
+                    <name>extension</name>
+                </property>
+            </activation>
+            <properties>
+                <version.wildfly>28.0.0.Beta1</version.wildfly>
+                <version.jakarta.ws.rs-api>3.1.0</version.jakarta.ws.rs-api>
+                <arquillian-graphene.version>2.5.4</arquillian-graphene.version>
+                <arquillian-bom.version>1.7.0.Alpha14</arquillian-bom.version>
+                <version.jackson>2.14.2</version.jackson>
+                <version.wildfly.arquillian.container>4.0.0.Alpha6</version.wildfly.arquillian.container>
+            </properties>
+            <modules>
+                <module>extension/action-token-authenticator</module>
+                <module>extension/action-token-required-action</module>
+                <module>extension/event-listener-sysout</module>
+                <module>extension/event-store-mem</module>
+                <module>extension/extend-account-console</module>
+                <module>extension/user-storage-simple</module>
+                <module>extension/user-storage-jpa</module>
+            </modules>
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jboss.logging</groupId>
+                        <artifactId>jboss-logging</artifactId>
+                        <version>3.5.0.Final</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jboss.arquillian</groupId>
+                        <artifactId>arquillian-bom</artifactId>
+                        <version>${arquillian-bom.version}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jboss.arquillian.selenium</groupId>
+                        <artifactId>selenium-bom</artifactId>
+                        <version>${selenium-bom.version}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jboss.arquillian.extension</groupId>
+                        <artifactId>arquillian-drone-bom</artifactId>
+                        <version>${arquillian-drone-bom.version}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jboss.arquillian.extension</groupId>
+                        <artifactId>arquillian-phantom-driver</artifactId>
+                        <version>${arquillian-phantom.version}</version>
+                        <scope>test</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jboss.arquillian.graphene</groupId>
+                        <artifactId>arquillian-browser-screenshooter</artifactId>
+                        <version>${arquillian-screenshooter.version}</version>
+                        <scope>test</scope>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>commons-io</groupId>
+                                <artifactId>commons-io</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.keycloak.bom</groupId>
+                        <artifactId>keycloak-misc-bom</artifactId>
+                        <version>${version.keycloak}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.keycloak.bom</groupId>
+                        <artifactId>keycloak-spi-bom</artifactId>
+                        <version>${version.keycloak}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.keycloak</groupId>
+                        <artifactId>keycloak-model-legacy</artifactId>
+                        <version>${version.keycloak}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.hamcrest</groupId>
+                        <artifactId>hamcrest-all</artifactId>
+                        <version>${version.hamcrest}</version>
+                        <scope>test</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-databind</artifactId>
+                        <version>${version.jackson}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.glassfish</groupId>
+                        <artifactId>javax.json</artifactId>
+                        <version>${version.json.javax}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.eclipse</groupId>
+                        <artifactId>yasson</artifactId>
+                        <version>${version.yasson}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                        <version>1.2</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.keycloak</groupId>
+                        <artifactId>keycloak-policy-enforcer</artifactId>
+                        <version>${version.keycloak}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.keycloak</groupId>
+                        <artifactId>keycloak-common</artifactId>
+                        <version>${version.keycloak}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.keycloak</groupId>
+                        <artifactId>keycloak-admin-client</artifactId>
+                        <version>${version.keycloak}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.keycloak</groupId>
+                        <artifactId>keycloak-admin-client-jee</artifactId>
+                        <version>${version.keycloak}</version>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+            <dependencies>
+                <dependency>
+                    <groupId>org.keycloak.bom</groupId>
+                    <artifactId>keycloak-misc-bom</artifactId>
+                    <version>${version.keycloak}</version>
+                    <type>pom</type>
+                    <scope>import</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.keycloak.bom</groupId>
+                    <artifactId>keycloak-spi-bom</artifactId>
+                    <version>${version.keycloak}</version>
+                    <type>pom</type>
+                    <scope>import</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.keycloak</groupId>
+                    <artifactId>keycloak-model-legacy</artifactId>
+                    <version>${version.keycloak}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.arquillian.junit</groupId>
+                    <artifactId>arquillian-junit-container</artifactId>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                    <version>${version.junit}</version>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.keycloak</groupId>
+                    <artifactId>keycloak-test-helper</artifactId>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.wildfly.plugins</groupId>
+                        <artifactId>wildfly-maven-plugin</artifactId>
+                        <version>${version.wildfly.maven.plugin}</version>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>unpack-wildfly</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>org.wildfly</groupId>
+                                            <artifactId>wildfly-dist</artifactId>
+                                            <version>${version.wildfly}</version>
+                                            <type>zip</type>
+                                            <outputDirectory>target</outputDirectory>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <skipTests>true</skipTests>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <!-- Needed when running tests on OpenJDK 17 -->
+                            <argLine>--add-opens=java.base/java.lang=ALL-UNNAMED</argLine>
+                            <failIfNoSpecifiedTests>false</failIfNoSpecifiedTests>
+                            <includes>
+                                <include>**/*Test</include>
+                            </includes>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>

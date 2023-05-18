@@ -15,10 +15,11 @@ for f in $(find . -type f -name 'keycloak-saml-example.xml'); do
    cp "$f" "${f%-example.xml}.xml"
 done
 
-if [ "$1" = "jakarta" ] || [ "$1" = "extension" ]; then
-  echo "Using jakarta profile when building maven artifacts"
-  args="$args -Djakarta"
+if [ -n "$1" ] ; then
+  args="$args -D$1"
 fi
+
+echo "mvn clean install $args -DskipTests -B -Dnightly"
 
 mvn clean install $args -DskipTests -B -Dnightly
 if [ -n "$PRODUCT" ] && [ "$PRODUCT" == "true" ]; then

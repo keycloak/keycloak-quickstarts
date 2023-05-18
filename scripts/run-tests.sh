@@ -8,7 +8,6 @@ tests_with_errors=()
 run_tests() {
   module=$1
   args="${*:2}"
-  echo "Args: $args"
   printf "\n\n\n*****************************************\n"
   echo "Running tests for $module QS"
   echo "*****************************************"
@@ -29,8 +28,10 @@ run_tests() {
   else
     args="$args -Dwebdriver.chrome.driver=/usr/local/bin/chromedriver"
   fi
+  args="$args -D$module"
+  echo "Args: $args"
   log_file=${module////_}.log
-  if ! mvn clean install -Dnightly -f $module $args -B 2>&1 | tee test-logs/$log_file; then
+  if ! mvn clean install -Dnightly $args -B 2>&1 | tee test-logs/$log_file; then
     tests_with_errors+=("$module")
   fi
   printf "\n\n\n*****************************************\n"
@@ -63,16 +64,9 @@ fi
 
 if [ "$1" = "jakarta" ]; then
   echo "Running tests with jakarta profile"
-  run_tests jakarta/servlet-authz-client -Djakarta -Pwildfly-managed
-  run_tests jakarta/jaxrs-resource-server -Djakarta -Pwildfly-managed
+  run_tests jakarta
 elif [ "$1" = "extension" ]; then
-  run_tests extension/action-token-authenticator -Djakarta -Pwildfly-managed
-  run_tests extension/action-token-required-action -Djakarta -Pwildfly-managed
-  run_tests extension/event-listener-sysout -Djakarta
-  run_tests extension/event-store-mem -Djakarta
-  run_tests extension/extend-account-console -Djakarta
-  run_tests extension/user-storage-simple -Djakarta
-  run_tests extension/user-storage-jpa -Djakarta
+  run_tests extension
 elif [ "$1" = "nodejs" ]; then
   npm -C nodejs/resource-server ci
   npm -C nodejs/resource-server start&
@@ -87,7 +81,7 @@ elif [ "$1" = "js" ]; then
     tests_with_errors+=("js/spa")
   fi
 else
-  run_tests javaee/app-profile-saml-jee-jsp -Pwildfly-managed
+  run_tests javaee/app-profile-saml-jee-jsp -Dlegacy
 fi
 
 print_failed_tests

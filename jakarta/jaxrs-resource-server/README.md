@@ -149,7 +149,7 @@ You don't need Wildfly running because a temporary server is started during test
 2. Run the following command to build and run tests:
 
    ````
-   mvn -Djakarta -Pwildfly-managed clean verify
+   mvn -Djakarta clean verify
    ````
 
 References

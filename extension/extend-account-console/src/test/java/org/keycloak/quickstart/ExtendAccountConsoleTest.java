@@ -93,7 +93,6 @@ public class ExtendAccountConsoleTest {
 
         loginPage.login("test-admin", "password");
         Assert.assertTrue(accountPage.isOverviewPage());
-
         accountPage.clickKeycloakManApp();
         Assert.assertTrue(accountPage.isKeycloakManPage());
     }
