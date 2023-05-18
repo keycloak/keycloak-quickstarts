@@ -26,10 +26,8 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.logging.Logger;
 import org.jboss.shrinkwrap.api.Archive;
-import org.jboss.shrinkwrap.api.Filters;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.EmptyAsset;
-import org.jboss.shrinkwrap.api.asset.StringAsset;
+import org.jboss.shrinkwrap.api.importer.ZipImporter;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -38,34 +36,28 @@ import org.junit.runner.RunWith;
 import org.keycloak.test.page.IndexPage;
 import org.keycloak.test.page.LoginPage;
 import org.keycloak.test.page.ProfilePage;
-import org.keycloak.quickstart.profilejee.Controller;
 import org.keycloak.test.TestsHelper;
-import org.keycloak.test.builders.ClientBuilder;
 import org.openqa.selenium.WebDriver;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.keycloak.test.TestsHelper.createClient;
 import static org.keycloak.test.TestsHelper.deleteRealm;
 import static org.keycloak.test.TestsHelper.importTestRealm;
-import static org.keycloak.test.builders.ClientBuilder.AccessType.BEARER_ONLY;
 
 /**
  * @author <a href="mailto:bruno@abstractj.org">Bruno Oliveira</a>
  */
 @RunWith(Arquillian.class)
 @RunAsClient
-public class ArquillianProfileSamlJeeJspTest {
-    private final static Logger log = Logger.getLogger(ArquillianProfileSamlJeeJspTest.class);
+public class SAMLServiceProviderTest {
 
-    private static final String WEBAPP_SRC = "src/main/webapp";
-    private static final String APP_NAME = "app-profile-saml";
+    private final static Logger log = Logger.getLogger(SAMLServiceProviderTest.class);
+    private static final String APP_NAME = "servlet-saml-service-provider";
 
     @Page
     private IndexPage indexPage;
@@ -90,15 +82,9 @@ public class ArquillianProfileSamlJeeJspTest {
     }
 
     @Deployment(name = APP_NAME, order = 2, testable = false)
-    public static Archive<?> createTestArchive2() throws IOException {
-        return ShrinkWrap.create(WebArchive.class, "app-profile-saml.war")
-                .addPackages(true, Filters.exclude(".*Test.*"), Controller.class.getPackage())
-                .addAsWebResource(new File(WEBAPP_SRC, "index.jsp"))
-                .addAsWebResource(new File(WEBAPP_SRC, "profile.jsp"))
-                .addAsWebResource(new File(WEBAPP_SRC, "styles.css"))
-                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-                .addAsWebInfResource(new File("src/test/resources", "keycloak-saml.xml"))
-                .setWebXML(new File("src/main/webapp", "WEB-INF/web.xml"));
+    public static Archive<?> createWebArchive() {
+        String name = APP_NAME + ".war";
+        return ShrinkWrap.create(ZipImporter.class, name).importFrom(new File("target/" + name)).as(WebArchive.class);
     }
 
     @Drone
@@ -115,15 +101,14 @@ public class ArquillianProfileSamlJeeJspTest {
 
     @Before
     public void setup() {
-        webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
         webDriver.navigate().to(contextRoot);
     }
 
     @Test
-    public void testLogin() throws InterruptedException {
+    public void testLogin() {
         try {
             indexPage.clickLogin();
-            loginPage.login("alice", "password");
+            loginPage.login("alice", "alice");
             // due to https://issues.redhat.com/browse/KEYCLOAK-14103 a second click to login is required
             // need to upgrade to Wildfly 19.1.0 to support a solution to this
             if (pageHelper.isOnStartPage()) {
@@ -133,6 +118,9 @@ public class ArquillianProfileSamlJeeJspTest {
             pageHelper.waitForAccountBtn();
             assertEquals(profilePage.getUsername(), "alice");
             profilePage.clickLogout();
+            assertTrue(pageHelper.isOnStartPage());
+            indexPage.clickLogin();
+            pageHelper.isOnLoginPage();
         } catch (Exception e) {
             debugTest(e);
             fail("Should display logged in user");
@@ -143,7 +131,7 @@ public class ArquillianProfileSamlJeeJspTest {
     public void testAccessAccountManagement() {
         try {
             indexPage.clickLogin();
-            loginPage.login("alice", "password");
+            loginPage.login("alice", "alice");
             // due to https://issues.redhat.com/browse/KEYCLOAK-14103 a second click to login is required
             // need to upgrade to Wildfly 19.1.0 to support a solution to this
             if (pageHelper.isOnStartPage()) {
