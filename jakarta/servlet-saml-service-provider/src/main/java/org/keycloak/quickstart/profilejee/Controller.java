@@ -16,12 +16,11 @@
  */
 package org.keycloak.quickstart.profilejee;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.keycloak.adapters.saml.SamlDeploymentContext;
 import org.keycloak.adapters.saml.SamlPrincipal;
 import org.keycloak.common.util.KeycloakUriBuilder;
 import org.keycloak.constants.ServiceUrlConstants;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Controller simplifies access to the server environment from the JSP.
@@ -64,7 +63,7 @@ public class Controller {
         String serverPath = findKeycloakServerPath(req);
         String realm = findRealmName(req);
         return KeycloakUriBuilder.fromUri(serverPath).path(ServiceUrlConstants.ACCOUNT_SERVICE_PATH)
-                .queryParam("referrer", "app-profile-saml").build(realm).toString();
+                .queryParam("referrer", "servlet-saml-service-provider").build(realm).toString();
     }
 
     // HACK: This is a really bad way to find the realm name, but I can't

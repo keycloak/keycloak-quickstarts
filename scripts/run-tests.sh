@@ -80,8 +80,6 @@ elif [ "$1" = "js" ]; then
   if ! npm -C js/spa test 2>&1 | tee test-logs/js_spa.log; then
     tests_with_errors+=("js/spa")
   fi
-else
-  run_tests javaee/app-profile-saml-jee-jsp -Dlegacy
 fi
 
 print_failed_tests

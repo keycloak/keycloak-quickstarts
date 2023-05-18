@@ -8,52 +8,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  tests-legacy:
-    name: Legacy
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        if: ${{ github.event_name != 'schedule' }}
-      - uses: actions/checkout@v3
-        if: ${{ github.event_name == 'schedule' }}
-        with:
-          ref: 'main'
-      - uses: actions/setup-java@v1
-        with:
-          java-version: 11
-      - name: Update maven settings
-        run: mkdir -p ~/.m2 ; cp .github/settings.xml ~/.m2/
-
-      - name: Cache Maven repo
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.m2/repository
-            !~/.m2/repository/org/keycloak
-          key: cache-1-${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: cache-1-${{ runner.os }}-m2
-
-      - name: Get Keycloak
-        run: scripts/prepare-local-server.sh
-
-      - name: Build Quickstarts
-        run: scripts/build-quickstarts.sh legacy
-
-      - name: Start Keycloak
-        run: scripts/start-local-server.sh
-
-      - name: Run tests
-        run: scripts/run-tests.sh legacy
-
-      - name: Archive logs
-        if: ${{ always() }}
-        uses: actions/upload-artifact@v2
-        with:
-          name: test-logs
-          retention-days: 2
-          path: |
-            test-logs
-            keycloak.log
 
   tests:
     name: Jakarta

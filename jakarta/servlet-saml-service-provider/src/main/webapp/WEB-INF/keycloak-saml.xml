@@ -1,5 +1,5 @@
 <keycloak-saml-adapter>
-    <SP entityID="app-profile-saml"
+    <SP entityID="servlet-saml-service-provider"
         sslPolicy="EXTERNAL"
         logoutPage="/index.jsp">
         <Keys>

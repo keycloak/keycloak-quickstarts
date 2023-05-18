@@ -20,6 +20,7 @@ package org.keycloak.quickstart;
 import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.jboss.arquillian.graphene.Graphene;
 import org.jboss.logging.Logger;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -50,6 +51,14 @@ public class PageHelper {
             String newUrl = browser.getCurrentUrl().replaceAll("styles.css$", "");
             log.info("redirecting browser from " + browser.getCurrentUrl() + " to " + newUrl + " (might be a phantomJS bug)");
             browser.get(newUrl);
+        }
+    }
+
+    public void isOnLoginPage() {
+        try {
+            Graphene.waitAjax().until().element(By.id("username")).is().present();
+        } catch (TimeoutException ex) {
+            throw new TimeoutException("timeout on page " + browser.getCurrentUrl(), ex);
         }
     }
 }
