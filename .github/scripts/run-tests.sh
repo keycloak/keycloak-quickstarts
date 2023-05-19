@@ -21,7 +21,7 @@ run_tests() {
       return 0
     fi
   else
-    args="$args -s maven-settings.xml"
+    args="$args -s .github/maven-settings.xml"
   fi
   if [ -n "$CHROMEWEBDRIVER" ]; then
     args="$args -Dwebdriver.chrome.driver=$CHROMEWEBDRIVER/chromedriver"
@@ -29,7 +29,6 @@ run_tests() {
     args="$args -Dwebdriver.chrome.driver=/usr/local/bin/chromedriver"
   fi
   args="$args -D$module"
-  echo "Args: $args"
   log_file=${module////_}.log
   if ! mvn clean install -Dnightly $args -B 2>&1 | tee test-logs/$log_file; then
     tests_with_errors+=("$module")
@@ -51,7 +50,11 @@ print_failed_tests() {
   fi
 }
 
-. scripts/export-keycloak-version.sh
+if [[ ( -n "$GITHUB_BASE_REF" &&  "$GITHUB_BASE_REF" == "latest" ) ]] || [[ ( -n "$QUICKSTART_BRANCH" && "$QUICKSTART_BRANCH" != "main" ) ]]; then
+  export KEYCLOAK_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+else
+  export KEYCLOAK_VERSION="999.0.0-SNAPSHOT"
+fi
 
 if [ -n "$KEYCLOAK_VERSION" ]; then
   JS_VERSION_OPTION="-Dkeycloak.js.version=$KEYCLOAK_VERSION"
@@ -80,6 +83,8 @@ elif [ "$1" = "js" ]; then
   if ! npm -C js/spa test 2>&1 | tee test-logs/js_spa.log; then
     tests_with_errors+=("js/spa")
   fi
+elif [ "$1" = "spring" ]; then
+  run_tests spring
 fi
 
 print_failed_tests

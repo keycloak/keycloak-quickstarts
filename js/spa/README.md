@@ -36,12 +36,12 @@ docker run --name keycloak \
   --network=host \
   quay.io/keycloak/keycloak:{KC_VERSION} \
   start-dev \
-  --http-relative-path=/auth --http-port=8180
+  --http-port=8180
 ```
 
 where `KC_VERSION` should be set to 21.0.0 or higher.
 
-You should be able to access your Keycloak Server at http://localhost:8180/auth.
+You should be able to access your Keycloak Server at http://localhost:8180.
 
 Log in as the admin user to access the Keycloak Administration Console. Username should be `admin` and password `admin`.
 

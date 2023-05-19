@@ -53,7 +53,7 @@ To install the provider, copy the `target/action-token-req-action-example.jar` J
 Finally, start the server as follows:
 
     ```
-    kc.[sh|bat] start-dev --http-port=8180 --http-relative-path="/auth" \
+    kc.[sh|bat] start-dev --http-port=8180 \
       --spi-action-token-handler-external-app-reqaction-notification-hmac-secret=aSqzP4reFgWR4j94BDT1r+81QYp/NYbY9SBwXtqV1ko= \
       --spi-required-action-redirect-to-external-application-external-application-url=http://127.0.0.1:8080/action-token-responder-example/external-action.jsp?token={TOKEN}
     ```
@@ -110,7 +110,7 @@ cd /tmp/$WILDFY_VERSION/bin
 
 Enable the Provider for a Realm
 -------------------------------
-Open [Keycloak admin console](http://localhost:8180/auth/admin)
+Open [Keycloak admin console](http://localhost:8180/admin)
 Login to the Keycloak Admin Console and go to the Authentication section,
 Required Actions tab. You should now see your deployed required action `Redirect to external application`.
 You can enable required action by switching `Enabled` to `ON`. This will now enable

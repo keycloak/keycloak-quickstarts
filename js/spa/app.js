@@ -5,7 +5,7 @@ const app = express();
 const port = 8080;
 
 app.use(stringReplace({
-  KC_URL: process.env.KC_URL || "http://localhost:8180/auth"
+  KC_URL: process.env.KC_URL || "http://localhost:8180"
 }));
 
 app.use('/', express.static('public'));

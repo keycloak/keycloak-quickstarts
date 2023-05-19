@@ -50,7 +50,7 @@ import static org.keycloak.quickstart.util.StorageManager.getPropertyFile;
 @RunWith(Arquillian.class)
 public class ArquillianSimpleStorageTest {
 
-    public static final String KEYCLOAK_URL = "http://localhost:8180/auth";
+    public static final String KEYCLOAK_URL = "http://localhost:8180";
 
     @Page
     private LoginPage loginPage;

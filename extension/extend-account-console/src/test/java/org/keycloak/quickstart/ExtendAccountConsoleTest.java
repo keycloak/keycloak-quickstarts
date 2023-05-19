@@ -40,7 +40,7 @@ import java.util.concurrent.TimeUnit;
 @RunAsClient
 public class ExtendAccountConsoleTest {
 
-    public static final String KEYCLOAK_URL = "http://localhost:8180/auth";
+    public static final String KEYCLOAK_URL = "http://localhost:8180";
 
     @Page
     private LoginPage loginPage;
