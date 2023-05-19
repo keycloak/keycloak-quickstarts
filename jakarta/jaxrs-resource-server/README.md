@@ -18,7 +18,7 @@ System Requirements
 
 To compile and run this quickstart you will need:
 
-* JDK 11
+* JDK 17
 * Apache Maven 3.8.6
 * Wildfly 28+
 * Keycloak 21+
@@ -36,12 +36,12 @@ docker run --name keycloak \
   --network=host \
   quay.io/keycloak/keycloak:{KC_VERSION} \
   start-dev \
-  --http-relative-path=/auth --http-port=8180
+  --http-port=8180
 ```
 
 where `KC_VERSION` should be set to 21.0.0 or higher.
 
-You should be able to access your Keycloak Server at http://localhost:8180/auth.
+You should be able to access your Keycloak Server at http://localhost:8180.
 
 Log in as the admin user to access the Keycloak Administration Console. Username should be `admin` and password `admin`.
 
@@ -93,7 +93,7 @@ To obtain the bearer token, run the following command:
 
 ```shell
 export access_token=$(\
-curl -X POST http://localhost:8180/auth/realms/quickstart/protocol/openid-connect/token \
+curl -X POST http://localhost:8180/realms/quickstart/protocol/openid-connect/token \
 -H 'content-type: application/x-www-form-urlencoded' \
 -d 'client_id=jakarta-jaxrs-resource-server&client_secret=secret' \
 -d 'username=alice&password=alice&grant_type=password' | jq --raw-output '.access_token' \

@@ -99,7 +99,7 @@ public class AuthzResourceServerTest {
 
 	public String getToken(String username, String password) {
 		Keycloak keycloak = Keycloak.getInstance(
-				"http://localhost:8180/auth",
+				"http://localhost:8180",
 				"quickstart",
 				username,
 				password,

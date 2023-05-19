@@ -40,7 +40,6 @@
         <jboss-jaxrs-api_2.1_spec>1.0.1.Final</jboss-jaxrs-api_2.1_spec>
         <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
         <version.war.maven.plugin>3.3.2</version.war.maven.plugin>
-        <version.enforcer.maven.plugin>1.4.1</version.enforcer.maven.plugin>
         <version.surefire.plugin>3.0.0-M7</version.surefire.plugin>
         <version.failsafe.plugin>3.0.0-M7</version.failsafe.plugin>
         <version.exec.maven.plugin>1.6.0</version.exec.maven.plugin>
@@ -121,46 +120,6 @@
         <pluginManagement>
             <plugins>
                 <plugin>
-                    <artifactId>maven-enforcer-plugin</artifactId>
-                    <version>${version.enforcer.maven.plugin}</version>
-                    <executions>
-                        <execution>
-                            <id>enforce-quickstart-realm-file-exist</id>
-                            <goals>
-                                <goal>enforce</goal>
-                            </goals>
-                            <phase>none</phase>
-                            <configuration>
-                                <rules>
-                                    <requireFilesExist>
-                                        <files>
-                                            <file>${basedir}/src/test/resources/quickstart-realm.json</file>
-                                        </files>
-                                    </requireFilesExist>
-                                </rules>
-                                <fail>true</fail>
-                            </configuration>
-                        </execution>
-                        <execution>
-                            <id>enforce-keycloak-file-exist</id>
-                            <goals>
-                                <goal>enforce</goal>
-                            </goals>
-                            <phase>none</phase>
-                            <configuration>
-                                <rules>
-                                    <requireFilesExist>
-                                        <files>
-                                            <file>${basedir}/config/keycloak.json</file>
-                                        </files>
-                                    </requireFilesExist>
-                                </rules>
-                                <fail>true</fail>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${version.surefire.plugin}</version>
                 </plugin>
@@ -196,10 +155,10 @@
             </repositories>
         </profile>
         <profile>
-            <id>spring-boot</id>
+            <id>spring</id>
             <activation>
                 <property>
-                    <name>spring-boot</name>
+                    <name>spring</name>
                 </property>
             </activation>
             <modules>

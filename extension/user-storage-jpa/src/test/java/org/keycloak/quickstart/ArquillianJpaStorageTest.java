@@ -42,7 +42,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(Arquillian.class)
 public class ArquillianJpaStorageTest {
 
-    public static final String KEYCLOAK_URL = "http://localhost:8180/auth";
+    public static final String KEYCLOAK_URL = "http://localhost:8180";
     public static final String PROVIDER_TYPE = "org.keycloak.storage.UserStorageProvider";
 
     @Page

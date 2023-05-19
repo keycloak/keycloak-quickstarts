@@ -54,7 +54,7 @@ To install the provider, copy the `target/action-token-example.jar` JAR file to 
 Finally, start the server as follows:
 
     ```
-    kc.[sh|bat] start-dev --http-port=8180 --http-relative-path="/auth" --spi-action-token-handler-external-app-notification-hmac-secret=aSqzP4reFgWR4j94BDT1r+81QYp/NYbY9SBwXtqV1ko=
+    kc.[sh|bat] start-dev --http-port=8180 --spi-action-token-handler-external-app-notification-hmac-secret=aSqzP4reFgWR4j94BDT1r+81QYp/NYbY9SBwXtqV1ko=
     ```
 
 If you see this startup command, you can notice the last configuration parameter, which is used for
@@ -111,7 +111,7 @@ cd /tmp/$WILDFY_VERSION/bin
 
 Enable the Provider for a Realm
 -------------------------------
-Open [Keycloak admin console](http://localhost:8180/auth/admin)
+Open [Keycloak admin console](http://localhost:8180/admin)
 Login to the Keycloak Admin Console and go to the `Authentication` section,
 `Flows` tab. Click to `browser` flow and then click in the right top corner on `Action` -> `Duplicate`. In the new flow named `Copy of Browser`, 
 you can find `Copy of browser forms` subflow. Then add a new execution called `External Application

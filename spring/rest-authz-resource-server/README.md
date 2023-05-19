@@ -20,7 +20,7 @@ System Requirements
 
 To compile and run this quickstart you will need:
 
-* JDK 11
+* JDK 17
 * Apache Maven 3.8.6
 * Spring Boot 3.0.6
 * Keycloak 21+
@@ -38,12 +38,12 @@ docker run --name keycloak \
   --network=host \
   quay.io/keycloak/keycloak:{KC_VERSION} \
   start-dev \
-  --http-relative-path=/auth --http-port=8180
+  --http-port=8180
 ```
 
 where `KC_VERSION` should be set to 21.0.0 or higher.
 
-You should be able to access your Keycloak Server at http://localhost:8180/auth.
+You should be able to access your Keycloak Server at http://localhost:8180.
 
 Log in as the admin user to access the Keycloak Administration Console. Username should be `admin` and password `admin`.
 
@@ -87,7 +87,7 @@ To obtain the bearer token, run the following command:
 
 ```shell
 export access_token=$(\
-curl -X POST http://localhost:8180/auth/realms/quickstart/protocol/openid-connect/token \
+curl -X POST http://localhost:8180/realms/quickstart/protocol/openid-connect/token \
 -H 'content-type: application/x-www-form-urlencoded' \
 -d 'client_id=authz-servlet&client_secret=secret' \
 -d 'username=jdoe&password=jdoe&grant_type=password' | jq --raw-output '.access_token' \
@@ -120,7 +120,7 @@ To obtain an RPT, you must first exchange an OAuth2 Access Token for a RPT by in
 
 ```bash
 export rpt=$(curl -X POST \
- http://localhost:8180/auth/realms/quickstart/protocol/openid-connect/token \
+ http://localhost:8180/realms/quickstart/protocol/openid-connect/token \
  -H "Authorization: Bearer "$access_token \
  --data "grant_type=urn:ietf:params:oauth:grant-type:uma-ticket" \
  --data "audience=authz-servlet" \
@@ -135,7 +135,7 @@ As an alternative, you can also obtain permissions for any resource protected by
 
 ```bash
 export rpt=$(curl -X POST \
- http://localhost:8180/auth/realms/quickstart/protocol/openid-connect/token \
+ http://localhost:8180/realms/quickstart/protocol/openid-connect/token \
  -H "Authorization: Bearer "$access_token \
  --data "grant_type=urn:ietf:params:oauth:grant-type:uma-ticket" \
  --data "audience=authz-servlet" | jq --raw-output '.access_token' \

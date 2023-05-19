@@ -17,12 +17,12 @@ To configure and enable the event store provider manually add default provider t
 This is needed because `eventsStore` SPI can have only one "active" provider in Keycloak. And by default, the `eventsStore` provider is 
 configured to store events in the Keycloak Storage DB. But for the illustration purpose, we will do it in this example to store them in memory only.
 
-Then go to [Events Config](http://localhost:8180/auth/admin/master/console/#/realms/master/events-settings) tab in the admin console and enable login events and admin events by a toggle buttons. You can configure what event types should be stored. Save the changes afterwards.
+Then go to [Events Config](http://localhost:8180/admin/master/console/#/realms/master/events-settings) tab in the admin console and enable login events and admin events by a toggle buttons. You can configure what event types should be stored. Save the changes afterwards.
 
 To apply changes in the configuration file restart the server.
 
-When you have the example deployed and configured go to [Login Events](http://localhost:8180/auth/admin/master/console/#/realms/master/events) tab in the admin console where you can see login events showed from the Event store provider.
-Similarly in [Admin Events](http://localhost:8180/auth/admin/master/console/#/realms/master/admin-events) tab you can see generated admin events. To generate an admin event you can for example create a user.
+When you have the example deployed and configured go to [Login Events](http://localhost:8180/admin/master/console/#/realms/master/events) tab in the admin console where you can see login events showed from the Event store provider.
+Similarly in [Admin Events](http://localhost:8180/admin/master/console/#/realms/master/admin-events) tab you can see generated admin events. To generate an admin event you can for example create a user.
 
 If you restart the server again all the events will be gone because they haven't been persisted in the database but stored only in memory.
 
@@ -51,17 +51,17 @@ To install the provider, copy the target/event-store-mem.jar JAR file to the `pr
 Finally, start the server as follows:
 
     ```
-    kc.[sh|bat] start-dev --http-port=8180 --http-relative-path="/auth" --spi-events-store-provider=in-mem
+    kc.[sh|bat] start-dev --http-port=8180 --spi-events-store-provider=in-mem
     ```
 
-Then go to [Events Config](http://localhost:8180/auth/admin/master/console/#/master/realm-settings/events) tab in the admin console and enable
+Then go to [Events Config](http://localhost:8180/admin/master/console/#/master/realm-settings/events) tab in the admin console and enable
 login events and admin events by a toggle buttons `Save events` in the subtabs `User event settings` and `Admin event settings`. You can configure
 what event types should be stored and expiration of events. Save the changes afterwards.
 
 To apply changes in the configuration file restart the server.
 
-When you have the example deployed and configured go to [Login Events](http://localhost:8180/auth/admin/master/console/#/master/events/user-events) tab in the admin console where you can see login events showed from the Event store provider.
-Similarly in [Admin Events](http://localhost:8180/auth/admin/master/console/#/master/events/admin-events) tab you can see generated admin events. To generate an admin event you can for example create a user.
+When you have the example deployed and configured go to [Login Events](http://localhost:8180/admin/master/console/#/master/events/user-events) tab in the admin console where you can see login events showed from the Event store provider.
+Similarly in [Admin Events](http://localhost:8180/admin/master/console/#/master/events/admin-events) tab you can see generated admin events. To generate an admin event you can for example create a user.
 
 If you restart the server again all the events will be gone because they haven't been persisted in the database but stored only in memory.
 
@@ -70,7 +70,7 @@ Integration test of the Quickstart
 ----------------------------------
 
 1. Make sure you have an Keycloak server running with an admin user in the `master` realm or use the provided docker image.
-   Your <span>Keycloak</span> should be listening on `http://localhost:8180/auth` and should have set `in-mem` as the default `eventsStore` provider.
+   Your <span>Keycloak</span> should be listening on `http://localhost:8180` and should have set `in-mem` as the default `eventsStore` provider.
    See in the previous section how the startup command for the server should look like.
 
 2. You need to have Chrome browser installed and updated to the latest version.

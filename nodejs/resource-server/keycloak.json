@@ -1,7 +1,7 @@
 {
   "realm": "quickstart",
   "bearer-only": true,
-  "auth-server-url": "http://127.0.0.1:8180/auth",
+  "auth-server-url": "http://127.0.0.1:8180",
   "ssl-required": "external",
   "resource": "resource-server"
 }

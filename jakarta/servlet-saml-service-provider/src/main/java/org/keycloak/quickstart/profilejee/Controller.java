@@ -71,15 +71,15 @@ public class Controller {
     //       the URL specified in keycloak-saml-example.xml
     private String findRealmName(HttpServletRequest req) {
         String bindingUrl = getBindingUrl(req);
-        // bindingUrl looks like http://localhost:8080/auth/realms/master/protocol/saml
+        // bindingUrl looks like http://localhost:8080/realms/master/protocol/saml
         int beginIndex = bindingUrl.indexOf("/realms/") + "/realms/".length();
         return bindingUrl.substring(beginIndex, bindingUrl.indexOf('/', beginIndex));
     }
 
     private String findKeycloakServerPath(HttpServletRequest req) {
         String bindingUrl = getBindingUrl(req);
-        // bindingUrl looks like http://localhost:8080/auth/realms/master/protocol/saml
-        return bindingUrl.substring(0, bindingUrl.indexOf("/auth")) + "/auth";
+        // bindingUrl looks like http://localhost:8080/realms/master/protocol/saml
+        return bindingUrl.substring(0, bindingUrl.indexOf("/", bindingUrl.indexOf("//") + 2));
     }
 
     private String getBindingUrl(HttpServletRequest req) {

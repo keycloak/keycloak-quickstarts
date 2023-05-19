@@ -38,10 +38,10 @@ To install the provider, copy the target/event-listener-sysout.jar JAR file to t
 Finally, start the server as follows:
 
     ```
-    kc.[sh|bat] start-dev --http-port=8180 --http-relative-path="/auth" --spi-events-listener-sysout-exclude-events=CODE_TO_TOKEN,REFRESH_TOKEN
+    kc.[sh|bat] start-dev --http-port=8180 --spi-events-listener-sysout-exclude-events=CODE_TO_TOKEN,REFRESH_TOKEN
     ```
 
-Then go to [Events Config](http://localhost:8180/auth/admin/master/console/#/master/realm-settings/events) tab in the admin console and add `sysout` to Event Listeners.
+Then go to [Events Config](http://localhost:8180/admin/master/console/#/master/realm-settings/events) tab in the admin console and add `sysout` to Event Listeners.
 Save the changes afterwards. 
 
 Then you can do some user operations with admin user (like login/logout) or some admin operations (like create/update some objects in the admin console)
@@ -54,7 +54,7 @@ Integration test of the Quickstart
 ----------------------------------
 
 1. Make sure you have an Keycloak server running with an admin user in the `master` realm or use the provided docker image. 
-Your <span>Keycloak</span> should be listening on `http://localhost:8180/auth` and should have excluded events configured (at least `CODE_TO_TOKEN).
+Your <span>Keycloak</span> should be listening on `http://localhost:8180` and should have excluded events configured (at least `CODE_TO_TOKEN).
 See in the previous section how the startup command for the server should look like.
 
 2. You need to have Chrome browser installed and updated to the latest version.

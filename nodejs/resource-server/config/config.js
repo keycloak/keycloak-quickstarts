@@ -1,4 +1,4 @@
-const baseUrl = 'http://127.0.0.1:8180/auth';
+const baseUrl = 'http://127.0.0.1:8180';
 
 export default {
   baseUrl: baseUrl,

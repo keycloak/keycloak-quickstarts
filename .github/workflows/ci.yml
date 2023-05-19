@@ -23,7 +23,7 @@ jobs:
         with:
           java-version: 17
       - name: Update maven settings
-        run: mkdir -p ~/.m2 ; cp .github/settings.xml ~/.m2/
+        run: mkdir -p ~/.m2 ; cp .github/maven-settings.xml ~/.m2/
 
       - name: Cache Maven repo
         uses: actions/cache@v2
@@ -35,16 +35,13 @@ jobs:
           restore-keys: cache-1-${{ runner.os }}-m2
 
       - name: Get Keycloak
-        run: scripts/prepare-local-server.sh
-
-      - name: Build Quickstarts
-        run: scripts/build-quickstarts.sh jakarta
+        run: .github/scripts/prepare-local-server.sh
 
       - name: Start Keycloak
-        run: scripts/start-local-server.sh
+        run: .github/scripts/start-local-server.sh
 
       - name: Run unit tests
-        run: scripts/run-tests.sh jakarta
+        run: .github/scripts/run-tests.sh jakarta
 
   tests-spring:
     name: Spring
@@ -60,7 +57,7 @@ jobs:
         with:
           java-version: 17
       - name: Update maven settings
-        run: mkdir -p ~/.m2 ; cp .github/settings.xml ~/.m2/
+        run: mkdir -p ~/.m2 ; cp .github/maven-settings.xml ~/.m2/
 
       - name: Cache Maven repo
         uses: actions/cache@v2
@@ -72,17 +69,13 @@ jobs:
           restore-keys: cache-1-${{ runner.os }}-m2
 
       - name: Get Keycloak
-        run: scripts/prepare-local-server.sh
-
-      - name: Build Quickstarts
-        run: scripts/build-quickstarts.sh jakarta
+        run: .github/scripts/prepare-local-server.sh
 
       - name: Start Keycloak
-        run: scripts/start-local-server.sh
+        run: .github/scripts/start-local-server.sh
 
       - name: Run unit tests
-        run: |
-          mvn -f spring/rest-authz-resource-server -Djakarta clean package verify
+        run: .github/scripts/run-tests.sh spring
 
   tests-nodejs:
     name: Node.js
@@ -99,13 +92,13 @@ jobs:
           node-version: 18
 
       - name: Get Keycloak
-        run: scripts/prepare-local-server.sh
+        run: .github/scripts/prepare-local-server.sh
 
       - name: Start Keycloak
-        run: scripts/start-local-server.sh
+        run: .github/scripts/start-local-server.sh
 
       - name: Run unit tests
-        run: scripts/run-tests.sh nodejs
+        run: .github/scripts/run-tests.sh nodejs
 
   tests-js:
     name: JavaScript
@@ -122,13 +115,13 @@ jobs:
           node-version: 18
 
       - name: Get Keycloak
-        run: scripts/prepare-local-server.sh
+        run: .github/scripts/prepare-local-server.sh
 
       - name: Start Keycloak
-        run: scripts/start-local-server.sh
+        run: .github/scripts/start-local-server.sh
 
       - name: Run unit tests
-        run: scripts/run-tests.sh js
+        run: .github/scripts/run-tests.sh js
 
   tests-extension:
     name: Extension
@@ -144,7 +137,7 @@ jobs:
         with:
           java-version: 17
       - name: Update maven settings
-        run: mkdir -p ~/.m2 ; cp .github/settings.xml ~/.m2/
+        run: mkdir -p ~/.m2 ; cp .github/maven-settings.xml ~/.m2/
 
       - name: Cache Maven repo
         uses: actions/cache@v2
@@ -156,14 +149,11 @@ jobs:
           restore-keys: cache-1-${{ runner.os }}-m2
 
       - name: Get Keycloak
-        run: scripts/prepare-local-server.sh
-
-      - name: Build Quickstarts
-        run: scripts/build-quickstarts.sh extension
+        run: .github/scripts/prepare-local-server.sh
 
       - name: Start Keycloak
-        run: scripts/start-local-server.sh extension
+        run: .github/scripts/start-local-server.sh extension
 
       - name: Run unit tests
-        run: scripts/run-tests.sh extension
+        run: .github/scripts/run-tests.sh extension
 

@@ -52,7 +52,7 @@ public class ArquillianSysoutEventListenerProviderTest {
 
     private static final Logger logger = Logger.getLogger(ArquillianSysoutEventListenerProviderTest.class);
 
-    public static final String KEYCLOAK_URL = "http://localhost:8180/auth";
+    public static final String KEYCLOAK_URL = "http://localhost:8180";
 
     public static final String REALM_QS_EVENT_SYSOUT = "event-listener-sysout";
 
