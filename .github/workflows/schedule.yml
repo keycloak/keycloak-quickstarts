@@ -1,0 +1,16 @@
+name: Scheduled workflows
+
+on: 
+  schedule:
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+
+jobs:
+
+  run-ci:
+    name: Run CI workflow
+    runs-on: ubuntu-latest
+    steps:
+      - run: gh workflow run -R keycloak/keycloak-quickstarts ci.yml -r main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
