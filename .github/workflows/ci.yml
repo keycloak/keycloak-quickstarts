@@ -3,8 +3,6 @@ name: Keycloak Integration CI
 on: 
   push:
   pull_request:
-  schedule:
-    - cron: '0 4 * * *'
   workflow_dispatch:
 
 jobs:
@@ -14,11 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        if: ${{ github.event_name != 'schedule' }}
-      - uses: actions/checkout@v3
-        if: ${{ github.event_name == 'schedule' }}
-        with:
-          ref: 'main'
       - uses: actions/setup-java@v1
         with:
           java-version: 17
@@ -48,11 +41,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        if: ${{ github.event_name != 'schedule' }}
-      - uses: actions/checkout@v3
-        if: ${{ github.event_name == 'schedule' }}
-        with:
-          ref: 'main'
       - uses: actions/setup-java@v1
         with:
           java-version: 17
@@ -82,11 +70,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        if: ${{ github.event_name != 'schedule' }}
-      - uses: actions/checkout@v3
-        if: ${{ github.event_name == 'schedule' }}
-        with:
-          ref: 'main'
       - uses: actions/setup-node@v3
         with:
           node-version: 18
@@ -105,11 +88,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        if: ${{ github.event_name != 'schedule' }}
-      - uses: actions/checkout@v3
-        if: ${{ github.event_name == 'schedule' }}
-        with:
-          ref: 'main'
       - uses: actions/setup-node@v3
         with:
           node-version: 18
@@ -128,11 +106,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        if: ${{ github.event_name != 'schedule' }}
-      - uses: actions/checkout@v3
-        if: ${{ github.event_name == 'schedule' }}
-        with:
-          ref: 'main'
       - uses: actions/setup-java@v1
         with:
           java-version: 17
