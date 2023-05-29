@@ -1,0 +1,128 @@
+kind: Template
+apiVersion: template.openshift.io/v1
+metadata:
+  name: keycloak
+  annotations:
+    description: An example template for trying out Keycloak on OpenShift
+    iconClass: icon-sso
+    openshift.io/display-name: Keycloak
+    tags: keycloak
+    version: 17.0.0-SNAPSHOT
+objects:
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        description: The web server's http port.
+      labels:
+        application: '${APPLICATION_NAME}'
+      name: '${APPLICATION_NAME}'
+    spec:
+      ports:
+        - port: 8080
+          targetPort: 8080
+      selector:
+        deploymentConfig: '${APPLICATION_NAME}'
+  - apiVersion: v1
+    id: '${APPLICATION_NAME}'
+    kind: Route
+    metadata:
+      annotations:
+        description: Route for application's service.
+      labels:
+        application: '${APPLICATION_NAME}'
+      name: '${APPLICATION_NAME}'
+    spec:
+      host: '${HOSTNAME}'
+      tls:
+        termination: edge
+      to:
+        name: '${APPLICATION_NAME}'
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      labels:
+        application: '${APPLICATION_NAME}'
+      name: '${APPLICATION_NAME}'
+    spec:
+      replicas: 1
+      selector:
+        deploymentConfig: '${APPLICATION_NAME}'
+      strategy:
+        type: Recreate
+      template:
+        metadata:
+          labels:
+            application: '${APPLICATION_NAME}'
+            deploymentConfig: '${APPLICATION_NAME}'
+          name: '${APPLICATION_NAME}'
+        spec:
+          containers:
+            - env:
+                - name: KEYCLOAK_ADMIN
+                  value: '${KEYCLOAK_ADMIN}'
+                - name: KEYCLOAK_ADMIN_PASSWORD
+                  value: '${KEYCLOAK_ADMIN_PASSWORD}'
+                - name: KC_PROXY
+                  value: 'edge'
+              image: quay.io/keycloak/keycloak:21.1.1
+              livenessProbe:
+                failureThreshold: 100
+                httpGet:
+                  path: /
+                  port: 8080
+                  scheme: HTTP
+                initialDelaySeconds: 60
+              name: '${APPLICATION_NAME}'
+              ports:
+                - containerPort: 8080
+                  protocol: TCP
+              readinessProbe:
+                failureThreshold: 300
+                httpGet:
+                  path: /
+                  port: 8080
+                  scheme: HTTP
+                initialDelaySeconds: 30
+              securityContext:
+                privileged: false
+              volumeMounts:
+                - mountPath: /opt/keycloak/data
+                  name: empty
+              args: ["start-dev"]
+          volumes:
+            - name: empty
+              emptyDir: {}
+      triggers:
+        - type: ConfigChange
+parameters:
+  - name: APPLICATION_NAME
+    displayName: Application Name
+    description: The name for the application.
+    value: keycloak
+    required: true
+  - name: KEYCLOAK_ADMIN
+    displayName: Keycloak Administrator Username
+    description: Keycloak Server administrator username
+    generate: expression
+    from: '[a-zA-Z0-9]{8}'
+    required: true
+  - name: KEYCLOAK_ADMIN_PASSWORD
+    displayName: Keycloak Administrator Password
+    description: Keycloak Server administrator password
+    generate: expression
+    from: '[a-zA-Z0-9]{8}'
+    required: true
+  - name: HOSTNAME
+    displayName: Custom Route Hostname
+    description: >-
+      Custom hostname for the service route. Leave blank for default hostname,
+      e.g.: <application-name>-<namespace>.<default-domain-suffix>
+  - name: NAMESPACE
+    displayName: Namespace used for DNS discovery
+    description: >-
+      This namespace is a part of DNS query sent to Kubernetes API. This query
+      allows the DNS_PING protocol to extract cluster members. This parameter
+      might be removed once https://issues.jboss.org/browse/JGRP-2292 is
+      implemented.
+    required: true
