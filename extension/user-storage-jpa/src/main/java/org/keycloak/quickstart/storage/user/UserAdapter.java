@@ -27,6 +27,7 @@ import org.keycloak.storage.adapter.AbstractUserAdapterFederatedStorage;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 /**
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
@@ -123,13 +124,13 @@ public class UserAdapter extends AbstractUserAdapterFederatedStorage {
     }
 
     @Override
-    public List<String> getAttribute(String name) {
+    public Stream<String> getAttributeStream(String name) {
         if (name.equals("phone")) {
             List<String> phone = new LinkedList<>();
             phone.add(entity.getPhone());
-            return phone;
+            return phone.stream();
         } else {
-            return super.getAttribute(name);
+            return super.getAttributeStream(name);
         }
     }
 }
