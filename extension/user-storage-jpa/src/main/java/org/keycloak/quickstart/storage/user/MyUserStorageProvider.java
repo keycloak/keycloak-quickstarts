@@ -40,7 +40,6 @@ import org.keycloak.storage.user.UserQueryProvider;
 import org.keycloak.storage.user.UserRegistrationProvider;
 
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -227,40 +226,17 @@ public class MyUserStorageProvider implements UserStorageProvider,
     }
 
     @Override
-    public Stream<UserModel> getUsersStream(RealmModel realm, Integer firstResult, Integer maxResults) {
-
-        TypedQuery<UserEntity> query = em.createNamedQuery("getAllUsers", UserEntity.class);
-        if (firstResult != -1) {
-            query.setFirstResult(firstResult);
-        }
-        if (maxResults != -1) {
-            query.setMaxResults(maxResults);
-        }
-        List<UserEntity> results = query.getResultList();
-        List<UserModel> users = new LinkedList<>();
-        for (UserEntity entity : results) users.add(new UserAdapter(session, realm, model, entity));
-        return users.stream();
-    }
-
-    @Override
-    public Stream<UserModel> searchForUserStream(RealmModel realm, String search, Integer firstResult, Integer maxResults) {
+    public Stream<UserModel> searchForUserStream(RealmModel realm, Map<String, String> params, Integer firstResult, Integer maxResults) {
+        String search = params.get(UserModel.SEARCH);
         TypedQuery<UserEntity> query = em.createNamedQuery("searchForUser", UserEntity.class);
         query.setParameter("search", "%" + search.toLowerCase() + "%");
-        if (firstResult != -1) {
+        if (firstResult != null) {
             query.setFirstResult(firstResult);
         }
-        if (maxResults != -1) {
+        if (maxResults != null) {
             query.setMaxResults(maxResults);
         }
-        List<UserEntity> results = query.getResultList();
-        List<UserModel> users = new LinkedList<>();
-        for (UserEntity entity : results) users.add(new UserAdapter(session, realm, model, entity));
-        return users.stream();
-    }
-
-    @Override
-    public Stream<UserModel> searchForUserStream(RealmModel realm, Map<String, String> params, Integer firstResult, Integer maxResults) {
-        return Stream.empty();
+        return query.getResultStream().map(entity -> new UserAdapter(session, realm, model, entity));
     }
 
     @Override
