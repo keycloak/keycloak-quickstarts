@@ -3,8 +3,6 @@ name: Quickstarts tests
 on: 
   push:
   pull_request:
-  schedule:
-    - cron: '0 4 * * *'
   workflow_dispatch:
 
 jobs:
