@@ -1,9 +1,9 @@
 jakarta-servlet-authz-client: Servlet Application Using Fine-grained Authorization
 ================================================
 
-Level: Beginner  
-Technologies: Jakarta EE
-Summary: Servlet application protected with Elytron OIDC and Keycloak Authorization Services  
+Level: Beginner \
+Technologies: Jakarta EE \
+Summary: Servlet application protected with Elytron OIDC and Keycloak Authorization Services \
 Target Product: <span>Keycloak</span>, <span>WildFly</span>
 
 What is it?
@@ -58,8 +58,10 @@ You should be able to access your Keycloak Server at http://localhost:8180.
 
 Log in as the admin user to access the Keycloak Administration Console. Username should be `admin` and password `admin`.
 
-Import the [realm configuration file](config/realm-import.json) to create a new realm called `quickstart`.
-For more details, see the Keycloak documentation about how to [create a new realm](https://www.keycloak.org/docs/latest/server_admin/index.html#_create-realm).
+Import the [realm configuration file](config/realm-import.json) to create a new realm called `quickstart`. The easiest way to do this is using the gui.  After you click on `Create Realm`, you have the option to choose a Resource JSON file.
+
+You can also import the realm with cli.
+For more details, see the Keycloak documentation about how to [import a realm using cli](https://www.keycloak.org/docs/latest/server_admin/index.html#importing-a-realm-from-exported-json-file) and [create a new realm](https://www.keycloak.org/docs/latest/server_admin/index.html#proc-creating-a-realm_server_administration_guide).
 
 Starting the Wildfly Server
 -------------------
@@ -67,6 +69,8 @@ Starting the Wildfly Server
 In order to deploy the example application, you need a Wildfly Server up and running. For more details, see the Wildfly documentation about how to [install the server](https://docs.wildfly.org/).
 
 Make sure the server is accessible from `localhost` and listening on port `8080`. 
+
+> You no longer need the Keycloak OIDC Client Adapter anymore as `elytron-oidc-client` subsystem  has been added to Wildfly 25
 
 Build and Deploy the Quickstart
 -------------------------------

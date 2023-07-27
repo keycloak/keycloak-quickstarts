@@ -57,7 +57,7 @@
         <version.jee.jaxb.api>2.3.1</version.jee.jaxb.api>
 
         <arquillian-managed>true</arquillian-managed>
-        <version.wildfly.maven.plugin>1.2.2.Final</version.wildfly.maven.plugin>
+        <version.wildfly.maven.plugin>4.1.1.Final</version.wildfly.maven.plugin>
         <jboss-cli.executable>./jboss-cli.sh</jboss-cli.executable>
         <keycloak.management.port>10090</keycloak.management.port>
         <selenium-bom.version>3.11.0</selenium-bom.version>

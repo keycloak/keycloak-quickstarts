@@ -1,9 +1,9 @@
 servlet-saml-service-provider: Servlet SAML Service Provider
 =============================================================
 
-Level: Beginner
-Technologies: JavaEE
-Summary: JSP Profile Application
+Level: Beginner \
+Technologies: JavaEE \
+Summary: JSP Profile Application \
 Target Product: <span>Keycloak</span>, <span>WildFly</span>
 
 What is it?
@@ -17,9 +17,9 @@ System Requirements
 
 To compile and run this quickstart you will need:
 
-* JDK 11
+* JDK 17
 * Apache Maven 3.8.6
-* Wildfly 28+
+* Wildfly <= 23
 * Keycloak 21+
 * Docker 20+
 
@@ -44,8 +44,10 @@ You should be able to access your Keycloak Server at http://localhost:8180.
 
 Log in as the admin user to access the Keycloak Administration Console. Username should be `admin` and password `admin`.
 
-Import the [realm configuration file](config/realm-import.json) to create a new realm called `quickstart`.
-For more details, see the Keycloak documentation about how to [create a new realm](https://www.keycloak.org/docs/latest/server_admin/index.html#_create-realm).
+Import the [realm configuration file](config/realm-import.json) to create a new realm called `quickstart`. The easiest way to do this is using the gui. After you click on `Create Realm`, you have the option to choose a Resource JSON file.
+
+You can also import the realm with cli.
+For more details, see the Keycloak documentation about how to [import a realm using cli](https://www.keycloak.org/docs/latest/server_admin/index.html#importing-a-realm-from-exported-json-file) and [create a new realm](https://www.keycloak.org/docs/latest/server_admin/index.html#proc-creating-a-realm_server_administration_guide).
 
 Starting the Wildfly Server
 -------------------
@@ -53,6 +55,15 @@ Starting the Wildfly Server
 In order to deploy the example application, you need a Wildfly Server up and running. For more details, see the Wildfly documentation about how to [install the server](https://docs.wildfly.org/).
 
 Make sure the server is accessible from `localhost` and listening on port `8080`.
+
+Installing the SAML 2.0 Wildfly Adapter
+-----------------------------------
+
+Install the WildFly SAML 2.0 Client Adapter following [this guide](https://www.keycloak.org/docs/latest/securing_apps/index.html#_saml-jboss-adapter-installation).
+
+> Please consider the supported WildFly version for this adapter
+
+
 
 Build and Deploy the Quickstart
 -------------------------------

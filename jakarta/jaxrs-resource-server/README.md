@@ -1,9 +1,9 @@
 jakarta-jaxrs-resource-server: JAX-RS Resource Server
 ===================================================
 
-Level: Beginner
-Technologies: Jakarta EE
-Summary: A JAX-RS resource server protected with Wildfly Elytron OIDC
+Level: Beginner \
+Technologies: Jakarta EE \
+Summary: A JAX-RS resource server protected with Wildfly Elytron OIDC\
 Target Product: <span>Keycloak</span>, <span>WildFly</span>
 
 What is it?
@@ -30,7 +30,7 @@ Starting and Configuring the Keycloak Server
 To start a Keycloak Server you can use OpenJDK on Bare Metal, Docker, Openshift or any other option described in [Keycloak Getting Started guides]https://www.keycloak.org/guides#getting-started. For example when using Docker just run the following command in the root directory of this quickstart:
 
 ```shell
-docker run --name keycloak \
+docker run --name keycloak \  
   -e KEYCLOAK_ADMIN=admin \
   -e KEYCLOAK_ADMIN_PASSWORD=admin \
   --network=host \
@@ -45,8 +45,10 @@ You should be able to access your Keycloak Server at http://localhost:8180.
 
 Log in as the admin user to access the Keycloak Administration Console. Username should be `admin` and password `admin`.
 
-Import the [realm configuration file](config/realm-import.json) to create a new realm called `quickstart`.
-For more details, see the Keycloak documentation about how to [create a new realm](https://www.keycloak.org/docs/latest/server_admin/index.html#_create-realm).
+Import the [realm configuration file](config/realm-import.json) to create a new realm called `quickstart`. The easiest way to do this is using the gui. After you click on `Create Realm`, you have the option to choose a Resource JSON file.
+
+You can also import the realm with cli.
+For more details, see the Keycloak documentation about how to [import a realm using cli](https://www.keycloak.org/docs/latest/server_admin/index.html#importing-a-realm-from-exported-json-file) and [create a new realm](https://www.keycloak.org/docs/latest/server_admin/index.html#proc-creating-a-realm_server_administration_guide).
 
 Starting the Wildfly Server
 -------------------
@@ -54,6 +56,8 @@ Starting the Wildfly Server
 In order to deploy the example application, you need a Wildfly Server up and running. For more details, see the Wildfly documentation about how to [install the server](https://docs.wildfly.org/).
 
 Make sure the server is accessible from `localhost` and listening on port `8080`.
+
+> You no longer need the Keycloak OIDC Client Adapter anymore as `elytron-oidc-client` subsystem  has been added to Wildfly 25
 
 Build and Deploy the Quickstart
 -------------------------------
@@ -71,9 +75,9 @@ Access the Quickstart
 
 There are 3 endpoints exposed by the service:
 
-* http://localhost:8080/service/public - requires no authentication
-* http://localhost:8080/service/secured - can be invoked by users with the `user` role
-* http://localhost:8080/service/admin - can be invoked by users with the `admin` role
+* http://localhost:8080/jakarta-jaxrs-resource-server/public - requires no authentication
+* http://localhost:8080/jakarta-jaxrs-resource-server/secured - can be invoked by users with the `user` role
+* http://localhost:8080/jakarta-jaxrs-resource-server/admin - can be invoked by users with the `admin` role
 
 You can open the public endpoint directly in the browser to test the service. The two other endpoints are protected and require
 invoking them with a bearer token.
