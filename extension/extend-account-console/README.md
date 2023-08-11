@@ -38,7 +38,7 @@ Configuration in <span>Keycloak</span>
 To build the provider, run the following maven command:
 
    ````
-   mvn clean install
+   mvn -Pextension clean install
    ````
 
 To install the provider, copy the `target/keycloak-man-theme.jar` JAR file to the `providers` directory of the server distribution.
