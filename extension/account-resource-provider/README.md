@@ -31,7 +31,7 @@ Configuration in <span>Keycloak</span>
 To build the provider, run the following maven command:
 
    ````
-   mvn clean install
+   mvn clean install -Pextension -DskipTests
    ````
 
 To install the provider, copy the `target/keycloak-account-v1.jar` JAR file to the `providers` directory of the server distribution.
@@ -61,4 +61,4 @@ Integration test of the Quickstart
 ```
 
 2. You need to have Chrome browser installed and updated to the latest version.
-3. Run `mvn clean install -Djakarta`
+3. Run `mvn clean install -Pextension`

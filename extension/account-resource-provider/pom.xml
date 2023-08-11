@@ -16,8 +16,6 @@
     <guava.version>32.0.0-jre</guava.version>
     <lombok.version>1.18.28</lombok.version>
     <auto-service.version>1.1.1</auto-service.version>
-    <arquillian-graphene.version>2.5.4</arquillian-graphene.version>
-    <arquillian-phantom.version>1.2.1.Final</arquillian-phantom.version>
   </properties>
 
   <build>
@@ -116,9 +114,9 @@
 
     <!-- testing deps -->
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>${version.junit}</version>
+      <groupId>org.keycloak</groupId>
+      <artifactId>keycloak-client-registration-api</artifactId>
+      <version>${keycloak.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -126,12 +124,6 @@
       <artifactId>graphene-webdriver</artifactId>
       <version>${arquillian-graphene.version}</version>
       <type>pom</type>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.keycloak</groupId>
-      <artifactId>keycloak-client-registration-api</artifactId>
-      <version>${keycloak.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
