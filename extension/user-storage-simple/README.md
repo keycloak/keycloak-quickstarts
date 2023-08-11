@@ -42,7 +42,7 @@ Build and Deploy the Quickstart
 To build the provider, run the following maven command:
 
    ````
-   mvn clean install
+   mvn -Pextension clean install
    ````
 
 To install the provider, copy the target/user-storage-properties-example.jar JAR file to the `providers` directory of the server distribution.

@@ -36,7 +36,7 @@ you make sure the persistence unit will be using the correct datasource.
 To build the provider, run the following maven command:
 
    ````
-   mvn clean install
+   mvn -Pextension clean install
    ````
 
 To install the provider, copy the target/user-storage-jpa-example.jar JAR file to the `providers` directory of the server distribution.
