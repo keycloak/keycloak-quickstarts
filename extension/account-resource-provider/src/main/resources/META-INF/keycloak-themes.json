@@ -1,0 +1,8 @@
+{
+  "themes": [
+    {
+      "name" : "account-v1",
+      "types": [ "account" ]
+    }
+  ]
+}
