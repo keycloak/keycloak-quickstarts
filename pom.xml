@@ -378,6 +378,7 @@
                 <version.wildfly.arquillian.container>4.0.0.Alpha6</version.wildfly.arquillian.container>
             </properties>
             <modules>
+                <module>extension/account-resource-provider</module>
                 <module>extension/action-token-authenticator</module>
                 <module>extension/action-token-required-action</module>
                 <module>extension/event-listener-sysout</module>
