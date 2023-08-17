@@ -38,7 +38,7 @@ import java.util.concurrent.TimeUnit;
  */
 @RunWith(Arquillian.class)
 @RunAsClient
-public class ExtendAccountConsoleTest {
+public class LegacyAccountConsoleTest {
 
     public static final String KEYCLOAK_URL = "http://localhost:8180";
 
@@ -46,7 +46,7 @@ public class ExtendAccountConsoleTest {
     private LoginPage loginPage;
 
     @Page
-    private ExtendedAccountPage accountPage;
+    private LegacyAccountPage accountPage;
 
     @Drone
     private WebDriver webDriver;
@@ -87,13 +87,10 @@ public class ExtendAccountConsoleTest {
     @Test
     public void keycloakManThemeTest() {
         accountPage.navigateTo();
-        Assert.assertTrue(accountPage.isLogoPresent());
-
-        accountPage.clickOverviewHome();
-
         loginPage.login("test-admin", "password");
-        Assert.assertTrue(accountPage.isOverviewPage());
-        accountPage.clickKeycloakManApp();
-        Assert.assertTrue(accountPage.isKeycloakManPage());
+        accountPage.clickAccount();
+        Assert.assertTrue(accountPage.isAccountPage());
+        accountPage.clickPassword();
+        Assert.assertTrue(accountPage.isPasswordPage());
     }
 }
