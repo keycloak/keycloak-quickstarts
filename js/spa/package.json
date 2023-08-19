@@ -13,6 +13,6 @@
     "@keycloak/keycloak-admin-client": "^21.1.1"
   },
   "devDependencies": {
-    "@playwright/test": "^1.33.0"
+    "@playwright/test": "^1.37.1"
   }
 }
