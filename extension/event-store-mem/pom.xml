@@ -20,7 +20,7 @@
     <parent>
         <artifactId>keycloak-quickstart-parent</artifactId>
         <groupId>org.keycloak.quickstarts</groupId>
-        <version>22.0.2</version>
+        <version>22.0.3</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
