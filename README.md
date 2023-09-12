@@ -31,6 +31,7 @@ First clone the Keycloak repository:
 
     git clone https://github.com/keycloak/keycloak-quickstarts.git
     cd keycloak-quickstarts
+    ./set-version.sh VERSION // replace VERSION, for example: ./set-version.sh 22.0.1
 
 Each quickstart provides its own documentation with the steps you need to follow in order to build, test, and run the example.
 Look at the `README.md` file at the root of a quickstart for more details.
