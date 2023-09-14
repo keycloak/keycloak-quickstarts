@@ -49,7 +49,7 @@ public class ExternalAppAuthenticator implements Authenticator {
 
     private static final Logger logger = Logger.getLogger(ExternalAppAuthenticator.class);
 
-    public static final String DEFAULT_EXTERNAL_APP_URL = "http://localhost:8080/wildfly_action-token-responder-example_action-token-responder-example/external-action.jsp?token={TOKEN}";
+    public static final String DEFAULT_EXTERNAL_APP_URL = "http://127.0.0.1:8080/wildfly_action-token-responder-example_action-token-responder-example/external-action.jsp?token={TOKEN}";
 
     public static final String DEFAULT_APPLICATION_ID = "application-id";
 
