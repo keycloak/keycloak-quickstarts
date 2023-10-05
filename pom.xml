@@ -20,7 +20,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.keycloak.quickstarts</groupId>
-    <artifactId>keycloak-quickstart-parent</artifactId>
     <version>22.0.4</version>
     <packaging>pom</packaging>
     <name>Keycloak Quickstart: parent</name>

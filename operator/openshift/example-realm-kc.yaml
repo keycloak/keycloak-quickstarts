@@ -1,0 +1,43 @@
+---
+apiVersion: k8s.keycloak.org/v2alpha1
+kind: KeycloakRealmImport
+metadata:
+  name: example-realm-kc
+spec:
+  keycloakCRName: example-kc
+  realm:
+    id: example-realm
+    realm: example-realm
+    displayName: Example Realm
+    enabled: true
+    users:
+      - username: admin
+        credentials:
+          - type: password
+            value: password
+        email: admin@keycloak.org
+        enabled: true
+        realmRoles:
+          - admin
+          - user
+      - username: user
+        credentials:
+          - type: password
+            value: user
+        email: user@keycloak.org
+        enabled: true
+        realmRoles:
+          - user
+      - username: client
+        credentials:
+          - type: password
+            value: creator
+        email: client@keycloak.org
+        enabled: true
+        clientRoles:
+          account:
+            - "manage-account"
+          realm-management:
+            - "create-client"
+            - "manage-realm"
+            - "manage-clients"
