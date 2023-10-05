@@ -20,7 +20,7 @@
     <parent>
         <groupId>org.keycloak.quickstarts</groupId>
         <artifactId>keycloak-quickstart-parent</artifactId>
-        <version>22.0.3</version>
+        <version>22.0.4</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <artifactId>jakarta-servlet-authz-client</artifactId>
