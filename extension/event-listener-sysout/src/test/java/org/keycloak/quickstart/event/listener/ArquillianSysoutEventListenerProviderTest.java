@@ -162,6 +162,7 @@ public class ArquillianSysoutEventListenerProviderTest {
 
     private void logout() {
         ADMIN_CLIENT.realm(REALM_QS_EVENT_SYSOUT).users().get(ADMIN_ID).logout();
+        webDriver.navigate().refresh();
     }
 
 
