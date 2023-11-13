@@ -35,6 +35,13 @@ First clone the Keycloak repository:
 Each quickstart provides its own documentation with the steps you need to follow in order to build, test, and run the example.
 Look at the `README.md` file at the root of a quickstart for more details.
 
+### Chrome driver version
+
+Some automated tests rely on the chrome browser present on your laptop. Also you need to have correct version of chrome driver according
+to the version of the chrome browser used. In case of the issues, see [Chrome page](https://googlechromelabs.github.io/chrome-for-testing/) and download
+correct chrome driver version for your Chrome browser. Then add system property `webdriver.chrome.driver` when running the tests according to chrome version
+and add whole path to the chrome driver. For instance something like `-Dwebdriver.chrome.driver=/somedir/chromedriver-linux64-119.0.6045.105/chromedriver`.
+
 ## Help and Documentation
 
 * [Documentation](https://www.keycloak.org/documentation.html)
