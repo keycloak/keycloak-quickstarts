@@ -54,6 +54,10 @@ In order to deploy the example application, you need a Wildfly Server up and run
 
 Make sure the server is accessible from `localhost` and listening on port `8080`.
 
+Once you verified that Wildfly server works, it is needed to install SAML adapter into it. You can follow the [SAML Adapter documentation](https://www.keycloak.org/docs/latest/securing_apps/index.html#_saml_jboss_adapter)
+for the details. Just make sure that you download Jakarta version of the SAML adapter.
+It can be downloaded from the following URL (replace $KC_VERSION with requested Keycloak version) https://repo1.maven.org/maven2/org/keycloak/keycloak-saml-wildfly-adapter-jakarta-dist/$KC_VERSION/keycloak-saml-wildfly-adapter-jakarta-dist-$KC_VERSION.zip .
+
 Build and Deploy the Quickstart
 -------------------------------
 

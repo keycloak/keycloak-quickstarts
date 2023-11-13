@@ -57,7 +57,7 @@
         <version.jee.jaxb.api>2.3.1</version.jee.jaxb.api>
 
         <arquillian-managed>true</arquillian-managed>
-        <version.wildfly.maven.plugin>1.2.2.Final</version.wildfly.maven.plugin>
+        <version.wildfly.maven.plugin>4.1.1.Final</version.wildfly.maven.plugin>
         <jboss-cli.executable>./jboss-cli.sh</jboss-cli.executable>
         <keycloak.management.port>10090</keycloak.management.port>
         <selenium-bom.version>3.11.0</selenium-bom.version>
@@ -173,7 +173,7 @@
                 </property>
             </activation>
             <properties>
-                <version.wildfly>28.0.0.Beta1</version.wildfly>
+                <version.wildfly>28.0.1.Final</version.wildfly>
                 <version.jakarta.ws.rs-api>3.1.0</version.jakarta.ws.rs-api>
                 <arquillian-graphene.version>2.5.4</arquillian-graphene.version>
                 <version.wildfly.arquillian.container>4.0.0.Alpha6</version.wildfly.arquillian.container>
@@ -370,7 +370,7 @@
                 </property>
             </activation>
             <properties>
-                <version.wildfly>28.0.0.Beta1</version.wildfly>
+                <version.wildfly>28.0.1.Final</version.wildfly>
                 <version.jakarta.ws.rs-api>3.1.0</version.jakarta.ws.rs-api>
                 <arquillian-graphene.version>2.5.4</arquillian-graphene.version>
                 <arquillian-bom.version>1.7.0.Alpha14</arquillian-bom.version>

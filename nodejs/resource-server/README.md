@@ -52,7 +52,7 @@ Log in as the admin user to access the Keycloak Administration Console. Username
 Import the [realm configuration file](config/realm-import.json) to create a new realm called `quickstart`.
 For more details, see the Keycloak documentation about how to [create a new realm](https://www.keycloak.org/docs/latest/server_admin/index.html#_create-realm).
 
-Alternatively, you can create the realm using the following command:
+Alternatively, you can create the realm using the following command (it might require first to run `npm install`)::
 
 ```shell
 npm run create-realm
@@ -75,9 +75,9 @@ Access the Quickstart
 
 There are 3 endpoints exposed by the service:
 
-* http://localhost:8080/public - requires no authentication
-* http://localhost:8080/secured - can be invoked by users with the `user` role
-* http://localhost:8080/admin - can be invoked by users with the `admin` role
+* http://localhost:3000/public - requires no authentication
+* http://localhost:3000/secured - can be invoked by users with the `user` role
+* http://localhost:3000/admin - can be invoked by users with the `admin` role
 
 You can open the public endpoint directly in the browser to test the service. The two other endpoints are protected and require
 invoking them with a bearer token.
@@ -93,7 +93,7 @@ You should be able to obtain tokens for any of these users:
 | alice    | alice    | user               |
 | admin    | admin    | admin              |
 
-To obtain the bearer token, run the following command:
+To obtain the bearer token, run for instance the following command when on Linux (please make sure to have `curl` and `jq` packages available in your linux distribution):
 
 ```shell
 export access_token=$(\
@@ -123,7 +123,7 @@ As a result, you will see the following response from the service:
 Running tests
 --------------------
 
-Make sure Keycloak is [running](#starting-and-configuring-the-keycloak-server).
+Make sure Keycloak is [running](#starting-and-configuring-the-keycloak-server). Also make sure that node server is still listening on http://localhost:3000 .
 
 1. Open a terminal and navigate to the root directory of this quickstart.
 

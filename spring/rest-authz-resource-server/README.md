@@ -83,7 +83,7 @@ You should be able to obtain tokens for any of these users:
 | jdoe     | jdoe     | user_premium |
 | alice    | alice    | user         |
 
-To obtain the bearer token, run the following command:
+To obtain the bearer token, run for instance the following command when on Linux (please make sure to have `curl` and `jq` packages available in your linux distribution):
 
 ```shell
 export access_token=$(\
@@ -169,7 +169,7 @@ You don't need Wildfly running because a temporary server is started during test
 2. Run the following command to build and run tests:
 
    ````
-   mvn -Djakarta clean verify
+   mvn -Dspring clean verify
    ````
 
 References

@@ -48,7 +48,7 @@ Log in as the admin user to access the Keycloak Administration Console. Username
 Import the [realm configuration file](config/realm-import.json) to create a new realm called `quickstart`.
 For more details, see the Keycloak documentation about how to [create a new realm](https://www.keycloak.org/docs/latest/server_admin/index.html#_create-realm).
 
-Alternatively, you can create the realm using the following command:
+Alternatively, you can create the realm using the following command (it might require first to run `npm install`):
 
 ```shell
 npm run create-realm
@@ -88,15 +88,32 @@ Once authenticated, you are redirected to the application and you can perform th
 Running tests
 --------------------
 
-Make sure Keycloak is [running](#starting-and-configuring-the-keycloak-server).
+Make sure Keycloak is [running](#starting-and-configuring-the-keycloak-server). At the same time, the `npm` should be stopped, so there is nothing listening on http://localhost:8080 .
 
-1. Open a terminal and navigate to the root directory of this quickstart.
+1. The test assumes that `quickstart` realm does not yet exists. If you already imported it as mentioned in previous steps, it may be needed to remove it first.
+   It can be done by login in admin console, then going to URL like http://localhost:8180/admin/master/console/#/quickstart/realm-settings and then click `Delete` at the `Action` menu on the left top corner.
 
-2. Run the following command to build and run tests:
+Alternatively, it can be done by command:
+```shell
+npm run delete-realm
+```
+
+2. Open a terminal and navigate to the root directory of this quickstart.
+
+3. Run the following command to build and run tests:
 
    ````
    npm test
    ````
+
+#### Test troubleshooting
+
+If there is error message like `Executable doesn't exist at /home/yournick/.cache/ms-playwright/chromium-1060/chrome-linux/chrome`, it may be needed to first install playwright with this command:
+
+```shell
+npx playwright install
+```
+
 
 References
 --------------------

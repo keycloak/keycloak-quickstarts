@@ -64,8 +64,8 @@ a configuration of a single custom SPI implemented in this example:
     is used in step 5 to verify that the invocation comes from the correct app.
 
 NOTE: In production environment, you don't need to use the "confidential" parameters sent in the server startup command. It might be better
-to use configuration properties file for it, or even use the Keycloak Valve capabilities. See the Keycloak documentation for more details about provider
-options and for the details about how to use the valve.
+to use configuration properties file for it, or even use the Keycloak Vault capabilities. See the Keycloak documentation for more details about provider
+options and for the details about how to use the vault.
 
 The custom authenticator is configured in admin console within the flow that uses it:
 
@@ -102,7 +102,7 @@ You can download latest Wildfly server. If you run the mvn command as described 
 We also need to deploy simple WAR application to it and start the server. In Linux, the commands to do all of that could be for example like this:
 
 ```
-export WILDFY_VERSION=wildfly-28.0.0.Beta1
+export WILDFY_VERSION=wildfly-28.0.1.Final
 cp -r target/$WILDFY_VERSION /tmp/
 cp target/deployments/wildfly_action-token-responder-example_action-token-responder-example.war /tmp/$WILDFY_VERSION/standalone/deployments/action-token-responder-example.war
 cd /tmp/$WILDFY_VERSION/bin
