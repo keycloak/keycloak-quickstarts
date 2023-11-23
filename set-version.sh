@@ -2,6 +2,13 @@
 
 NEW_VERSION=$1
 
+function updateNpmDep() {
+  FILE="$1"
+  PACKAGE="$2"
+
+  sed -i 's|"'"$PACKAGE"'": "[^"]*"|"'"$PACKAGE"'": "'"$NEW_VERSION"'"|g' $FILE
+}
+
 mvn versions:set -Dversion.keycloak=$NEW_VERSION -DnewVersion=$NEW_VERSION -DgenerateBackupPoms=false -DgroupId=org.keycloak* -DartifactId=*
 
 sed -i 's/\$\$VERSION\$\$/'"$NEW_VERSION"'/g' kubernetes/keycloak.yaml
@@ -17,11 +24,11 @@ else
 fi
 
 # JS quickstart
-npm i @keycloak/keycloak-admin-client@$NPM_ADMIN_CLIENT --prefix js/spa
+updateNpmDep js/spa/package.json "@keycloak/keycloak-admin-client"
 
 # NodeJS quickstart
-npm i @keycloak/keycloak-admin-client@$NPM_ADMIN_CLIENT --prefix nodejs/resource-server
-npm i keycloak-connect@$NPM_NODE_ADAPTER --prefix nodejs/resource-server
+updateNpmDep nodejs/resource-server/package.json "@keycloak/keycloak-admin-client"
+updateNpmDep nodejs/resource-server/package.json "keycloak-connect"
 
 echo "New Mvn Version: $NEW_VERSION" >&2
 echo "Used NPM dependency of keycloak-admin-client: $NPM_ADMIN_CLIENT" >&2
