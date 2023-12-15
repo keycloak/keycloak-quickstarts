@@ -30,6 +30,7 @@ if [ "$1" = "extension" ]; then
     cp extension/user-storage-simple/target/user-storage-properties-example.jar $dist/providers
     cp extension/user-storage-jpa/conf/quarkus.properties $dist/conf
     cp extension/user-storage-jpa/target/user-storage-jpa-example.jar $dist/providers
+    cp extension/extend-admin-console-spi/target/extend-admin-ui.jar $dist/providers
   fi
 fi
 
