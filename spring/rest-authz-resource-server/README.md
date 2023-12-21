@@ -29,7 +29,7 @@ To compile and run this quickstart you will need:
 Starting and Configuring the Keycloak Server
 -------------------
 
-To start a Keycloak Server you can use OpenJDK on Bare Metal, Docker, Openshift or any other option described in [Keycloak Getting Started guides]https://www.keycloak.org/guides#getting-started. For example when using Docker just run the following command in the root directory of this quickstart:
+To start a Keycloak Server you can use OpenJDK on Bare Metal, Docker, Openshift or any other option described in [Keycloak Getting Started guides](https://www.keycloak.org/guides#getting-started). For example when using Docker just run the following command in the root directory of this quickstart:
 
 ```shell
 docker run --name keycloak \
