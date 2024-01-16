@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
+import React from 'react';
 
 import {
     Card,
@@ -27,9 +27,7 @@ import {
     Title
 } from '@patternfly/react-core';
 
-declare const resourceUrl: string;
-
-export class KeycloakManLovesJsx extends React.Component {
+class KeycloakManLovesJsx extends React.Component {
 
     public render(): React.ReactNode {
 
@@ -42,12 +40,12 @@ export class KeycloakManLovesJsx extends React.Component {
                         </Title>
                         <EmptyStateBody>
                             <Grid gutter='sm'>
-                                <GridItem span={12}><img src={resourceUrl + '/public/keycloak-man-95x95.jpg'}/></GridItem>
-                                <GridItem span={12}><img src={resourceUrl + '/public/heart-95x95.png'}/></GridItem>
+                                <GridItem span={12}><img src="public/keycloak-man-95x95.jpg"/></GridItem>
+                                <GridItem span={12}><img src="public/heart-95x95.png"/></GridItem>
                                 <GridItem span={12}>
-                                    <img src={resourceUrl + '/public/jsx-95x95.png'}/>
-                                    <img src={resourceUrl + '/public/react-95x95.png'}/>
-                                    <img src={resourceUrl + '/public/patternfly-95x95.png'}/>
+                                    <img src="public/jsx-95x95.png"/>
+                                    <img src="public/react-95x95.png"/>
+                                    <img src="public/patternfly-95x95.png"/>
                                 </GridItem>
                             </Grid>
                         </EmptyStateBody>
@@ -60,3 +58,5 @@ export class KeycloakManLovesJsx extends React.Component {
         );
     }
 };
+
+export default KeycloakManLovesJsx;

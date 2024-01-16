@@ -15,19 +15,19 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class ExtendedAccountPage {
 
     @FindBy(
-            css = "#landingLogo > img[src*=keycloak-man]"
+            css = ".pf-c-page__header-brand > a > img"
     )
     private WebElement keycloakManLogo;
     @FindBy(
-            id = "landing-keycloak-man"
+            xpath = "//a[@data-testid='content/keycloak-man']"
     )
     private WebElement keycloakManContainer;
     @FindBy(
-            id = "landing-sample-overview"
+            xpath = "//a[@data-testid='content/sample-overview']"
     )
     private WebElement overviewHomeBtn;
     @FindBy(
-            id = "nav-link-who-is-keycloak-man"
+            xpath = "//a[@data-testid='content/keycloak-man']"
     )
     private WebElement keycloakManAppBtn;
 
