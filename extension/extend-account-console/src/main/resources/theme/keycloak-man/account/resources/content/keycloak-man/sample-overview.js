@@ -70,7 +70,7 @@ class SampleOverview extends React.Component {
                     e('ol', null, [
                         e('li', null, 'npm install'),
                         e('li', null, 'npm run build'),
-                        e('li', null, `Edit content.json and find the section for 'keycloak-man-likes-jsx'.  Set the hidden flag to false.`),
+                        e('li', null, 'Redeploy the theme'),
                     ])
                 ])
             ]),
