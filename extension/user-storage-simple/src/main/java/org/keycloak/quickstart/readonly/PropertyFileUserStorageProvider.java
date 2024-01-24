@@ -26,7 +26,7 @@ import org.keycloak.component.ComponentModel;
 import org.keycloak.credential.CredentialInput;
 import org.keycloak.credential.CredentialInputUpdater;
 import org.keycloak.credential.CredentialInputValidator;
-import org.keycloak.credential.LegacyUserCredentialManager;
+import org.keycloak.credential.UserCredentialManager;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.SubjectCredentialManager;
@@ -85,7 +85,7 @@ public class PropertyFileUserStorageProvider implements
 
             @Override
             public SubjectCredentialManager credentialManager() {
-                return new LegacyUserCredentialManager(session, realm, this);
+                return new UserCredentialManager(session, realm, this);
             }
         };
     }
