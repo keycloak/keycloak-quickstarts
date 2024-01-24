@@ -108,7 +108,7 @@ public class ExtendAccountConsoleTest {
         Assert.assertTrue(accountPage.isKeycloakManPage());
         accountPage.clickKeycloakManLovesJsx();
 
-        // TBD
+        assertThat(webDriver.getPageSource(), containsString("Keycloak Man Loves JSX, React, and PatternFly"));
         Assert.assertTrue(accountPage.isKeycloakManPage());
     }
 
