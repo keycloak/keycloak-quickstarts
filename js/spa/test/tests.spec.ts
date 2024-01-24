@@ -30,7 +30,7 @@ test('Show My Account', async ({ page }) => {
   await login(page)
 
   await page.locator('id=showMyAccount').click();
-  await expect(page).toHaveTitle('Keycloak Account Management');
+  await expect(page).toHaveTitle('Account Management');
 });
 
 async function login(page) {
