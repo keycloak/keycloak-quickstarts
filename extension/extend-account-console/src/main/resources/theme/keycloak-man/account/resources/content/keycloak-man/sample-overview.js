@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-import * as React from "../../../../common/keycloak/web_modules/react.js";
-import { Msg } from "../../widgets/Msg.js";
+import React from "react";
 
 // No JSX - no compilation/transpilation needed
-export class SampleOverview extends React.Component {
+class SampleOverview extends React.Component {
     render() {
         const e = React.createElement;
         return e('div', {class: 'pf-c-card'}, [
-            e('center', null, e("img", {class: 'pf-c-brand', src: resourceUrl + '/public/keycloak-man-95x95.jpg', alt: 'Keycloak Man Logo'})),
+            e('center', null, e("img", {class: 'pf-c-brand', src: 'public/keycloak-man-95x95.jpg', alt: 'Keycloak Man Logo'})),
             e('div', {class: 'pf-c-card__body'}, [
                 e('p', null, `You can create new pages like this using a React component.  The component is declared in content.json.`),
                 e('p', null, `This page only provides an overview of the files and directories.  See Keycloak documentation for more details.`)
@@ -35,7 +34,7 @@ export class SampleOverview extends React.Component {
 
             e('div', {class: 'pf-c-card__body'}, [
                 e('strong', null, '/messages/messages_en.properties: '),
-                e(Msg, {msgKey: 'youCanLocalize'})
+                e('span', 'youCanLocalize')
             ]),
 
             e('div', {class: 'pf-c-card__body'}, [
@@ -71,10 +70,12 @@ export class SampleOverview extends React.Component {
                     e('ol', null, [
                         e('li', null, 'npm install'),
                         e('li', null, 'npm run build'),
-                        e('li', null, `Edit content.json and find the section for 'keycloak-man-likes-jsx'.  Set the hidden flag to false.`),
+                        e('li', null, 'Redeploy the theme'),
                     ])
                 ])
             ]),
         ]);
     }
 };
+
+export default SampleOverview;

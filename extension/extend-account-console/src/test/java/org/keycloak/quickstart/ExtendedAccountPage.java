@@ -15,21 +15,25 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class ExtendedAccountPage {
 
     @FindBy(
-            css = "#landingLogo > img[src*=keycloak-man]"
+            css = ".pf-c-page__header-brand > a > img"
     )
     private WebElement keycloakManLogo;
     @FindBy(
-            id = "landing-keycloak-man"
+            xpath = "//a[@data-testid='content/keycloak-man']/ancestor::li[button/text()='Keycloak Man']"
     )
     private WebElement keycloakManContainer;
     @FindBy(
-            id = "landing-sample-overview"
+            xpath = "//a[@data-testid='content/sample-overview']"
     )
     private WebElement overviewHomeBtn;
     @FindBy(
-            id = "nav-link-who-is-keycloak-man"
+            xpath = "//a[@data-testid='content/keycloak-man']"
     )
     private WebElement keycloakManAppBtn;
+    @FindBy(
+            xpath = "//a[@data-testid='content/keycloak-man-loves-jsx']"
+    )
+    private WebElement keycloakManLovesJsx;
 
     @Drone
     private WebDriver webDriver;
@@ -42,6 +46,14 @@ public class ExtendedAccountPage {
 
     public void clickKeycloakManApp() {
         this.keycloakManAppBtn.click();
+    }
+
+    public void clickKeycloakManContainer() {
+        this.keycloakManContainer.click();
+    }
+
+    public void clickKeycloakManLovesJsx() {
+        this.keycloakManLovesJsx.click();
     }
 
     public void navigateTo() {

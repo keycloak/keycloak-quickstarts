@@ -14,6 +14,12 @@
     <name>Keycloak Quickstarts: Extend Account Console</name>
     <description>Keycloak Man theme shows how to extend account console.</description>
 
+    <properties>
+        <node.version>v18.18.2</node.version>
+        <pnpm.version>8.10.0</pnpm.version>
+        <pnpm.args.install>install --prefer-offline --frozen-lockfile --ignore-scripts</pnpm.args.install>
+    </properties>
+    
     <dependencies>
         <dependency>
             <groupId>org.jboss.arquillian.graphene</groupId>
@@ -37,5 +43,49 @@
 
     <build>
         <finalName>keycloak-man-theme</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>**/src/**/*</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                 <configuration>
+                    <nodeVersion>${node.version}</nodeVersion>
+                    <pnpmVersion>${pnpm.version}</pnpmVersion>
+                    <workingDirectory>src/main/resources/theme/keycloak-man/account/src</workingDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>install-node-and-pnpm</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>pnpm-install</id>
+                        <goals>
+                            <goal>pnpm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>${pnpm.args.install}</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>run-build</id>
+                        <goals>
+                            <goal>pnpm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>run build</arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 </project>
