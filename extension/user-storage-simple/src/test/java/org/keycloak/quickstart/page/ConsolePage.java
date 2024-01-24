@@ -10,19 +10,20 @@ import static org.jboss.arquillian.graphene.Graphene.waitAjax;
  */
 public class ConsolePage {
 
-    @FindBy(id = "user-name")
-    private WebElement username;
-
-    @FindBy(id = "signOutButton")
+    @FindBy(xpath = "//a[text() = 'Sign out']")
     private WebElement logoutLink;
 
+    @FindBy(xpath = "//div[@data-testid='options']")
+    private WebElement profileMenu;
+
     public void logout() {
+        profileMenu.click();
         logoutLink.click();
     }
 
     public String getUser() {
-        waitAjax().until().element(username).value().not().equalTo("");
-        return username.getAttribute("value");
+        waitAjax().until().element(profileMenu).text().not().equalTo("");
+        return profileMenu.getText();
     }
 
 }
