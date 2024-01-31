@@ -54,7 +54,7 @@
         </dependency>
         <dependency>
             <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-model-legacy</artifactId>
+            <artifactId>keycloak-model-storage</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>

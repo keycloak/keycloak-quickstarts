@@ -1,1 +1,1 @@
-Dependencies: org.keycloak.keycloak-model-legacy
+Dependencies: org.keycloak.keycloak-model-storage
