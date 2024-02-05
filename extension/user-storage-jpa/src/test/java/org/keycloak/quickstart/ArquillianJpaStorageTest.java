@@ -32,6 +32,7 @@ import org.keycloak.representations.idm.UserRepresentation;
 import org.keycloak.test.FluentTestsHelper;
 import org.keycloak.test.page.LoginPage;
 import org.keycloak.quickstart.storage.user.MyExampleUserStorageProviderFactory;
+import org.keycloak.representations.idm.RequiredActionProviderRepresentation;
 import java.time.Duration;
 import org.openqa.selenium.WebDriver;
 
@@ -77,7 +78,10 @@ public class ArquillianJpaStorageTest {
 
     @Before
     public void beforeTest() throws Exception {
-        testsHelper.importTestRealm("/quickstart-realm.json");
+        FluentTestsHelper r = testsHelper.importTestRealm("/quickstart-realm.json");
+        RequiredActionProviderRepresentation ra = r.getTestRealmResource().flows().getRequiredAction("VERIFY_PROFILE");
+        ra.setEnabled(false);
+        r.getTestRealmResource().flows().updateRequiredAction("VERIFY_PROFILE", ra);
         webDriver.manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
         webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
