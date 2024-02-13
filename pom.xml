@@ -104,6 +104,11 @@
                 <artifactId>keycloak-test-helper</artifactId>
                 <version>${version.keycloak}</version>
             </dependency>
+            <dependency>
+                <groupId>org.keycloak</groupId>
+                <artifactId>keycloak-server-spi-private</artifactId>
+                <version>${version.keycloak}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -406,6 +411,7 @@
                 <module>extension/event-listener-sysout</module>
                 <module>extension/event-store-mem</module>
                 <module>extension/extend-account-console</module>
+                <module>extension/extend-admin-console-spi</module>
                 <module>extension/user-storage-simple</module>
                 <module>extension/user-storage-jpa</module>
             </modules>
