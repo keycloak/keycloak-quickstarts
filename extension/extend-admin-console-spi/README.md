@@ -36,12 +36,12 @@ After you created an item you can view the details by clicking on it in the list
 
 ### Integration test of the Quickstart
 Make sure you have a Keycloak server running with an admin user in the master realm and copy the generated jar file into the providers folder.
-Your Keycloak server should be listening on `http://localhost:8180`. You can archive this by running:
+Your Keycloak server should be listening on `http://localhost:8180`. You can achieve this by running:
 ```
 ./kc.sh start-dev --http-port=8180
 ```
 
-You need to have Chrome browser installed and updated to the latest version. See README for additional details.
+You need to have Chrome browser installed and updated to the latest version. See the root README for additional details.
 ```
 mvn clean install -Dextension
 ```
