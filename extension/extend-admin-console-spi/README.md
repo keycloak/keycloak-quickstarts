@@ -26,13 +26,13 @@ Then copy the generated `extend-admin-ui.jar` into your <keycloak-server>/provid
 ### Screenshots
 
 To illustrate how `getPath` method is used, check the `ThemeUiTab` class in this quickstart. The ThemeUi page can now be found when you navigate to _Realm settings_.
-![attribute ream tab](images/img.png, "Realm attributes tab")
+![attribute ream tab](images/img.png "Realm attributes tab")
 
 The `AdminUiPage` class illustrates how to introduce a new section into the main menu in admin console. It adds a Todo section as the last item in the side menu:
-![todo section](images/img_1.png, "Todo section")
+![todo section](images/img_1.png "Todo section")
 
 After you created an item you can view the details by clicking on it in the list:
-![todo detail screen](images/img_2.png, "Todo item details")
+![todo detail screen](images/img_2.png "Todo item details")
 
 ### Integration test of the Quickstart
 Make sure you have a Keycloak server running with an admin user in the master realm and copy the generated jar file into the providers folder.
