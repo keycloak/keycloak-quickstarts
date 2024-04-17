@@ -229,7 +229,8 @@ public class MyUserStorageProvider implements UserStorageProvider,
     public Stream<UserModel> searchForUserStream(RealmModel realm, Map<String, String> params, Integer firstResult, Integer maxResults) {
         String search = params.get(UserModel.SEARCH);
         TypedQuery<UserEntity> query = em.createNamedQuery("searchForUser", UserEntity.class);
-        query.setParameter("search", "%" + search.toLowerCase() + "%");
+        String lower = search != null ? search.toLowerCase() : "";
+        query.setParameter("search", "%" + lower + "%");
         if (firstResult != null) {
             query.setFirstResult(firstResult);
         }
