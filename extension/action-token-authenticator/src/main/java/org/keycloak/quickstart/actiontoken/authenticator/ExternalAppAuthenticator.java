@@ -89,7 +89,7 @@ public class ExternalAppAuthenticator implements Authenticator {
         // This URL will be used by the application to submit the action token above to return back to the flow
         String submitActionTokenUrl;
         submitActionTokenUrl = Urls
-          .actionTokenBuilder(context.getUriInfo().getBaseUri(), token, clientId, authSession.getTabId())
+          .actionTokenBuilder(context.getUriInfo().getBaseUri(), token, clientId, authSession.getTabId(), "")
           .queryParam(Constants.EXECUTION, context.getExecution().getId())
           .queryParam(ExternalApplicationNotificationActionTokenHandler.QUERY_PARAM_APP_TOKEN, "{tokenParameterName}")
           .build(context.getRealm().getName(), "{APP_TOKEN}")
