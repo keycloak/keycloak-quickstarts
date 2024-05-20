@@ -88,7 +88,7 @@ public class ExtendAdminConsoleTest {
         adminConsole.navigateTo();
         waitForPageToLoad();
         loginPage.login("admin", "admin");
-        assertThat(webDriver.getTitle(), containsString("Keycloak Administration UI"));
+        assertThat(webDriver.getTitle(), containsString("Keycloak Administration Console"));
 
         Assert.assertTrue(adminConsole.isTodoMenuPresent());
         adminConsole.clickTodoMenuItem();
