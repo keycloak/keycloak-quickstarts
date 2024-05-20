@@ -21,7 +21,13 @@ Run this example by compiling with maven:
 mvn -Pextension clean install -DskipTests=true
 ```
 
-Then copy the generated `extend-admin-ui.jar` into your <keycloak-server>/providers folder and run the server using `kc.[sh|bat] start-dev`.
+Then copy the generated `extend-admin-ui.jar` into your <keycloak-server>/providers folder and run the server using:
+
+```bash
+kc.[sh|bat] start-dev --features=declarative-ui
+```
+
+NOTE: In order to properly use the SPI, the `declarative-ui` feature must be turned on.
 
 ### Screenshots
 
@@ -38,7 +44,7 @@ After you created an item you can view the details by clicking on it in the list
 Make sure you have a Keycloak server running with an admin user in the master realm and copy the generated jar file into the providers folder.
 Your Keycloak server should be listening on `http://localhost:8180`. You can achieve this by running:
 ```
-./kc.sh start-dev --http-port=8180
+./kc.sh start-dev --http-port=8180 --features=declarative-ui
 ```
 
 You need to have Chrome browser installed and updated to the latest version. See the root README for additional details.

@@ -20,6 +20,9 @@ if [ "$1" = "extension" ]; then
   # extensions/event-store-mem example
   SERVER_ARGS="$SERVER_ARGS --spi-events-store-provider=in-mem";
 
+  # extension/extend-admin-console-spi
+  SERVER_ARGS="$SERVER_ARGS --features=declarative-ui";
+
   if [ "$1" == "extension" ]; then
     mvn -Dextension -DskipTests -B -Dnightly clean package
     cp extension/action-token-authenticator/target/action-token-example.jar $dist/providers
