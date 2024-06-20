@@ -24,6 +24,9 @@ you do not respond within 2 weeks (bear in mind you can always open a new PR if 
 Also, please remember that we do receive a fairly large amount of PRs and also have code to write ourselves, so we may
 not be able to respond to your PR immediately.
 
+WARNING: Please send pull requests to the branch `main`. The pull requests are not supposed to be sent to any other branch (especially not to the `latest` branch, which is always overwritten from the
+content of the `main` branch during every release).
+
 ### Finding something to work on
 
 If you would like to contribute to Keycloak, but are not sure exactly what to work on, you can find a number of open
