@@ -56,6 +56,14 @@ The tests should be written in its simplest form so that they can be maintained 
 
 Make sure the quickstart is properly documented from a `README.md` file that must be located at the root of the quickstart.
 
+### Picking correct branch for your PR
+
+Quickstarts are organized into the following branches:
+* `main` contains the latest state of the development on par with latest Keycloak.
+  This is destination for your PR.
+* `latest` is the branch that corresponds to the latest _released_ version of Keycloak.
+  You should *not* open PRs to this branch unless there is proper justification.
+
 ### Submitting your PR
 
 When preparing your PR make sure you have a single commit and your branch is rebased on the main branch from the

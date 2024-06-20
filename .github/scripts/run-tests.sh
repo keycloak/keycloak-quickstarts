@@ -71,12 +71,14 @@ if [ "$1" = "jakarta" ]; then
 elif [ "$1" = "extension" ]; then
   run_tests extension
 elif [ "$1" = "nodejs" ]; then
+  npm -C nodejs/resource-server install
   npm -C nodejs/resource-server ci
   npm -C nodejs/resource-server start&
   if ! npm -C nodejs/resource-server test 2>&1 | tee test-logs/nodejs_resource-server.log; then
     tests_with_errors+=("nodejs/resource-server")
   fi
 elif [ "$1" = "js" ]; then
+  npm -C js/spa install
   npm -C js/spa ci
   npx -C js/spa playwright install-deps chromium
   npx -C js/spa playwright install chromium

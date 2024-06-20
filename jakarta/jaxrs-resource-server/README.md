@@ -71,9 +71,9 @@ Access the Quickstart
 
 There are 3 endpoints exposed by the service:
 
-* http://localhost:8080/service/public - requires no authentication
-* http://localhost:8080/service/secured - can be invoked by users with the `user` role
-* http://localhost:8080/service/admin - can be invoked by users with the `admin` role
+* http://localhost:8080/jakarta-jaxrs-resource-server/public - requires no authentication
+* http://localhost:8080/jakarta-jaxrs-resource-server/secured - can be invoked by users with the `user` role
+* http://localhost:8080/jakarta-jaxrs-resource-server/admin - can be invoked by users with the `admin` role
 
 You can open the public endpoint directly in the browser to test the service. The two other endpoints are protected and require
 invoking them with a bearer token.
@@ -89,7 +89,7 @@ You should be able to obtain tokens for any of these users:
 | alice    | alice    | user               |
 | admin    | admin    | admin              |
 
-To obtain the bearer token, run the following command:
+To obtain the bearer token, run for instance the following command when on Linux (please make sure to have `curl` and `jq` packages available in your linux distribution):
 
 ```shell
 export access_token=$(\
@@ -102,7 +102,7 @@ curl -X POST http://localhost:8180/realms/quickstart/protocol/openid-connect/tok
 
 You can use the same command to obtain tokens on behalf of user `admin`, just make sure to change both `username` and `password` request parameters.
 
-After running the command above, you can now access the `http://localhost:8080/service/secured` endpoint
+After running the command above, you can now access the `http://localhost:8080/jakarta-jaxrs-resource-server/secured` endpoint
 because the user `alice` has the `user` role.
 
 ```shell

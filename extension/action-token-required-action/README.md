@@ -45,7 +45,7 @@ Build and Deploy the Quickstart
 To build the provider, run the following maven command:
 
    ````
-   mvn clean install
+   mvn -Pextension clean install
    ````
 
 To install the provider, copy the `target/action-token-req-action-example.jar` JAR file to the `providers` directory of the server distribution.
@@ -72,7 +72,7 @@ a configuration of two custom SPIs implemented in this example:
 
 NOTE: In production environment, you don't need to use the "confidential" parameters sent in the server startup command, which in this case
 applies especially for the `hmac-secret` configuration parameter. It might be better to use configuration properties file for it, or even use
-the Keycloak Valve capabilities. See the Keycloak documentation for more details about provider options and for the details about how to use the valve.
+the Keycloak Vault capabilities. See the Keycloak documentation for more details about provider options and for the details about how to use the vault.
 
 Note that you need to deploy the responder application into WildFly. A sample responder
 application is part of the tests, so you first need to run the tests in order to have the WAR archive
@@ -84,7 +84,7 @@ Integration test of the Quickstart
 1. Make sure you have an Keycloak server running with an admin user in the `master` realm or use the provided docker image. Also make sure that server
    was started with the parameters as described above
 2. You need to have Chrome browser installed and updated to the latest version
-3. Run `mvn clean install -Djakarta`
+3. Run `mvn -Pextension clean install`
 
 After running the above command, the WAR file will be located in
 `target/deployments/wildfly_action-token-responder-example_action-token-responder-example.war`.
@@ -101,7 +101,7 @@ You can download latest Wildfly server. If you run the mvn command as described 
 We also need to deploy simple WAR application to it and start the server. In Linux, the commands to do all of that could be for example like this:
 
 ```
-export WILDFY_VERSION=wildfly-28.0.0.Beta1
+export WILDFY_VERSION=wildfly-28.0.1.Final
 cp -r target/$WILDFY_VERSION /tmp/
 cp target/deployments/wildfly_action-token-responder-example_action-token-responder-example.war /tmp/$WILDFY_VERSION/standalone/deployments/action-token-responder-example.war
 cd /tmp/$WILDFY_VERSION/bin

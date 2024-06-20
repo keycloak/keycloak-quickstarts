@@ -56,7 +56,7 @@
         <version.jee.jaxb.api>2.3.1</version.jee.jaxb.api>
 
         <arquillian-managed>true</arquillian-managed>
-        <version.wildfly.maven.plugin>1.2.2.Final</version.wildfly.maven.plugin>
+        <version.wildfly.maven.plugin>4.1.1.Final</version.wildfly.maven.plugin>
         <jboss-cli.executable>./jboss-cli.sh</jboss-cli.executable>
         <keycloak.management.port>10090</keycloak.management.port>
         <selenium-bom.version>3.11.0</selenium-bom.version>
@@ -64,6 +64,7 @@
         <version.json.javax>1.1.2</version.json.javax>
         <version.yasson>1.0.8</version.yasson>
         <version.jackson>2.14.2</version.jackson>
+        <org.jboss.galleon.version>5.2.2.Final</org.jboss.galleon.version>
 
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -100,6 +101,11 @@
             <dependency>
                 <groupId>org.keycloak</groupId>
                 <artifactId>keycloak-test-helper</artifactId>
+                <version>${version.keycloak}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.keycloak</groupId>
+                <artifactId>keycloak-server-spi-private</artifactId>
                 <version>${version.keycloak}</version>
             </dependency>
         </dependencies>
@@ -172,11 +178,11 @@
                 </property>
             </activation>
             <properties>
-                <version.wildfly>28.0.0.Beta1</version.wildfly>
+                <version.wildfly>30.0.0.Final</version.wildfly>
                 <version.jakarta.ws.rs-api>3.1.0</version.jakarta.ws.rs-api>
                 <arquillian-graphene.version>2.5.4</arquillian-graphene.version>
                 <version.wildfly.arquillian.container>4.0.0.Alpha6</version.wildfly.arquillian.container>
-                <arquillian-bom.version>1.7.0.Alpha14</arquillian-bom.version>
+                <arquillian-bom.version>1.7.1.Final</arquillian-bom.version>
             </properties>
             <modules>
                 <module>jakarta/servlet-authz-client</module>
@@ -299,35 +305,57 @@
                                             <type>zip</type>
                                             <outputDirectory>target</outputDirectory>
                                         </artifactItem>
-                                        <artifactItem>
-                                            <groupId>org.keycloak</groupId>
-                                            <artifactId>keycloak-saml-wildfly-adapter-jakarta-dist</artifactId>
-                                            <version>${version.keycloak}</version>
-                                            <type>zip</type>
-                                            <outputDirectory>target/wildfly-${version.wildfly}</outputDirectory>
-                                        </artifactItem>
                                     </artifactItems>
                                 </configuration>
                             </execution>
                         </executions>
                     </plugin>
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <version>${version.antrun.maven.plugin}</version>
+                        <groupId>org.jboss.galleon</groupId>
+                        <artifactId>galleon-maven-plugin</artifactId>
+                        <version>${org.jboss.galleon.version}</version>
+                        <!--Provision a server with relevant layers-->
                         <executions>
                             <execution>
-                                <id>install-adapters</id>
+                                <id>saml-adapter-installation</id>
                                 <phase>pre-integration-test</phase>
                                 <goals>
-                                    <goal>run</goal>
+                                    <goal>provision</goal>
                                 </goals>
                                 <configuration>
-                                    <target name="run">
-                                        <exec dir="target/wildfly-${version.wildfly}/bin" executable="${jboss-cli.executable}" inputstring="">
-                                            <arg value="--file=adapter-elytron-install-saml-offline.cli" />
-                                        </exec>
-                                    </target>
+                                    <install-dir>target/wildfly-${version.wildfly}</install-dir>
+                                    <record-state>true</record-state>
+                                    <log-time>${galleon.log.time}</log-time>
+                                    <offline>false</offline>
+                                    <feature-packs>
+                                        <feature-pack>
+                                            <groupId>org.keycloak</groupId>
+                                            <artifactId>keycloak-saml-adapter-galleon-pack</artifactId>
+                                            <version>${project.version}</version>
+                                        </feature-pack>
+                                    </feature-packs>
+                                    <pluginOptions>
+                                        <optional-packages>all</optional-packages>
+                                    </pluginOptions>
+                                    <configurations>
+                                        <config>
+                                            <model>standalone</model>
+                                            <name>standalone.xml</name>
+                                            <layers>
+                                                <layer>core-server</layer>
+                                                <layer>web-server</layer>
+                                                <layer>jaxrs-server</layer>
+                                                <layer>datasources-web-server</layer>
+                                                <layer>web-console</layer>
+
+                                                <layer>keycloak-saml</layer>
+                                                <layer>keycloak-client-saml</layer>
+                                                <layer>keycloak-client-saml-ejb</layer>
+                                                <layer>elytron</layer>
+                                                <layer>elytron-oidc-client</layer>
+                                            </layers>
+                                        </config>
+                                    </configurations>
                                 </configuration>
                             </execution>
                         </executions>
@@ -369,10 +397,10 @@
                 </property>
             </activation>
             <properties>
-                <version.wildfly>28.0.0.Beta1</version.wildfly>
+                <version.wildfly>30.0.0.Final</version.wildfly>
                 <version.jakarta.ws.rs-api>3.1.0</version.jakarta.ws.rs-api>
                 <arquillian-graphene.version>2.5.4</arquillian-graphene.version>
-                <arquillian-bom.version>1.7.0.Alpha14</arquillian-bom.version>
+                <arquillian-bom.version>1.7.1.Final</arquillian-bom.version>
                 <version.jackson>2.14.2</version.jackson>
                 <version.wildfly.arquillian.container>4.0.0.Alpha6</version.wildfly.arquillian.container>
             </properties>
@@ -382,6 +410,7 @@
                 <module>extension/event-listener-sysout</module>
                 <module>extension/event-store-mem</module>
                 <module>extension/extend-account-console</module>
+                <module>extension/extend-admin-console-spi</module>
                 <module>extension/user-storage-simple</module>
                 <module>extension/user-storage-jpa</module>
             </modules>
@@ -447,7 +476,7 @@
                     </dependency>
                     <dependency>
                         <groupId>org.keycloak</groupId>
-                        <artifactId>keycloak-model-legacy</artifactId>
+                        <artifactId>keycloak-model-storage</artifactId>
                         <version>${version.keycloak}</version>
                     </dependency>
                     <dependency>
@@ -515,7 +544,7 @@
                 </dependency>
                 <dependency>
                     <groupId>org.keycloak</groupId>
-                    <artifactId>keycloak-model-legacy</artifactId>
+                    <artifactId>keycloak-model-storage</artifactId>
                     <version>${version.keycloak}</version>
                 </dependency>
                 <dependency>

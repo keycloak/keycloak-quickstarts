@@ -34,7 +34,7 @@ System Requirements
 
 You need to have <span>Keycloak</span> running. It is recommended to use Keycloak 22 or later.
 
-All you need to build this project is Java 11 (Java SDK 11) or later and Maven 3.6.3 or later.
+All you need to build this project is Java 17 (Java SDK 17) or later and Maven 3.6.3 or later.
 
 
 Build and Deploy the Quickstart
@@ -43,7 +43,7 @@ Build and Deploy the Quickstart
 To build the provider, run the following maven command:
 
    ````
-   mvn clean install
+   mvn -Pextension clean install -DskipTests=true
    ````
 
 To install the provider, copy the target/event-store-mem.jar JAR file to the `providers` directory of the server distribution.
@@ -73,8 +73,8 @@ Integration test of the Quickstart
    Your <span>Keycloak</span> should be listening on `http://localhost:8180` and should have set `in-mem` as the default `eventsStore` provider.
    See in the previous section how the startup command for the server should look like.
 
-2. You need to have Chrome browser installed and updated to the latest version.
-3. Run `mvn clean install -Djakarta`
+2. You need to have Chrome browser installed and updated to the latest version. See [README](../../README.md#chrome-driver-version) for additional details.
+3. Run `mvn clean install -Dextension`
 
 
 Undeploy the quickstart

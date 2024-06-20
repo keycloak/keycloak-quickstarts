@@ -17,7 +17,6 @@
 
 package org.keycloak.quickstart;
 
-import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.jboss.arquillian.graphene.page.Page;
 import org.jboss.arquillian.junit.Arquillian;
@@ -29,15 +28,21 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.keycloak.test.FluentTestsHelper;
 import org.keycloak.test.page.LoginPage;
+import java.time.Duration;
 import org.openqa.selenium.WebDriver;
 
 import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.support.ui.FluentWait;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.openqa.selenium.support.ui.ExpectedConditions.not;
+import static org.openqa.selenium.support.ui.ExpectedConditions.urlToBe;
 
 /**
  * @author <a href="mailto:aboullos@redhat.com">Alfredo Moises Boullosa</a>
  */
 @RunWith(Arquillian.class)
-@RunAsClient
 public class ExtendAccountConsoleTest {
 
     public static final String KEYCLOAK_URL = "http://localhost:8180";
@@ -85,15 +90,43 @@ public class ExtendAccountConsoleTest {
     }
 
     @Test
-    public void keycloakManThemeTest() {
+    public void keycloakManThemeTest() throws Exception {
         accountPage.navigateTo();
-        Assert.assertTrue(accountPage.isLogoPresent());
-
-        accountPage.clickOverviewHome();
+        waitForPageToLoad();
+        assertThat(webDriver.getTitle(), containsString("Sign in to " + testsHelper.getTestRealmName()));
 
         loginPage.login("test-admin", "password");
+        waitForPageToLoad();
+
+        Assert.assertTrue(accountPage.isLogoPresent());
+        accountPage.clickKeycloakManContainer();
+        accountPage.clickOverviewHome();
+
         Assert.assertTrue(accountPage.isOverviewPage());
         accountPage.clickKeycloakManApp();
+
         Assert.assertTrue(accountPage.isKeycloakManPage());
+        accountPage.clickKeycloakManLovesJsx();
+
+        assertThat(webDriver.getPageSource(), containsString("Keycloak Man Loves JSX, React, and PatternFly"));
+        Assert.assertTrue(accountPage.isKeycloakManPage());
+    }
+
+    public void waitForPageToLoad() {
+        // Taken from org.keycloak.testsuite.util.WaitUtils
+
+        String currentUrl = null;
+
+        // Ensure the URL is "stable", i.e. is not changing anymore; if it'd changing, some redirects are probably still in progress
+        for (int maxRedirects = 4; maxRedirects > 0; maxRedirects--) {
+            currentUrl = webDriver.getCurrentUrl();
+            FluentWait<WebDriver> wait = new FluentWait<>(webDriver).withTimeout(Duration.ofMillis(250));
+            try {
+                wait.until(not(urlToBe(currentUrl)));
+            }
+            catch (TimeoutException e) {
+                break; // URL has not changed recently - ok, the URL is stable and page is current
+            }
+        }
     }
 }

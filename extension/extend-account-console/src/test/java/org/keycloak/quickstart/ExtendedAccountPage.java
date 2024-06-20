@@ -9,25 +9,31 @@ import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class ExtendedAccountPage {
 
     @FindBy(
-            css = "#landingLogo > img[src*=keycloak-man]"
+            css = ".pf-v5-c-page__header-brand > a > img"
     )
     private WebElement keycloakManLogo;
     @FindBy(
-            id = "landing-keycloak-man"
+            xpath = "//a[@data-testid='content/keycloak-man']/ancestor::li[button/text()='Keycloak Man']"
     )
     private WebElement keycloakManContainer;
     @FindBy(
-            id = "landing-sample-overview"
+            xpath = "//a[@data-testid='content/sample-overview']"
     )
     private WebElement overviewHomeBtn;
     @FindBy(
-            id = "nav-link-who-is-keycloak-man"
+            xpath = "//a[@data-testid='content/keycloak-man']"
     )
     private WebElement keycloakManAppBtn;
+    @FindBy(
+            xpath = "//a[@data-testid='content/keycloak-man-loves-jsx']"
+    )
+    private WebElement keycloakManLovesJsx;
 
     @Drone
     private WebDriver webDriver;
@@ -42,6 +48,14 @@ public class ExtendedAccountPage {
         this.keycloakManAppBtn.click();
     }
 
+    public void clickKeycloakManContainer() {
+        this.keycloakManContainer.click();
+    }
+
+    public void clickKeycloakManLovesJsx() {
+        this.keycloakManLovesJsx.click();
+    }
+
     public void navigateTo() {
         webDriver.navigate().to(ExtendAccountConsoleTest.KEYCLOAK_URL + ACCOUNT_URL);
     }
@@ -51,10 +65,10 @@ public class ExtendedAccountPage {
     }
 
     public boolean isOverviewPage() {
-        return webDriver.getCurrentUrl().endsWith("/sample-overview");
+        return new WebDriverWait(webDriver, 5).until(ExpectedConditions.urlMatches(".*/sample-overview"));
     }
 
     public boolean isKeycloakManPage() {
-        return webDriver.getCurrentUrl().endsWith("/keycloak-man");
+        return new WebDriverWait(webDriver, 5).until(ExpectedConditions.urlMatches(".*/keycloak-man"));
     }
 }

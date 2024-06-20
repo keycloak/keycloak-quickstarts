@@ -7,6 +7,9 @@
   "users": [
     {
       "username": "alice",
+      "firstName": "Alice",
+      "lastName": "Liddel",
+      "email": "alice@keycloak.org",
       "enabled": true,
       "credentials": [
         {
@@ -21,6 +24,9 @@
     {
       "username": "jdoe",
       "enabled": true,
+      "firstName": "jdoe",
+      "lastName": "jdoe",
+      "email": "jdoe@keycloak.org",
       "credentials": [
         {
           "type": "password",
@@ -34,6 +40,9 @@
     },
     {
       "username": "admin",
+      "firstName": "admin",
+      "lastName": "admin",
+      "email": "admin@keycloak.org",
       "enabled": true,
       "credentials": [
         {

@@ -59,6 +59,8 @@ target
 # Node.js #
 ###########
 node_modules
+**/package-lock.json
+node/
 
 # Keycloak distribution
 keycloak-dist

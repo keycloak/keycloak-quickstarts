@@ -14,28 +14,15 @@
  * limitations under the License.
  */
 
-import * as React from "../../../../common/keycloak/web_modules/react.js";
-import { AccountServiceContext } from "../../account-service/AccountServiceContext.js";
+import React from "react";
 
 // No JSX - no compilation needed
-export class KeycloakManHistory extends React.Component {
-    static contextType = AccountServiceContext;
+class KeycloakManHistory extends React.Component {
+    // static contextType = AccountServiceContext;
 
     constructor(props) {
         super(props);
         this.state = {firstName: 'you', lastName: ''};
-    }
-
-    componentDidMount() {
-        this.fetchName();
-    }
-
-    fetchName() {
-        this.context.doGet("/").then(response => {
-            const firstName = response.data.firstName || response.data.username || 'you';
-            const lastName = response.data.lastName || '';
-            this.setState({firstName, lastName});
-        });
     }
 
     render() {
@@ -43,7 +30,7 @@ export class KeycloakManHistory extends React.Component {
         return e('div', {class: 'pf-c-card'}, [
             e('div', {class: 'pf-c-card__header'}, [
                 e('div', {class: 'pf-c-card__header-main'}, [
-                    e('center', null, e("img", {class: 'pf-c-brand', src: resourceUrl + '/public/keycloak-man-95x95.jpg', alt: 'Keycloak Man Logo'})),
+                    e('center', null, e("img", {class: 'pf-c-brand', src: 'public/keycloak-man-95x95.jpg', alt: 'Keycloak Man Logo'})),
                 ])
             ]),
 
@@ -58,3 +45,5 @@ export class KeycloakManHistory extends React.Component {
         ]);
     }
 };
+
+export default KeycloakManHistory;

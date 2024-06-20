@@ -17,9 +17,9 @@ System Requirements
 
 To compile and run this quickstart you will need:
 
-* JDK 11
+* JDK 17
 * Apache Maven 3.8.6
-* Wildfly 28+
+* Wildfly 29+
 * Keycloak 21+
 * Docker 20+
 
@@ -52,7 +52,21 @@ Starting the Wildfly Server
 
 In order to deploy the example application, you need a Wildfly Server up and running. For more details, see the Wildfly documentation about how to [install the server](https://docs.wildfly.org/).
 
-Make sure the server is accessible from `localhost` and listening on port `8080`.
+Once you have Wildfly server downloaded somewhere, it is needed to install SAML adapter into it. It can be installed with the usage of Galleon tools. Please follow these instructions:
+
+1. Download Galleon tools. The ZIP can be downloaded for example from [this page](https://github.com/wildfly/galleon/releases) and unzip to some location on your laptop.
+
+2. Install Keycloak SAML adapter into Wildfly via Galleon. It can be done for instance with the command similar to this (replace environment variables according to your environment and used versions):
+
+```
+cd wildfly-$WILDFLY_VERSION
+$GALLEON_PATH/bin/galleon.sh install org.keycloak:keycloak-saml-adapter-galleon-pack:$KC_VERSION --layers=keycloak-client-saml
+```
+
+There are alternative ways for doing that as described in the [Wildfly SAML documentation](https://docs.wildfly.org/30/WildFly_Elytron_Security.html#Keycloak_SAML_Integration). You can check what path suits
+best your needs.
+
+3. Start Wildfly server and make sure the server is accessible from `localhost` and listening on port `8080`.
 
 Build and Deploy the Quickstart
 -------------------------------
@@ -107,3 +121,4 @@ References
 
 * [Keycloak SAML Adapter](https://www.keycloak.org/docs/latest/securing_apps/#_saml_jboss_adapter)
 * [Keycloak Documentation](https://www.keycloak.org/documentation)
+* [Wildfly SAML documentation](https://docs.wildfly.org/30/WildFly_Elytron_Security.html#Keycloak_SAML_Integration)
