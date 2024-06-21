@@ -55,7 +55,6 @@ nbproject
 #########
 target
 
-
 # Node.js #
 ###########
 node_modules
@@ -64,3 +63,6 @@ node/
 
 # Keycloak distribution
 keycloak-dist
+
+# Certificates
+*.pem
