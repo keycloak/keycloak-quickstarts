@@ -103,7 +103,7 @@ kubectl apply -f example-kc.yaml
 Importing a new Realm
 -------------------
 
-Creating a new Realm, and its configuration, uses the `KeycloalRealmImport` CRD. The [my-realm-kc.yaml](my-realm-kc.yaml) file
+Creating a new Realm, and its configuration, uses the `KeycloakRealmImport` CRD. The [my-realm-kc.yaml](my-realm-kc.yaml) file
 describes a sample realm. Applying it on Kubernetes with the next command:
 
 ```shell

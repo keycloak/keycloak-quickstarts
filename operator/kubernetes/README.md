@@ -46,9 +46,9 @@ Deploying Keycloak Operator
 You can install the Operator on Kubernetes by using `kubectl` commands:
 
 ```shell
-kubectl apply -f https://raw.githubusercontent.com/keycloak/keycloak-k8s-resources/22.0.3/kubernetes/keycloaks.k8s.keycloak.org-v1.yml
-kubectl apply -f https://raw.githubusercontent.com/keycloak/keycloak-k8s-resources/22.0.3/kubernetes/keycloakrealmimports.k8s.keycloak.org-v1.yml
-kubectl apply -f https://raw.githubusercontent.com/keycloak/keycloak-k8s-resources/22.0.3/kubernetes/kubernetes.yml
+kubectl apply -f https://raw.githubusercontent.com/keycloak/keycloak-k8s-resources/25.0.1/kubernetes/keycloaks.k8s.keycloak.org-v1.yml
+kubectl apply -f https://raw.githubusercontent.com/keycloak/keycloak-k8s-resources/25.0.1/kubernetes/keycloakrealmimports.k8s.keycloak.org-v1.yml
+kubectl apply -f https://raw.githubusercontent.com/keycloak/keycloak-k8s-resources/25.0.1/kubernetes/kubernetes.yml
 ```
 
 Deploying PostgreSQL Database
