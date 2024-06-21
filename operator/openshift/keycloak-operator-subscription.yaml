@@ -1,0 +1,20 @@
+---
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: keycloak-quickstart-og
+spec:
+  targetNamespaces:
+  - keycloak-quickstart
+---
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: amq-streams
+spec:
+  channel: fast
+  installPlanApproval: Automatic
+  name: keycloak-operator
+  source: community-operators
+  sourceNamespace: openshift-marketplace
+  startingCSV: keycloak-operator.v22.0.3
