@@ -28,12 +28,17 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.keycloak.common.util.MultivaluedHashMap;
+import org.keycloak.models.UserModel;
 import org.keycloak.quickstart.page.ConsolePage;
 import org.keycloak.representations.idm.ComponentRepresentation;
 import org.keycloak.representations.idm.RequiredActionProviderRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
+import org.keycloak.representations.userprofile.config.UPAttributePermissions;
+import org.keycloak.representations.userprofile.config.UPAttributeRequired;
+import org.keycloak.representations.userprofile.config.UPConfig;
 import org.keycloak.test.FluentTestsHelper;
 import org.keycloak.test.page.LoginPage;
+import org.keycloak.userprofile.config.UPConfigUtils;
 import org.openqa.selenium.WebDriver;
 
 import java.io.IOException;
@@ -92,8 +97,26 @@ public class ArquillianSimpleStorageTest {
         RequiredActionProviderRepresentation ra = r.getTestRealmResource().flows().getRequiredAction("VERIFY_PROFILE");
         ra.setEnabled(false);
         r.getTestRealmResource().flows().updateRequiredAction("VERIFY_PROFILE", ra);
+        disableUserProfileAttributes(r);
         webDriver.manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
         webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    }
+
+    // Disable email, firstName, lastName attributes from user-profile
+    private void disableUserProfileAttributes(FluentTestsHelper r) {
+        UPConfig upConfig = r.getTestRealmResource().users().userProfile().getConfiguration();
+
+        removeUserPermissionsFromAttribute(upConfig, UserModel.EMAIL);
+        removeUserPermissionsFromAttribute(upConfig, UserModel.FIRST_NAME);
+        removeUserPermissionsFromAttribute(upConfig, UserModel.LAST_NAME);
+
+        r.getTestRealmResource().users().userProfile().update(upConfig);
+    }
+
+    private void removeUserPermissionsFromAttribute(UPConfig upConfig, String attrName) {
+        UPAttributePermissions upAttributePermissions = upConfig.getAttribute(attrName).getPermissions();
+        upAttributePermissions.getEdit().remove(UPConfigUtils.ROLE_USER);
+        upAttributePermissions.getView().remove(UPConfigUtils.ROLE_USER);
     }
 
     @After
