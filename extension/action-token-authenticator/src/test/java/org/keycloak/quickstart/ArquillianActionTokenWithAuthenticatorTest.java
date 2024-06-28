@@ -18,7 +18,6 @@
 
 package org.keycloak.quickstart;
 
-import com.google.common.collect.ImmutableMap;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.container.test.api.TargetsContainer;
@@ -56,6 +55,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -125,7 +125,7 @@ public class ArquillianActionTokenWithAuthenticatorTest {
         importTestRealm("admin", "admin", "/quickstart-realm.json");
 
         // Update authentication flow to use external application redirection
-        qsRealm.flows().copy("browser", ImmutableMap.<String, String>builder().put("newName", "browser-copy").build()).close();
+        qsRealm.flows().copy("browser", Map.of("newName", "browser-copy")).close();
         List<AuthenticationExecutionInfoRepresentation> executions = qsRealm.flows().getExecutions("browser-copy");
 
         AuthenticationExecutionInfoRepresentation browserFormFlow = executions.stream()
@@ -134,9 +134,8 @@ public class ArquillianActionTokenWithAuthenticatorTest {
           .orElseThrow(() -> new AssertionError("Could not find forms flow"));
 
         qsRealm.flows().addExecution(browserFormFlow.getDisplayName(),
-          ImmutableMap.<String, String>builder()
-            .put("provider", ExternalAppAuthenticatorFactory.ID)
-            .build());
+                Map.of("provider", ExternalAppAuthenticatorFactory.ID)
+        );
 
         executions = qsRealm.flows().getExecutions("browser-copy");
         AuthenticationExecutionInfoRepresentation extAppExecution = executions.stream()
