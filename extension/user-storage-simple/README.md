@@ -67,6 +67,13 @@ admin console or on the registration pages of <span>Keycloak</span>, will be cre
 to the Users tab in the Admin Console and create a new user, you'll be able to see the provider in action.  You can also
 edit the file yourself to add the username/password pairs you want.
 
+Disable user profile attributes
+-------------------------------
+Because the user-storage providers in this application use just attribute `username`, it may be needed to disable attributes `email`, `firstName` and `lastname` in the user-profile configuration
+to not be required or even visible. After login to admin console, you can go to tab `Realm settings` -> tab `User Profile` -> Click to requested attribute (like EG. `email`) and uncheck `Permissions`
+for `User` for both `edit` and `view`. This step is not needed in `master` realm, but may be needed in any other realm as attributes `email`, `firstName`, `lastname` and visible and required by default. 
+
+
 Integration test of the Quickstart
 ----------------------------------
 

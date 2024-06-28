@@ -40,6 +40,7 @@ public class StorageManager {
     }
 
     public static void deleteStorage() {
+        if (file == null) return;
         try {
             Files.deleteIfExists(file);
         } catch (IOException e) {

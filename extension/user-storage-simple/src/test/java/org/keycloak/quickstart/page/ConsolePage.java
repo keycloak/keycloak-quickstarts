@@ -10,10 +10,10 @@ import static org.jboss.arquillian.graphene.Graphene.waitAjax;
  */
 public class ConsolePage {
 
-    @FindBy(xpath = "//a[text() = 'Sign out']")
+    @FindBy(xpath = "//span[text() = 'Sign out']")
     private WebElement logoutLink;
 
-    @FindBy(xpath = "//div[@data-testid='options']")
+    @FindBy(xpath = "//button[@data-testid='options-toggle']")
     private WebElement profileMenu;
 
     public void logout() {
