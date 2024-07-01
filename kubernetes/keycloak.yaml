@@ -31,7 +31,7 @@ spec:
     spec:
       containers:
         - name: keycloak
-          image: quay.io/keycloak/keycloak:$$VERSION$$
+          image: quay.io/keycloak/keycloak:24.0.2
           args: ["start-dev"]
           env:
             - name: KEYCLOAK_ADMIN
