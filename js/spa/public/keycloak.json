@@ -1,6 +1,6 @@
 {
   "realm": "quickstart",
-  "auth-server-url": "http://localhost:8180",
+  "auth-server-url": "${KC_URL}",
   "ssl-required": "external",
   "resource": "spa",
   "public-client": true
