@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.keycloak</groupId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>999.0.0-SNAPSHOT</version>
     <artifactId>my-account-ui</artifactId>
     <name>My Account UI</name>
     <description>The user inferface to manage an account on the Keycloak server.</description>
