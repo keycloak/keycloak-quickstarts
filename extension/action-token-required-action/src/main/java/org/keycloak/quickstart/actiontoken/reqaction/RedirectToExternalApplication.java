@@ -75,7 +75,7 @@ public class RedirectToExternalApplication implements RequiredActionProvider, Re
         // This URL will be used by the application to submit the action token above to return back to the flow
         String submitActionTokenUrl;
         submitActionTokenUrl = Urls
-          .actionTokenBuilder(context.getUriInfo().getBaseUri(), token, clientId, authSession.getTabId(), "")
+          .actionTokenBuilder(context.getUriInfo().getBaseUri(), token, clientId, authSession.getTabId())
           .queryParam(ExternalApplicationNotificationReqactionActionTokenHandler.QUERY_PARAM_APP_TOKEN, "{tokenParameterName}")
           .build(context.getRealm().getName(), "{APP_TOKEN}")
           .toString();
