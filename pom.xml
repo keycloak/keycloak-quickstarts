@@ -36,6 +36,8 @@
 
     <properties>
         <version.keycloak>${project.version}</version.keycloak>
+        <version.keycloak.client>26.0.0-SNAPSHOT</version.keycloak.client>
+
         <servlet.api.30.version>1.0.2.Final</servlet.api.30.version>
         <jboss-jaxrs-api_2.1_spec>1.0.1.Final</jboss-jaxrs-api_2.1_spec>
         <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
@@ -77,7 +79,7 @@
             <dependency>
                 <groupId>org.keycloak</groupId>
                 <artifactId>keycloak-policy-enforcer</artifactId>
-                <version>${version.keycloak}</version>
+                <version>${version.keycloak.client}</version>
             </dependency>
             <dependency>
                 <groupId>org.keycloak</groupId>
@@ -92,17 +94,18 @@
             <dependency>
                 <groupId>org.keycloak</groupId>
                 <artifactId>keycloak-admin-client</artifactId>
-                <version>${version.keycloak}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.keycloak</groupId>
-                <artifactId>keycloak-admin-client-jee</artifactId>
-                <version>${version.keycloak}</version>
+                <version>${version.keycloak.client}</version>
             </dependency>
             <dependency>
                 <groupId>org.keycloak</groupId>
                 <artifactId>keycloak-test-helper</artifactId>
                 <version>${version.keycloak}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.keycloak</groupId>
+                        <artifactId>keycloak-admin-client-tests</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.keycloak</groupId>
@@ -266,6 +269,17 @@
                 <dependency>
                     <groupId>org.keycloak</groupId>
                     <artifactId>keycloak-test-helper</artifactId>
+                    <scope>test</scope>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.keycloak</groupId>
+                            <artifactId>keycloak-admin-client-tests</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+                <dependency>
+                    <groupId>org.keycloak</groupId>
+                    <artifactId>keycloak-admin-client</artifactId>
                     <scope>test</scope>
                 </dependency>
                 <dependency>
@@ -463,13 +477,6 @@
                     </dependency>
                     <dependency>
                         <groupId>org.keycloak.bom</groupId>
-                        <artifactId>keycloak-misc-bom</artifactId>
-                        <version>${version.keycloak}</version>
-                        <type>pom</type>
-                        <scope>import</scope>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.keycloak.bom</groupId>
                         <artifactId>keycloak-spi-bom</artifactId>
                         <version>${version.keycloak}</version>
                         <type>pom</type>
@@ -509,7 +516,7 @@
                     <dependency>
                         <groupId>org.keycloak</groupId>
                         <artifactId>keycloak-policy-enforcer</artifactId>
-                        <version>${version.keycloak}</version>
+                        <version>${version.keycloak.client}</version>
                     </dependency>
                     <dependency>
                         <groupId>org.keycloak</groupId>
@@ -519,23 +526,11 @@
                     <dependency>
                         <groupId>org.keycloak</groupId>
                         <artifactId>keycloak-admin-client</artifactId>
-                        <version>${version.keycloak}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.keycloak</groupId>
-                        <artifactId>keycloak-admin-client-jee</artifactId>
-                        <version>${version.keycloak}</version>
+                        <version>${version.keycloak.client}</version>
                     </dependency>
                 </dependencies>
             </dependencyManagement>
             <dependencies>
-                <dependency>
-                    <groupId>org.keycloak.bom</groupId>
-                    <artifactId>keycloak-misc-bom</artifactId>
-                    <version>${version.keycloak}</version>
-                    <type>pom</type>
-                    <scope>import</scope>
-                </dependency>
                 <dependency>
                     <groupId>org.keycloak.bom</groupId>
                     <artifactId>keycloak-spi-bom</artifactId>
@@ -562,6 +557,17 @@
                 <dependency>
                     <groupId>org.keycloak</groupId>
                     <artifactId>keycloak-test-helper</artifactId>
+                    <scope>test</scope>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.keycloak</groupId>
+                            <artifactId>keycloak-admin-client-tests</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+                <dependency>
+                    <groupId>org.keycloak</groupId>
+                    <artifactId>keycloak-admin-client</artifactId>
                     <scope>test</scope>
                 </dependency>
                 <dependency>
