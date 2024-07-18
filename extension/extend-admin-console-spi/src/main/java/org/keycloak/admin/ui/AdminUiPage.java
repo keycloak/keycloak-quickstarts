@@ -24,7 +24,9 @@ import org.keycloak.provider.ProviderConfigurationBuilder;
 import org.keycloak.services.ui.extend.UiPageProvider;
 import org.keycloak.services.ui.extend.UiPageProviderFactory;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Implements UiPageProvider so it will be a master detail view in the admin ui of TODO items
@@ -72,5 +74,12 @@ public class AdminUiPage implements UiPageProvider, UiPageProviderFactory<Compon
                 .type(ProviderConfigProperty.LIST_TYPE)
                 .options("critical", "high priority", "neutral", "low priority", "unknown")
                 .add().build();
+    }
+
+    @Override
+    public Map<String, Object> getTypeMetadata() {
+        Map<String, Object> metaData = new HashMap<>();
+        metaData.put("displayFields", List.of("name", "prio"));
+        return metaData;
     }
 }
