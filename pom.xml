@@ -50,7 +50,6 @@
         <version.resources.maven.plugin>3.0.2</version.resources.maven.plugin>
         <version.compiler.maven.plugin>3.1</version.compiler.maven.plugin>
 
-        <arquillian-phantom.version>1.2.1.Final</arquillian-phantom.version>
         <arquillian-screenshooter.version>2.3.2</arquillian-screenshooter.version>
         <version.junit>4.12</version.junit>
         <version.hamcrest>1.3</version.hamcrest>
@@ -227,12 +226,6 @@
                         <version>${arquillian-drone-bom.version}</version>
                         <type>pom</type>
                         <scope>import</scope>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.jboss.arquillian.extension</groupId>
-                        <artifactId>arquillian-phantom-driver</artifactId>
-                        <version>${arquillian-phantom.version}</version>
-                        <scope>test</scope>
                     </dependency>
                     <dependency>
                         <groupId>org.jboss.arquillian.graphene</groupId>
@@ -456,12 +449,6 @@
                         <version>${arquillian-drone-bom.version}</version>
                         <type>pom</type>
                         <scope>import</scope>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.jboss.arquillian.extension</groupId>
-                        <artifactId>arquillian-phantom-driver</artifactId>
-                        <version>${arquillian-phantom.version}</version>
-                        <scope>test</scope>
                     </dependency>
                     <dependency>
                         <groupId>org.jboss.arquillian.graphene</groupId>
