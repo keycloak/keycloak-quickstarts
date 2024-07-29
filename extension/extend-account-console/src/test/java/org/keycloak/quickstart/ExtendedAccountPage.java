@@ -15,7 +15,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class ExtendedAccountPage {
 
     @FindBy(
-            css = ".pf-v5-c-masthead__brand img"
+            xpath = "//[data-testid='page-header'] > img"
     )
     private WebElement keycloakManLogo;
     @FindBy(
