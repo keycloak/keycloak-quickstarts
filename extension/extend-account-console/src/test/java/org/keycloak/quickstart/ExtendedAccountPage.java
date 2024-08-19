@@ -1,8 +1,3 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by Fernflower decompiler)
-//
-
 package org.keycloak.quickstart;
 
 import org.jboss.arquillian.drone.api.annotation.Drone;
@@ -15,7 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class ExtendedAccountPage {
 
     @FindBy(
-            xpath = "//[data-testid='page-header'] > img"
+            css = ".pf-v5-c-masthead__brand img"
     )
     private WebElement keycloakManLogo;
     @FindBy(
