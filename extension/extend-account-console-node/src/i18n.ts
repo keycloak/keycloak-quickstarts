@@ -19,7 +19,7 @@ export const i18n = createInstance({
     escapeValue: false,
   },
   backend: {
-    loadPath: `${environment.authServerUrl}/resources/${environment.realm}/account/{{lng}}`,
+    loadPath: `${environment.serverBaseUrl}/resources/${environment.realm}/account/{{lng}}`,
     parse: (data: string) => {
       const messages = JSON.parse(data);
 

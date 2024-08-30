@@ -9,7 +9,6 @@ import {
 import { PropsWithChildren, MouseEvent as ReactMouseEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHref, useLinkClickHandler } from "react-router-dom";
-import { environment } from "./environment";
 import { routes } from "./routes";
 
 type NavLinkProps = NavItemProps & {
@@ -59,7 +58,7 @@ export const PageNav = () => {
                 <NavLink
                   key={path}
                   path={path}
-                  isActive={`${environment.baseUrl}${path}` === window.location.href || path === active}
+                  isActive={path === window.location.pathname || path === active}
                   onClick={() => setActive(path)}
                 >
                   {t(path!.substring(path!.lastIndexOf("/") + 1, path!.length))}
