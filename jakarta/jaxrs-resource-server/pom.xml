@@ -41,6 +41,12 @@
 
         <!-- Test Dependencies -->
         <dependency>
+            <groupId>org.keycloak.quickstarts</groupId>
+            <artifactId>keycloak-quickstarts-test-helper</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-admin-client</artifactId>
             <scope>test</scope>

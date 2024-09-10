@@ -36,8 +36,8 @@ import org.keycloak.representations.idm.UserRepresentation;
 import org.keycloak.representations.userprofile.config.UPAttributePermissions;
 import org.keycloak.representations.userprofile.config.UPAttributeRequired;
 import org.keycloak.representations.userprofile.config.UPConfig;
-import org.keycloak.test.FluentTestsHelper;
-import org.keycloak.test.page.LoginPage;
+import org.keycloak.quickstart.test.FluentTestsHelper;
+import org.keycloak.quickstart.test.page.LoginPage;
 import org.keycloak.userprofile.config.UPConfigUtils;
 import org.openqa.selenium.WebDriver;
 

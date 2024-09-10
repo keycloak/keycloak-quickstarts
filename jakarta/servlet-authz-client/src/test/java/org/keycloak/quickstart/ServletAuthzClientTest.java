@@ -33,7 +33,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.keycloak.test.page.LoginPage;
+import org.keycloak.quickstart.test.page.LoginPage;
 import org.openqa.selenium.WebDriver;
 
 import java.io.File;
@@ -44,8 +44,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.keycloak.test.TestsHelper.deleteRealm;
-import static org.keycloak.test.TestsHelper.importTestRealm;
+import static org.keycloak.quickstart.test.TestsHelper.deleteRealm;
+import static org.keycloak.quickstart.test.TestsHelper.importTestRealm;
 
 /**
  * @author <a href="mailto:bruno@abstractj.org">Bruno Oliveira</a>
