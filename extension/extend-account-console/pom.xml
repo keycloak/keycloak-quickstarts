@@ -15,6 +15,7 @@
     <description>Keycloak Man theme shows how to extend account console.</description>
 
     <properties>
+        <frontend.plugin.version>1.15.0</frontend.plugin.version>
         <node.version>v18.18.2</node.version>
         <pnpm.version>8.10.0</pnpm.version>
         <pnpm.args.install>install --prefer-offline --frozen-lockfile --ignore-scripts</pnpm.args.install>
@@ -50,6 +51,7 @@
             <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
+                <version>${frontend.plugin.version}</version>
                  <configuration>
                     <nodeVersion>${node.version}</nodeVersion>
                     <pnpmVersion>${pnpm.version}</pnpmVersion>
