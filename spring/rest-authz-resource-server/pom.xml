@@ -36,7 +36,7 @@
     </licenses>
 
     <properties>
-        <version.springboot>3.0.6</version.springboot>
+        <version.springboot>3.3.3</version.springboot>
     </properties>
 
     <dependencyManagement>
@@ -98,6 +98,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${version.springboot}</version>
             </plugin>
         </plugins>
     </build>
