@@ -73,6 +73,12 @@
             <groupId>org.jboss.arquillian.graphene</groupId>
             <artifactId>arquillian-browser-screenshooter</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.keycloak.quickstarts</groupId>
+            <artifactId>keycloak-quickstarts-test-helper</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
         <!-- Only needed for testing by arquillian (ExporterRegistrationHandler requires JEE JAXB) -->
         <dependency>
             <groupId>javax.xml.bind</groupId>

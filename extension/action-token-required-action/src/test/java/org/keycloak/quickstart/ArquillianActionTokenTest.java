@@ -43,7 +43,7 @@ import org.keycloak.quickstart.page.ExternalActionPage;
 import org.keycloak.representations.JsonWebToken;
 import org.keycloak.representations.idm.RequiredActionProviderSimpleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
-import org.keycloak.test.page.LoginPage;
+import org.keycloak.quickstart.test.page.LoginPage;
 import org.keycloak.util.JsonSerialization;
 import org.openqa.selenium.WebDriver;
 
@@ -66,9 +66,9 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
-import static org.keycloak.test.TestsHelper.deleteRealm;
-import static org.keycloak.test.TestsHelper.importTestRealm;
-import static org.keycloak.test.TestsHelper.keycloakBaseUrl;
+import static org.keycloak.quickstart.test.TestsHelper.deleteRealm;
+import static org.keycloak.quickstart.test.TestsHelper.importTestRealm;
+import static org.keycloak.quickstart.test.TestsHelper.keycloakBaseUrl;
 import static org.openqa.selenium.support.ui.ExpectedConditions.not;
 import static org.openqa.selenium.support.ui.ExpectedConditions.urlToBe;
 

@@ -31,14 +31,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.keycloak.admin.client.Keycloak;
-import org.keycloak.test.TestsHelper;
+import org.keycloak.quickstart.test.TestsHelper;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-import static org.keycloak.test.TestsHelper.deleteRealm;
-import static org.keycloak.test.TestsHelper.importTestRealm;
+import static org.keycloak.quickstart.test.TestsHelper.deleteRealm;
+import static org.keycloak.quickstart.test.TestsHelper.importTestRealm;
 
 
 @RunWith(Arquillian.class)

@@ -56,6 +56,7 @@
         <version.creaper>1.6.1</version.creaper>
         <version.shrinkwrap.resolvers>3.1.4</version.shrinkwrap.resolvers>
         <version.jee.jaxb.api>2.3.1</version.jee.jaxb.api>
+        <version.resteasy>6.2.10.Final</version.resteasy>
 
         <arquillian-managed>true</arquillian-managed>
         <version.wildfly.maven.plugin>4.1.1.Final</version.wildfly.maven.plugin>
@@ -72,6 +73,10 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <modules>
+        <module>misc</module>
+    </modules>
 
     <dependencyManagement>
         <dependencies>
@@ -94,17 +99,6 @@
                 <groupId>org.keycloak</groupId>
                 <artifactId>keycloak-admin-client</artifactId>
                 <version>${version.keycloak.client}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.keycloak</groupId>
-                <artifactId>keycloak-test-helper</artifactId>
-                <version>${version.keycloak}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.keycloak</groupId>
-                        <artifactId>keycloak-admin-client-tests</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.keycloak</groupId>
@@ -258,17 +252,6 @@
                     <artifactId>junit</artifactId>
                     <version>${version.junit}</version>
                     <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.keycloak</groupId>
-                    <artifactId>keycloak-test-helper</artifactId>
-                    <scope>test</scope>
-                    <exclusions>
-                        <exclusion>
-                            <groupId>org.keycloak</groupId>
-                            <artifactId>keycloak-admin-client-tests</artifactId>
-                        </exclusion>
-                    </exclusions>
                 </dependency>
                 <dependency>
                     <groupId>org.keycloak</groupId>
@@ -540,17 +523,6 @@
                     <artifactId>junit</artifactId>
                     <version>${version.junit}</version>
                     <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.keycloak</groupId>
-                    <artifactId>keycloak-test-helper</artifactId>
-                    <scope>test</scope>
-                    <exclusions>
-                        <exclusion>
-                            <groupId>org.keycloak</groupId>
-                            <artifactId>keycloak-admin-client-tests</artifactId>
-                        </exclusion>
-                    </exclusions>
                 </dependency>
                 <dependency>
                     <groupId>org.keycloak</groupId>

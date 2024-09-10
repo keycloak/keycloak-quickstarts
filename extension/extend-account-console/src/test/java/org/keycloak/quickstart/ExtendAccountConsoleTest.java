@@ -26,8 +26,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.keycloak.test.FluentTestsHelper;
-import org.keycloak.test.page.LoginPage;
+import org.keycloak.quickstart.test.FluentTestsHelper;
+import org.keycloak.quickstart.test.page.LoginPage;
 import java.time.Duration;
 import org.openqa.selenium.WebDriver;
 

@@ -32,7 +32,7 @@ import org.junit.runner.RunWith;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.events.EventType;
 import org.keycloak.representations.idm.RealmEventsConfigRepresentation;
-import org.keycloak.test.page.LoginPage;
+import org.keycloak.quickstart.test.page.LoginPage;
 import org.openqa.selenium.WebDriver;
 
 import java.io.IOException;
@@ -40,9 +40,9 @@ import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 
 import static java.lang.String.format;
-import static org.keycloak.test.TestsHelper.deleteRealm;
-import static org.keycloak.test.TestsHelper.importTestRealm;
-import static org.keycloak.test.TestsHelper.keycloakBaseUrl;
+import static org.keycloak.quickstart.test.TestsHelper.deleteRealm;
+import static org.keycloak.quickstart.test.TestsHelper.importTestRealm;
+import static org.keycloak.quickstart.test.TestsHelper.keycloakBaseUrl;
 
 /**
  * @author <a href="mailto:mkanis@redhat.com">Martin Kanis</a>
