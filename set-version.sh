@@ -25,6 +25,7 @@ fi
 
 # JS quickstart
 updateNpmDep js/spa/package.json "@keycloak/keycloak-admin-client"
+updateNpmDep js/spa/package.json "keycloak-js"
 
 # NodeJS quickstart
 updateNpmDep nodejs/resource-server/package.json "@keycloak/keycloak-admin-client"

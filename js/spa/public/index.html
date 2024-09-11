@@ -3,6 +3,22 @@
   <head>
     <meta charset="utf-8">
     <title>Keycloak Single-Page Application Example</title>
+    <script type="importmap">
+      {
+        "imports": {
+          "keycloak-js": "/vendor/keycloak-js/keycloak.mjs",
+          "jwt-decode": "/vendor/jwt-decode/index.js",
+          "@noble/hashes/sha256": "/vendor/@noble/hashes/sha256.js",
+          "@noble/hashes/crypto": "/vendor/@noble/hashes/crypto.js"
+        }
+      }
+    </script>
+    <link rel="modulepreload" href="/vendor/keycloak-js/keycloak.mjs">
+    <link rel="modulepreload" href="/vendor/jwt-decode/index.js">
+    <link rel="modulepreload" href="/vendor/@noble/hashes/sha256.js">
+    <link rel="modulepreload" href="/vendor/@noble/hashes/_md.js">
+    <link rel="modulepreload" href="/vendor/@noble/hashes/utils.js">
+    <link rel="modulepreload" href="/vendor/@noble/hashes/crypto.js">
   </head>
   <body>
     <div id="user" style="display: none;">
@@ -15,8 +31,9 @@
       <h2 id="name"></h2>
       <pre id="output"></pre>
     </div>
-    <script src="KC_URL/js/keycloak.js"></script>
     <script type="module">
+      import Keycloak from "keycloak-js";
+
       const outputElement = document.getElementById("output");
       const nameElement = document.getElementById("name");
       const userElement = document.getElementById("user");
