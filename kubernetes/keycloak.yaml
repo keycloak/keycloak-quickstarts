@@ -40,10 +40,12 @@ spec:
               value: "admin"
             - name: KC_PROXY
               value: "edge"
+            - name: KC_HEALTH_ENABLED
+              value: "true"
           ports:
             - name: http
               containerPort: 8080
           readinessProbe:
             httpGet:
-              path: /realms/master
-              port: 8080
+              path: /health/ready
+              port: 9000
