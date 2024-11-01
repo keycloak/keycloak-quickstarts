@@ -30,8 +30,8 @@ To start a Keycloak Server you can use OpenJDK on Bare Metal, Docker, Openshift 
 
 ```shell
 docker run --name keycloak \
-  -e KEYCLOAK_ADMIN=admin \
-  -e KEYCLOAK_ADMIN_PASSWORD=admin \
+  -e KC_BOOTSTRAP_ADMIN_USERNAME=admin \
+  -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin \
   --network=host \
   quay.io/keycloak/keycloak:{KC_VERSION} \
   start-dev \

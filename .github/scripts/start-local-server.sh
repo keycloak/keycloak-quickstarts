@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
-export KEYCLOAK_ADMIN=admin
-export KEYCLOAK_ADMIN_PASSWORD=admin
+export KC_BOOTSTRAP_ADMIN_USERNAME=admin
+export KC_BOOTSTRAP_ADMIN_PASSWORD=admin
 
 dist="keycloak-dist"
 
