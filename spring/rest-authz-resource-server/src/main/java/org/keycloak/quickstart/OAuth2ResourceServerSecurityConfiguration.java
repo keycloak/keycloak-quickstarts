@@ -16,7 +16,6 @@
 package org.keycloak.quickstart;
 
 import java.io.IOException;
-
 import org.keycloak.adapters.authorization.integration.jakarta.ServletPolicyEnforcerFilter;
 import org.keycloak.adapters.authorization.spi.ConfigurationResolver;
 import org.keycloak.adapters.authorization.spi.HttpRequest;
@@ -32,6 +31,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
+import static org.springframework.security.config.Customizer.withDefaults;
 
 /**
  * OAuth resource configuration.
@@ -50,6 +50,9 @@ public class OAuth2ResourceServerSecurityConfiguration {
 		http
 				.authorizeHttpRequests((authorize) -> authorize
 						.anyRequest().authenticated()
+				)
+				.oauth2ResourceServer((oauth2) -> oauth2
+						.jwt(withDefaults())
 				)
 				.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
 				.addFilterAfter(createPolicyEnforcerFilter(), BearerTokenAuthenticationFilter.class);
