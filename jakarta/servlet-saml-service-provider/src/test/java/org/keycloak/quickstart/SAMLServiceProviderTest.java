@@ -108,6 +108,7 @@ public class SAMLServiceProviderTest {
     public void testLogin() {
         try {
             indexPage.clickLogin();
+            pageHelper.waitForLoginPage();
             loginPage.login("alice", "alice");
             // due to https://issues.redhat.com/browse/KEYCLOAK-14103 a second click to login is required
             // need to upgrade to Wildfly 19.1.0 to support a solution to this
@@ -118,9 +119,9 @@ public class SAMLServiceProviderTest {
             pageHelper.waitForAccountBtn();
             assertEquals(profilePage.getUsername(), "alice");
             profilePage.clickLogout();
-            assertTrue(pageHelper.isOnStartPage());
+            pageHelper.waitForStartPage();
             indexPage.clickLogin();
-            pageHelper.isOnLoginPage();
+            pageHelper.waitForLoginPage();
         } catch (Exception e) {
             debugTest(e);
             fail("Should display logged in user");
@@ -131,6 +132,7 @@ public class SAMLServiceProviderTest {
     public void testAccessAccountManagement() {
         try {
             indexPage.clickLogin();
+            pageHelper.waitForLoginPage();
             loginPage.login("alice", "alice");
             // due to https://issues.redhat.com/browse/KEYCLOAK-14103 a second click to login is required
             // need to upgrade to Wildfly 19.1.0 to support a solution to this
@@ -140,7 +142,7 @@ public class SAMLServiceProviderTest {
             }
             pageHelper.waitForAccountBtn();
             profilePage.clickAccount();
-            assertTrue(webDriver.getTitle().contains("Account Management"));
+            pageHelper.waitUntilTitle("Account Management");
         } catch (Exception e) {
             debugTest(e);
             fail("Should display account management page");
