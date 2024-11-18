@@ -20,7 +20,6 @@ package org.keycloak.quickstart;
 import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.jboss.arquillian.graphene.Graphene;
 import org.jboss.logging.Logger;
-import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -35,6 +34,15 @@ public class PageHelper {
     public boolean isOnStartPage() {
         fixStylesPage();
         return browser.findElements(By.name("loginBtn")).size() > 0;
+    }
+
+    public void waitForStartPage() {
+        fixStylesPage();
+        try {
+            Graphene.waitAjax().until().element(By.name("loginBtn")).is().present();
+        } catch (TimeoutException ex) {
+            throw new TimeoutException("timeout on page " + browser.getCurrentUrl(), ex);
+        }
     }
 
     public void waitForAccountBtn() {
@@ -57,6 +65,22 @@ public class PageHelper {
     public void isOnLoginPage() {
         try {
             Graphene.waitAjax().until().element(By.id("username")).is().present();
+        } catch (TimeoutException ex) {
+            throw new TimeoutException("timeout on page " + browser.getCurrentUrl(), ex);
+        }
+    }
+
+    public void waitForLoginPage() {
+        try {
+            Graphene.waitAjax().until().element(By.id("username")).is().present();
+        } catch (TimeoutException ex) {
+            throw new TimeoutException("timeout on page " + browser.getCurrentUrl(), ex);
+        }
+    }
+
+    public void waitUntilTitle(String title) {
+        try {
+            Graphene.waitAjax().until((WebDriver driver) -> driver.getTitle().contains(title));
         } catch (TimeoutException ex) {
             throw new TimeoutException("timeout on page " + browser.getCurrentUrl(), ex);
         }
