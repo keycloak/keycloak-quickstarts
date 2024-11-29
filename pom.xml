@@ -322,7 +322,7 @@
                                         <feature-pack>
                                             <groupId>org.keycloak</groupId>
                                             <artifactId>keycloak-saml-adapter-galleon-pack</artifactId>
-                                            <version>${project.version}</version>
+                                            <version>${version.keycloak}</version>
                                         </feature-pack>
                                     </feature-packs>
                                     <pluginOptions>

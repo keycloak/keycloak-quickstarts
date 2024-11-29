@@ -2,13 +2,15 @@
 
 mkdir keycloak-dist
 
-if [[ ( -n "$GITHUB_BASE_REF" &&  "$GITHUB_BASE_REF" == "latest" ) ]] || [[ ( -n "$QUICKSTART_BRANCH" && "$QUICKSTART_BRANCH" != "main" ) ]]; then
-  VERSION=$(grep -oPm1 "(?<=<version>)[^<]+" pom.xml)
-  echo "Using corresponding Keycloak version: $VERSION"
-  URL="https://github.com/keycloak/keycloak/releases/download/${VERSION}/keycloak-${VERSION}.tar.gz"
-else
-  echo "Downloading nightly Keycloak release"
+if [ "$NIGHTLY_TEST" == "true" ]; then
+  # the nighly version is used
+  echo "Downloading Keycloak release nightly"
   URL="https://github.com/keycloak/keycloak/releases/download/nightly/keycloak-999.0.0-SNAPSHOT.tar.gz"
+else
+  # normal execution with current keycloak versions
+  VERSION=$(grep -oPm1 "(?<=<version.keycloak>)[^<]+" pom.xml)
+  echo "Downloading Keycloak release $VERSION"
+  URL="https://github.com/keycloak/keycloak/releases/download/${VERSION}/keycloak-${VERSION}.tar.gz"
 fi
 
 wget -q -O keycloak-dist.tar.gz "$URL"

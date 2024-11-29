@@ -33,10 +33,6 @@
         </license>
     </licenses>
 
-    <properties>
-        <version.keycloak>${project.version}</version.keycloak>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>jakarta.servlet</groupId>

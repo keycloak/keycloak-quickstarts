@@ -1,0 +1,152 @@
+name: Reusable Keycloak Integration CI
+
+on:
+  workflow_call:
+    inputs:
+      nightly-test:
+        description: 'if true nightly 999.0.0-SNAPSHOT version is used for keycloak and keycloak-client, otherwise the current versions in pom.xml'
+        default: 'false'
+        required: false
+        type: string
+
+env:
+  DEFAULT_JDK_VERSION: 17
+  DEFAULT_JDK_DIST: temurin
+  NIGHTLY_TEST: ${{ inputs.nightly-test }}
+
+jobs:
+
+  tests:
+    name: Jakarta
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: ${{ env.DEFAULT_JDK_DIST }}
+          java-version: ${{ env.DEFAULT_JDK_VERSION }}
+      - name: Update maven settings
+        run: mkdir -p ~/.m2 ; cp .github/maven-settings.xml ~/.m2/
+
+      - name: Cache Maven repo
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.m2/repository
+            !~/.m2/repository/org/keycloak
+          key: cache-1-${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: cache-1-${{ runner.os }}-m2
+
+      - name: Get Keycloak
+        run: .github/scripts/prepare-local-server.sh
+
+      - name: Start Keycloak
+        run: .github/scripts/start-local-server.sh
+
+      - name: Run unit tests
+        run: .github/scripts/run-tests.sh jakarta
+
+  tests-spring:
+    name: Spring
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: ${{ env.DEFAULT_JDK_DIST }}
+          java-version: ${{ env.DEFAULT_JDK_VERSION }}
+      - name: Update maven settings
+        run: mkdir -p ~/.m2 ; cp .github/maven-settings.xml ~/.m2/
+
+      - name: Cache Maven repo
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.m2/repository
+            !~/.m2/repository/org/keycloak
+          key: cache-1-${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: cache-1-${{ runner.os }}-m2
+
+      - name: Get Keycloak
+        run: .github/scripts/prepare-local-server.sh
+
+      - name: Start Keycloak
+        run: .github/scripts/start-local-server.sh
+
+      - name: Run unit tests
+        run: .github/scripts/run-tests.sh spring
+
+  tests-nodejs:
+    name: Node.js
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - uses: actions/setup-java@v3
+        with:
+          distribution: ${{ env.DEFAULT_JDK_DIST }}
+          java-version: ${{ env.DEFAULT_JDK_VERSION }}
+
+      - name: Get Keycloak
+        run: .github/scripts/prepare-local-server.sh
+
+      - name: Start Keycloak
+        run: .github/scripts/start-local-server.sh
+
+      - name: Run unit tests
+        run: .github/scripts/run-tests.sh nodejs
+
+  tests-js:
+    name: JavaScript
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - uses: actions/setup-java@v3
+        with:
+          distribution: ${{ env.DEFAULT_JDK_DIST }}
+          java-version: ${{ env.DEFAULT_JDK_VERSION }}
+
+      - name: Get Keycloak
+        run: .github/scripts/prepare-local-server.sh
+
+      - name: Start Keycloak
+        run: .github/scripts/start-local-server.sh
+
+      - name: Run unit tests
+        run: .github/scripts/run-tests.sh js
+
+  tests-extension:
+    name: Extension
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: ${{ env.DEFAULT_JDK_DIST }}
+          java-version: ${{ env.DEFAULT_JDK_VERSION }}
+      - name: Update maven settings
+        run: mkdir -p ~/.m2 ; cp .github/maven-settings.xml ~/.m2/
+
+      - name: Cache Maven repo
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.m2/repository
+            !~/.m2/repository/org/keycloak
+          key: cache-1-${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: cache-1-${{ runner.os }}-m2
+
+      - name: Get Keycloak
+        run: .github/scripts/prepare-local-server.sh
+
+      - name: Start Keycloak
+        run: .github/scripts/start-local-server.sh extension
+
+      - name: Run unit tests
+        run: .github/scripts/run-tests.sh extension
+

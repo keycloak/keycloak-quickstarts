@@ -28,6 +28,12 @@ run_tests() {
   else
     args="$args -Dwebdriver.chrome.driver=/usr/local/bin/chromedriver"
   fi
+  if [ -n "$KEYCLOAK_VERSION" ]; then
+    args="$args -Dversion.keycloak=$KEYCLOAK_VERSION"
+  fi
+  if [ -n "$KEYCLOAK_CLIENT_VERSION" ]; then
+    args="$args -Dversion.keycloak.client=$KEYCLOAK_CLIENT_VERSION"
+  fi
   args="$args -D$module"
   log_file=${module////_}.log
   if ! mvn clean install -Dnightly $args -B 2>&1 | tee test-logs/$log_file; then
@@ -50,10 +56,9 @@ print_failed_tests() {
   fi
 }
 
-if [[ ( -n "$GITHUB_BASE_REF" &&  "$GITHUB_BASE_REF" == "latest" ) ]] || [[ ( -n "$QUICKSTART_BRANCH" && "$QUICKSTART_BRANCH" != "main" ) ]]; then
-  export KEYCLOAK_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
-else
+if [ "$NIGHTLY_TEST" == "true" ]; then
   export KEYCLOAK_VERSION="999.0.0-SNAPSHOT"
+  export KEYCLOAK_CLIENT_VERSION="999.0.0-SNAPSHOT"
 fi
 
 if [ -n "$KEYCLOAK_VERSION" ]; then
