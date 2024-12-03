@@ -1,0 +1,55 @@
+name: Update Keycloak Client Version
+
+on:
+  workflow_dispatch:
+    inputs:
+      new_version:
+        description: "New Keycloak client version to update"
+        required: true
+        type: string
+
+jobs:
+  update-keycloak-version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Get current Keycloak Client version
+        id: get-current-version
+        run: |
+          CURRENT_KEYCLOAK_CLIENT_VERSION=$(grep -oP '(?<=<version.keycloak.client>).*?(?=</version.keycloak.client>)' pom.xml)
+          echo "Current Keycloak Client version: $CURRENT_KEYCLOAK_CLIENT_VERSION"
+          echo "CURRENT_KEYCLOAK_CLIENT_VERSION=$CURRENT_KEYCLOAK_CLIENT_VERSION" >> $GITHUB_ENV
+
+      - name: Check version difference
+        id: check-version
+        run: |
+          if [ "${{ github.event.inputs.new_version }}" = "$CURRENT_KEYCLOAK_CLIENT_VERSION" ]; then
+            echo "The version is already up-to-date."
+            echo "update_needed=false" >> $GITHUB_ENV
+          else
+            echo "A version update is needed."
+            echo "update_needed=true" >> $GITHUB_ENV
+          fi
+
+      - name: Update Keycloak Client version
+        if: env.update_needed == 'true'
+        run: |
+          NEW_VERSION=${{ github.event.inputs.new_version }}
+          echo "Updating version.keycloak.client to $NEW_VERSION"
+          sed -i "s/<version.keycloak.client>.*<\/version.keycloak.client>/<version.keycloak.client>${NEW_VERSION}<\/version.keycloak.client>/" pom.xml
+
+      - name: Configure Git
+        if: env.update_needed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit and push changes
+        if: env.update_needed == 'true'
+        run: |
+          git add pom.xml
+          git commit -m "Update version.keycloak.client to ${{ github.event.inputs.new_version }}"
+          git push origin main
