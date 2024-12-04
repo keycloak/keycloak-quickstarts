@@ -53,3 +53,5 @@ jobs:
           git add pom.xml
           git commit -m "Update version.keycloak.client to ${{ github.event.inputs.new_version }}"
           git push origin main
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
