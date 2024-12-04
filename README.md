@@ -6,7 +6,7 @@ The quickstarts herein provided demonstrate securing applications with <span>Key
 and how to extend the server capabilities through a set of Java-based [Service Provider Interfaces(SPI)](https://www.keycloak.org/docs/latest/server_development/). 
 They provide small, specific, working examples that can be used as a reference for your own project.
 
-They are organized in this repository under different categories (or directories) as follows:
+Thhey are organized in this repository under different categories (or directories) as follows:
 
 | Category  | Description                                                                           |
 |-----------|---------------------------------------------------------------------------------------|
