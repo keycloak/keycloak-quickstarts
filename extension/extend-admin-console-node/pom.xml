@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.keycloak</groupId>
+    <version>999.0.0-SNAPSHOT</version>
+    <artifactId>my-admin-ui</artifactId>
+    <name>My Admin UI</name>
+    <description>The user interface to manage the Keycloak server.</description>
+
+    <properties>
+        <node.version>v20.13.0</node.version>
+        <pnpm.version>9.1.0</pnpm.version>
+    </properties>
+    <build>
+        <resources>
+            <resource>
+                <directory>maven-resources</directory>
+            </resource>
+            <resource>
+                <directory>dist</directory>
+                <targetPath>theme/my-account/account/resources</targetPath>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>1.15.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>install-node-and-pnpm</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>pnpm-install</id>
+                        <goals>
+                            <goal>pnpm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>install --prefer-offline --frozen-lockfile --ignore-scripts</arguments>
+                            <workingDirectory>${maven.multiModuleProjectDirectory}</workingDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>pnpm-build</id>
+                        <goals>
+                            <goal>pnpm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>build</arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <nodeVersion>${node.version}</nodeVersion>
+                    <pnpmVersion>${pnpm.version}</pnpmVersion>
+                    <installDirectory>${maven.multiModuleProjectDirectory}</installDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
