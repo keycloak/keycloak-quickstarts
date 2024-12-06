@@ -30,7 +30,6 @@ updateNpmDep js/spa/package.json "keycloak-js"
 
 # NodeJS quickstart
 updateNpmDep nodejs/resource-server/package.json "@keycloak/keycloak-admin-client"
-updateNpmDep nodejs/resource-server/package.json "keycloak-connect"
 
 echo "New Mvn Version: $NEW_VERSION" >&2
 echo "Used NPM dependency of keycloak-admin-client: $NPM_ADMIN_CLIENT" >&2
