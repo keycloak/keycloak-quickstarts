@@ -1,0 +1,25 @@
+---
+apiVersion: k8s.keycloak.org/v2alpha1
+kind: Keycloak
+metadata:
+  name: example-kc
+spec:
+  instances: 1
+  db:
+    vendor: postgres
+    host: postgres-db
+    usernameSecret:
+      name: keycloak-db-secret
+      key: username
+    passwordSecret:
+      name: keycloak-db-secret
+      key: password
+    poolInitialSize: 1
+    poolMinSize: 1
+    poolMaxSize: 10      
+  http:
+    tlsSecret: example-kc-tls-secret
+  ingress:
+    enabled: true
+  hostname:
+    hostname: example-kc.apps-crc.testing
