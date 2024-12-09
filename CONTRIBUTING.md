@@ -24,8 +24,7 @@ you do not respond within 2 weeks (bear in mind you can always open a new PR if 
 Also, please remember that we do receive a fairly large amount of PRs and also have code to write ourselves, so we may
 not be able to respond to your PR immediately.
 
-WARNING: Please send pull requests to the branch `main`. The pull requests are not supposed to be sent to any other branch (especially not to the `latest` branch, which is always overwritten from the
-content of the `main` branch during every release).
+WARNING: Please send pull requests to the branch `main`. The pull requests are not supposed to be sent to any other branch.
 
 ### Finding something to work on
 
@@ -59,13 +58,19 @@ The tests should be written in its simplest form so that they can be maintained 
 
 Make sure the quickstart is properly documented from a `README.md` file that must be located at the root of the quickstart.
 
-### Picking correct branch for your PR
+### Compatibility with server, client and adapter versions
 
-Quickstarts are organized into the following branches:
-* `main` contains the latest state of the development on par with latest Keycloak.
-  This is destination for your PR.
-* `latest` is the branch that corresponds to the latest _released_ version of Keycloak.
-  You should *not* open PRs to this branch unless there is proper justification.
+We accept the pull requests sent to the `main` branch as stated above. The `main` branch has reference to the last released version
+of Keycloak server, Keycloak client libraries and adapters (Node.JS adapter, Javascript adapter and SAML adapter). If your quickstart
+works only with `nightly` version of the server or client libraries (typically when you are implementing quickstart for some very new feature,
+which was just added in the `main` branch of server/client, but is not yet released), then it is still possible to implement your quickstart and
+send the PR. In this case:
+* Please mark the PR as draft PR
+* Add the description in the PR about the fact that your PR works only with latest codebase, but not yet with released version of server/client/adapter.
+Your quickstarts PR might be possibly accepted once the particular server/client/adapter version is released.
+
+During testing your quickstart, you may need to update the particular version to SNAPSHOT (for example updating `keycloak.version` or `keycloak.client.version`
+in the root [pom.xml](pom.xml) file), but please do that just during your own testing. Make sure to not update the version to SNAPSHOT in the final version of your PR.
 
 ### Submitting your PR
 
