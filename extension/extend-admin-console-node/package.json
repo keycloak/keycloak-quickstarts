@@ -10,8 +10,7 @@
     "start-keycloak": "node ./start-server.js --account-dev"
   },
   "dependencies": {
-    "@keycloak/keycloak-admin-ui": "^26.0.6",
-    "@keycloak/keycloak-ui-shared": "^26.0.6",
+    "@keycloak/keycloak-ui-shared": "^26.0.7",
     "@patternfly/react-core": "5.0.0",
     "i18next": "^23.14.0",
     "i18next-http-backend": "^2.6.0",
@@ -22,7 +21,7 @@
     "react-router-dom": "^6.26.1"
   },
   "devDependencies": {
-    "@keycloak/keycloak-admin-client": "^26.0.6",
+    "@keycloak/keycloak-admin-client": "^26.0.7",
     "@octokit/rest": "^20.1.1",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
