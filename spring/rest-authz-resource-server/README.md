@@ -53,7 +53,15 @@ For more details, see the Keycloak documentation about how to [create a new real
 Build and Run the Quickstart
 -------------------------------
 
-If your server is up and running, perform the following steps to start the application:
+If this is the first time you're running the quickstart application, you will need to install the parent POM and test helper in your local Maven repository. From the root of the repository, do the following:
+
+```
+mvn install
+cd misc
+mvn install
+```
+
+If your Keycloak server is up and running, perform the following steps to start the application:
 
 1. Open a terminal and navigate to the root directory of this quickstart.
 
