@@ -64,7 +64,7 @@ Before contributing to this repository, please read our [contributing guidelines
 
 * [Keycloak](https://github.com/keycloak/keycloak) - Keycloak Server and Java adapters
 * [Keycloak Node.js Connect](https://github.com/keycloak/keycloak-nodejs-connect) - Node.js adapter for Keycloak
-* [Keycloak Node.js Admin Client](https://github.com/keycloak/keycloak-nodejs-admin-client) - Node.js library for Keycloak Admin REST API
+* [Keycloak Node.js Admin Client](https://github.com/keycloak/keycloak/tree/main/js/libs/keycloak-admin-client) - Node.js library for Keycloak Admin REST API
 
 ## License
 
