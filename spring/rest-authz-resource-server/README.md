@@ -58,7 +58,7 @@ If this is the first time you're running the quickstart application, you will ne
 ```
 mvn clean install
 cd misc
-mvn install
+mvn clean install
 ```
 
 If your Keycloak server is up and running, perform the following steps to start the application:
