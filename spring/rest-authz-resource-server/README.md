@@ -56,7 +56,7 @@ Build and Run the Quickstart
 If this is the first time you're running the quickstart application, you will need to install the parent POM and test helper in your local Maven repository. From the root of the repository, do the following:
 
 ```
-mvn install
+mvn clean install
 cd misc
 mvn install
 ```
