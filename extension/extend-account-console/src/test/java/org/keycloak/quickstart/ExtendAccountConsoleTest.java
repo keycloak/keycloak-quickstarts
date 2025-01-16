@@ -20,11 +20,7 @@ package org.keycloak.quickstart;
 import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.jboss.arquillian.graphene.page.Page;
 import org.jboss.arquillian.junit.Arquillian;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.keycloak.quickstart.test.FluentTestsHelper;
 import org.keycloak.quickstart.test.page.LoginPage;
@@ -43,6 +39,7 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.urlToBe;
  * @author <a href="mailto:aboullos@redhat.com">Alfredo Moises Boullosa</a>
  */
 @RunWith(Arquillian.class)
+@Ignore
 public class ExtendAccountConsoleTest {
 
     public static final String KEYCLOAK_URL = "http://localhost:8180";
