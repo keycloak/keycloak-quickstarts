@@ -12,7 +12,7 @@
 
     <properties>
         <node.version>v20.13.0</node.version>
-        <pnpm.version>9.1.0</pnpm.version>
+        <pnpm.version>9.14.4</pnpm.version>
     </properties>
     <build>
         <resources>
