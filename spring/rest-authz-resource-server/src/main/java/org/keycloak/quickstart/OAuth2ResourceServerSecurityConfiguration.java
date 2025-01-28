@@ -23,7 +23,6 @@ import org.keycloak.adapters.authorization.integration.jakarta.ServletPolicyEnfo
 import org.keycloak.adapters.authorization.spi.ConfigurationResolver;
 import org.keycloak.adapters.authorization.spi.HttpRequest;
 import org.keycloak.representations.adapters.config.PolicyEnforcerConfig;
-import org.keycloak.util.SystemPropertiesJsonParserFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -64,7 +63,7 @@ public class OAuth2ResourceServerSecurityConfiguration {
 		PolicyEnforcerConfig config;
 
 		try {
-			ObjectMapper mapper = new ObjectMapper(new SystemPropertiesJsonParserFactory());
+			ObjectMapper mapper = new ObjectMapper();
 			mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
 			config = mapper.readValue(getClass().getResourceAsStream("/policy-enforcer.json"), PolicyEnforcerConfig.class);
 		} catch (IOException e) {
