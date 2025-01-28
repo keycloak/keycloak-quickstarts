@@ -153,9 +153,14 @@ public class MemAdminEventQuery implements AdminEventQuery {
 
     @Override
     public AdminEventQuery fromTime(Date fromTime) {
+        return fromTime(fromTime.getTime());
+    }
+
+
+    public AdminEventQuery fromTime(long fromTime) {
         Iterator<AdminEvent> itr = this.adminEvents.iterator();
         while (itr.hasNext()) {
-            if (!(itr.next().getTime() >= fromTime.getTime())) {
+            if (!(itr.next().getTime() >= fromTime)) {
                 itr.remove();
             }
         }
@@ -164,9 +169,14 @@ public class MemAdminEventQuery implements AdminEventQuery {
 
     @Override
     public AdminEventQuery toTime(Date toTime) {
+        return toTime(toTime.getTime());
+    }
+
+    
+    public AdminEventQuery toTime(long toTime) {
         Iterator<AdminEvent> itr = this.adminEvents.iterator();
         while (itr.hasNext()) {
-            if (!(itr.next().getTime() <= toTime.getTime())) {
+            if (!(itr.next().getTime() <= toTime)) {
                 itr.remove();
             }
         }

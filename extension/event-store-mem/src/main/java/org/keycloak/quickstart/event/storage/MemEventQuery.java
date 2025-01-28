@@ -93,23 +93,33 @@ public class MemEventQuery implements EventQuery {
         }
         return this;
     }
-    
+
     @Override
     public EventQuery fromDate(Date fromDate) {
+        return fromDate(fromDate.getTime());
+    }
+
+
+    public EventQuery fromDate(long fromDate) {
         Iterator<Event> itr = this.events.iterator();
         while (itr.hasNext()) {
-            if (!(itr.next().getTime() >= fromDate.getTime())) {
+            if (!(itr.next().getTime() >= fromDate)) {
                 itr.remove();
             }
         }
         return this;
     }
-    
+
     @Override
     public EventQuery toDate(Date toDate) {
+        return toDate(toDate.getTime());
+    }
+
+
+    public EventQuery toDate(long toDate) {
         Iterator<Event> itr = this.events.iterator();
         while (itr.hasNext()) {
-            if (!(itr.next().getTime() <= toDate.getTime())) {
+            if (!(itr.next().getTime() <= toDate)) {
                 itr.remove();
             }
         }
