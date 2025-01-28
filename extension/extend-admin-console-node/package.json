@@ -1,0 +1,36 @@
+{
+  "name": "vite-project",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "start-keycloak": "node ./start-server.js --account-dev"
+  },
+  "dependencies": {
+    "@keycloak/keycloak-ui-shared": "^26.0.7",
+    "@patternfly/react-core": "5.0.0",
+    "i18next": "^23.14.0",
+    "i18next-http-backend": "^2.6.0",
+    "keycloak-js": "^26.0.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-i18next": "^14.1.3",
+    "react-router-dom": "^6.26.1"
+  },
+  "devDependencies": {
+    "@keycloak/keycloak-admin-client": "^26.0.7",
+    "@octokit/rest": "^20.1.1",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react-swc": "^3.7.0",
+    "gunzip-maybe": "^1.4.2",
+    "tar-fs": "^3.0.6",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.1",
+    "vite-plugin-checker": "^0.6.4"
+  },
+  "packageManager": "pnpm@9.12.2+sha512.22721b3a11f81661ae1ec68ce1a7b879425a1ca5b991c975b074ac220b187ce56c708fe5db69f4c962c989452eee76c82877f4ee80f474cebd61ee13461b6228"
+}
