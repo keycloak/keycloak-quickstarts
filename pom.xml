@@ -35,7 +35,7 @@
     </licenses>
 
     <properties>
-        <version.keycloak>26.1.0</version.keycloak>
+        <version.keycloak>26.1.1</version.keycloak>
         <version.keycloak.client>26.0.4</version.keycloak.client>
 
         <servlet.api.30.version>1.0.2.Final</servlet.api.30.version>
