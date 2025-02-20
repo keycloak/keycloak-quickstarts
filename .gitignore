@@ -64,3 +64,5 @@ node/
 
 # Keycloak distribution
 keycloak-dist
+
+dist/
