@@ -36,7 +36,7 @@ import org.junit.runner.RunWith;
 import org.keycloak.quickstart.test.page.IndexPage;
 import org.keycloak.quickstart.test.page.LoginPage;
 import org.keycloak.quickstart.test.page.ProfilePage;
-import org.keycloak.quickstart.test.TestsHelper;
+import org.keycloak.quickstart.test.FluentTestsHelper;
 import org.openqa.selenium.WebDriver;
 
 import java.io.File;
@@ -46,8 +46,8 @@ import java.net.URL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.keycloak.quickstart.test.TestsHelper.deleteRealm;
-import static org.keycloak.quickstart.test.TestsHelper.importTestRealm;
+import org.keycloak.quickstart.test.FluentTestsHelper.deleteRealm;
+import org.keycloak.quickstart.test.FluentTestsHelper.importTestRealm;
 
 /**
  * @author <a href="mailto:bruno@abstractj.org">Bruno Oliveira</a>
@@ -96,7 +96,7 @@ public class SAMLServiceProviderTest {
 
     @AfterClass
     public static void cleanUp() throws IOException{
-        deleteRealm("admin","admin",TestsHelper.testRealm);
+        deleteRealm("admin","admin",FluentTestsHelper.testRealm);
     }
 
     @Before
