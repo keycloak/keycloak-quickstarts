@@ -66,9 +66,9 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
-import static org.keycloak.quickstart.test.TestsHelper.deleteRealm;
-import static org.keycloak.quickstart.test.TestsHelper.importTestRealm;
-import static org.keycloak.quickstart.test.TestsHelper.keycloakBaseUrl;
+import static org.keycloak.quickstart.test.FluentTestsHelper.deleteRealm;
+import static org.keycloak.quickstart.test.FluentTestsHelper.importTestRealm;
+import static org.keycloak.quickstart.test.FluentTestsHelper.keycloakBaseUrl;
 import static org.openqa.selenium.support.ui.ExpectedConditions.not;
 import static org.openqa.selenium.support.ui.ExpectedConditions.urlToBe;
 
