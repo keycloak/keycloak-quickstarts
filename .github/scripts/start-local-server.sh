@@ -37,6 +37,6 @@ if [ "$1" = "extension" ]; then
   fi
 fi
 
-eval exec "$dist/bin/kc.sh start-dev --http-port=8180 $SERVER_ARGS" | tee keycloak.log &
+eval exec "$dist/bin/kc.sh start-dev --http-port=8180 --verbose $SERVER_ARGS" | tee keycloak.log &
 
 wget --retry-connrefused --waitretry=3 --read-timeout=20 --timeout=15 -t 30 http://localhost:8180 --quiet
