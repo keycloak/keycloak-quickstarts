@@ -8,9 +8,9 @@
     "delete-realm": "node scripts/delete-realm.js"
   },
   "dependencies": {
-    "@keycloak/keycloak-admin-client": "26.1.2",
+    "@keycloak/keycloak-admin-client": "26.1.3",
     "express": "^4.18.2",
-    "keycloak-js": "26.1.2"
+    "keycloak-js": "26.1.3"
   },
   "devDependencies": {
     "@playwright/test": "^1.33.0"
