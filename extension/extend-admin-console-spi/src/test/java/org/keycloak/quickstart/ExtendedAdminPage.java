@@ -17,6 +17,7 @@
 
 package org.keycloak.quickstart;
 
+import java.time.Duration;
 import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -75,7 +76,7 @@ public class ExtendedAdminPage {
     }
 
     public boolean isOverviewPage() {
-        return new WebDriverWait(webDriver, 5).until(ExpectedConditions.textToBe(By.id("view-header-subkey"), "Here you can store your Todo items"));
+        return new WebDriverWait(webDriver, Duration.ofSeconds(5)).until(ExpectedConditions.textToBe(By.id("view-header-subkey"), "Here you can store your Todo items"));
     }
 
     public void clickAddButton() {

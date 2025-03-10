@@ -57,13 +57,15 @@
         <version.shrinkwrap.resolvers>3.1.4</version.shrinkwrap.resolvers>
         <version.jee.jaxb.api>2.3.1</version.jee.jaxb.api>
         <version.resteasy>6.2.10.Final</version.resteasy>
+        <version.shrinkwrap>1.2.6</version.shrinkwrap>
 
         <arquillian-managed>true</arquillian-managed>
         <version.wildfly.maven.plugin>4.1.1.Final</version.wildfly.maven.plugin>
         <jboss-cli.executable>./jboss-cli.sh</jboss-cli.executable>
         <keycloak.management.port>10090</keycloak.management.port>
-        <selenium-bom.version>3.11.0</selenium-bom.version>
-        <arquillian-drone-bom.version>2.5.1</arquillian-drone-bom.version>
+        <selenium.version>4.28.1</selenium.version>
+        <arquillian-bom.version>1.9.3.Final</arquillian-bom.version>
+        <arquillian-drone-bom.version>3.0.0-alpha.8</arquillian-drone-bom.version>
         <version.json.javax>1.1.2</version.json.javax>
         <version.yasson>1.0.8</version.yasson>
         <version.jackson>2.14.2</version.jackson>
@@ -177,9 +179,8 @@
             <properties>
                 <version.wildfly>30.0.0.Final</version.wildfly>
                 <version.jakarta.ws.rs-api>3.1.0</version.jakarta.ws.rs-api>
-                <arquillian-graphene.version>2.5.4</arquillian-graphene.version>
+                <arquillian-graphene.version>3.0.0-alpha.4</arquillian-graphene.version>
                 <version.wildfly.arquillian.container>4.0.0.Alpha6</version.wildfly.arquillian.container>
-                <arquillian-bom.version>1.7.1.Final</arquillian-bom.version>
             </properties>
             <modules>
                 <module>jakarta/servlet-authz-client</module>
@@ -204,13 +205,6 @@
                         <groupId>org.jboss.arquillian</groupId>
                         <artifactId>arquillian-bom</artifactId>
                         <version>${arquillian-bom.version}</version>
-                        <type>pom</type>
-                        <scope>import</scope>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.jboss.arquillian.selenium</groupId>
-                        <artifactId>selenium-bom</artifactId>
-                        <version>${selenium-bom.version}</version>
                         <type>pom</type>
                         <scope>import</scope>
                     </dependency>
@@ -390,9 +384,7 @@
             <properties>
                 <version.wildfly>30.0.0.Final</version.wildfly>
                 <version.jakarta.ws.rs-api>3.1.0</version.jakarta.ws.rs-api>
-                <arquillian-graphene.version>2.5.4</arquillian-graphene.version>
-                <arquillian-bom.version>1.7.1.Final</arquillian-bom.version>
-                <version.jackson>2.14.2</version.jackson>
+                <arquillian-graphene.version>3.0.0-alpha.4</arquillian-graphene.version>
                 <version.wildfly.arquillian.container>4.0.0.Alpha6</version.wildfly.arquillian.container>
             </properties>
             <modules>
@@ -416,13 +408,6 @@
                         <groupId>org.jboss.arquillian</groupId>
                         <artifactId>arquillian-bom</artifactId>
                         <version>${arquillian-bom.version}</version>
-                        <type>pom</type>
-                        <scope>import</scope>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.jboss.arquillian.selenium</groupId>
-                        <artifactId>selenium-bom</artifactId>
-                        <version>${selenium-bom.version}</version>
                         <type>pom</type>
                         <scope>import</scope>
                     </dependency>
@@ -532,6 +517,11 @@
                 <dependency>
                     <groupId>com.fasterxml.jackson.core</groupId>
                     <artifactId>jackson-databind</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.seleniumhq.selenium</groupId>
+                    <artifactId>selenium-java</artifactId>
+                    <version>${selenium.version}</version>
                 </dependency>
             </dependencies>
             <build>
