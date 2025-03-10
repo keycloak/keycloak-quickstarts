@@ -186,12 +186,14 @@ public class ArquillianActionTokenWithAuthenticatorTest {
     public void testUserLogin() {
         // Attempt to login as alice
         loginPage.login("alice", "password");
+        waitForPageToLoad();
 
         // Expect that the new required action has redirected user to the external application and fill in the form
         assertThat(webDriver.getCurrentUrl(), startsWith(externalAppContextRoot.toString()));
         externalActionPage.field1("abc def");
         externalActionPage.field2("ghi jkl");
         externalActionPage.submit();
+        waitForPageToLoad();
 
         // Expect that the login has succeeded
         assertThat(webDriver.getCurrentUrl(), containsString("/account"));

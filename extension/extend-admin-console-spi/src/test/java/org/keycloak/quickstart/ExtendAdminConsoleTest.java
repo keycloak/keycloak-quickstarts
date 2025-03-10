@@ -88,13 +88,16 @@ public class ExtendAdminConsoleTest {
         adminConsole.navigateTo();
         waitForPageToLoad();
         loginPage.login("admin", "admin");
+        waitForPageToLoad();
         assertThat(webDriver.getTitle(), containsString("Keycloak Administration Console"));
 
         Assert.assertTrue(adminConsole.isTodoMenuPresent());
         adminConsole.clickTodoMenuItem();
+        waitForPageToLoad();
         Assert.assertTrue(adminConsole.isOverviewPage());
 
         adminConsole.clickAddButton();
+        waitForPageToLoad();
         adminConsole.fillTodoForm("something", "something that needs doing");
         adminConsole.clickSave();
 

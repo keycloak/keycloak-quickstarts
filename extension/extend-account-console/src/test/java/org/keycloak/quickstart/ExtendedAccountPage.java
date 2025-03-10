@@ -1,5 +1,6 @@
 package org.keycloak.quickstart;
 
+import java.time.Duration;
 import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -60,10 +61,10 @@ public class ExtendedAccountPage {
     }
 
     public boolean isOverviewPage() {
-        return new WebDriverWait(webDriver, 5).until(ExpectedConditions.urlMatches(".*/sample-overview"));
+        return new WebDriverWait(webDriver, Duration.ofSeconds(5)).until(ExpectedConditions.urlMatches(".*/sample-overview"));
     }
 
     public boolean isKeycloakManPage() {
-        return new WebDriverWait(webDriver, 5).until(ExpectedConditions.urlMatches(".*/keycloak-man"));
+        return new WebDriverWait(webDriver, Duration.ofSeconds(5)).until(ExpectedConditions.urlMatches(".*/keycloak-man"));
     }
 }

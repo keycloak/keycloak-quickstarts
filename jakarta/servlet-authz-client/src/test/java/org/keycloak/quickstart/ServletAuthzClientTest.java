@@ -34,11 +34,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.keycloak.quickstart.test.page.LoginPage;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.FluentWait;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.time.Duration;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -46,6 +49,8 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.keycloak.quickstart.test.TestsHelper.deleteRealm;
 import static org.keycloak.quickstart.test.TestsHelper.importTestRealm;
+import static org.openqa.selenium.support.ui.ExpectedConditions.not;
+import static org.openqa.selenium.support.ui.ExpectedConditions.urlToBe;
 
 /**
  * @author <a href="mailto:bruno@abstractj.org">Bruno Oliveira</a>
@@ -94,10 +99,29 @@ public class ServletAuthzClientTest {
         webDriver.navigate().to(contextRoot);
     }
 
+    public void waitForPageToLoad() {
+        // Taken from org.keycloak.testsuite.util.WaitUtils
+
+        String currentUrl = null;
+
+        // Ensure the URL is "stable", i.e. is not changing anymore; if it'd changing, some redirects are probably still in progress
+        for (int maxRedirects = 4; maxRedirects > 0; maxRedirects--) {
+            currentUrl = webDriver.getCurrentUrl();
+            FluentWait<WebDriver> wait = new FluentWait<>(webDriver).withTimeout(Duration.ofMillis(250));
+            try {
+                wait.until(not(urlToBe(currentUrl)));
+            }
+            catch (TimeoutException e) {
+                break; // URL has not changed recently - ok, the URL is stable and page is current
+            }
+        }
+    }
+
     @Test
     public void testAdminAccessToAdminResources() {
         try {
             loginPage.login("admin", "admin");
+            waitForPageToLoad();
             indexPage.clickAdminLink();
             assertEquals("Should display the administrator page",
                     "Only Administrators can access this page.",
@@ -114,6 +138,7 @@ public class ServletAuthzClientTest {
         try {
 
             loginPage.login("admin", "admin");
+            waitForPageToLoad();
             assertTrue("Should display the admin resource permission",
                     webDriver.getPageSource().contains("Resource: Admin Resource"));
             assertTrue("Should display the admin scope permission",
@@ -142,6 +167,7 @@ public class ServletAuthzClientTest {
         try {
 
             loginPage.login("alice", "alice");
+            waitForPageToLoad();
             assertTrue("Should display the proteced resource permission",
                     webDriver.getPageSource().contains("Resource: Protected Resource"));
             assertTrue("Should display the protected resource scope permission",
@@ -172,6 +198,7 @@ public class ServletAuthzClientTest {
         try {
 
             loginPage.login("jdoe", "jdoe");
+            waitForPageToLoad();
             assertTrue("Should display the proteced resource permission",
                     webDriver.getPageSource().contains("Resource: Protected Resource"));
             assertTrue("Should display the protected resource scope permission",
@@ -202,6 +229,7 @@ public class ServletAuthzClientTest {
         try {
 
             loginPage.login("admin", "admin");
+            waitForPageToLoad();
             indexPage.clickPremiumLink();
             assertEquals("Should display access denied page",
                     "You can not access this resource.",
@@ -218,6 +246,7 @@ public class ServletAuthzClientTest {
     public void testAdminAccessToSharedResources() {
         try {
             loginPage.login("admin", "admin");
+            waitForPageToLoad();
             indexPage.clickDynamicMenuLink();
             assertEquals("Should display the shared resource",
                     "Any authenticated user can access this page.",
@@ -235,6 +264,7 @@ public class ServletAuthzClientTest {
         try {
 
             loginPage.login("jdoe", "jdoe");
+            waitForPageToLoad();
             indexPage.clickPremiumLink();
             assertEquals("Should display the premium page",
                     "Only for premium users.",
@@ -252,6 +282,7 @@ public class ServletAuthzClientTest {
         try {
 
             loginPage.login("jdoe", "jdoe");
+            waitForPageToLoad();
             indexPage.clickAdminLink();
             assertEquals("Should display access denied page",
                     "You can not access this resource.",
@@ -269,6 +300,7 @@ public class ServletAuthzClientTest {
         try {
 
             loginPage.login("jdoe", "jdoe");
+            waitForPageToLoad();
             indexPage.clickDynamicMenuLink();
             assertEquals("Should display the shared resource",
                     "Any authenticated user can access this page.",
@@ -286,6 +318,7 @@ public class ServletAuthzClientTest {
         try {
 
             loginPage.login("alice", "alice");
+            waitForPageToLoad();
             indexPage.clickAdminLink();
             assertEquals("Should display access denied page",
                     "You can not access this resource.",
@@ -303,6 +336,7 @@ public class ServletAuthzClientTest {
         try {
 
             loginPage.login("alice", "alice");
+            waitForPageToLoad();
             indexPage.clickPremiumLink();
             assertEquals("Should display access denied page",
                     "You can not access this resource.",
@@ -320,6 +354,7 @@ public class ServletAuthzClientTest {
         try {
 
             loginPage.login("alice", "alice");
+            waitForPageToLoad();
             indexPage.clickDynamicMenuLink();
             assertEquals("Should display the shared resource",
                     "Any authenticated user can access this page.",

@@ -20,8 +20,8 @@ jobs:
     name: Jakarta
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-java@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
         with:
           distribution: ${{ env.DEFAULT_JDK_DIST }}
           java-version: ${{ env.DEFAULT_JDK_VERSION }}
@@ -29,7 +29,7 @@ jobs:
         run: mkdir -p ~/.m2 ; cp .github/maven-settings.xml ~/.m2/
 
       - name: Cache Maven repo
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: |
             ~/.m2/repository
@@ -50,8 +50,8 @@ jobs:
     name: Spring
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-java@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
         with:
           distribution: ${{ env.DEFAULT_JDK_DIST }}
           java-version: ${{ env.DEFAULT_JDK_VERSION }}
@@ -59,7 +59,7 @@ jobs:
         run: mkdir -p ~/.m2 ; cp .github/maven-settings.xml ~/.m2/
 
       - name: Cache Maven repo
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: |
             ~/.m2/repository
@@ -80,11 +80,11 @@ jobs:
     name: Node.js
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 18
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
           distribution: ${{ env.DEFAULT_JDK_DIST }}
           java-version: ${{ env.DEFAULT_JDK_VERSION }}
@@ -102,11 +102,11 @@ jobs:
     name: JavaScript
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 18
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
           distribution: ${{ env.DEFAULT_JDK_DIST }}
           java-version: ${{ env.DEFAULT_JDK_VERSION }}
@@ -124,8 +124,8 @@ jobs:
     name: Extension
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-java@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
         with:
           distribution: ${{ env.DEFAULT_JDK_DIST }}
           java-version: ${{ env.DEFAULT_JDK_VERSION }}
@@ -133,7 +133,7 @@ jobs:
         run: mkdir -p ~/.m2 ; cp .github/maven-settings.xml ~/.m2/
 
       - name: Cache Maven repo
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: |
             ~/.m2/repository
