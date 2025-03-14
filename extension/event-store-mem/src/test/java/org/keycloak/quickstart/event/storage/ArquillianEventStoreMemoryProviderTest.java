@@ -46,9 +46,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
-import static org.keycloak.quickstart.test.TestsHelper.deleteRealm;
-import static org.keycloak.quickstart.test.TestsHelper.importTestRealm;
-import static org.keycloak.quickstart.test.TestsHelper.keycloakBaseUrl;
+import static org.keycloak.quickstart.test.FluentTestsHelper.deleteRealm;
+import static org.keycloak.quickstart.test.FluentTestsHelper.importTestRealm;
+import static org.keycloak.quickstart.test.FluentTestsHelper.keycloakBaseUrl;
 
 /**
  * @author <a href="mailto:mkanis@redhat.com">Martin Kanis</a>

@@ -47,10 +47,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.keycloak.quickstart.test.TestsHelper.deleteRealm;
-import static org.keycloak.quickstart.test.TestsHelper.importTestRealm;
+import static org.keycloak.quickstart.test.FluentTestsHelper.deleteRealm;
+import static org.keycloak.quickstart.test.FluentTestsHelper.importTestRealm;
 import static org.openqa.selenium.support.ui.ExpectedConditions.not;
 import static org.openqa.selenium.support.ui.ExpectedConditions.urlToBe;
+import static org.keycloak.quickstart.test.FluentTestsHelper.deleteRealm;
+import static org.keycloak.quickstart.test.FluentTestsHelper.importTestRealm;
 
 /**
  * @author <a href="mailto:bruno@abstractj.org">Bruno Oliveira</a>
