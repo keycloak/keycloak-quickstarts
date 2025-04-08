@@ -54,7 +54,7 @@ export const MyPageRoute: RouteObject = {
 };
 
 export const RootRoute: RouteObject = {
-  path: decodeURIComponent(new URL(environment.baseUrl).pathname),
+  path: decodeURIComponent(new URL(environment.baseUrl).pathname.substring(1)),
   element: <App />,
   errorElement: <>Error</>,
   children: [
