@@ -33,6 +33,7 @@ import org.keycloak.admin.client.Keycloak;
 import org.keycloak.events.EventType;
 import org.keycloak.representations.idm.RealmEventsConfigRepresentation;
 import org.keycloak.quickstart.test.page.LoginPage;
+import org.keycloak.quickstart.test.FluentTestsHelper;
 import org.openqa.selenium.WebDriver;
 
 import java.io.IOException;
@@ -70,13 +71,14 @@ public class ArquillianSysoutEventListenerProviderTest {
 
     private LogReaderHelper logReader;
 
-
+    private static FluentTestsHelper fluentTestsHelper;
+    
     @BeforeClass
     public static void setupClass() throws IOException {
         importTestRealm("admin", "admin", "/quickstart-realm.json");
 
-        ADMIN_CLIENT = Keycloak.getInstance(keycloakBaseUrl, "master", "admin", "admin", "admin-cli");
-        ADMIN_ID = ADMIN_CLIENT.realm(REALM_QS_EVENT_SYSOUT).users().search("test-admin").get(0).getId();
+        fluentTestsHelper = new FluentTestsHelper(keycloakBaseUrl, "admin", "admin", "master", "admin-cli", REALM_QS_EVENT_SYSOUT).init();
+        ADMIN_ID = fluentTestsHelper.getKeycloakInstance().realm(REALM_QS_EVENT_SYSOUT).users().search("test-admin").get(0).getId();
     }
 
     @AfterClass
@@ -115,6 +117,7 @@ public class ArquillianSysoutEventListenerProviderTest {
 
         // generate some events
         loginToAdminConsole();
+        assertAdminEvent("ACTION", false);
         assertUserEvent(EventType.LOGIN, false);
         assertUserEvent(EventType.CODE_TO_TOKEN, true);
 
@@ -122,21 +125,22 @@ public class ArquillianSysoutEventListenerProviderTest {
         assertAdminEvent("ACTION", false);
 
         loginToAdminConsole();
+        assertAdminEvent("ACTION", false);
         assertUserEvent(EventType.LOGIN, false);
         assertUserEvent(EventType.CODE_TO_TOKEN, true);
     }
 
 
     private void registerEventListener() {
-        RealmEventsConfigRepresentation realmEventsConfig = ADMIN_CLIENT.realm(REALM_QS_EVENT_SYSOUT).getRealmEventsConfig();
+        RealmEventsConfigRepresentation realmEventsConfig = fluentTestsHelper.getKeycloakInstance().realm(REALM_QS_EVENT_SYSOUT).getRealmEventsConfig();
         realmEventsConfig.getEventsListeners().add("sysout");
-        ADMIN_CLIENT.realm(REALM_QS_EVENT_SYSOUT).updateRealmEventsConfig(realmEventsConfig);
+        fluentTestsHelper.getKeycloakInstance().realm(REALM_QS_EVENT_SYSOUT).updateRealmEventsConfig(realmEventsConfig);
     }
 
     private void removeEventListener() {
-        RealmEventsConfigRepresentation realmEventsConfig = ADMIN_CLIENT.realm(REALM_QS_EVENT_SYSOUT).getRealmEventsConfig();
+        RealmEventsConfigRepresentation realmEventsConfig = fluentTestsHelper.getKeycloakInstance().realm(REALM_QS_EVENT_SYSOUT).getRealmEventsConfig();
         realmEventsConfig.getEventsListeners().remove("sysout");
-        ADMIN_CLIENT.realm(REALM_QS_EVENT_SYSOUT).updateRealmEventsConfig(realmEventsConfig);
+        fluentTestsHelper.getKeycloakInstance().realm(REALM_QS_EVENT_SYSOUT).updateRealmEventsConfig(realmEventsConfig);
     }
 
     private void navigateToAdminConsole(String path) {
@@ -148,7 +152,7 @@ public class ArquillianSysoutEventListenerProviderTest {
 
         navigateToAdminConsole(path);
 
-        loginPage.login("test-admin", "password");
+        loginPage.login("test-admin", fluentTestsHelper.changePassword("test-admin", REALM_QS_EVENT_SYSOUT));
 
         // wait for URL to stop changing
         while (true) {
@@ -161,7 +165,7 @@ public class ArquillianSysoutEventListenerProviderTest {
     }
 
     private void logout() {
-        ADMIN_CLIENT.realm(REALM_QS_EVENT_SYSOUT).users().get(ADMIN_ID).logout();
+        fluentTestsHelper.getKeycloakInstance().realm(REALM_QS_EVENT_SYSOUT).users().get(ADMIN_ID).logout();
         webDriver.navigate().refresh();
     }
 

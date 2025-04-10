@@ -37,6 +37,7 @@ import org.keycloak.representations.idm.AdminEventRepresentation;
 import org.keycloak.representations.idm.RealmEventsConfigRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.keycloak.quickstart.test.page.LoginPage;
+import org.keycloak.quickstart.test.FluentTestsHelper;
 import org.openqa.selenium.WebDriver;
 
 import java.io.IOException;
@@ -60,9 +61,9 @@ public class ArquillianEventStoreMemoryProviderTest {
 
     public static final String KEYCLOAK_URL_CONSOLE = keycloakBaseUrl + "/admin/%s/console/#%s";
 
-    public static Keycloak ADMIN_CLIENT;
-
     public static String ADMIN_ID;
+
+    private static FluentTestsHelper fluentTestsHelper;
 
     @Page
     private LoginPage loginPage;
@@ -74,8 +75,8 @@ public class ArquillianEventStoreMemoryProviderTest {
     public static void setupClass() throws IOException {
         importTestRealm("admin", "admin", "/quickstart-realm.json");
 
-        ADMIN_CLIENT = Keycloak.getInstance(keycloakBaseUrl, "master", "admin", "admin", "admin-cli");
-        ADMIN_ID = ADMIN_CLIENT.realm(REALM_QS_EVENT_STORE).users().search("test-admin").get(0).getId();
+        fluentTestsHelper = new FluentTestsHelper(keycloakBaseUrl, "admin", "admin", "master", "admin-cli", REALM_QS_EVENT_STORE).init();
+        ADMIN_ID = fluentTestsHelper.getKeycloakInstance().realm(REALM_QS_EVENT_STORE).users().search("test-admin").get(0).getId();
     }
 
     @AfterClass
@@ -109,8 +110,8 @@ public class ArquillianEventStoreMemoryProviderTest {
 
         // clear events and check if the events are gone (they should because they shouldn't be persisted in the DB)
         clearEvents();
-        Assert.assertTrue(ADMIN_CLIENT.realm(REALM_QS_EVENT_STORE).getEvents().isEmpty());
-        Assert.assertTrue(ADMIN_CLIENT.realm(REALM_QS_EVENT_STORE).getAdminEvents().isEmpty());
+        Assert.assertTrue(fluentTestsHelper.getKeycloakInstance().realm(REALM_QS_EVENT_STORE).getEvents().isEmpty());
+        Assert.assertTrue(fluentTestsHelper.getKeycloakInstance().realm(REALM_QS_EVENT_STORE).getAdminEvents().isEmpty());
     }
 
     @After
@@ -123,24 +124,24 @@ public class ArquillianEventStoreMemoryProviderTest {
     }
 
     private void enableEventsSettings() {
-        RealmEventsConfigRepresentation realmEventsConfig = ADMIN_CLIENT.realm(REALM_QS_EVENT_STORE).getRealmEventsConfig();
+        RealmEventsConfigRepresentation realmEventsConfig = fluentTestsHelper.getKeycloakInstance().realm(REALM_QS_EVENT_STORE).getRealmEventsConfig();
         realmEventsConfig.setEventsEnabled(true);
         realmEventsConfig.setAdminEventsEnabled(true);
-        ADMIN_CLIENT.realm(REALM_QS_EVENT_STORE).updateRealmEventsConfig(realmEventsConfig);
+        fluentTestsHelper.getKeycloakInstance().realm(REALM_QS_EVENT_STORE).updateRealmEventsConfig(realmEventsConfig);
 
         clearEvents();
     }
 
     private void clearEvents() {
-        ADMIN_CLIENT.realm(REALM_QS_EVENT_STORE).clearEvents();
-        ADMIN_CLIENT.realm(REALM_QS_EVENT_STORE).clearAdminEvents();
+        fluentTestsHelper.getKeycloakInstance().realm(REALM_QS_EVENT_STORE).clearEvents();
+        fluentTestsHelper.getKeycloakInstance().realm(REALM_QS_EVENT_STORE).clearAdminEvents();
     }
 
     private void disableEventsSettings() {
-        RealmEventsConfigRepresentation realmEventsConfig = ADMIN_CLIENT.realm(REALM_QS_EVENT_STORE).getRealmEventsConfig();
+        RealmEventsConfigRepresentation realmEventsConfig = fluentTestsHelper.getKeycloakInstance().realm(REALM_QS_EVENT_STORE).getRealmEventsConfig();
         realmEventsConfig.setEventsEnabled(false);
         realmEventsConfig.setAdminEventsEnabled(false);
-        ADMIN_CLIENT.realm(REALM_QS_EVENT_STORE).updateRealmEventsConfig(realmEventsConfig);
+        fluentTestsHelper.getKeycloakInstance().realm(REALM_QS_EVENT_STORE).updateRealmEventsConfig(realmEventsConfig);
     }
 
     private void loginToAdminConsole() throws InterruptedException {
@@ -148,7 +149,7 @@ public class ArquillianEventStoreMemoryProviderTest {
 
         navigateToAdminConsole(path);
 
-        loginPage.login("test-admin", "password");
+        loginPage.login("test-admin", fluentTestsHelper.changePassword("test-admin", REALM_QS_EVENT_STORE));
 
         // wait for URL to stop changing
         while (true) {
@@ -161,17 +162,17 @@ public class ArquillianEventStoreMemoryProviderTest {
     }
 
     private void logout() {
-        ADMIN_CLIENT.realm(REALM_QS_EVENT_STORE).users().get(ADMIN_ID).logout();
+        fluentTestsHelper.getKeycloakInstance().realm(REALM_QS_EVENT_STORE).users().get(ADMIN_ID).logout();
     }
 
     private void checkIfEventExists(String... events) {
-        List<String> actualEvents = ADMIN_CLIENT.realm(REALM_QS_EVENT_STORE).getEvents().stream().map(e -> e.getType()).collect(Collectors.toList());
+        List<String> actualEvents = fluentTestsHelper.getKeycloakInstance().realm(REALM_QS_EVENT_STORE).getEvents().stream().map(e -> e.getType()).collect(Collectors.toList());
 
         Assert.assertThat(actualEvents, Matchers.hasItems(events));
     }
 
     private void checkAdminEvents(String operationType, String resourceType) {
-        List<AdminEventRepresentation> adminEvents = ADMIN_CLIENT.realm(REALM_QS_EVENT_STORE).getAdminEvents();
+        List<AdminEventRepresentation> adminEvents = fluentTestsHelper.getKeycloakInstance().realm(REALM_QS_EVENT_STORE).getAdminEvents();
         List<String> operationTypes = adminEvents.stream().map(e -> e.getOperationType()).collect(Collectors.toList());
         List<String> resourceTypes = adminEvents.stream().map(e -> e.getResourceType()).collect(Collectors.toList());
 
@@ -182,6 +183,6 @@ public class ArquillianEventStoreMemoryProviderTest {
     private void addUser() {
         UserRepresentation user = new UserRepresentation();
         user.setUsername("test-user");
-        ADMIN_CLIENT.realm(REALM_QS_EVENT_STORE).users().create(user);
+        fluentTestsHelper.getKeycloakInstance().realm(REALM_QS_EVENT_STORE).users().create(user);
     }
 }

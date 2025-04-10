@@ -27,6 +27,8 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import java.security.SecureRandom;
 
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
@@ -39,6 +41,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.RoleResource;
+import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.client.registration.Auth;
 import org.keycloak.client.registration.ClientRegistration;
 import org.keycloak.client.registration.ClientRegistrationException;
@@ -49,6 +52,7 @@ import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RealmRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
+import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.quickstart.test.builders.ClientBuilder;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -460,6 +464,31 @@ public class FluentTestsHelper implements Closeable {
         assert isInitialized;
         return keycloak.tokenManager().getAccessTokenString();
     }
+
+    private static String generatePassword() {
+        String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+";
+        int PASSWORD_LENGTH = 64;
+        SecureRandom random = new SecureRandom();
+        StringBuilder password = new StringBuilder(PASSWORD_LENGTH);
+        for (int i = 0; i < PASSWORD_LENGTH; i++) {
+            int index = random.nextInt(CHARACTERS.length());
+            password.append(CHARACTERS.charAt(index));
+        }
+
+        return password.toString();
+    }
+
+    public String changePassword(String username, String realm) {
+        List<UserRepresentation> userReps = keycloak.realm(realm).users().search(username, true);
+        UserResource userRes = keycloak.realm(realm).users().get(userReps.iterator().next().getId());
+        CredentialRepresentation credential = new CredentialRepresentation();
+        credential.setType(CredentialRepresentation.PASSWORD);
+        credential.setTemporary(Boolean.FALSE);
+        credential.setValue(generatePassword());
+        userRes.resetPassword(credential);
+        return credential.getValue();
+    }
+
 
     public String getKeycloakBaseUrl() {
         return keycloakBaseUrl;
