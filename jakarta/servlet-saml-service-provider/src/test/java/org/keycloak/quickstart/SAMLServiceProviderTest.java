@@ -36,6 +36,7 @@ import org.junit.runner.RunWith;
 import org.keycloak.quickstart.test.page.IndexPage;
 import org.keycloak.quickstart.test.page.LoginPage;
 import org.keycloak.quickstart.test.page.ProfilePage;
+import org.keycloak.quickstart.test.FluentTestsHelper;
 import org.keycloak.quickstart.test.TestsHelper;
 import org.openqa.selenium.WebDriver;
 
@@ -48,6 +49,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.keycloak.quickstart.test.TestsHelper.deleteRealm;
 import static org.keycloak.quickstart.test.TestsHelper.importTestRealm;
+import static org.keycloak.quickstart.test.TestsHelper.keycloakBaseUrl;
 
 /**
  * @author <a href="mailto:bruno@abstractj.org">Bruno Oliveira</a>
@@ -71,9 +73,12 @@ public class SAMLServiceProviderTest {
     @Page
     private ProfilePage profilePage;
 
+    private static FluentTestsHelper fluentTestsHelper;
+
     static {
         try {
             importTestRealm("admin", "admin", "/quickstart-realm.json");
+            fluentTestsHelper = new FluentTestsHelper(keycloakBaseUrl, "admin", "admin", "master", "admin-cli", "quickstart").init();
         } catch (Exception e) {
             // print stacktrace here as an exception in a static initializer will lead to a class initialization problem
             e.printStackTrace();
@@ -109,7 +114,7 @@ public class SAMLServiceProviderTest {
         try {
             indexPage.clickLogin();
             pageHelper.waitForLoginPage();
-            loginPage.login("alice", "alice");
+            loginPage.login("alice", fluentTestsHelper.changePassword("alice", "quickstart"));
             // due to https://issues.redhat.com/browse/KEYCLOAK-14103 a second click to login is required
             // need to upgrade to Wildfly 19.1.0 to support a solution to this
             if (pageHelper.isOnStartPage()) {
@@ -133,7 +138,7 @@ public class SAMLServiceProviderTest {
         try {
             indexPage.clickLogin();
             pageHelper.waitForLoginPage();
-            loginPage.login("alice", "alice");
+            loginPage.login("alice", fluentTestsHelper.changePassword("alice", "quickstart"));
             // due to https://issues.redhat.com/browse/KEYCLOAK-14103 a second click to login is required
             // need to upgrade to Wildfly 19.1.0 to support a solution to this
             if (pageHelper.isOnStartPage()) {

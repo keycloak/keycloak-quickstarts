@@ -39,6 +39,7 @@ import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.common.util.Base64;
 import org.keycloak.jose.jws.JWSInput;
 import org.keycloak.quickstart.actiontoken.reqaction.RedirectToExternalApplication;
+import org.keycloak.quickstart.test.FluentTestsHelper;
 import org.keycloak.quickstart.page.ExternalActionPage;
 import org.keycloak.representations.JsonWebToken;
 import org.keycloak.representations.idm.RequiredActionProviderSimpleRepresentation;
@@ -78,7 +79,7 @@ public class ArquillianActionTokenTest {
     private static final String PROVIDER_JAR = "action-token-provider";
     private static final String EXTERNAL_APP = "action-token-responder-example";
 
-    private static Keycloak ADMIN_CLIENT;
+    private static FluentTestsHelper fluentTestsHelper;
     private static final String KEYCLOAK_URL = keycloakBaseUrl + "%s";
     private static final String REALM_QUICKSTART_ACTION_TOKEN = "quickstart-action-token";
 
@@ -116,11 +117,11 @@ public class ArquillianActionTokenTest {
 
     @BeforeClass
     public static void setupClass() throws Exception {
-        ADMIN_CLIENT = Keycloak.getInstance(keycloakBaseUrl, "master", "admin", "admin", "admin-cli");
-        final RealmResource qsRealm = ADMIN_CLIENT.realm(REALM_QUICKSTART_ACTION_TOKEN);
-
         // Import realm
         importTestRealm("admin", "admin", "/quickstart-realm.json");
+
+        fluentTestsHelper = new FluentTestsHelper(keycloakBaseUrl, "admin", "admin", "master", "admin-cli", REALM_QUICKSTART_ACTION_TOKEN).init();
+        final RealmResource qsRealm = fluentTestsHelper.getKeycloakInstance().realm(REALM_QUICKSTART_ACTION_TOKEN);
 
         // Register the custom required action provider
         final RequiredActionProviderSimpleRepresentation requiredActionProvider = new RequiredActionProviderSimpleRepresentation();
@@ -171,7 +172,7 @@ public class ArquillianActionTokenTest {
     @Test
     public void testUserLogin() {
         // Attempt to login as alice
-        loginPage.login("alice", "password");
+        loginPage.login("alice", fluentTestsHelper.changePassword("alice", REALM_QUICKSTART_ACTION_TOKEN));
         waitForPageToLoad();
 
         // Expect that the new required action has redirected user to the external application and fill in the form
@@ -185,7 +186,7 @@ public class ArquillianActionTokenTest {
         assertThat(webDriver.getCurrentUrl(), containsString("/account"));
 
         // Now check that the response from external application has been correctly handled by the custom action token handler
-        final RealmResource qsRealm = ADMIN_CLIENT.realm(REALM_QUICKSTART_ACTION_TOKEN);
+        final RealmResource qsRealm = fluentTestsHelper.getKeycloakInstance().realm(REALM_QUICKSTART_ACTION_TOKEN);
         List<UserRepresentation> aliceUsers = qsRealm.users().search("alice");
         assertThat(aliceUsers, hasSize(1));
         UserRepresentation alice = aliceUsers.get(0);
