@@ -4,7 +4,7 @@ import {
   UserRepresentation,
   getPersonalInfo,
   savePersonalInfo,
-  useAlerts,
+  useAccountAlerts,
   useEnvironment,
   usePromise,
 } from "@keycloak/keycloak-account-ui";
@@ -16,7 +16,7 @@ export const MyPage = () => {
   const { t } = useTranslation();
   const context = useEnvironment<AccountEnvironment>();
   const [personalInfo, setPersonalInfo] = useState<UserRepresentation>();
-  const { addAlert, addError } = useAlerts();
+  const { addAlert, addError } = useAccountAlerts();
 
   usePromise((signal) => getPersonalInfo({ signal, context }), setPersonalInfo);
 
@@ -28,7 +28,7 @@ export const MyPage = () => {
       addAlert(t("myPage.save.success"));
     } catch (error) {
       console.error(error);
-      addError("Not able to save personal info");
+      addError("Not able to save personal info", error);
     }
   };
 
