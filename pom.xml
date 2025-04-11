@@ -393,6 +393,7 @@
                 <module>extension/event-listener-sysout</module>
                 <module>extension/event-store-mem</module>
                 <module>extension/extend-account-console</module>
+                <module>extension/extend-account-console-node</module>
                 <module>extension/extend-admin-console-spi</module>
                 <module>extension/user-storage-simple</module>
                 <module>extension/user-storage-jpa</module>
