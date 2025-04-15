@@ -91,8 +91,7 @@ public class ExtendAccountConsoleTest {
         accountPage.navigateTo();
         waitForPageToLoad();
         assertThat(webDriver.getTitle(), containsString("Sign in to " + testsHelper.getTestRealmName()));
-
-        loginPage.login("test-admin", "password");
+        loginPage.login("test-admin", testsHelper.changePassword("test-admin", "quickstart"));
         waitForPageToLoad();
 
         Assert.assertTrue(accountPage.isLogoPresent());

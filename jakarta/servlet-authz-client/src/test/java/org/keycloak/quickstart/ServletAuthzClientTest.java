@@ -34,6 +34,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.keycloak.quickstart.test.page.LoginPage;
+import org.keycloak.quickstart.test.FluentTestsHelper;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -49,6 +50,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.keycloak.quickstart.test.TestsHelper.deleteRealm;
 import static org.keycloak.quickstart.test.TestsHelper.importTestRealm;
+import static org.keycloak.quickstart.test.TestsHelper.keycloakBaseUrl;
 import static org.openqa.selenium.support.ui.ExpectedConditions.not;
 import static org.openqa.selenium.support.ui.ExpectedConditions.urlToBe;
 
@@ -60,6 +62,8 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.urlToBe;
 public class ServletAuthzClientTest {
 
     private static final String APP_NAME = "jakarta-servlet-authz-client";
+
+    private static FluentTestsHelper fluentTestsHelper;
 
     @Page
     private ClientPage indexPage;
@@ -89,6 +93,7 @@ public class ServletAuthzClientTest {
     public static void onBeforeClass() {
         try {
             importTestRealm("admin", "admin", "/quickstart-realm.json");
+            fluentTestsHelper = new FluentTestsHelper(keycloakBaseUrl, "admin", "admin", "master", "admin-cli", "quickstart").init();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -120,7 +125,7 @@ public class ServletAuthzClientTest {
     @Test
     public void testAdminAccessToAdminResources() {
         try {
-            loginPage.login("admin", "admin");
+            loginPage.login("admin", fluentTestsHelper.changePassword("admin", "quickstart"));
             waitForPageToLoad();
             indexPage.clickAdminLink();
             assertEquals("Should display the administrator page",
@@ -137,7 +142,7 @@ public class ServletAuthzClientTest {
     public void testAdminGrantedPermissions() {
         try {
 
-            loginPage.login("admin", "admin");
+            loginPage.login("admin", fluentTestsHelper.changePassword("admin", "quickstart"));
             waitForPageToLoad();
             assertTrue("Should display the admin resource permission",
                     webDriver.getPageSource().contains("Resource: Admin Resource"));
@@ -166,7 +171,7 @@ public class ServletAuthzClientTest {
     public void testAliceGrantedPermissions() {
         try {
 
-            loginPage.login("alice", "alice");
+            loginPage.login("alice", fluentTestsHelper.changePassword("alice", "quickstart"));
             waitForPageToLoad();
             assertTrue("Should display the proteced resource permission",
                     webDriver.getPageSource().contains("Resource: Protected Resource"));
@@ -197,7 +202,7 @@ public class ServletAuthzClientTest {
     public void testJdoeGrantedPermissions() {
         try {
 
-            loginPage.login("jdoe", "jdoe");
+            loginPage.login("jdoe", fluentTestsHelper.changePassword("jdoe", "quickstart"));
             waitForPageToLoad();
             assertTrue("Should display the proteced resource permission",
                     webDriver.getPageSource().contains("Resource: Protected Resource"));
@@ -228,7 +233,7 @@ public class ServletAuthzClientTest {
     public void testAdminAccessToPremiumResources() {
         try {
 
-            loginPage.login("admin", "admin");
+            loginPage.login("admin", fluentTestsHelper.changePassword("admin", "quickstart"));
             waitForPageToLoad();
             indexPage.clickPremiumLink();
             assertEquals("Should display access denied page",
@@ -245,7 +250,7 @@ public class ServletAuthzClientTest {
     @Test
     public void testAdminAccessToSharedResources() {
         try {
-            loginPage.login("admin", "admin");
+            loginPage.login("admin", fluentTestsHelper.changePassword("admin", "quickstart"));
             waitForPageToLoad();
             indexPage.clickDynamicMenuLink();
             assertEquals("Should display the shared resource",
@@ -263,7 +268,7 @@ public class ServletAuthzClientTest {
     public void testPremiumAccessToPremiumResources() {
         try {
 
-            loginPage.login("jdoe", "jdoe");
+            loginPage.login("jdoe", fluentTestsHelper.changePassword("jdoe", "quickstart"));
             waitForPageToLoad();
             indexPage.clickPremiumLink();
             assertEquals("Should display the premium page",
@@ -281,7 +286,7 @@ public class ServletAuthzClientTest {
     public void testPremiumAccessToAdminResources() {
         try {
 
-            loginPage.login("jdoe", "jdoe");
+            loginPage.login("jdoe", fluentTestsHelper.changePassword("jdoe", "quickstart"));
             waitForPageToLoad();
             indexPage.clickAdminLink();
             assertEquals("Should display access denied page",
@@ -299,7 +304,7 @@ public class ServletAuthzClientTest {
     public void testPremiumAccessToSharedResources() {
         try {
 
-            loginPage.login("jdoe", "jdoe");
+            loginPage.login("jdoe", fluentTestsHelper.changePassword("jdoe", "quickstart"));
             waitForPageToLoad();
             indexPage.clickDynamicMenuLink();
             assertEquals("Should display the shared resource",
@@ -317,7 +322,7 @@ public class ServletAuthzClientTest {
     public void testUserAccessToAdminResources() {
         try {
 
-            loginPage.login("alice", "alice");
+            loginPage.login("alice", fluentTestsHelper.changePassword("alice", "quickstart"));
             waitForPageToLoad();
             indexPage.clickAdminLink();
             assertEquals("Should display access denied page",
@@ -335,7 +340,7 @@ public class ServletAuthzClientTest {
     public void testUserAccessToPremiumResources() {
         try {
 
-            loginPage.login("alice", "alice");
+            loginPage.login("alice", fluentTestsHelper.changePassword("alice", "quickstart"));
             waitForPageToLoad();
             indexPage.clickPremiumLink();
             assertEquals("Should display access denied page",
@@ -353,7 +358,7 @@ public class ServletAuthzClientTest {
     public void testUserAccessToSharedResources() {
         try {
 
-            loginPage.login("alice", "alice");
+            loginPage.login("alice", fluentTestsHelper.changePassword("alice", "quickstart"));
             waitForPageToLoad();
             indexPage.clickDynamicMenuLink();
             assertEquals("Should display the shared resource",

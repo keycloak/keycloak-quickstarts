@@ -134,7 +134,7 @@ public class ArquillianSimpleStorageTest {
         addProvider(org.keycloak.quickstart.readonly.PropertyFileUserStorageProviderFactory.PROVIDER_NAME);
         assertEquals("There should be no tbrady user", 0, testsHelper.getTestRealmResource().users().search("tbrady").size());
 
-        navigateToAccount("tbrady", "superbowl");
+        navigateToAccount("tbrady", "superbowl", false);
         assertEquals("Should display the user from storage provider", "tbrady", consolePage.getUser());
         consolePage.logout();
     }
@@ -150,12 +150,12 @@ public class ArquillianSimpleStorageTest {
         addUser("malcom", "butler");
         addProvider(org.keycloak.quickstart.writeable.PropertyFileUserStorageProviderFactory.PROVIDER_NAME);
 
-        navigateToAccount("malcom", "butler");
+        navigateToAccount("malcom", "butler", true);
         assertEquals("Should display the user from storage provider", "malcom", consolePage.getUser());
         consolePage.logout();
 
         addUser("rob", "gronkowski");
-        navigateToAccount("rob", "gronkowski");
+        navigateToAccount("rob", "gronkowski", true);
         assertEquals("Should display the user from storage provider", "rob", consolePage.getUser());
         consolePage.logout();
 
@@ -184,10 +184,16 @@ public class ArquillianSimpleStorageTest {
         assertEquals(201, response.getStatus());
     }
 
-    private void navigateToAccount(String user, String password) {
+    private void navigateToAccount(String user, String password, boolean changePassword) {
         navigateTo(format("/realms/%s/account/#/", testsHelper.getTestRealmName()));
         waitForPageToLoad();
-        loginPage.login(user, password);
+
+        if (changePassword) {
+            loginPage.login(user, testsHelper.changePassword(user, "quickstart"));
+        }
+        else {
+            loginPage.login(user, password);
+        }
     }
 
     public void waitForPageToLoad() {
