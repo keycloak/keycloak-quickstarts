@@ -75,7 +75,7 @@ public class ThemeUiTab implements UiTabProvider, UiTabProviderFactory<Component
 
     @Override
     public String getPath() {
-        return "/:realm/realm-settings/:tab?";
+        return "/:realm/realm-settings/:tab";
     }
 
     @Override
