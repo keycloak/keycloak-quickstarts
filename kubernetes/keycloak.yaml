@@ -6,21 +6,41 @@ metadata:
     app: keycloak
 spec:
   ports:
-    - name: http
+    - protocol: TCP
       port: 8080
-      targetPort: 8080
+      targetPort: http
+      name: http
   selector:
     app: keycloak
-  type: LoadBalancer
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: keycloak
+  # Used to
+  name: keycloak-discovery
+spec:
+  selector:
+    app: keycloak
+  # Allow not-yet-ready Pods to be visible to ensure the forming of a cluster if Pods come up concurrently
+  publishNotReadyAddresses: true
+  clusterIP: None
+  type: ClusterIP
 ---
 apiVersion: apps/v1
-kind: Deployment
+# Use a stateful setup to ensure that for a rolling update Pods are restarted with a rolling strategy one-by-one.
+# This prevents losing in-memory information stored redundantly in two Pods.
+kind: StatefulSet
 metadata:
   name: keycloak
   labels:
     app: keycloak
 spec:
-  replicas: 1
+  serviceName: keycloak-discovery
+  # Run with one replica to save resources, or with two replicas to allow for rolling updates for configuration changes
+  replicas: 2
   selector:
     matchLabels:
       app: keycloak
@@ -32,22 +52,127 @@ spec:
       containers:
         - name: keycloak
           image: quay.io/keycloak/keycloak:26.2.4
-          args: ["start-dev"]
+          args: ["start"]
           env:
-            - name: KEYCLOAK_ADMIN
+            - name: KC_BOOTSTRAP_ADMIN_USERNAME
               value: "admin"
-            - name: KEYCLOAK_ADMIN_PASSWORD
+            - name: KC_BOOTSTRAP_ADMIN_PASSWORD
               value: "admin"
+            # In a production environment, add a TLS certificate to Keycloak to either end-to-end encrypt the traffic between
+            # the client or Keycloak, or to encrypt the traffic between your proxy and Keycloak.
+            # Respect the proxy headers forwarded by the reverse proxy
+            # In a production environment, verify which proxy type you are using, and restrict access to Keycloak
+            # from other sources than your proxy if you continue to use proxy headers.
             - name: KC_PROXY_HEADERS
               value: "xforwarded"
             - name: KC_HTTP_ENABLED
               value: "true"
+            # In this explorative setup, no strict hostname is set.
+            # For production environments, set a hostname for a secure setup.
+            - name: KC_HOSTNAME_STRICT
+              value: "false"
             - name: KC_HEALTH_ENABLED
               value: "true"
+            - name: 'KC_CACHE'
+              value: 'ispn'
+            # Use the Kubernetes configuration for distributed caches which is based on DNS
+            - name: 'KC_CACHE_STACK'
+              value: 'kubernetes'
+            # Passing the Pod's IP primary address to the JGroups clustering as this is required in IPv6 only setups
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            # Instruct JGroups which DNS hostname to use to discover other Keycloak nodes
+            # Needs to be unique for each Keycloak cluster
+            - name: JAVA_OPTS_APPEND
+              value: '-Djgroups.dns.query="keycloak-discovery" -Djgroups.bind.address=$(POD_IP)'
+            - name: 'KC_DB_URL_DATABASE'
+              value: 'keycloak'
+            - name: 'KC_DB_URL_HOST'
+              value: 'postgres'
+            - name: 'KC_DB'
+              value: 'postgres'
+            # In a production environment, use a secret to store username and password to the database
+            - name: 'KC_DB_PASSWORD'
+              value: 'keycloak'
+            - name: 'KC_DB_USERNAME'
+              value: 'keycloak'
           ports:
             - name: http
               containerPort: 8080
+          startupProbe:
+            httpGet:
+              path: /health/started
+              port: 9000
           readinessProbe:
             httpGet:
               path: /health/ready
               port: 9000
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 9000
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 2000Mi
+            requests:
+              cpu: 500m
+              memory: 1700Mi
+---
+# This is deployment of PostgreSQL with an ephemeral storage for testing: Once the Pod stops, the data is lost.
+# For a production setup, replace it with a database setup that persists your data.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  labels:
+    app: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: mirror.gcr.io/postgres:17
+          env:
+            - name: POSTGRES_USER
+              value: "keycloak"
+            - name: POSTGRES_PASSWORD
+              value: "keycloak"
+            - name: POSTGRES_DB
+              value: "keycloak"
+            - name: POSTGRES_LOG_STATEMENT
+              value: "all"
+          ports:
+            - name: postgres
+              containerPort: 5432
+          volumeMounts:
+            # Using volume mount for PostgreSQL's data folder as it is otherwise not writable
+            - name: postgres-data
+              mountPath: /var/lib/postgresql
+      volumes:
+        - name: postgres-data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: postgres
+  name: postgres
+spec:
+  selector:
+    app: postgres
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+  type: ClusterIP
