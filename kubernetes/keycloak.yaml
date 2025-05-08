@@ -38,7 +38,7 @@ metadata:
   labels:
     app: keycloak
 spec:
-  serviceName: keycloak
+  serviceName: keycloak-discovery
   # Run with one replica to save resources, or with two replicas to allow for rolling updates for configuration changes
   replicas: 2
   selector:
@@ -52,7 +52,7 @@ spec:
       containers:
         - name: keycloak
           image: quay.io/keycloak/keycloak:26.2.4
-          args: ["start", "-Djgroups.bind.address=$(POD_IP)"]
+          args: ["start"]
           env:
             - name: KC_BOOTSTRAP_ADMIN_USERNAME
               value: "admin"
@@ -78,15 +78,15 @@ spec:
             # Use the Kubernetes configuration for distributed caches which is based on DNS
             - name: 'KC_CACHE_STACK'
               value: 'kubernetes'
-            # Instruct JGroups which DNS hostname to use to discover other Keycloak nodes
-            # Needs to be unique for each Keycloak cluster
-            - name: JAVA_OPTS_APPEND
-              value: '-Djgroups.dns.query="keycloak-discovery"'
             # Passing the Pod's IP primary address to the JGroups clustering as this is required in IPv6 only setups
             - name: POD_IP
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            # Instruct JGroups which DNS hostname to use to discover other Keycloak nodes
+            # Needs to be unique for each Keycloak cluster
+            - name: JAVA_OPTS_APPEND
+              value: '-Djgroups.dns.query="keycloak-discovery" -Djgroups.bind.address=$(POD_IP)'
             - name: 'KC_DB_URL_DATABASE'
               value: 'keycloak'
             - name: 'KC_DB_URL_HOST'
