@@ -122,7 +122,7 @@ Accessing Protected Resources using Requesting Party Token (RPT)
 ---------------------
 
 Another approach to access resources protected by a policy enforcer is using a RPT as a bearer token, instead of a regular access token. 
-The RPT is an access token with all permissions granted by the server, basically, an access token containing all permissions granted by the server.
+The RPT is basically an access token containing all permissions granted by the server.
 
 To obtain an RPT, you must first exchange an OAuth2 Access Token for a RPT by invoking the token endpoint at the Keycloak server: 
 
