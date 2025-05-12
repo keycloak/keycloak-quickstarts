@@ -1,5 +1,5 @@
 import { LanguageDetectorModule, createInstance } from "i18next";
-import HttpBackend from "i18next-http-backend";
+import FetchBackend from "i18next-fetch-backend";
 import { initReactI18next } from "react-i18next";
 import { environment } from "./environment";
 
@@ -30,6 +30,6 @@ export const i18n = createInstance({
   },
 });
 
-i18n.use(HttpBackend);
+i18n.use(FetchBackend);
 i18n.use(keycloakLanguageDetector);
 i18n.use(initReactI18next);
