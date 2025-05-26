@@ -35,8 +35,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.keycloak.Token;
 import org.keycloak.TokenCategory;
-import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.RealmResource;
+import org.keycloak.admin.client.resource.UserProfileResource;
 import org.keycloak.common.util.Base64;
 import org.keycloak.jose.jws.JWSInput;
 import org.keycloak.quickstart.actiontoken.authenticator.ExternalAppAuthenticator;
@@ -48,6 +48,7 @@ import org.keycloak.representations.idm.AuthenticationExecutionInfoRepresentatio
 import org.keycloak.representations.idm.RealmRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.keycloak.quickstart.test.page.LoginPage;
+import org.keycloak.representations.userprofile.config.UPConfig;
 import org.keycloak.util.JsonSerialization;
 import org.openqa.selenium.WebDriver;
 
@@ -148,6 +149,12 @@ public class ArquillianActionTokenWithAuthenticatorTest {
         final RealmRepresentation qsRealmRepresentation = qsRealm.toRepresentation();
         qsRealmRepresentation.setBrowserFlow("browser-copy");
         qsRealm.update(qsRealmRepresentation);
+
+        // Enable unmanaged attributes of user profile to be able to see the custom attributes
+        UserProfileResource userProfileRes = qsRealm.users().userProfile();
+        UPConfig cfg = userProfileRes.getConfiguration();
+        cfg.setUnmanagedAttributePolicy(UPConfig.UnmanagedAttributePolicy.ENABLED);
+        userProfileRes.update(cfg);
     }
 
     @AfterClass

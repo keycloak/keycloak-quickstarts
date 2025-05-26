@@ -35,9 +35,9 @@ flow. It is implemented by cooperation of authenticator and action token:
 System Requirements
 -------------------
 
-You need to have <span>Keycloak</span> running. It is recommended to use Keycloak 22 or later.
+You need to have <span>Keycloak</span> running. It is recommended to use Keycloak 26 or later.
 
-All you need to build this project is Java 11 (Java SDK 11) or later and Maven 3.6.3 or later.
+All you need to build this project is Java 17 (Java SDK 17) or later and Maven 3.6.3 or later.
 
 
 Build and Deploy the Quickstart
@@ -83,7 +83,7 @@ Integration test of the Quickstart
 ----------------------------------
 
 1. Make sure you have an Keycloak server running with an admin user in the `master` realm or use the provided docker image. Also make sure that server
-was started with the parameters as described above 
+was started with the parameters as described above and `action-token-example` is deployed to the server as described above
 2. You need to have Chrome browser installed and updated to the latest version
 3. Run `mvn -Pextension clean install`
 
@@ -102,9 +102,10 @@ You can download latest Wildfly server. If you run the mvn command as described 
 We also need to deploy simple WAR application to it and start the server. In Linux, the commands to do all of that could be for example like this:
 
 ```
-export WILDFY_VERSION=wildfly-28.0.1.Final
-cp -r target/$WILDFY_VERSION /tmp/
-cp target/deployments/wildfly_action-token-responder-example_action-token-responder-example.war /tmp/$WILDFY_VERSION/standalone/deployments/action-token-responder-example.war
+cd target
+export WILDFY_VERSION=`ls -d wildfly-*`
+cp -r $WILDFY_VERSION /tmp/
+cp deployments/wildfly_action-token-responder-example_action-token-responder-example.war /tmp/$WILDFY_VERSION/standalone/deployments/action-token-responder-example.war
 cd /tmp/$WILDFY_VERSION/bin
 ./standalone.sh
 ```
