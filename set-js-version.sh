@@ -2,6 +2,11 @@
 
 NEW_VERSION=$1
 
+if [ "$NEW_VERSION" == "" ]; then
+  echo "Usage: set-js-version.sh <NEW VERSION>"
+  exit 1;
+fi
+
 function updateNpmDep() {
   FILE="$1"
   PACKAGE="$2"

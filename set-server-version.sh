@@ -2,6 +2,11 @@
 
 NEW_VERSION=$1
 
+if [ "$NEW_VERSION" == "" ]; then
+  echo "Usage: set-server-version.sh <NEW VERSION>"
+  exit 1;
+fi
+
 function updateNpmDep() {
   FILE="$1"
   PACKAGE="$2"
@@ -11,9 +16,9 @@ function updateNpmDep() {
 
 mvn versions:set-property -Dproperty=version.keycloak -DnewVersion=$NEW_VERSION -DgenerateBackupPoms=false
 
-sed -i 's/ image:\(.*\):.*/ image:\1:'"$NEW_VERSION"'/g' kubernetes/keycloak.yaml
+sed -i 's/ image:\(.*keycloak\):.*/ image:\1:'"$NEW_VERSION"'/g' kubernetes/keycloak.yaml
 sed -i 's/ version: .*/ version: '"$NEW_VERSION"'/g' openshift/keycloak.yaml
-sed -i 's/ image:\(.*\):.*/ image:\1:'"$NEW_VERSION"'/g' openshift/keycloak.yaml
+sed -i 's/ image:\(.*keycloak\):.*/ image:\1:'"$NEW_VERSION"'/g' openshift/keycloak.yaml
 
 if [[ $NEW_VERSION == "999.0.0-SNAPSHOT" ]]; then
   # Use the nightly versions of adapters
@@ -26,7 +31,6 @@ fi
 
 # JS quickstart
 updateNpmDep js/spa/package.json "@keycloak/keycloak-admin-client"
-updateNpmDep js/spa/package.json "keycloak-js"
 
 # NodeJS quickstart
 updateNpmDep nodejs/resource-server/package.json "@keycloak/keycloak-admin-client"
