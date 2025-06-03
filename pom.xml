@@ -147,7 +147,7 @@
                 <repository>
                     <id>sonatype-snapshots</id>
                     <name>Sonatype Snapshots</name>
-                    <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+                    <url>https://central.sonatype.com/repository/maven-snapshots/</url>
                     <snapshots>
                         <enabled>true</enabled>
                         <updatePolicy>daily</updatePolicy>
