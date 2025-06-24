@@ -38,8 +38,10 @@ To install the provider, copy the target/event-listener-sysout.jar JAR file to t
 Finally, start the server as follows:
 
     ```
-    kc.[sh|bat] start-dev --http-port=8180 --spi-events-listener-sysout-exclude-events=CODE_TO_TOKEN,REFRESH_TOKEN
+    kc.[sh|bat] start-dev --http-port=8180 --spi-events-listener--sysout--exclude-events=CODE_TO_TOKEN,REFRESH_TOKEN
     ```
+
+NOTE: When using Keycloak 26.2 or older, you may need to use this parameter for the last option instead `--spi-events-listener-sysout-exclude-events=CODE_TO_TOKEN,REFRESH_TOKEN`
 
 Then go to [Events Config](http://localhost:8180/admin/master/console/#/master/realm-settings/events) tab in the admin console and add `sysout` to Event Listeners.
 Save the changes afterwards. 
