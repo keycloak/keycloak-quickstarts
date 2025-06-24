@@ -54,7 +54,7 @@ To install the provider, copy the `target/action-token-example.jar` JAR file to 
 Finally, start the server as follows:
 
     ```
-    kc.[sh|bat] start-dev --http-port=8180 --spi-action-token-handler-external-app-notification-hmac-secret=aSqzP4reFgWR4j94BDT1r+81QYp/NYbY9SBwXtqV1ko=
+    kc.[sh|bat] start-dev --http-port=8180 --spi-action-token-handler--external-app-notification--hmac-secret=aSqzP4reFgWR4j94BDT1r+81QYp/NYbY9SBwXtqV1ko=
     ```
 
 If you see this startup command, you can notice the last configuration parameter, which is used for
@@ -62,6 +62,8 @@ a configuration of a single custom SPI implemented in this example:
 
  *  `external-app-notification` action token handler is given a HMAC secret key that
     is used in step 5 to verify that the invocation comes from the correct app.
+
+NOTE: When using Keycloak 26.2 or older, you may need to use this parameter for the last option instead `--spi-action-token-handler-external-app-notification-hmac-secret=aSqzP4reFgWR4j94BDT1r+81QYp/NYbY9SBwXtqV1ko=`
 
 NOTE: In production environment, you don't need to use the "confidential" parameters sent in the server startup command. It might be better
 to use configuration properties file for it, or even use the Keycloak Vault capabilities. See the Keycloak documentation for more details about provider

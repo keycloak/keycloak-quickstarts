@@ -54,6 +54,8 @@ Finally, start the server as follows:
     kc.[sh|bat] start-dev --http-port=8180 --spi-events-store-provider=in-mem
     ```
 
+NOTE: When using Keycloak 26.2 or older, you may need to use this parameter for the last option instead `--spi-events-store--provider=in-mem`
+
 Then go to [Events Config](http://localhost:8180/admin/master/console/#/master/realm-settings/events) tab in the admin console and enable
 login events and admin events by a toggle buttons `Save events` in the subtabs `User event settings` and `Admin event settings`. You can configure
 what event types should be stored and expiration of events. Save the changes afterwards.

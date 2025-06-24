@@ -54,8 +54,8 @@ Finally, start the server as follows:
 
     ```
     kc.[sh|bat] start-dev --http-port=8180 \
-      --spi-action-token-handler-external-app-reqaction-notification-hmac-secret=aSqzP4reFgWR4j94BDT1r+81QYp/NYbY9SBwXtqV1ko= \
-      --spi-required-action-redirect-to-external-application-external-application-url=http://127.0.0.1:8080/action-token-responder-example/external-action.jsp?token={TOKEN}
+      --spi-action-token-handler--external-app-reqaction-notification--hmac-secret=aSqzP4reFgWR4j94BDT1r+81QYp/NYbY9SBwXtqV1ko= \
+      --spi-required-action--redirect-to-external-application--external-application-url=http://127.0.0.1:8080/action-token-responder-example/external-action.jsp?token={TOKEN}
     ```
 
 If you see this startup command, you can notice the last two configuration parameters, which are used for
@@ -69,6 +69,9 @@ a configuration of two custom SPIs implemented in this example:
     flow. This URL contains special string `{TOKEN}` that is replaced with
     URL with action token. That URL is used by the external application to
     redirect back to Keycloak once its own flow is completed.
+
+NOTE: When using Keycloak 26.2 or older, you may need to use the parameter names without `--` inside the parameter names. So something like
+`--spi-action-token-handler-external-app-reqaction-notification-hmac-secret` and `--spi-required-action-redirect-to-external-application-external-application-url` .
 
 NOTE: In production environment, you don't need to use the "confidential" parameters sent in the server startup command, which in this case
 applies especially for the `hmac-secret` configuration parameter. It might be better to use configuration properties file for it, or even use
