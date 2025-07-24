@@ -16,6 +16,7 @@
 package org.keycloak.quickstart;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -62,10 +63,10 @@ public class OAuth2ResourceServerSecurityConfiguration {
 	private ServletPolicyEnforcerFilter createPolicyEnforcerFilter() {
 		PolicyEnforcerConfig config;
 
-		try {
+		try(InputStream inputStream = getClass().getResourceAsStream("/policy-enforcer.json")) {
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
-			config = mapper.readValue(getClass().getResourceAsStream("/policy-enforcer.json"), PolicyEnforcerConfig.class);
+			config = mapper.readValue(inputStream, PolicyEnforcerConfig.class);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
