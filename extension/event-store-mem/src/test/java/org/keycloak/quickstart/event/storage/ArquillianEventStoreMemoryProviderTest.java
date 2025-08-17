@@ -47,9 +47,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
-import static org.keycloak.quickstart.test.TestsHelper.deleteRealm;
-import static org.keycloak.quickstart.test.TestsHelper.importTestRealm;
-import static org.keycloak.quickstart.test.TestsHelper.keycloakBaseUrl;
 
 /**
  * @author <a href="mailto:mkanis@redhat.com">Martin Kanis</a>
@@ -59,7 +56,9 @@ public class ArquillianEventStoreMemoryProviderTest {
 
     public static final String REALM_QS_EVENT_STORE = "event-store-mem";
 
-    public static final String KEYCLOAK_URL_CONSOLE = keycloakBaseUrl + "/admin/%s/console/#%s";
+    public static final String KEYCLOAK_URL = "http://localhost:8180";
+
+    public static final String KEYCLOAK_URL_CONSOLE = KEYCLOAK_URL + "/admin/%s/console/#%s";
 
     public static String ADMIN_ID;
 
@@ -73,15 +72,20 @@ public class ArquillianEventStoreMemoryProviderTest {
 
     @BeforeClass
     public static void setupClass() throws IOException {
-        importTestRealm("admin", "admin", "/quickstart-realm.json");
-
-        fluentTestsHelper = new FluentTestsHelper(keycloakBaseUrl, "admin", "admin", "master", "admin-cli", REALM_QS_EVENT_STORE).init();
+        fluentTestsHelper = new FluentTestsHelper(KEYCLOAK_URL,
+                FluentTestsHelper.DEFAULT_ADMIN_USERNAME,
+                FluentTestsHelper.DEFAULT_ADMIN_PASSWORD,
+                FluentTestsHelper.DEFAULT_ADMIN_REALM,
+                FluentTestsHelper.DEFAULT_ADMIN_CLIENT,
+                REALM_QS_EVENT_STORE)
+                .init();
+        fluentTestsHelper.importTestRealm("/quickstart-realm.json");
         ADMIN_ID = fluentTestsHelper.getKeycloakInstance().realm(REALM_QS_EVENT_STORE).users().search("test-admin").get(0).getId();
     }
 
     @AfterClass
-    public static void tearDownClass() throws Exception {
-        deleteRealm("admin", "admin", REALM_QS_EVENT_STORE);
+    public static void tearDownClass() {
+        fluentTestsHelper.deleteRealm(REALM_QS_EVENT_STORE);
     }
 
     @Before

@@ -37,7 +37,6 @@ import org.keycloak.quickstart.test.page.IndexPage;
 import org.keycloak.quickstart.test.page.LoginPage;
 import org.keycloak.quickstart.test.page.ProfilePage;
 import org.keycloak.quickstart.test.FluentTestsHelper;
-import org.keycloak.quickstart.test.TestsHelper;
 import org.openqa.selenium.WebDriver;
 
 import java.io.File;
@@ -47,9 +46,6 @@ import java.net.URL;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.keycloak.quickstart.test.TestsHelper.deleteRealm;
-import static org.keycloak.quickstart.test.TestsHelper.importTestRealm;
-import static org.keycloak.quickstart.test.TestsHelper.keycloakBaseUrl;
 
 /**
  * @author <a href="mailto:bruno@abstractj.org">Bruno Oliveira</a>
@@ -60,6 +56,7 @@ public class SAMLServiceProviderTest {
 
     private final static Logger log = Logger.getLogger(SAMLServiceProviderTest.class);
     private static final String APP_NAME = "servlet-saml-service-provider";
+    public static final String KEYCLOAK_URL = "http://localhost:8180";
 
     @Page
     private IndexPage indexPage;
@@ -76,10 +73,16 @@ public class SAMLServiceProviderTest {
     private static FluentTestsHelper fluentTestsHelper;
 
     static {
+        fluentTestsHelper = new FluentTestsHelper(KEYCLOAK_URL,
+                FluentTestsHelper.DEFAULT_ADMIN_USERNAME,
+                FluentTestsHelper.DEFAULT_ADMIN_PASSWORD,
+                FluentTestsHelper.DEFAULT_ADMIN_REALM,
+                FluentTestsHelper.DEFAULT_ADMIN_CLIENT,
+                "quickstart")
+                .init();
         try {
-            importTestRealm("admin", "admin", "/quickstart-realm.json");
-            fluentTestsHelper = new FluentTestsHelper(keycloakBaseUrl, "admin", "admin", "master", "admin-cli", "quickstart").init();
-        } catch (Exception e) {
+            fluentTestsHelper.importTestRealm("/quickstart-realm.json");
+        } catch (IOException e) {
             // print stacktrace here as an exception in a static initializer will lead to a class initialization problem
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -100,8 +103,8 @@ public class SAMLServiceProviderTest {
     private URL contextRoot;
 
     @AfterClass
-    public static void cleanUp() throws IOException{
-        deleteRealm("admin","admin",TestsHelper.testRealm);
+    public static void cleanUp() {
+        fluentTestsHelper.deleteRealm(fluentTestsHelper.getTestRealmName());
     }
 
     @Before
