@@ -68,9 +68,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
-import static org.keycloak.quickstart.test.TestsHelper.deleteRealm;
-import static org.keycloak.quickstart.test.TestsHelper.importTestRealm;
-import static org.keycloak.quickstart.test.TestsHelper.keycloakBaseUrl;
 import static org.openqa.selenium.support.ui.ExpectedConditions.not;
 import static org.openqa.selenium.support.ui.ExpectedConditions.urlToBe;
 
@@ -81,7 +78,7 @@ public class ArquillianActionTokenTest {
     private static final String EXTERNAL_APP = "action-token-responder-example";
 
     private static FluentTestsHelper fluentTestsHelper;
-    private static final String KEYCLOAK_URL = keycloakBaseUrl + "%s";
+    private static final String KEYCLOAK_URL = "http://localhost:8180" + "%s";
     private static final String REALM_QUICKSTART_ACTION_TOKEN = "quickstart-action-token";
 
     private static final String WEBAPP_SRC = "src/main/webapp";
@@ -119,9 +116,14 @@ public class ArquillianActionTokenTest {
     @BeforeClass
     public static void setupClass() throws Exception {
         // Import realm
-        importTestRealm("admin", "admin", "/quickstart-realm.json");
-
-        fluentTestsHelper = new FluentTestsHelper(keycloakBaseUrl, "admin", "admin", "master", "admin-cli", REALM_QUICKSTART_ACTION_TOKEN).init();
+        fluentTestsHelper = new FluentTestsHelper(KEYCLOAK_URL,
+                FluentTestsHelper.DEFAULT_ADMIN_USERNAME,
+                FluentTestsHelper.DEFAULT_ADMIN_PASSWORD,
+                FluentTestsHelper.DEFAULT_ADMIN_REALM,
+                FluentTestsHelper.DEFAULT_ADMIN_CLIENT,
+                REALM_QUICKSTART_ACTION_TOKEN)
+                .init();
+        fluentTestsHelper.importTestRealm("/quickstart-realm.json");
         final RealmResource qsRealm = fluentTestsHelper.getKeycloakInstance().realm(REALM_QUICKSTART_ACTION_TOKEN);
 
         // Register the custom required action provider
@@ -145,8 +147,8 @@ public class ArquillianActionTokenTest {
     }
 
     @AfterClass
-    public static void tearDownClass() throws Exception {
-        deleteRealm("admin", "admin", REALM_QUICKSTART_ACTION_TOKEN);
+    public static void tearDownClass() {
+        fluentTestsHelper.deleteRealm(REALM_QUICKSTART_ACTION_TOKEN);
     }
 
     @Before

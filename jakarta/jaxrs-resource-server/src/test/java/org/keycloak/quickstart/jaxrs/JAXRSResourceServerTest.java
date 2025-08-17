@@ -31,18 +31,18 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.keycloak.admin.client.Keycloak;
-import org.keycloak.quickstart.test.TestsHelper;
+import org.keycloak.quickstart.test.FluentTestsHelper;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-import static org.keycloak.quickstart.test.TestsHelper.deleteRealm;
-import static org.keycloak.quickstart.test.TestsHelper.importTestRealm;
-
-
 @RunWith(Arquillian.class)
 public class JAXRSResourceServerTest {
+
+    public static final String KEYCLOAK_URL = "http://localhost:8180";
+
+    private static FluentTestsHelper fluentTestsHelper;
 
     @ArquillianResource
     private URL contextRoot;
@@ -56,29 +56,30 @@ public class JAXRSResourceServerTest {
     }
 
     @AfterClass
-    public static void cleanUp() throws Exception {
-        deleteRealm("admin", "admin", "quickstart");
+    public static void cleanUp() {
+        fluentTestsHelper.deleteRealm("quickstart");
     }
 
     @BeforeClass
     public static void onBeforeClass() {
+        fluentTestsHelper = new FluentTestsHelper(KEYCLOAK_URL,
+                FluentTestsHelper.DEFAULT_ADMIN_USERNAME,
+                FluentTestsHelper.DEFAULT_ADMIN_PASSWORD,
+                FluentTestsHelper.DEFAULT_ADMIN_REALM,
+                FluentTestsHelper.DEFAULT_ADMIN_CLIENT,
+                "quickstart")
+                .init();
         try {
-            importTestRealm("admin", "admin", "/quickstart-realm.json");
-        } catch (Exception e) {
+            fluentTestsHelper.importTestRealm("/quickstart-realm.json");
+        } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @Before
-    public void onBefore() {
-        TestsHelper.baseUrl = contextRoot.toString();
-        TestsHelper.testRealm = "quickstart";
     }
 
     @Test
     public void testSecuredEndpoint() {
         try {
-            Assert.assertTrue(TestsHelper.returnsForbidden("/secured"));
+            Assert.assertTrue(fluentTestsHelper.returnsForbidden("/secured"));
         } catch (IOException e) {
             Assert.fail();
         }
@@ -87,7 +88,7 @@ public class JAXRSResourceServerTest {
     @Test
     public void testAdminEndpoint() {
         try {
-            Assert.assertTrue(TestsHelper.returnsForbidden("/admin"));
+            Assert.assertTrue(fluentTestsHelper.returnsForbidden("/admin"));
         } catch (IOException e) {
             Assert.fail();
         }
@@ -96,7 +97,7 @@ public class JAXRSResourceServerTest {
     @Test
     public void testPublicEndpoint() {
         try {
-            Assert.assertFalse(TestsHelper.returnsForbidden("/public"));
+            Assert.assertFalse(fluentTestsHelper.returnsForbidden("/public"));
         } catch (IOException e) {
             Assert.fail();
         }
@@ -105,7 +106,7 @@ public class JAXRSResourceServerTest {
     @Test
     public void testSecuredEndpointWithAuth() {
         try {
-            Assert.assertTrue(TestsHelper.testGetWithAuth("/secured", getToken("alice", "alice")));
+            Assert.assertTrue(fluentTestsHelper.testGetWithAuth("/secured", getToken("alice", "alice")));
         } catch (IOException e) {
             Assert.fail();
         }
@@ -114,7 +115,7 @@ public class JAXRSResourceServerTest {
     @Test
     public void testAdminEndpointWithAuthButNoRole() {
         try {
-            Assert.assertFalse(TestsHelper.testGetWithAuth("/admin", getToken("alice", "alice")));
+            Assert.assertFalse(fluentTestsHelper.testGetWithAuth("/admin", getToken("alice", "alice")));
         } catch (IOException e) {
             Assert.fail();
         }
@@ -123,7 +124,7 @@ public class JAXRSResourceServerTest {
     @Test
     public void testAdminEndpointWithAuthAndRole() {
         try {
-            Assert.assertTrue(TestsHelper.testGetWithAuth("/admin", getToken("admin", "admin")));
+            Assert.assertTrue(fluentTestsHelper.testGetWithAuth("/admin", getToken("admin", "admin")));
         } catch (IOException e) {
             Assert.fail();
         }
@@ -131,8 +132,8 @@ public class JAXRSResourceServerTest {
 
     public String getToken(String username, String password) {
         Keycloak keycloak = Keycloak.getInstance(
-                TestsHelper.keycloakBaseUrl,
-                TestsHelper.testRealm,
+                fluentTestsHelper.getKeycloakBaseUrl(),
+                fluentTestsHelper.getTestRealmName(),
                 username,
                 password,
                 "jakarta-jaxrs-resource-server",
