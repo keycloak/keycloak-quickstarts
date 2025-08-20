@@ -48,9 +48,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.keycloak.quickstart.test.TestsHelper.deleteRealm;
-import static org.keycloak.quickstart.test.TestsHelper.importTestRealm;
-import static org.keycloak.quickstart.test.TestsHelper.keycloakBaseUrl;
 import static org.openqa.selenium.support.ui.ExpectedConditions.not;
 import static org.openqa.selenium.support.ui.ExpectedConditions.urlToBe;
 
@@ -62,6 +59,8 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.urlToBe;
 public class ServletAuthzClientTest {
 
     private static final String APP_NAME = "jakarta-servlet-authz-client";
+
+    public static final String KEYCLOAK_URL = "http://localhost:8180";
 
     private static FluentTestsHelper fluentTestsHelper;
 
@@ -85,16 +84,22 @@ public class ServletAuthzClientTest {
     private URL contextRoot;
 
     @AfterClass
-    public static void cleanUp() throws Exception {
-        deleteRealm("admin", "admin", "quickstart");
+    public static void cleanUp() {
+        fluentTestsHelper.deleteRealm("quickstart");
     }
 
     @BeforeClass
     public static void onBeforeClass() {
+        fluentTestsHelper = new FluentTestsHelper(KEYCLOAK_URL,
+                FluentTestsHelper.DEFAULT_ADMIN_USERNAME,
+                FluentTestsHelper.DEFAULT_ADMIN_PASSWORD,
+                FluentTestsHelper.DEFAULT_ADMIN_REALM,
+                FluentTestsHelper.DEFAULT_ADMIN_CLIENT,
+                "quickstart")
+                .init();
         try {
-            importTestRealm("admin", "admin", "/quickstart-realm.json");
-            fluentTestsHelper = new FluentTestsHelper(keycloakBaseUrl, "admin", "admin", "master", "admin-cli", "quickstart").init();
-        } catch (Exception e) {
+            fluentTestsHelper.importTestRealm("/quickstart-realm.json");
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

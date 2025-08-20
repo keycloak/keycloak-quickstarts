@@ -41,9 +41,6 @@ import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 
 import static java.lang.String.format;
-import static org.keycloak.quickstart.test.TestsHelper.deleteRealm;
-import static org.keycloak.quickstart.test.TestsHelper.importTestRealm;
-import static org.keycloak.quickstart.test.TestsHelper.keycloakBaseUrl;
 
 /**
  * @author <a href="mailto:mkanis@redhat.com">Martin Kanis</a>
@@ -75,15 +72,20 @@ public class ArquillianSysoutEventListenerProviderTest {
     
     @BeforeClass
     public static void setupClass() throws IOException {
-        importTestRealm("admin", "admin", "/quickstart-realm.json");
-
-        fluentTestsHelper = new FluentTestsHelper(keycloakBaseUrl, "admin", "admin", "master", "admin-cli", REALM_QS_EVENT_SYSOUT).init();
+        fluentTestsHelper = new FluentTestsHelper(KEYCLOAK_URL,
+                FluentTestsHelper.DEFAULT_ADMIN_USERNAME,
+                FluentTestsHelper.DEFAULT_ADMIN_PASSWORD,
+                FluentTestsHelper.DEFAULT_ADMIN_REALM,
+                FluentTestsHelper.DEFAULT_ADMIN_CLIENT,
+                REALM_QS_EVENT_SYSOUT)
+                .init();
+        fluentTestsHelper.importTestRealm("/quickstart-realm.json");
         ADMIN_ID = fluentTestsHelper.getKeycloakInstance().realm(REALM_QS_EVENT_SYSOUT).users().search("test-admin").get(0).getId();
     }
 
     @AfterClass
-    public static void tearDownClass() throws Exception {
-        deleteRealm("admin", "admin", REALM_QS_EVENT_SYSOUT);
+    public static void tearDownClass() {
+        fluentTestsHelper.deleteRealm(REALM_QS_EVENT_SYSOUT);
     }
 
     @Before

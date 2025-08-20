@@ -19,6 +19,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import org.keycloak.admin.client.Keycloak;
+import org.keycloak.quickstart.test.FluentTestsHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,9 +28,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
+import java.io.IOException;
+
 import static org.hamcrest.Matchers.containsString;
-import static org.keycloak.quickstart.test.TestsHelper.deleteRealm;
-import static org.keycloak.quickstart.test.TestsHelper.importTestRealm;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -45,16 +46,27 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 public class AuthzResourceServerTest {
 
-	@AfterAll
-	public static void cleanUp() throws Exception {
-		deleteRealm("admin", "admin", "quickstart");
+    public static final String KEYCLOAK_URL = "http://localhost:8180";
+
+    private static FluentTestsHelper fluentTestsHelper;
+
+    @AfterAll
+	public static void cleanUp() {
+        fluentTestsHelper.deleteRealm("quickstart");
 	}
 
 	@BeforeAll
 	public static void onBeforeClass() {
+        fluentTestsHelper = new FluentTestsHelper(KEYCLOAK_URL,
+                FluentTestsHelper.DEFAULT_ADMIN_USERNAME,
+                FluentTestsHelper.DEFAULT_ADMIN_PASSWORD,
+                FluentTestsHelper.DEFAULT_ADMIN_REALM,
+                FluentTestsHelper.DEFAULT_ADMIN_CLIENT,
+                "quickstart")
+                .init();
 		try {
-			importTestRealm("admin", "admin", "/realm-import.json");
-		} catch (Exception e) {
+            fluentTestsHelper.importTestRealm("/realm-import.json");
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
