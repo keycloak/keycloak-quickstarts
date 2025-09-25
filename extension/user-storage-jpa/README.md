@@ -21,7 +21,7 @@ runtime. Before using this example, you should probably read the User Storage SP
 System Requirements
 -------------------
 
-You need to have <span>Keycloak</span> running. It is recommended to use Keycloak 22 or later.
+You need to have <span>Keycloak</span> running. It is recommended to use Keycloak 26.3.0 or later.
 
 All you need to build this project is Java 17 (Java SDK 17) or later and Maven 3.6.3 or later.
 
@@ -29,7 +29,7 @@ Build and Deploy the Quickstart
 -------------------------------
 
 You must first configure the datasource it uses. 
-For that, copy the [conf/quarkus.properties](conf/quarkus.properties) to the `conf` directory of the server distribution.
+For that, copy the [conf/keycloak.conf](conf/keycloak.conf) to the `conf` directory of the server distribution.
 In this file, you have a named datasource using the same name as the [persistence unit](src/main/resources/META-INF/persistence.xml) from the quickstart. By using the same name,
 you make sure the persistence unit will be using the correct datasource.
 
@@ -39,7 +39,7 @@ To build the provider, run the following maven command:
    mvn -Pextension clean install -DskipTests=true
    ````
 
-To install the provider, copy the target/user-storage-jpa-example.jar JAR file to the `providers` directory of the server distribution.
+To install the provider, copy the `target/user-storage-jpa-example.jar` JAR file to the `providers` directory of the server distribution.
 
 Finally, start the server as follows:
 
@@ -55,7 +55,7 @@ to the Users tab in the Admin Console and create a new user, you'll be able to s
 Integration test of the Quickstart
 ----------------------------------
 
-1. Make sure you have a Keycloak server running with the installed provider, the `quarkus.properties` file and with an administration user with username `admin` and password `admin` in the `master` realm. Your Keycloak server should be listening on `http://localhost:8180`. You can archive this by running:
+1. Make sure you have a Keycloak server running with the installed provider, the `keycloak.conf` file and with an administration user with username `admin` and password `admin` in the `master` realm. Your Keycloak server should be listening on `http://localhost:8180`. You can archive this by running:
 
 ```
 ./kc.sh start-dev --http-port=8180

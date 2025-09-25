@@ -31,7 +31,7 @@ if [ "$1" = "extension" ]; then
     cp extension/event-store-mem/target/event-store-mem.jar $dist/providers
     cp extension/extend-account-console/target/keycloak-man-theme.jar $dist/providers
     cp extension/user-storage-simple/target/user-storage-properties-example.jar $dist/providers
-    cp extension/user-storage-jpa/conf/quarkus.properties $dist/conf
+    cp extension/user-storage-jpa/conf/keycloak.conf $dist/conf
     cp extension/user-storage-jpa/target/user-storage-jpa-example.jar $dist/providers
     cp extension/extend-admin-console-spi/target/extend-admin-ui.jar $dist/providers
   fi
