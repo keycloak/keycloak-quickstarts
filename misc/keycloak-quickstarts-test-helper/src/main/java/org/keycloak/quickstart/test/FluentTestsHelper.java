@@ -164,6 +164,20 @@ public class FluentTestsHelper implements Closeable {
     }
 
     /**
+     * Initialization method importing the test realm.
+     *
+     * @param realmJsonPath The file to import
+     * @return <code>this</code>
+     */
+    public FluentTestsHelper init(String realmJsonPath) throws IOException {
+        keycloak = createKeycloakInstance(keycloakBaseUrl, adminRealm, adminUserName, adminPassword, adminClient);
+        isInitialized = true;
+        importTestRealm(realmJsonPath);
+        accessToken = generateInitialAccessToken();
+        return this;
+    }
+
+    /**
      * @return Returns <code>true</code> if this helper has been initialized.
      */
     public boolean isInitialized() {
@@ -414,7 +428,7 @@ public class FluentTestsHelper implements Closeable {
         CloseableHttpClient client = HttpClientBuilder.create().build();
 
         try {
-            HttpGet get = new HttpGet(keycloakBaseUrl + endpoint);
+            HttpGet get = new HttpGet(endpoint);
             get.addHeader("Authorization", "Bearer " + token);
 
             HttpResponse response = client.execute(get);
@@ -444,7 +458,7 @@ public class FluentTestsHelper implements Closeable {
     public boolean returnsForbidden(String endpoint) throws IOException {
         CloseableHttpClient client = HttpClientBuilder.create().build();
         try {
-            HttpGet get = new HttpGet(keycloakBaseUrl + endpoint);
+            HttpGet get = new HttpGet(endpoint);
             HttpResponse response = client.execute(get);
             if (response.getStatusLine().getStatusCode() == 403 || response.getStatusLine().getStatusCode() == 401) {
                 return true;

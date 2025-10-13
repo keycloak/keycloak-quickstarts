@@ -78,8 +78,7 @@ public class ArquillianSysoutEventListenerProviderTest {
                 FluentTestsHelper.DEFAULT_ADMIN_REALM,
                 FluentTestsHelper.DEFAULT_ADMIN_CLIENT,
                 REALM_QS_EVENT_SYSOUT)
-                .init();
-        fluentTestsHelper.importTestRealm("/quickstart-realm.json");
+                .init("/quickstart-realm.json");
         ADMIN_ID = fluentTestsHelper.getKeycloakInstance().realm(REALM_QS_EVENT_SYSOUT).users().search("test-admin").get(0).getId();
     }
 

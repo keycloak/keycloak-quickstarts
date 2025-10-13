@@ -57,15 +57,14 @@ public class AuthzResourceServerTest {
 
 	@BeforeAll
 	public static void onBeforeClass() {
-        fluentTestsHelper = new FluentTestsHelper(KEYCLOAK_URL,
-                FluentTestsHelper.DEFAULT_ADMIN_USERNAME,
-                FluentTestsHelper.DEFAULT_ADMIN_PASSWORD,
-                FluentTestsHelper.DEFAULT_ADMIN_REALM,
-                FluentTestsHelper.DEFAULT_ADMIN_CLIENT,
-                "quickstart")
-                .init();
 		try {
-            fluentTestsHelper.importTestRealm("/realm-import.json");
+			fluentTestsHelper = new FluentTestsHelper(KEYCLOAK_URL,
+					FluentTestsHelper.DEFAULT_ADMIN_USERNAME,
+					FluentTestsHelper.DEFAULT_ADMIN_PASSWORD,
+					FluentTestsHelper.DEFAULT_ADMIN_REALM,
+					FluentTestsHelper.DEFAULT_ADMIN_CLIENT,
+					"quickstart")
+					.init("/realm-import.json");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
