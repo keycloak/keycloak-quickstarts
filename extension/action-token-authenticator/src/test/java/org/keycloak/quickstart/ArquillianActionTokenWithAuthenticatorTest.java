@@ -81,7 +81,8 @@ public class ArquillianActionTokenWithAuthenticatorTest {
     private static final String EXTERNAL_APP = "action-token-responder-example";
 
     private static FluentTestsHelper fluentTestsHelper;
-    private static final String KEYCLOAK_URL = "http://localhost:8180" + "%s";
+    private static final String KEYCLOAK_URL_BASE = "http://localhost:8180";
+    private static final String KEYCLOAK_URL = KEYCLOAK_URL_BASE + "%s";
     private static final String REALM_QUICKSTART_ACTION_TOKEN = "quickstart-action-token";
 
     private static final String WEBAPP_SRC = "src/main/webapp";
@@ -118,14 +119,13 @@ public class ArquillianActionTokenWithAuthenticatorTest {
     @BeforeClass
     public static void setupClass() throws Exception {
         // Import realm
-        fluentTestsHelper = new FluentTestsHelper(KEYCLOAK_URL,
+        fluentTestsHelper = new FluentTestsHelper(KEYCLOAK_URL_BASE,
                 FluentTestsHelper.DEFAULT_ADMIN_USERNAME,
                 FluentTestsHelper.DEFAULT_ADMIN_PASSWORD,
                 FluentTestsHelper.DEFAULT_ADMIN_REALM,
                 FluentTestsHelper.DEFAULT_ADMIN_CLIENT,
-                REALM_QUICKSTART_ACTION_TOKEN)
-                .init();
-        fluentTestsHelper.importTestRealm("/quickstart-realm.json");
+                FluentTestsHelper.DEFAULT_ADMIN_REALM)
+                .init("/quickstart-realm.json");
         final RealmResource qsRealm = fluentTestsHelper.getKeycloakInstance().realm(REALM_QUICKSTART_ACTION_TOKEN);
 
         // Update authentication flow to use external application redirection

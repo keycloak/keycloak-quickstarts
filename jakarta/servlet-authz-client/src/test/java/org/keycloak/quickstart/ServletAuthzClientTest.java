@@ -90,15 +90,14 @@ public class ServletAuthzClientTest {
 
     @BeforeClass
     public static void onBeforeClass() {
-        fluentTestsHelper = new FluentTestsHelper(KEYCLOAK_URL,
-                FluentTestsHelper.DEFAULT_ADMIN_USERNAME,
-                FluentTestsHelper.DEFAULT_ADMIN_PASSWORD,
-                FluentTestsHelper.DEFAULT_ADMIN_REALM,
-                FluentTestsHelper.DEFAULT_ADMIN_CLIENT,
-                "quickstart")
-                .init();
         try {
-            fluentTestsHelper.importTestRealm("/quickstart-realm.json");
+            fluentTestsHelper = new FluentTestsHelper(KEYCLOAK_URL,
+                    FluentTestsHelper.DEFAULT_ADMIN_USERNAME,
+                    FluentTestsHelper.DEFAULT_ADMIN_PASSWORD,
+                    FluentTestsHelper.DEFAULT_ADMIN_REALM,
+                    FluentTestsHelper.DEFAULT_ADMIN_CLIENT,
+                    "quickstart")
+                    .init("/quickstart-realm.json");
         } catch (IOException e) {
             e.printStackTrace();
         }

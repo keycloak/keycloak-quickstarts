@@ -62,15 +62,14 @@ public class JAXRSResourceServerTest {
 
     @BeforeClass
     public static void onBeforeClass() {
-        fluentTestsHelper = new FluentTestsHelper(KEYCLOAK_URL,
-                FluentTestsHelper.DEFAULT_ADMIN_USERNAME,
-                FluentTestsHelper.DEFAULT_ADMIN_PASSWORD,
-                FluentTestsHelper.DEFAULT_ADMIN_REALM,
-                FluentTestsHelper.DEFAULT_ADMIN_CLIENT,
-                "quickstart")
-                .init();
         try {
-            fluentTestsHelper.importTestRealm("/quickstart-realm.json");
+            fluentTestsHelper = new FluentTestsHelper(KEYCLOAK_URL,
+                    FluentTestsHelper.DEFAULT_ADMIN_USERNAME,
+                    FluentTestsHelper.DEFAULT_ADMIN_PASSWORD,
+                    FluentTestsHelper.DEFAULT_ADMIN_REALM,
+                    FluentTestsHelper.DEFAULT_ADMIN_CLIENT,
+                    "quickstart")
+                    .init("/quickstart-realm.json");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -79,7 +78,7 @@ public class JAXRSResourceServerTest {
     @Test
     public void testSecuredEndpoint() {
         try {
-            Assert.assertTrue(fluentTestsHelper.returnsForbidden("/secured"));
+            Assert.assertTrue(fluentTestsHelper.returnsForbidden(contextRoot.toString() + "/secured"));
         } catch (IOException e) {
             Assert.fail();
         }
@@ -88,8 +87,8 @@ public class JAXRSResourceServerTest {
     @Test
     public void testAdminEndpoint() {
         try {
-            Assert.assertTrue(fluentTestsHelper.returnsForbidden("/admin"));
-        } catch (IOException e) {
+            Assert.assertTrue(fluentTestsHelper.returnsForbidden(contextRoot.toString() + "/admin"));
+        } catch (Exception e) {
             Assert.fail();
         }
     }
@@ -97,7 +96,7 @@ public class JAXRSResourceServerTest {
     @Test
     public void testPublicEndpoint() {
         try {
-            Assert.assertFalse(fluentTestsHelper.returnsForbidden("/public"));
+            Assert.assertFalse(fluentTestsHelper.returnsForbidden(contextRoot.toString() + "/public"));
         } catch (IOException e) {
             Assert.fail();
         }
@@ -106,7 +105,7 @@ public class JAXRSResourceServerTest {
     @Test
     public void testSecuredEndpointWithAuth() {
         try {
-            Assert.assertTrue(fluentTestsHelper.testGetWithAuth("/secured", getToken("alice", "alice")));
+            Assert.assertTrue(fluentTestsHelper.testGetWithAuth(contextRoot.toString() + "/secured", getToken("alice", "alice")));
         } catch (IOException e) {
             Assert.fail();
         }
@@ -115,7 +114,7 @@ public class JAXRSResourceServerTest {
     @Test
     public void testAdminEndpointWithAuthButNoRole() {
         try {
-            Assert.assertFalse(fluentTestsHelper.testGetWithAuth("/admin", getToken("alice", "alice")));
+            Assert.assertFalse(fluentTestsHelper.testGetWithAuth(contextRoot.toString() + "/admin", getToken("alice", "alice")));
         } catch (IOException e) {
             Assert.fail();
         }
@@ -124,7 +123,7 @@ public class JAXRSResourceServerTest {
     @Test
     public void testAdminEndpointWithAuthAndRole() {
         try {
-            Assert.assertTrue(fluentTestsHelper.testGetWithAuth("/admin", getToken("admin", "admin")));
+            Assert.assertTrue(fluentTestsHelper.testGetWithAuth(contextRoot.toString() + "/admin", getToken("admin", "admin")));
         } catch (IOException e) {
             Assert.fail();
         }

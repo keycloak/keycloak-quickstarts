@@ -131,12 +131,12 @@ public class PropertyFileUserStorageProvider implements
     public Stream<UserModel> searchForUserStream(RealmModel realm, String search, Integer firstResult,
             Integer maxResults) {
         Predicate<String> predicate = "*".equals(search) ? username -> true : username -> username.contains(search);
-        return properties.keySet().stream()
+        Stream<UserModel> result = properties.keySet().stream()
                 .map(String.class::cast)
                 .filter(predicate)
-                .skip(firstResult)
-                .map(username -> getUserByUsername(realm, username))
-                .limit(maxResults);
+                .skip(firstResult != null ? firstResult : 0)
+                .map(username -> getUserByUsername(realm, username));
+        return maxResults != null ? result.limit(maxResults) : result;
     }
 
     @Override

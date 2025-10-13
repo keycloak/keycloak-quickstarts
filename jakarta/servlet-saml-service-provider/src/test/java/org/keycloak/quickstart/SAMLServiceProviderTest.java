@@ -73,17 +73,17 @@ public class SAMLServiceProviderTest {
     private static FluentTestsHelper fluentTestsHelper;
 
     static {
-        fluentTestsHelper = new FluentTestsHelper(KEYCLOAK_URL,
-                FluentTestsHelper.DEFAULT_ADMIN_USERNAME,
-                FluentTestsHelper.DEFAULT_ADMIN_PASSWORD,
-                FluentTestsHelper.DEFAULT_ADMIN_REALM,
-                FluentTestsHelper.DEFAULT_ADMIN_CLIENT,
-                "quickstart")
-                .init();
         try {
-            fluentTestsHelper.importTestRealm("/quickstart-realm.json");
+            fluentTestsHelper = new FluentTestsHelper(KEYCLOAK_URL,
+                    FluentTestsHelper.DEFAULT_ADMIN_USERNAME,
+                    FluentTestsHelper.DEFAULT_ADMIN_PASSWORD,
+                    FluentTestsHelper.DEFAULT_ADMIN_REALM,
+                    FluentTestsHelper.DEFAULT_ADMIN_CLIENT,
+                    "quickstart")
+                    .init("/quickstart-realm.json");
         } catch (IOException e) {
-            // print stacktrace here as an exception in a static initializer will lead to a class initialization problem
+            // print stacktrace here as an exception in a static initializer will lead to a
+            // class initialization problem
             e.printStackTrace();
             throw new RuntimeException(e);
         }
