@@ -161,7 +161,7 @@ spec:
           volumeMounts:
             # Using volume mount for PostgreSQL's data folder as it is otherwise not writable
             - name: postgres-data
-              mountPath: /var/lib/postgresql
+              mountPath: /var/lib/postgresql/data
       volumes:
         - name: postgres-data
           emptyDir: {}
