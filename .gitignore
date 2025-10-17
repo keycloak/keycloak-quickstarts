@@ -64,3 +64,6 @@ node/
 
 # Keycloak distribution
 keycloak-dist
+
+# node build folder
+dist/
