@@ -1,10 +1,17 @@
 import KeycloakAdminClient from "@keycloak/keycloak-admin-client";
 import {
+  AccessContextProvider,
   AccountEnvironment,
-  Header,
-  useEnvironment,
-  initAdminClient,
   AdminClientContext,
+  ErrorBoundaryProvider,
+  Header,
+  initAdminClient,
+  RealmContextProvider,
+  RecentRealmsProvider,
+  ServerInfoProvider,
+  SubGroups,
+  useEnvironment,
+  WhoAmIContextProvider,
 } from "@keycloak/keycloak-admin-ui";
 import {
   Page,
@@ -34,22 +41,40 @@ function App() {
   if (!adminClient) return <Spinner />;
   return (
     <AdminClientContext.Provider value={{ keycloak, adminClient }}>
-      <Page
-        className={style.headerLogo}
-        header={<Header />}
-        sidebar={<PageNav />}
-        isManagedSidebar
-      >
-        <PageSection variant={PageSectionVariants.darker}>
-          <a href="https://vitejs.dev" target="_blank">
-            <img src={viteLogo} className={style.logo} alt="Vite logo" />
-          </a>
-          <h1>extra content</h1>
-        </PageSection>
-        <Suspense fallback={<Spinner />}>
-          <Outlet />
-        </Suspense>
-      </Page>
+      <ErrorBoundaryProvider>
+        <RealmContextProvider>
+          <ServerInfoProvider>
+            <WhoAmIContextProvider>
+              <RecentRealmsProvider>
+                <AccessContextProvider>
+                  <SubGroups>
+                    <Page
+                      className={style.headerLogo}
+                      header={<Header />}
+                      sidebar={<PageNav />}
+                      isManagedSidebar
+                    >
+                      <PageSection variant={PageSectionVariants.darker}>
+                        <a href="https://vitejs.dev" target="_blank">
+                          <img
+                            src={viteLogo}
+                            className={style.logo}
+                            alt="Vite logo"
+                          />
+                        </a>
+                        <h1>extra content</h1>
+                      </PageSection>
+                      <Suspense fallback={<Spinner />}>
+                        <Outlet />
+                      </Suspense>
+                    </Page>
+                  </SubGroups>
+                </AccessContextProvider>
+              </RecentRealmsProvider>
+            </WhoAmIContextProvider>
+          </ServerInfoProvider>
+        </RealmContextProvider>
+      </ErrorBoundaryProvider>
     </AdminClientContext.Provider>
   );
 }
