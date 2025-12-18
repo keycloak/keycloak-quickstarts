@@ -59,12 +59,12 @@ objects:
         spec:
           containers:
             - env:
-                - name: KEYCLOAK_ADMIN
-                  value: '${KEYCLOAK_ADMIN}'
-                - name: KEYCLOAK_ADMIN_PASSWORD
-                  value: '${KEYCLOAK_ADMIN_PASSWORD}'
-                - name: KC_PROXY
-                  value: 'edge'
+                - name: KC_BOOTSTRAP_ADMIN_USERNAME
+                  value: '${KC_BOOTSTRAP_ADMIN_USERNAME}'
+                - name: KC_BOOTSTRAP_ADMIN_PASSWORD
+                  value: '${KC_BOOTSTRAP_ADMIN_PASSWORD}'
+                - name: KC_PROXY_HEADERS
+                  value: 'forwarded'
               image: quay.io/keycloak/keycloak:26.4.7
               livenessProbe:
                 failureThreshold: 100
@@ -101,13 +101,13 @@ parameters:
     description: The name for the application.
     value: keycloak
     required: true
-  - name: KEYCLOAK_ADMIN
+  - name: KC_BOOTSTRAP_ADMIN_USERNAME
     displayName: Keycloak Administrator Username
     description: Keycloak Server administrator username
     generate: expression
     from: '[a-zA-Z0-9]{8}'
     required: true
-  - name: KEYCLOAK_ADMIN_PASSWORD
+  - name: KC_BOOTSTRAP_ADMIN_PASSWORD
     displayName: Keycloak Administrator Password
     description: Keycloak Server administrator password
     generate: expression
