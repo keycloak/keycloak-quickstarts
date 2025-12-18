@@ -7,21 +7,22 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "start-keycloak": "node ./start-server.js --account-dev"
+    "start-keycloak": "node ./start-server.js --admin-dev"
   },
   "dependencies": {
-    "@keycloak/keycloak-ui-shared": "^26.0.7",
+    "@keycloak/keycloak-admin-ui": "^26.4.2",
+    "@keycloak/keycloak-ui-shared": "^26.4.2",
     "@patternfly/react-core": "5.0.0",
-    "i18next": "^23.14.0",
-    "i18next-http-backend": "^2.6.0",
+    "i18next": "^25.5.2",
+    "i18next-fetch-backend": "^6.0.0",
     "keycloak-js": "^26.0.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-i18next": "^14.1.3",
+    "react-i18next": "v15.7.3",
     "react-router-dom": "^6.26.1"
   },
   "devDependencies": {
-    "@keycloak/keycloak-admin-client": "^26.0.7",
+    "@keycloak/keycloak-admin-client": "^26.4.2",
     "@octokit/rest": "^20.1.1",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
@@ -32,5 +33,5 @@
     "vite": "^5.4.1",
     "vite-plugin-checker": "^0.6.4"
   },
-  "packageManager": "pnpm@9.12.2+sha512.22721b3a11f81661ae1ec68ce1a7b879425a1ca5b991c975b074ac220b187ce56c708fe5db69f4c962c989452eee76c82877f4ee80f474cebd61ee13461b6228"
+  "packageManager": "pnpm@10.20.0+sha512.cf9998222162dd85864d0a8102e7892e7ba4ceadebbf5a31f9c2fce48dfce317a9c53b9f6464d1ef9042cba2e02ae02a9f7c143a2b438cd93c91840f0192b9dd"
 }
