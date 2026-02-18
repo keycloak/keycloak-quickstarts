@@ -48,7 +48,7 @@ Log in as the admin user to access the Keycloak Administration Console. Username
 Import the [realm configuration file](config/realm-import.json) to create a new realm called `quickstart`.
 For more details, see the Keycloak documentation about how to [create a new realm](https://www.keycloak.org/docs/latest/server_admin/index.html#_create-realm).
 
-Alternatively, you can create the realm using the following command (it might require first to run `npm install`):
+Alternatively, you can create the realm using the following command (it might require first running `npm install`):
 
 ```shell
 npm run create-realm
@@ -90,10 +90,10 @@ Running tests
 
 Make sure Keycloak is [running](#starting-and-configuring-the-keycloak-server). At the same time, the `npm` should be stopped, so there is nothing listening on http://localhost:8080 .
 
-1. The test assumes that `quickstart` realm does not yet exists. If you already imported it as mentioned in previous steps, it may be needed to remove it first.
-   It can be done by login in admin console, then going to URL like http://localhost:8180/admin/master/console/#/quickstart/realm-settings and then click `Delete` at the `Action` menu on the left top corner.
+1. The test assumes that the `quickstart` realm does not yet exist. If you already imported it as mentioned in the previous steps, it may be needed to remove it first.
+   It can be done by logging into the admin console, then going to the URL like http://localhost:8180/admin/master/console/#/quickstart/realm-settings and then clicking `Delete` at the `Action` menu on the left top corner.
 
-Alternatively, it can be done by command:
+Alternatively, it can be done by the command:
 ```shell
 npm run delete-realm
 ```
@@ -108,7 +108,7 @@ npm run delete-realm
 
 #### Test troubleshooting
 
-If there is error message like `Executable doesn't exist at /home/yournick/.cache/ms-playwright/chromium-1060/chrome-linux/chrome`, it may be needed to first install playwright with this command:
+If there is an error message like `Executable doesn't exist at /home/yournick/.cache/ms-playwright/chromium-1060/chrome-linux/chrome`, it may be needed to first install playwright with this command:
 
 ```shell
 npx playwright install
