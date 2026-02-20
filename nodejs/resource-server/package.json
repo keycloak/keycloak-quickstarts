@@ -8,7 +8,7 @@
     "delete-realm": "node scripts/delete-realm.js"
   },
   "dependencies": {
-    "@keycloak/keycloak-admin-client": "26.5.3",
+    "@keycloak/keycloak-admin-client": "26.5.4",
     "express": "^4.18.2",
     "keycloak-connect": "26.1.1"
   },
