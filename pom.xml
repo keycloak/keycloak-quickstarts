@@ -56,20 +56,20 @@
         <version.creaper>1.6.1</version.creaper>
         <version.shrinkwrap.resolvers>3.1.4</version.shrinkwrap.resolvers>
         <version.jee.jaxb.api>2.3.1</version.jee.jaxb.api>
-        <version.resteasy>6.2.10.Final</version.resteasy>
+        <version.resteasy>6.2.11.Final</version.resteasy>
         <version.shrinkwrap>1.2.6</version.shrinkwrap>
 
         <arquillian-managed>true</arquillian-managed>
-        <version.wildfly.maven.plugin>4.1.1.Final</version.wildfly.maven.plugin>
+        <version.wildfly.maven.plugin>5.1.5.Final</version.wildfly.maven.plugin>
         <jboss-cli.executable>./jboss-cli.sh</jboss-cli.executable>
         <keycloak.management.port>10090</keycloak.management.port>
         <selenium.version>4.28.1</selenium.version>
-        <arquillian-bom.version>1.9.3.Final</arquillian-bom.version>
-        <arquillian-drone-bom.version>3.0.0-alpha.8</arquillian-drone-bom.version>
+        <arquillian-bom.version>1.10.0.Final</arquillian-bom.version>
+        <arquillian-drone-bom.version>3.0.0.Final</arquillian-drone-bom.version>
         <version.json.javax>1.1.2</version.json.javax>
         <version.yasson>1.0.8</version.yasson>
         <version.jackson>2.14.2</version.jackson>
-        <org.jboss.galleon.version>5.2.2.Final</org.jboss.galleon.version>
+        <org.jboss.galleon.version>7.0.3.Final</org.jboss.galleon.version>
 
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -177,10 +177,10 @@
                 </property>
             </activation>
             <properties>
-                <version.wildfly>30.0.0.Final</version.wildfly>
+                <version.wildfly>35.0.1.Final</version.wildfly>
                 <version.jakarta.ws.rs-api>3.1.0</version.jakarta.ws.rs-api>
-                <arquillian-graphene.version>3.0.0-alpha.4</arquillian-graphene.version>
-                <version.wildfly.arquillian.container>4.0.0.Alpha6</version.wildfly.arquillian.container>
+                <arquillian-graphene.version>3.0.0.Final</arquillian-graphene.version>
+                <version.wildfly.arquillian.container>5.1.0.Final</version.wildfly.arquillian.container>
             </properties>
             <modules>
                 <module>jakarta/servlet-authz-client</module>
@@ -299,7 +299,7 @@
                         <groupId>org.jboss.galleon</groupId>
                         <artifactId>galleon-maven-plugin</artifactId>
                         <version>${org.jboss.galleon.version}</version>
-                        <!--Provision a server with relevant layers-->
+                        <!--Provision a serker with relevant layers-->
                         <executions>
                             <execution>
                                 <id>saml-adapter-installation</id>
@@ -321,6 +321,7 @@
                                     </feature-packs>
                                     <pluginOptions>
                                         <optional-packages>all</optional-packages>
+                                        <jboss-fork-embedded>true</jboss-fork-embedded>
                                     </pluginOptions>
                                     <configurations>
                                         <config>
@@ -382,10 +383,10 @@
                 </property>
             </activation>
             <properties>
-                <version.wildfly>30.0.0.Final</version.wildfly>
+                <version.wildfly>35.0.1.Final</version.wildfly>
                 <version.jakarta.ws.rs-api>3.1.0</version.jakarta.ws.rs-api>
-                <arquillian-graphene.version>3.0.0-alpha.4</arquillian-graphene.version>
-                <version.wildfly.arquillian.container>4.0.0.Alpha6</version.wildfly.arquillian.container>
+                <arquillian-graphene.version>3.0.0.Final</arquillian-graphene.version>
+                <version.wildfly.arquillian.container>5.1.0.Final</version.wildfly.arquillian.container>
             </properties>
             <modules>
                 <module>extension/action-token-authenticator</module>
@@ -402,7 +403,7 @@
                     <dependency>
                         <groupId>org.jboss.logging</groupId>
                         <artifactId>jboss-logging</artifactId>
-                        <version>3.5.0.Final</version>
+                        <version>3.6.1.Final</version>
                     </dependency>
                     <dependency>
                         <groupId>org.jboss.arquillian</groupId>
