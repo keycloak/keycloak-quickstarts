@@ -10,11 +10,12 @@ They are organized in this repository under different categories (or directories
 
 | Category  | Description                                                                           |
 |-----------|---------------------------------------------------------------------------------------|
-| extension | Examples about how to extend the server capabilities using some of the Keycloak SPIs. |
-| jakarta   | Examples about how to secure Jakarta Applications                                        |
-| js        | Examples about how to secure JavaScript Applications                                  |
-| nodejs    | Examples about how to secure NodeJS Applications                                      |
-| spring    | Examples about how to secure Spring Applications                                      |
+| extension          | Examples about how to extend the server capabilities using some of the Keycloak SPIs. |
+| jakarta            | Examples about how to secure Jakarta Applications                                     |
+| js                 | Examples about how to secure JavaScript Applications                                  |
+| nodejs             | Examples about how to secure NodeJS Applications                                      |
+| [proxy](proxy)     | Examples about how to deploy Keycloak behind a reverse proxy                          |
+| spring             | Examples about how to secure Spring Applications                                      |
 
 For any missing programming language and framework, you might want to consider looking at:
 

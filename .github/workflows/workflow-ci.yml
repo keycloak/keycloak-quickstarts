@@ -150,3 +150,31 @@ jobs:
       - name: Run unit tests
         run: .github/scripts/run-tests.sh extension
 
+  tests-haproxy-passthrough:
+    name: HAProxy Passthrough
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install docker compose
+        uses: docker/setup-compose-action@v2
+        with:
+          version: latest
+
+      - name: Generate TLS certificates
+        run: proxy/haproxy/passthrough/generate-certs.sh "$(hostname)"
+
+      - name: Start services
+        working-directory: proxy/haproxy/passthrough
+        run: KC_HOST="$(hostname)" docker compose up -d --quiet-pull --no-color --wait --wait-timeout 120
+
+      - name: Check services
+        run: docker ps -a
+
+      - name: Run proxy tests
+        run: proxy/test-proxy.sh "$(hostname)" proxy/haproxy/passthrough/certs/cert.pem
+
+      - name: Stop services
+        if: always()
+        working-directory: proxy/haproxy/passthrough
+        run: KC_HOST="$(hostname)" docker compose down
