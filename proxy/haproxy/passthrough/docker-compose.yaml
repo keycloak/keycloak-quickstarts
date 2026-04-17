@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:18
+    image: mirror.gcr.io/postgres:18
     environment:
       POSTGRES_DB: keycloak
       POSTGRES_USER: keycloak
@@ -34,12 +34,20 @@ services:
       KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/certs/key.pem      
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      # Enable the access log to see as requests arrive on at Keycloak
+      KC_HTTP_ACCESS_LOG_ENABLED: "true"
       # Misc
       KC_SHUTDOWN_DELAY: 30s
       KC_SHUTDOWN_TIMEOUT: 30s
       KC_SPI_CACHE_EMBEDDED__DEFAULT__NODE_NAME: keycloak1      
     volumes:
-      - ./certs:/opt/keycloak/certs:ro
+      - source: ./certs
+        target: /opt/keycloak/certs
+        type: bind
+        read_only: true
+        bind:
+          selinux: z
+
     depends_on:
       postgres:
         condition: service_healthy
@@ -64,15 +72,22 @@ services:
       KC_PROXY_PROTOCOL_ENABLED: "true"
       KC_HOSTNAME: "${KC_HOST}"
       KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/certs/cert.pem
-      KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/certs/key.pem      
+      KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/certs/key.pem
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      # Enable the access log to see as requests arrive on at Keycloak
+      KC_HTTP_ACCESS_LOG_ENABLED: "true"
       # Misc
       KC_SHUTDOWN_DELAY: 30s
       KC_SHUTDOWN_TIMEOUT: 30s
       KC_SPI_CACHE_EMBEDDED__DEFAULT__NODE_NAME: keycloak2
     volumes:
-      - ./certs:/opt/keycloak/certs:ro
+      - source: ./certs
+        target: /opt/keycloak/certs
+        type: bind
+        read_only: true
+        bind:
+          selinux: z
     depends_on:
       postgres:
         condition: service_healthy
@@ -80,11 +95,15 @@ services:
       - backend
 
   haproxy:
-    image: haproxy:3.3
+    image: mirror.gcr.io/haproxy:3.3
     volumes:
-      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro      
+      - source: ./haproxy.cfg
+        target: /usr/local/etc/haproxy/haproxy.cfg
+        type: bind
+        read_only: true
+        bind:
+          selinux: z
     ports:
-      - "8080:8080"
       - "8443:8443"
       - "8404:8404"
     depends_on:

@@ -69,7 +69,24 @@ This is expected and can be safely accepted for local testing.
 
 Open [http://localhost:8404/stats](http://localhost:8404/stats) in a browser to verify that both Keycloak backends are healthy.
 
-### 5. Stop the services
+### 5. Showcase graceful shutdown
+
+This is a walkthrough through a graceful shutdown of one of the Keycloak instances: 
+
+1. Open [http://localhost:8404/stats](http://localhost:8404/stats) in a browser to verify that both Keycloak backends are healthy.
+2. Send a `TERM` signal to one of the Keycloak containers for a graceful shutdown (takes 30 seconds). Container exits with code 143.
+   ```bash
+   docker stop passthrough-keycloak1-1 -t 60
+   ```
+3. Observe that after 3x5=15 seconds the `keycloak1` backend turns UP/green to UP/yelllow and eventually to DOWN/red.
+   Requests are still served by the node until it shuts down gracefully after 30 seconds.  
+4. Start the Keycloak container again:  
+   ```bash
+   docker start passthrough-keycloak1-1
+   ```
+5. Observe that after 3x5=15 seconds the `keycloak1` backend turns DOWN/yellow and eventually UP/green
+
+### 6. Stop the services
 
 ```bash
 docker compose down
