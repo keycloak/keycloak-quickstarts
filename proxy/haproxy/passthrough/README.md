@@ -84,7 +84,7 @@ This is a walkthrough through a graceful shutdown of one of the Keycloak instanc
    ```bash
    docker start passthrough-keycloak1-1
    ```
-5. Observe that after 3x5=15 seconds the `keycloak1` backend turns DOWN/yellow and eventually UP/green
+5. Observe that after 2x5=10 seconds the `keycloak1` backend turns DOWN/yellow and eventually UP/green.
 
 ### 6. Stop the services
 
