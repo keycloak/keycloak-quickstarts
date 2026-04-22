@@ -1,0 +1,14 @@
+
+entryPoints:
+  websecure:
+    address: ":8443"
+api:
+  dashboard: true
+  insecure: true
+
+log:
+  level: INFO
+
+providers:
+  file:
+    directory: "/mnt"
