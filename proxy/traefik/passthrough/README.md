@@ -73,7 +73,8 @@ Open http://127.0.0.1:8080/dashboard/ in a browser to verify that Traefik is run
 
 This is a walkthrough through a graceful shutdown of one of the Keycloak instances:
 
-1. Open [http://localhost:8404/stats](http://localhost:8404/stats) in a browser to verify that both Keycloak backends are healthy.
+1. Open [http://127.0.0.1:8080/dashboard/](http://127.0.0.1:8080/dashboard/) in a browser to verify that Traefik is running and both Keycloak backends are healthy.
+
 2. Send a `TERM` signal to one of the Keycloak containers for a graceful shutdown (takes 30 seconds). Container exits with code 143.
    ```bash
    docker stop passthrough-keycloak1-1 -t 60
