@@ -29,6 +29,8 @@ services:
       KC_HEALTH_ENABLED: "true"
       # Hostname / HTTPS
       KC_PROXY_PROTOCOL_ENABLED: "true"
+      # Traefik can't run an HTTPS health check, so we downgrade to HTTP to do a TCP check
+      KC_HTTP_MANAGEMENT_SCHEME: http
       KC_HOSTNAME: "${KC_HOST}"
       KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/certs/cert.pem
       KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/certs/key.pem      
@@ -70,6 +72,8 @@ services:
       KC_HEALTH_ENABLED: "true"
       # Hostname / HTTPS
       KC_PROXY_PROTOCOL_ENABLED: "true"
+      # Traefik can't run an HTTPS health check, so we downgrade to HTTP to do a TCP check
+      KC_HTTP_MANAGEMENT_SCHEME: http
       KC_HOSTNAME: "${KC_HOST}"
       KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/certs/cert.pem
       KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/certs/key.pem
