@@ -95,9 +95,14 @@ docker compose down
 
 ## Traefik configuration
 
-The key parts of the Traefik configuration are explained below.
+Traefik separates its configuration into two files:
 
-traefik.yaml — static configuration
+- traefik.yaml — static configuration loaded at startup (entry points, dashboard, and providers).
+- keycloak.yaml — dynamic configuration for runtime routing rules, services, and health checks.
+
+Both files are required for this setup to work correctly.
+
+## traefik.yaml — static configuration:
 
 **Entry point for TLS traffic:**
 ```yaml
@@ -116,33 +121,44 @@ api:
 - `insecure: true` exposes the Traefik dashboard without any authentication. This is intended for local development and debugging only and must never be used in production.
 Enables the Traefik dashboard on port 8080 without authentication (for local testing only). The dashboard is accessible at http://127.0.0.1:8080/dashboard/.
 
-keycloak.yaml — dynamic configuration
+## keycloak.yaml — dynamic configuration:
 
 **TCP router with TLS passthrough:**
 ```yaml
 tcp:
   routers:
-    keycloak:
+    keycloak-router:
       rule: "HostSNI(`*`)"
+      service: "keycloak-service"
+      priority: 100
       entryPoints:
-        - websecure
+        - "websecure"
       tls:
         passthrough: true
-      service: keycloak
 ```
 - `HostSNI(*)`matches all TLS connections regardless of the SNI hostname.
+- `priority: 100` ensures this router takes precedence over any other TCP routers that may be defined
 - `tls.passthrough: true` instructs Traefik to forward the raw TLS stream without terminating it. Keycloak handles TLS termination.
+
+**Servers transport with PROXY protocol:**
+```yaml
+       serversTransports:
+       kc-passthrough:
+         proxyProtocol:
+           version: 2
+```
+
+- Defines a named transport kc-passthrough that enables PROXY protocol v2 on all backend connections. This allows Keycloak to see the original client IP address and requires Keycloak to be configured with KC_PROXY_PROTOCOL_ENABLED=true.
 
 **Load balancer with proxy protocol:**
 ```yaml
-   services:
+     services:
      keycloak-service:
        loadBalancer:
          serversTransport: kc-passthrough
          healthCheck:
            interval: "5s"
            timeout: "3s"
-           port: 9000
          servers:
            - address: "keycloak1:8443"
            - address: "keycloak2:8443"
@@ -150,44 +166,37 @@ tcp:
 - `serversTransport: kc-passthrough` links the load balancer to the transport defined above, enabling PROXY protocol v2 on all backend connections. This requires Keycloak to be configured with KC_PROXY_PROTOCOL_ENABLED=true.
 - Traffic is distributed across both Keycloak instances using round-robin.
 
-**HTTP health check on the management port:**
+**Traefik health check :**
 
-Since Traefik is operating at the TCP layer for TLS passthrough, it performs health checks by sending a raw HTTP request and validating the response string.
+**Traefik health check:**
+
+Since Traefik operates at the TCP layer for TLS passthrough, it performs TCP-level health checks on each backend server.
 
 ```yaml
-healthCheck:
-  interval: "5s"
-  timeout: "2s"
-  port: 9000
-  send: "GET /health/ready HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n"
-  expect: "200"
+        healthCheck:
+          interval: "5s"
+          timeout: "3s"
 ```
 
-Traefik performs health checks against Keycloak's management endpoint /health/ready, expecting an HTTP 200 response. This is achieved by sending a manual HTTP/1.1 request and looking for the "200" status string in the response buffer.
-This endpoint is only available when Keycloak is configured with KC_HEALTH_ENABLED=true and KC_METRICS_ENABLED=true.
+- Traefik checks each backend every 5s, marking a server as unhealthy if it does not respond within 3s. Unhealthy backends are automatically removed from the load balancer rotation and re-added once they recover
 
 **Server lines:**
 
 In the dynamic configuration, the servers and health parameters are defined within the TCP service:
 
 ```yaml
-tcp:
   services:
     keycloak-service:
       loadBalancer:
-        proxyProtocol:
-          version: 2
+        serversTransport: kc-passthrough
         healthCheck:
           interval: "5s"
-          timeout: "2s"
-          port: 9000
+          timeout: "3s"
         servers:
           - address: "keycloak1:8443"
           - address: "keycloak2:8443"
 ```
-- `port: 9000`  directs health checks to the management port (9000). Because Traefik is in TCP mode, it sends the raw send string to this port to verify application readiness without interfering with the main TLS traffic on port 8443.
-Version 1 (`send-proxy`) is also supported.
-This requires Keycloak to be configured with `KC_PROXY_PROTOCOL_ENABLED=true`.
+- Defines the two Keycloak backend servers. Traefik distributes incoming TCP connections across both instances using round-robin load balancing.
 
 - `docker run --rm --network passthrough_backend alpine nc -zv keycloak1 9000`  verify the management port is reachable within the internal Docker network (as seen in the nc test)
 

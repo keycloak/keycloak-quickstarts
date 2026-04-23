@@ -1,6 +1,6 @@
 tcp:
   routers:
-    my-router:
+    keycloak-router:
       rule: "HostSNI(`*`)"
       service: "keycloak-service"
       priority: 100
@@ -21,11 +21,6 @@ tcp:
         healthCheck:
           interval: "5s"
           timeout: "3s"
-          port: 9000
-          # Standard HTTP/1.0 request for maximum L4 compatibility
-          send: "GET /health/ready HTTP/1.0\r\n\r\n"
-          # Matches the status text in Keycloak's health JSON
-          expect: "OK"
         servers:
           - address: "keycloak1:8443"
           - address: "keycloak2:8443"
