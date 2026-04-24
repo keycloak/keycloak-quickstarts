@@ -178,3 +178,32 @@ jobs:
         if: always()
         working-directory: proxy/haproxy/passthrough
         run: KC_HOST="$(hostname)" docker compose down
+
+  tests-haproxy-reencrypt:
+    name: HAProxy Re-encrypt
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install docker compose
+        uses: docker/setup-compose-action@v2
+        with:
+          version: latest
+
+      - name: Generate TLS certificates
+        run: proxy/haproxy/reencrypt/generate-certs.sh "$(hostname)"
+
+      - name: Start services
+        working-directory: proxy/haproxy/reencrypt
+        run: KC_HOST="$(hostname)" docker compose up -d --quiet-pull --no-color --wait --wait-timeout 120
+
+      - name: Check services
+        run: docker ps -a
+
+      - name: Run proxy tests
+        run: proxy/test-proxy.sh "$(hostname)" proxy/haproxy/reencrypt/certs/haproxy/cert.pem
+
+      - name: Stop services
+        if: always()
+        working-directory: proxy/haproxy/reencrypt
+        run: KC_HOST="$(hostname)" docker compose down
