@@ -32,6 +32,8 @@ services:
       KC_HOSTNAME: "${KC_HOST}"
       KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/certs/cert.pem
       KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/certs/key.pem      
+      KC_HTTPS_CLIENT_AUTH: required
+      KC_HTTPS_TRUST_STORE_FILE: /opt/keycloak/conf/truststores/haproxy-internal-cert.pem
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
       # Enable the access log to see as requests arrive on at Keycloak
@@ -79,6 +81,8 @@ services:
       KC_HOSTNAME: "${KC_HOST}"
       KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/certs/cert.pem
       KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/certs/key.pem
+      KC_HTTPS_CLIENT_AUTH: required
+      KC_HTTPS_TRUST_STORE_FILE: /opt/keycloak/conf/truststores/haproxy-internal-cert.pem
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
       # Enable the access log to see as requests arrive on at Keycloak
