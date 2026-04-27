@@ -13,8 +13,29 @@
   </div>
   <p>And enter the following code:</p>
   <h1 class="display-1 fw-bold" th:text="${userCode}">XXXX-XXXX</h1>
+  <hr>
+  <p class="text-muted">Direct link for convenience:</p>
+  <a th:href="${verificationUriComplete}" target="_blank" class="h4 text-decoration-none" th:text="${verificationUriComplete}"></a>
+
   <div id="error-message" class="alert alert-danger mt-3" style="display: none;"></div>
 </div>
 
+<script>
+  let pollInterval = setInterval(function() {
+      fetch('/check-status')
+          .then(response => response.json())
+          .then(data => {
+              if (data.state === "success") {
+                  window.location.href = "/welcome";
+              } else if (data.state === "error") {
+                  clearInterval(pollInterval);
+                  const errorBox = document.getElementById('error-message');
+                  errorBox.innerText = data.message;
+                  errorBox.style.display = 'block';
+                  document.getElementById('status-card').classList.add('border-danger');
+              }
+          });
+  }, 2000);
+</script>
 </body>
 </html>

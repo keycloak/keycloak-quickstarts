@@ -24,7 +24,7 @@ System Requirements
 
 To compile and run this quickstart you will need:
 
-* JDK 21
+* JDK 17
 * Apache Maven 3.8.6
 * Spring Boot 3.2.4
 * Keycloak 21+
