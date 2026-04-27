@@ -18,85 +18,76 @@
 package org.keycloak.quickstart;
 
 import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.container.test.api.TargetsContainer;
 import org.jboss.arquillian.drone.api.annotation.Drone;
-import org.jboss.arquillian.graphene.page.Page;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
+import org.jboss.arquillian.junit5.ArquillianExtension;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.keycloak.Token;
 import org.keycloak.TokenCategory;
-import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.UserProfileResource;
 import org.keycloak.common.util.Base64;
 import org.keycloak.jose.jws.JWSInput;
 import org.keycloak.quickstart.actiontoken.reqaction.RedirectToExternalApplication;
-import org.keycloak.quickstart.test.FluentTestsHelper;
-import org.keycloak.quickstart.page.ExternalActionPage;
 import org.keycloak.representations.JsonWebToken;
+import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RequiredActionProviderSimpleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
-import org.keycloak.quickstart.test.page.LoginPage;
 import org.keycloak.representations.userprofile.config.UPConfig;
+import org.keycloak.testframework.annotations.InjectRealm;
+import org.keycloak.testframework.annotations.KeycloakIntegrationTest;
+import org.keycloak.testframework.oauth.OAuthClient;
+import org.keycloak.testframework.oauth.annotations.InjectOAuthClient;
+import org.keycloak.testframework.realm.ManagedRealm;
+import org.keycloak.testframework.realm.RealmConfig;
+import org.keycloak.testframework.realm.RealmConfigBuilder;
+import org.keycloak.testframework.server.KeycloakServerConfig;
+import org.keycloak.testframework.server.KeycloakServerConfigBuilder;
 import org.keycloak.util.JsonSerialization;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.FluentWait;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.support.ui.FluentWait;
 import static java.lang.String.format;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.hasEntry;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.startsWith;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.openqa.selenium.support.ui.ExpectedConditions.not;
 import static org.openqa.selenium.support.ui.ExpectedConditions.urlToBe;
 
-@RunWith(Arquillian.class)
+@ExtendWith(ArquillianExtension.class)
+@KeycloakIntegrationTest(config = ArquillianActionTokenTest.ServerConfig.class)
 public class ArquillianActionTokenTest {
 
-    private static final String PROVIDER_JAR = "action-token-provider";
     private static final String EXTERNAL_APP = "action-token-responder-example";
 
-    private static FluentTestsHelper fluentTestsHelper;
-    private static final String KEYCLOAK_URL_BASE = "http://localhost:8180";
+    private static final String KEYCLOAK_URL_BASE = "http://localhost:8080";
     private static final String KEYCLOAK_URL = KEYCLOAK_URL_BASE + "%s";
     private static final String REALM_QUICKSTART_ACTION_TOKEN = "quickstart-action-token";
 
     private static final String WEBAPP_SRC = "src/main/webapp";
-    private static final String RESOURCES_SRC = "src/test/resources";
 
-    @Page
-    private LoginPage loginPage;
-
-    @Page
-    private ExternalActionPage externalActionPage;
+    @InjectRealm(config = ArquillianActionTokenTest.ActionTokenRealmConfig.class)
+    static ManagedRealm realm;
 
     @Drone
     private WebDriver webDriver;
 
-    @ArquillianResource
-    @OperateOnDeployment(EXTERNAL_APP)
-    private URL externalAppContextRoot;
+    @InjectOAuthClient
+    OAuthClient oAuthClient;
+
+    private static boolean requiredActionConfigured = false;
+    private static boolean userCreated = false;
 
     @Deployment(testable=false, name=EXTERNAL_APP)
     @TargetsContainer("wildfly")
@@ -114,44 +105,7 @@ public class ArquillianActionTokenTest {
           ;
     }
 
-    @BeforeClass
-    public static void setupClass() throws Exception {
-        // Import realm
-        fluentTestsHelper = new FluentTestsHelper(KEYCLOAK_URL_BASE,
-                FluentTestsHelper.DEFAULT_ADMIN_USERNAME,
-                FluentTestsHelper.DEFAULT_ADMIN_PASSWORD,
-                FluentTestsHelper.DEFAULT_ADMIN_REALM,
-                FluentTestsHelper.DEFAULT_ADMIN_CLIENT,
-                REALM_QUICKSTART_ACTION_TOKEN)
-                .init("/quickstart-realm.json");
-        final RealmResource qsRealm = fluentTestsHelper.getKeycloakInstance().realm(REALM_QUICKSTART_ACTION_TOKEN);
-
-        // Register the custom required action provider
-        final RequiredActionProviderSimpleRepresentation requiredActionProvider = new RequiredActionProviderSimpleRepresentation();
-        requiredActionProvider.setProviderId("redirect-to-external-application");
-        requiredActionProvider.setName("Redirect to external application");
-        qsRealm.flows().registerRequiredAction(requiredActionProvider);
-
-        // Add the new required action to the list of "alice"'s actions required after her logon
-        List<String> reqActions = Arrays.asList("redirect-to-external-application");
-        qsRealm.users().search("alice").forEach(u -> {
-            u.setRequiredActions(reqActions);
-            qsRealm.users().get(u.getId()).update(u);
-        });
-
-        // Enable unmanaged attributes of user profile to be able to see the custom attributes
-        UserProfileResource userProfileRes = qsRealm.users().userProfile();
-        UPConfig cfg = userProfileRes.getConfiguration();
-        cfg.setUnmanagedAttributePolicy(UPConfig.UnmanagedAttributePolicy.ENABLED);
-        userProfileRes.update(cfg);
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-        fluentTestsHelper.deleteRealm(REALM_QUICKSTART_ACTION_TOKEN);
-    }
-
-    @Before
+    @BeforeEach
     public void setup() {
         webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
         webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -180,32 +134,124 @@ public class ArquillianActionTokenTest {
 
     @Test
     public void testUserLogin() {
-        // Attempt to login as alice
-        loginPage.login("alice", fluentTestsHelper.changePassword("alice", REALM_QUICKSTART_ACTION_TOKEN));
+
+        createUserIfNeeded();
+        setupRequiredActionIfNeeded();
+
+        oAuthClient.openLoginForm();
+
+        // Attempt to login as alice using WebDriver directly
+        webDriver.findElement(org.openqa.selenium.By.id("username")).sendKeys("alice");
+        webDriver.findElement(org.openqa.selenium.By.id("password")).sendKeys("password");
+        webDriver.findElement(org.openqa.selenium.By.id("kc-login")).click();
         waitForPageToLoad();
 
         // Expect that the new required action has redirected user to the external application and fill in the form
-        assertThat(webDriver.getCurrentUrl(), startsWith(externalAppContextRoot.toString()));
-        externalActionPage.field1("abc def");
-        externalActionPage.field2("ghi jkl");
-        externalActionPage.submit();
+        assertTrue(Objects.requireNonNull(webDriver.getCurrentUrl()).contains("/action-token-responder-example/external-action.jsp"));
+
+        // Set field values and submit using JavaScript to ensure proper form submission
+        org.openqa.selenium.JavascriptExecutor js = (org.openqa.selenium.JavascriptExecutor) webDriver;
+        js.executeScript(
+            "document.getElementsByName('field_1')[0].value = 'abc def';" +
+            "document.getElementsByName('field_2')[0].value = 'ghi jkl';" +
+            "document.querySelector('form').submit();"
+        );
+        waitForPageToLoad();
+        // Wait for the submit-back.jsp redirect to complete
+        try { Thread.sleep(2000); } catch (InterruptedException e) {}
         waitForPageToLoad();
 
         // Expect that the login has succeeded
-        assertThat(webDriver.getCurrentUrl(), containsString("/account"));
+        String finalUrl = webDriver.getCurrentUrl();
+        assertTrue(finalUrl.contains("/account"),
+            "Expected URL to contain '/account' but was: " + finalUrl);
 
         // Now check that the response from external application has been correctly handled by the custom action token handler
-        final RealmResource qsRealm = fluentTestsHelper.getKeycloakInstance().realm(REALM_QUICKSTART_ACTION_TOKEN);
-        List<UserRepresentation> aliceUsers = qsRealm.users().search("alice");
-        assertThat(aliceUsers, hasSize(1));
+        List<UserRepresentation> aliceUsers = realm.admin().users().search("alice");
+        assertEquals(1, aliceUsers.size());
         UserRepresentation alice = aliceUsers.get(0);
-        assertThat(alice, notNullValue());
-        assertThat(alice.getAttributes(), notNullValue());
-        assertThat(alice.getAttributes(), hasEntry(is(RedirectToExternalApplication.DEFAULT_APPLICATION_ID + "." + "field_1"), contains("abc def")));
-        assertThat(alice.getAttributes(), hasEntry(is(RedirectToExternalApplication.DEFAULT_APPLICATION_ID + "." + "field_2"), contains("ghi jkl")));
+        assertNotNull(alice);
+        assertNotNull(alice.getAttributes());
+        assertTrue(alice.getAttributes().containsKey(RedirectToExternalApplication.DEFAULT_APPLICATION_ID + "." + "field_1"));
+        assertEquals(List.of("abc def"), alice.getAttributes().get(RedirectToExternalApplication.DEFAULT_APPLICATION_ID + "." + "field_1"));
+        assertTrue(alice.getAttributes().containsKey(RedirectToExternalApplication.DEFAULT_APPLICATION_ID + "." + "field_2"));
+        assertEquals(List.of("ghi jkl"), alice.getAttributes().get(RedirectToExternalApplication.DEFAULT_APPLICATION_ID + "." + "field_2"));
     }
 
     private void navigateTo(String path) {
         webDriver.navigate().to(format(KEYCLOAK_URL, path));
+    }
+
+    private void createUserIfNeeded() {
+        if (userCreated) {
+            return;
+        }
+
+        UserRepresentation alice = new UserRepresentation();
+        alice.setUsername("alice");
+        alice.setEmail("alice@keycloak.org");
+        alice.setFirstName("Alice");
+        alice.setLastName("Liddel");
+        alice.setEnabled(true);
+
+        CredentialRepresentation credential = new CredentialRepresentation();
+        credential.setType(CredentialRepresentation.PASSWORD);
+        credential.setValue("password");
+        credential.setTemporary(false);
+        alice.setCredentials(List.of(credential));
+
+        jakarta.ws.rs.core.Response response = realm.admin().users().create(alice);
+        response.close();
+
+        userCreated = true;
+    }
+
+    private void setupRequiredActionIfNeeded() {
+        if (requiredActionConfigured) {
+            return;
+        }
+
+        // Register the custom required action provider
+        RequiredActionProviderSimpleRepresentation requiredActionProvider = new RequiredActionProviderSimpleRepresentation();
+        requiredActionProvider.setProviderId("redirect-to-external-application");
+        requiredActionProvider.setName("Redirect to external application");
+        realm.admin().flows().registerRequiredAction(requiredActionProvider);
+
+        // Add the new required action to alice user
+        List<String> reqActions = Arrays.asList("redirect-to-external-application");
+        realm.admin().users().search("alice").forEach(u -> {
+            u.setRequiredActions(reqActions);
+            realm.admin().users().get(u.getId()).update(u);
+        });
+
+        // Enable unmanaged attributes of user profile
+        UserProfileResource userProfileRes = realm.admin().users().userProfile();
+        UPConfig cfg = userProfileRes.getConfiguration();
+        cfg.setUnmanagedAttributePolicy(UPConfig.UnmanagedAttributePolicy.ENABLED);
+        userProfileRes.update(cfg);
+
+        requiredActionConfigured = true;
+    }
+
+    public static class ServerConfig implements KeycloakServerConfig {
+
+        @Override
+        public KeycloakServerConfigBuilder configure(KeycloakServerConfigBuilder config) {
+            return config
+                    .dependencyCurrentProject()
+                    .spiOption("action-token-handler", "external-app-reqaction-notification", "hmac-secret", "aSqzP4reFgWR4j94BDT1r+81QYp/NYbY9SBwXtqV1ko=")
+                    .spiOption("required-action", "redirect-to-external-application", "external-application-url", "http://localhost:9080/action-token-responder-example/external-action.jsp?token={TOKEN}");
+        }
+    }
+
+    static class ActionTokenRealmConfig implements RealmConfig {
+
+        @Override
+        public RealmConfigBuilder configure(RealmConfigBuilder realmConfigBuilder) {
+            return realmConfigBuilder
+                    .name("quickstart-action-token")
+                    .sslRequired("external")
+                    .registrationAllowed(true);
+        }
     }
 }

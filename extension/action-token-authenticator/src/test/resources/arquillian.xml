@@ -20,8 +20,9 @@
                 the jbossHome property -->
             <configuration>
                 <property name="managementAddress">127.0.0.1</property>
-                <property name="managementPort">9990</property>
+                <property name="managementPort">10990</property>
                 <property name="jbossHome">${basedir}/target/wildfly-${version.wildfly}</property>
+                <property name="javaVmArguments">-Djboss.socket.binding.port-offset=1000 -Djboss.bind.address=127.0.0.1</property>
             </configuration>
         </container>
 

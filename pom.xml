@@ -74,8 +74,13 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <testframework.surefire.args>
+            -XX:+ExitOnOutOfMemoryError
+            -XX:+HeapDumpOnOutOfMemoryError
+            -Djava.util.logging.manager=org.jboss.logmanager.LogManager
+            -Djava.util.concurrent.ForkJoinPool.common.threadFactory=io.quarkus.bootstrap.forkjoin.QuarkusForkJoinWorkerThreadFactory
+        </testframework.surefire.args>
     </properties>
-
     <modules>
         <module>misc</module>
     </modules>
@@ -106,6 +111,31 @@
                 <groupId>org.keycloak</groupId>
                 <artifactId>keycloak-server-spi-private</artifactId>
                 <version>${version.keycloak}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.keycloak.testframework</groupId>
+                <artifactId>keycloak-test-framework-bom</artifactId>
+                <version>${version.keycloak}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.keycloak.testframework</groupId>
+                <artifactId>keycloak-test-framework-core</artifactId>
+                <version>${version.keycloak}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.keycloak.testframework</groupId>
+                <artifactId>keycloak-test-framework-ui</artifactId>
+                <version>${version.keycloak}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.keycloak.testframework</groupId>
+                <artifactId>keycloak-test-framework-oauth</artifactId>
+                <version>${version.keycloak}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

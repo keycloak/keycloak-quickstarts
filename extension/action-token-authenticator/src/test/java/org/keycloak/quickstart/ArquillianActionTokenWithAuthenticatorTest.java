@@ -19,90 +19,78 @@
 package org.keycloak.quickstart;
 
 import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.container.test.api.TargetsContainer;
 import org.jboss.arquillian.drone.api.annotation.Drone;
-import org.jboss.arquillian.graphene.page.Page;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
+import org.jboss.arquillian.junit5.ArquillianExtension;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.keycloak.Token;
 import org.keycloak.TokenCategory;
-import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.UserProfileResource;
 import org.keycloak.common.util.Base64;
 import org.keycloak.jose.jws.JWSInput;
 import org.keycloak.quickstart.actiontoken.authenticator.ExternalAppAuthenticator;
 import org.keycloak.quickstart.actiontoken.authenticator.ExternalAppAuthenticatorFactory;
-import org.keycloak.quickstart.test.FluentTestsHelper;
-import org.keycloak.quickstart.page.ExternalActionPage;
 import org.keycloak.representations.JsonWebToken;
-import org.keycloak.representations.idm.AuthenticationExecutionInfoRepresentation;
-import org.keycloak.representations.idm.RealmRepresentation;
-import org.keycloak.representations.idm.UserRepresentation;
-import org.keycloak.quickstart.test.page.LoginPage;
+import org.keycloak.representations.idm.*;
 import org.keycloak.representations.userprofile.config.UPConfig;
+import org.keycloak.testframework.annotations.InjectRealm;
+import org.keycloak.testframework.annotations.KeycloakIntegrationTest;
+import org.keycloak.testframework.oauth.OAuthClient;
+import org.keycloak.testframework.oauth.annotations.InjectOAuthClient;
+import org.keycloak.testframework.realm.ManagedRealm;
+import org.keycloak.testframework.realm.RealmConfig;
+import org.keycloak.testframework.realm.RealmConfigBuilder;
+import org.keycloak.testframework.server.KeycloakServerConfig;
+import org.keycloak.testframework.server.KeycloakServerConfigBuilder;
 import org.keycloak.util.JsonSerialization;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.FluentWait;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.support.ui.FluentWait;
 import static java.lang.String.format;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.hasEntry;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.startsWith;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.openqa.selenium.support.ui.ExpectedConditions.not;
 import static org.openqa.selenium.support.ui.ExpectedConditions.urlToBe;
 
-@RunWith(Arquillian.class)
+@ExtendWith(ArquillianExtension.class)
+@KeycloakIntegrationTest(config = ArquillianActionTokenWithAuthenticatorTest.ServerConfig.class)
 public class ArquillianActionTokenWithAuthenticatorTest {
 
     private static final String EXTERNAL_APP = "action-token-responder-example";
 
-    private static FluentTestsHelper fluentTestsHelper;
-    private static final String KEYCLOAK_URL_BASE = "http://localhost:8180";
+    private static final String KEYCLOAK_URL_BASE = "http://localhost:8080";
     private static final String KEYCLOAK_URL = KEYCLOAK_URL_BASE + "%s";
     private static final String REALM_QUICKSTART_ACTION_TOKEN = "quickstart-action-token";
 
     private static final String WEBAPP_SRC = "src/main/webapp";
 
-    @Page
-    private LoginPage loginPage;
-
-    @Page
-    private ExternalActionPage externalActionPage;
+    @InjectRealm(config = ArquillianActionTokenWithAuthenticatorTest.ActionTokenRealmConfig.class)
+    static ManagedRealm realm;
 
     @Drone
     private WebDriver webDriver;
 
-    @ArquillianResource
-    @OperateOnDeployment(EXTERNAL_APP)
-    private URL externalAppContextRoot;
+    @InjectOAuthClient
+    OAuthClient oAuthClient;
+
+    private static boolean authFlowConfigured = false;
+    private static boolean userCreated = false;
 
     @Deployment(testable=false, name=EXTERNAL_APP)
     @TargetsContainer("wildfly")
-    public static Archive<?> createTestArchive() throws IOException {
+    public static Archive<?> createTestArchive() {
         return ShrinkWrap.create(WebArchive.class, "action-token-responder-example.war")
           .setWebXML(new File(WEBAPP_SRC, "WEB-INF/web.xml"))
           .addAsWebInfResource(new File(WEBAPP_SRC, "WEB-INF/jboss-deployment-structure.xml"))
@@ -116,56 +104,7 @@ public class ArquillianActionTokenWithAuthenticatorTest {
           ;
     }
 
-    @BeforeClass
-    public static void setupClass() throws Exception {
-        // Import realm
-        fluentTestsHelper = new FluentTestsHelper(KEYCLOAK_URL_BASE,
-                FluentTestsHelper.DEFAULT_ADMIN_USERNAME,
-                FluentTestsHelper.DEFAULT_ADMIN_PASSWORD,
-                FluentTestsHelper.DEFAULT_ADMIN_REALM,
-                FluentTestsHelper.DEFAULT_ADMIN_CLIENT,
-                FluentTestsHelper.DEFAULT_ADMIN_REALM)
-                .init("/quickstart-realm.json");
-        final RealmResource qsRealm = fluentTestsHelper.getKeycloakInstance().realm(REALM_QUICKSTART_ACTION_TOKEN);
-
-        // Update authentication flow to use external application redirection
-        qsRealm.flows().copy("browser", Map.of("newName", "browser-copy")).close();
-        List<AuthenticationExecutionInfoRepresentation> executions = qsRealm.flows().getExecutions("browser-copy");
-
-        AuthenticationExecutionInfoRepresentation browserFormFlow = executions.stream()
-          .filter(ex -> Objects.equals(ex.getAuthenticationFlow(), Boolean.TRUE) && Objects.equals(ex.getDisplayName(), "browser-copy forms"))
-          .findFirst()
-          .orElseThrow(() -> new AssertionError("Could not find forms flow"));
-
-        qsRealm.flows().addExecution(browserFormFlow.getDisplayName(),
-                Map.of("provider", ExternalAppAuthenticatorFactory.ID)
-        );
-
-        executions = qsRealm.flows().getExecutions("browser-copy");
-        AuthenticationExecutionInfoRepresentation extAppExecution = executions.stream()
-          .filter(ex -> Objects.equals(ex.getProviderId(), ExternalAppAuthenticatorFactory.ID))
-          .findFirst()
-          .orElseThrow(() -> new AssertionError("Could not find execution"));
-        extAppExecution.setRequirement("REQUIRED");
-        qsRealm.flows().updateExecutions(browserFormFlow.getDisplayName(), extAppExecution);
-
-        final RealmRepresentation qsRealmRepresentation = qsRealm.toRepresentation();
-        qsRealmRepresentation.setBrowserFlow("browser-copy");
-        qsRealm.update(qsRealmRepresentation);
-
-        // Enable unmanaged attributes of user profile to be able to see the custom attributes
-        UserProfileResource userProfileRes = qsRealm.users().userProfile();
-        UPConfig cfg = userProfileRes.getConfiguration();
-        cfg.setUnmanagedAttributePolicy(UPConfig.UnmanagedAttributePolicy.ENABLED);
-        userProfileRes.update(cfg);
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-        fluentTestsHelper.deleteRealm(REALM_QUICKSTART_ACTION_TOKEN);
-    }
-
-    @Before
+    @BeforeEach
     public void setup() {
         webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
         webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -194,32 +133,151 @@ public class ArquillianActionTokenWithAuthenticatorTest {
 
     @Test
     public void testUserLogin() {
-        // Attempt to login as alice
-        loginPage.login("alice", fluentTestsHelper.changePassword("alice", REALM_QUICKSTART_ACTION_TOKEN));
+
+        createUserIfNeeded();
+        setupAuthenticationFlowIfNeeded();
+
+        oAuthClient.openLoginForm();
+
+        // Attempt to login as alice using WebDriver directly
+        webDriver.findElement(org.openqa.selenium.By.id("username")).sendKeys("alice");
+        webDriver.findElement(org.openqa.selenium.By.id("password")).sendKeys("password");
+        webDriver.findElement(org.openqa.selenium.By.id("kc-login")).click();
         waitForPageToLoad();
 
-        // Expect that the new required action has redirected user to the external application and fill in the form
-        assertThat(webDriver.getCurrentUrl(), startsWith(externalAppContextRoot.toString()));
-        externalActionPage.field1("abc def");
-        externalActionPage.field2("ghi jkl");
-        externalActionPage.submit();
+        // Expect that the authenticator has redirected user to the external application
+        String currentUrl = webDriver.getCurrentUrl();
+        assertTrue(currentUrl.contains("/action-token-responder-example/external-action.jsp"),
+                "Expected redirect to external app but was at: " + currentUrl);
+
+        // Set field values and submit using JavaScript to ensure proper form submission
+        org.openqa.selenium.JavascriptExecutor js = (org.openqa.selenium.JavascriptExecutor) webDriver;
+        js.executeScript(
+                "document.getElementsByName('field_1')[0].value = 'abc def';" +
+                        "document.getElementsByName('field_2')[0].value = 'ghi jkl';" +
+                        "document.querySelector('form').submit();"
+        );
+        waitForPageToLoad();
+        // Wait for the submit-back.jsp redirect to complete
+        try { Thread.sleep(2000); } catch (InterruptedException e) {}
         waitForPageToLoad();
 
         // Expect that the login has succeeded
-        assertThat(webDriver.getCurrentUrl(), containsString("/account"));
+        String finalUrl = webDriver.getCurrentUrl();
+        assertTrue(finalUrl.contains("/account"),
+                "Expected URL to contain '/account' but was: " + finalUrl);
 
         // Now check that the response from external application has been correctly handled by the custom action token handler
-        final RealmResource qsRealm = fluentTestsHelper.getKeycloakInstance().realm(REALM_QUICKSTART_ACTION_TOKEN);
-        List<UserRepresentation> aliceUsers = qsRealm.users().search("alice");
-        assertThat(aliceUsers, hasSize(1));
+        List<UserRepresentation> aliceUsers = realm.admin().users().search("alice");
+        assertEquals(1, aliceUsers.size());
         UserRepresentation alice = aliceUsers.get(0);
-        assertThat(alice, notNullValue());
-        assertThat(alice.getAttributes(), notNullValue());
-        assertThat(alice.getAttributes(), hasEntry(is(ExternalAppAuthenticator.DEFAULT_APPLICATION_ID + "." + "field_1"), contains("abc def")));
-        assertThat(alice.getAttributes(), hasEntry(is(ExternalAppAuthenticator.DEFAULT_APPLICATION_ID + "." + "field_2"), contains("ghi jkl")));
+        assertNotNull(alice);
+        assertNotNull(alice.getAttributes());
+        assertTrue(alice.getAttributes().containsKey(ExternalAppAuthenticator.DEFAULT_APPLICATION_ID + "." + "field_1"));
+        assertEquals(List.of("abc def"), alice.getAttributes().get(ExternalAppAuthenticator.DEFAULT_APPLICATION_ID + "." + "field_1"));
+        assertTrue(alice.getAttributes().containsKey(ExternalAppAuthenticator.DEFAULT_APPLICATION_ID + "." + "field_2"));
+        assertEquals(List.of("ghi jkl"), alice.getAttributes().get(ExternalAppAuthenticator.DEFAULT_APPLICATION_ID + "." + "field_2"));
     }
 
     private void navigateTo(String path) {
         webDriver.navigate().to(format(KEYCLOAK_URL, path));
     }
+
+
+    public static class ServerConfig implements KeycloakServerConfig {
+
+        @Override
+        public KeycloakServerConfigBuilder configure(KeycloakServerConfigBuilder config) {
+            return config
+                    .dependencyCurrentProject()
+                    .spiOption("action-token-handler", "external-app-notification", "hmac-secret", "aSqzP4reFgWR4j94BDT1r+81QYp/NYbY9SBwXtqV1ko=");
+        }
+    }
+
+    static class ActionTokenRealmConfig implements RealmConfig {
+
+        @Override
+        public RealmConfigBuilder configure(RealmConfigBuilder realmConfigBuilder) {
+            return realmConfigBuilder
+                    .name("quickstart-action-token")
+                    .sslRequired("external")
+                    .registrationAllowed(true);
+        }
+    }
+
+    private void createUserIfNeeded() {
+        if (userCreated) {
+            return;
+        }
+
+        UserRepresentation alice = new UserRepresentation();
+        alice.setUsername("alice");
+        alice.setEmail("alice@keycloak.org");
+        alice.setFirstName("Alice");
+        alice.setLastName("Liddel");
+        alice.setEnabled(true);
+
+        CredentialRepresentation credential = new CredentialRepresentation();
+        credential.setType(CredentialRepresentation.PASSWORD);
+        credential.setValue("password");
+        credential.setTemporary(false);
+        alice.setCredentials(List.of(credential));
+
+        jakarta.ws.rs.core.Response response = realm.admin().users().create(alice);
+        response.close();
+
+        userCreated = true;
+    }
+
+    private void setupAuthenticationFlowIfNeeded() {
+        if (authFlowConfigured) {
+            return;
+        }
+
+        // Update authentication flow to use external application redirection
+        realm.admin().flows().copy("browser", Map.of("newName", "browser-copy")).close();
+
+        // Add the authenticator to the TOP-LEVEL browser-copy flow, not the forms subflow
+        // This makes it execute AFTER authentication succeeds
+        realm.admin().flows().addExecution("browser-copy",
+                Map.of("provider", ExternalAppAuthenticatorFactory.ID)
+        );
+
+        // Get all executions from the TOP-LEVEL flow to find our newly added authenticator
+        List<AuthenticationExecutionInfoRepresentation> browserExecutions = realm.admin().flows().getExecutions("browser-copy");
+        AuthenticationExecutionInfoRepresentation extAppExecution = browserExecutions.stream()
+                .filter(ex -> Objects.equals(ex.getProviderId(), ExternalAppAuthenticatorFactory.ID))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("Could not find execution"));
+
+        // Set it to REQUIRED and update on the TOP-LEVEL flow
+        extAppExecution.setRequirement("REQUIRED");
+        realm.admin().flows().updateExecutions("browser-copy", extAppExecution);
+
+        // Configure the authenticator to use port 9080 for the external app (WildFly with port offset)
+        AuthenticatorConfigRepresentation config = new AuthenticatorConfigRepresentation();
+        config.setAlias("external-app-config");
+        config.setConfig(Map.of(
+                ExternalAppAuthenticatorFactory.CONFIG_APPLICATION_ID, ExternalAppAuthenticator.DEFAULT_APPLICATION_ID,
+                ExternalAppAuthenticatorFactory.CONFIG_EXTERNAL_APP_URL, "http://localhost:9080/action-token-responder-example/external-action.jsp?token={TOKEN}"
+        ));
+
+        jakarta.ws.rs.core.Response configResponse = realm.admin().flows().newExecutionConfig(extAppExecution.getId(), config);
+        assertEquals(201, configResponse.getStatus(), "Failed to create authenticator config");
+        configResponse.close();
+
+        // Set the new browser flow
+        RealmRepresentation realmRep = realm.admin().toRepresentation();
+        realmRep.setBrowserFlow("browser-copy");
+        realm.admin().update(realmRep);
+
+        // Enable unmanaged attributes of user profile
+        UserProfileResource userProfileRes = realm.admin().users().userProfile();
+        UPConfig cfg = userProfileRes.getConfiguration();
+        cfg.setUnmanagedAttributePolicy(UPConfig.UnmanagedAttributePolicy.ENABLED);
+        userProfileRes.update(cfg);
+
+        authFlowConfigured = true;
+    }
+
 }
