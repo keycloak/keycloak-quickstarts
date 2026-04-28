@@ -175,15 +175,16 @@ services:
 
 **Traefik health check:**
 
-Since Traefik operates at the TCP layer for TLS passthrough, it cannot perform a standard HTTPS health check.
-Instead, this setup uses a TCP-level send/expect check against Keycloak's management port (9000).
-Keycloak's management endpoint is configured to use plain HTTP (via `KC_HTTP_MANAGEMENT_SCHEME=http`) so that Traefik can parse the response without TLS.
+When Traefik is set up for TLS passthrough and TCP services, it currently does not support an HTTPS or HTTP based health check for those services.
+
+Making use of the available features, this setup uses a TCP-level send/expect check against Keycloak's management port (9000).
+As the Traefik's TCP check does not support TLS, Keycloak's management endpoint is configured to use plain HTTP (via `KC_HTTP_MANAGEMENT_SCHEME=http`) so that Traefik can parse the response.
 
 The check sends a raw `HEAD /health/ready HTTP/1.0` request and matches the expected HTTP response headers.
 This approach has known trade-offs:
 
 - **Fragile**: The `expect` string must match the full response headers exactly, including `content-type` charset. Any change to the Keycloak response format (e.g. a different charset) will break the check.
-- **No TLS**: The management port runs plain HTTP for this to work, which is acceptable since port 9000 is only on the internal `backend` network.
+- **No TLS**: The management port runs plain HTTP for this to work, which is acceptable since port 9000 is only accessible from the internal `backend` network.
 - **Alternatives considered**: A simple TCP connect check (no `send`/`expect`) would be less fragile but would not detect split-brain, database connectivity failures, or an overloaded node — it would only detect a dead process. Without a readiness probe, `KC_SERVER_ASYNC_BOOTSTRAP` would also need to be disabled, and graceful shutdown behaviour would need a different approach (manually removing the node before stopping it).
 
 > **Note:** Traefik does not yet support native HTTP health checks for TCP services. Track upstream support at [traefik/traefik#12606](https://github.com/traefik/traefik/pull/12606). Once that feature is available, the send/expect workaround can be replaced with a cleaner HTTP check.
