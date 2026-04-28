@@ -178,3 +178,33 @@ jobs:
         if: always()
         working-directory: proxy/haproxy/passthrough
         run: KC_HOST="$(hostname)" docker compose down
+
+  tests-traefik-passthrough:
+    name: Traefik Passthrough
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install docker compose
+        uses: docker/setup-compose-action@v2
+        with:
+          version: latest
+
+      - name: Generate TLS certificates
+        run: proxy/traefik/passthrough/generate-certs.sh "$(hostname)"
+
+      - name: Start services
+        working-directory: proxy/traefik/passthrough
+        run: KC_HOST="$(hostname)" docker compose up -d --quiet-pull --no-color --wait --wait-timeout 120
+
+      - name: Check services
+        run: docker ps -a
+
+      - name: Run proxy tests
+        run: proxy/test-proxy.sh "$(hostname)" proxy/traefik/passthrough/certs/cert.pem
+
+      - name: Stop services
+        if: always()
+        working-directory: proxy/traefik/passthrough
+        run: KC_HOST="$(hostname)" docker compose down
+
