@@ -15,7 +15,7 @@ The TLS connection is terminated by Keycloak itself, which means:
 
 ## Architecture
 
-![Architecture diagram](traefik.svg)
+![Architecture diagram](architecture-traefik.svg)
 
 - **Traefik** listens on port 8443 and forwards raw TCP traffic to both Keycloak instances using round-robin.
   It uses PROXY protocol v2 to pass the original client IP address to Keycloak.
