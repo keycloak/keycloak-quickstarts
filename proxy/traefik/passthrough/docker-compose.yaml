@@ -4,7 +4,7 @@ services:
     environment:
       POSTGRES_DB: keycloak
       POSTGRES_USER: keycloak
-      POSTGRES_PASSWORD: keycloak    
+      POSTGRES_PASSWORD: keycloak
     networks:
       - backend
     healthcheck:
@@ -33,7 +33,7 @@ services:
       KC_HTTP_MANAGEMENT_SCHEME: http
       KC_HOSTNAME: "${KC_HOST}"
       KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/certs/cert.pem
-      KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/certs/key.pem      
+      KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/certs/key.pem
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
       # Enable the access log to see as requests arrive on at Keycloak
@@ -41,7 +41,7 @@ services:
       # Misc
       KC_SHUTDOWN_DELAY: 30s
       KC_SHUTDOWN_TIMEOUT: 30s
-      KC_SPI_CACHE_EMBEDDED__DEFAULT__NODE_NAME: keycloak1      
+      KC_SPI_CACHE_EMBEDDED__DEFAULT__NODE_NAME: keycloak1
     volumes:
       - source: ./certs
         target: /opt/keycloak/certs
@@ -49,7 +49,6 @@ services:
         read_only: true
         bind:
           selinux: z
-
     depends_on:
       postgres:
         condition: service_healthy
@@ -96,7 +95,6 @@ services:
       postgres:
         condition: service_healthy
     networks:
-      - frontend
       - backend
 
   traefik:
@@ -128,4 +126,3 @@ networks:
   frontend:
   backend:
     internal: true
-

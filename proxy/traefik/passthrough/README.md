@@ -15,7 +15,7 @@ The TLS connection is terminated by Keycloak itself, which means:
 
 ## Architecture
 
-![Architecture diagram](traefikArchitechture.png)
+![Architecture diagram](traefikArchitechture.svg)
 
 - **Traefik** listens on port 8443 and forwards raw TCP traffic to both Keycloak instances using round-robin.
   It uses PROXY protocol v2 to pass the original client IP address to Keycloak.
@@ -67,7 +67,7 @@ This is expected and can be safely accepted for local testing.
 
 ### 4. Check Traefik dashboard
 
-Open http://127.0.0.1:8080/dashboard/ in a browser to verify that Traefik is running and both Keycloak backends are registered as TCP services
+Open http://127.0.0.1:8080/dashboard/ in a browser to verify that Traefik is running and both Keycloak backends are registered as TCP services.
 
 ### 5. Showcase graceful shutdown
 
@@ -80,7 +80,7 @@ This is a walkthrough through a graceful shutdown of one of the Keycloak instanc
    docker stop passthrough-keycloak1-1 -t 60
    ```
 3. Observe that Traefik detects the backend is unavailable and stops routing traffic to it. Requests are still served by the remaining node.
-   
+
 4. Start the Keycloak container again:
    ```bash
    docker start passthrough-keycloak1-1
@@ -118,8 +118,8 @@ Defines the entry point on port 8443 where Traefik accepts incoming TCP/TLS conn
 api:
   insecure: true
 ```
-- `insecure: true` exposes the Traefik dashboard without any authentication. This is intended for local development and debugging only and must never be used in production.
-Enables the Traefik dashboard on port 8080 without authentication (for local testing only). The dashboard is accessible at http://127.0.0.1:8080/dashboard/.
+
+Enables the Traefik dashboard on port 8080 without authentication. The dashboard is accessible at http://127.0.0.1:8080/dashboard/. This must never be used in production.
 
 ## keycloak.yaml — dynamic configuration:
 
@@ -136,72 +136,61 @@ tcp:
       tls:
         passthrough: true
 ```
-- `HostSNI(*)`matches all TLS connections regardless of the SNI hostname.
-- `priority: 100` ensures this router takes precedence over any other TCP routers that may be defined
+- `HostSNI(*)` matches all TLS connections regardless of the SNI hostname.
+- `priority: 100` ensures this router takes precedence over any other TCP routers that may be defined.
 - `tls.passthrough: true` instructs Traefik to forward the raw TLS stream without terminating it. Keycloak handles TLS termination.
 
 **Servers transport with PROXY protocol:**
 ```yaml
-       serversTransports:
-       kc-passthrough:
-         proxyProtocol:
-           version: 2
+serversTransports:
+  kc-passthrough:
+    proxyProtocol:
+      version: 2
 ```
 
-- Defines a named transport kc-passthrough that enables PROXY protocol v2 on all backend connections. This allows Keycloak to see the original client IP address and requires Keycloak to be configured with KC_PROXY_PROTOCOL_ENABLED=true.
+- Defines a named transport `kc-passthrough` that enables PROXY protocol v2 on all backend connections. This allows Keycloak to see the original client IP address and requires Keycloak to be configured with `KC_PROXY_PROTOCOL_ENABLED=true`.
 
-**Load balancer with proxy protocol:**
+**Load balancer with health check:**
 ```yaml
-     services:
-     keycloak-service:
-       loadBalancer:
-         serversTransport: kc-passthrough
-         healthCheck:
-           interval: "5s"
-           timeout: "3s"
-         servers:
-           - address: "keycloak1:8443"
-           - address: "keycloak2:8443"
+services:
+  keycloak-service:
+    loadBalancer:
+      serversTransport: kc-passthrough
+      # Use the JSON syntax to have explicit CR/LF encoding for send/expect.
+      healthCheck: {
+        interval: "5s",
+        timeout: "3s",
+        port: 9000,
+        send: "HEAD /health/ready HTTP/1.0\r\n\r\n",
+        expect: "HTTP/1.0 200 OK\r\ncontent-type: application/json; charset=UTF-8\r\ncache-control: no-store\r\n\r\n"
+      }
+      servers:
+        - address: "keycloak1:8443"
+        - address: "keycloak2:8443"
 ```
-- `serversTransport: kc-passthrough` links the load balancer to the transport defined above, enabling PROXY protocol v2 on all backend connections. This requires Keycloak to be configured with KC_PROXY_PROTOCOL_ENABLED=true.
-- Traffic is distributed across both Keycloak instances using round-robin.
 
-**Traefik health check :**
+- `serversTransport: kc-passthrough` links the load balancer to the transport defined above, enabling PROXY protocol v2 on all backend connections. This requires Keycloak to be configured with `KC_PROXY_PROTOCOL_ENABLED=true`.
+- Traffic is distributed across both Keycloak instances using round-robin.
+- Traefik checks each backend every 5s, marking a server as unhealthy if it does not respond within 3s. Unhealthy backends are automatically removed from the load balancer rotation and re-added once they recover.
 
 **Traefik health check:**
 
-Since Traefik operates at the TCP layer for TLS passthrough, it performs TCP-level health checks on each backend server.
+Since Traefik operates at the TCP layer for TLS passthrough, it cannot perform a standard HTTPS health check.
+Instead, this setup uses a TCP-level send/expect check against Keycloak's management port (9000).
+Keycloak's management endpoint is configured to use plain HTTP (via `KC_HTTP_MANAGEMENT_SCHEME=http`) so that Traefik can parse the response without TLS.
 
-```yaml
-        healthCheck:
-          interval: "5s"
-          timeout: "3s"
-```
+The check sends a raw `HEAD /health/ready HTTP/1.0` request and matches the expected HTTP response headers.
+This approach has known trade-offs:
 
-- Traefik checks each backend every 5s, marking a server as unhealthy if it does not respond within 3s. Unhealthy backends are automatically removed from the load balancer rotation and re-added once they recover
+- **Fragile**: The `expect` string must match the full response headers exactly, including `content-type` charset. Any change to the Keycloak response format (e.g. a different charset) will break the check.
+- **No TLS**: The management port runs plain HTTP for this to work, which is acceptable since port 9000 is only on the internal `backend` network.
+- **Alternatives considered**: A simple TCP connect check (no `send`/`expect`) would be less fragile but would not detect split-brain, database connectivity failures, or an overloaded node — it would only detect a dead process. Without a readiness probe, `KC_SERVER_ASYNC_BOOTSTRAP` would also need to be disabled, and graceful shutdown behaviour would need a different approach (manually removing the node before stopping it).
 
-**Server lines:**
-
-In the dynamic configuration, the servers and health parameters are defined within the TCP service:
-
-```yaml
-  services:
-    keycloak-service:
-      loadBalancer:
-        serversTransport: kc-passthrough
-        healthCheck:
-          interval: "5s"
-          timeout: "3s"
-        servers:
-          - address: "keycloak1:8443"
-          - address: "keycloak2:8443"
-```
-- Defines the two Keycloak backend servers. Traefik distributes incoming TCP connections across both instances using round-robin load balancing.
-
-- `docker run --rm --network passthrough_backend alpine nc -zv keycloak1 9000`  verify the management port is reachable within the internal Docker network (as seen in the nc test)
+> **Note:** Traefik does not yet support native HTTP health checks for TCP services. Track upstream support at [traefik/traefik#12606](https://github.com/traefik/traefik/pull/12606). Once that feature is available, the send/expect workaround can be replaced with a cleaner HTTP check.
 
 ## Resources
 
 - [Traefik TCP Health Check Documentation](https://doc.traefik.io/traefik/routing/services/#health-check_1)
 - [Traefik Proxy Protocol Configuration](https://doc.traefik.io/traefik/routing/services/#proxy-protocol)
 - [Keycloak Guide - Reverse Proxy Configuration](https://www.keycloak.org/server/reverseproxy)
+- [Upstream Traefik issue: HTTP health check for TCP services](https://github.com/traefik/traefik/pull/12606)
