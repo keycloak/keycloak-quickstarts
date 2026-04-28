@@ -37,7 +37,7 @@ KC_SPI_CACHE_EMBEDDED__DEFAULT__NODE_NAME: keycloak1
 KC_SPI_CACHE_EMBEDDED__DEFAULT__NODE_NAME: keycloak2
 ```
 
-Not all requests carry the `AUTH_SESSION_ID` cookie.
+Now all requests with the `AUTH_SESSION_ID` cookie have the node name as a suffix.
 For requests without it — such as the initial request before authentication starts, static resource loads, or API calls — the `use-server` conditions don't match and HAProxy falls back to `balance roundrobin`.
 
 ### Verifying Sticky Sessions
