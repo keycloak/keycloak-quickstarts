@@ -47,4 +47,12 @@ The log format includes the backend server name, so you can confirm that all req
 
 The HAProxy stats page is also available at `http://localhost:8404/stats` and shows per-server request counts and session information.
 
+### Drawbacks
+
+This approach requires a `use-server` directive for each Keycloak node.
+Adding a new node means adding a new `use-server` line to `haproxy.cfg` and reloading HAProxy to apply the change.
+
+The [HAProxy Runtime API](https://www.haproxy.com/documentation/haproxy-runtime-api/) cannot add or modify `use-server` rules — it supports adding servers and modifying ACLs, but not server switching rules.
+The [HAProxy Data Plane API](https://www.haproxy.com/documentation/haproxy-data-plane-api/) does support managing `use-server` directives via the `server_switching_rules` endpoint, but still requires a reload to apply changes.
+
 For more details, see the [Enabling sticky sessions](https://www.keycloak.org/server/reverseproxy#_enable_sticky_sessions) section in the Keycloak reverse proxy guide.
