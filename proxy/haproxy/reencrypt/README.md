@@ -144,8 +144,15 @@ This endpoint is only available when Keycloak is configured with `KC_HEALTH_ENAB
 
 **Sticky Sessions:**
 
+When using Keycloak with embedded caches, each authentication session and user session has a primary owner to store that information.
+To reduce the traffic between Keycloak nodes and to provide faster responses, route an incoming request for a session to a Keycloak node that is the primary owner of that session.
+This works for all browser based login flows, but not for requests of confidential clients for requests like a code-to-token or token refresh.
+If you do not configure this part, your setup will still work functionally correct and your setup will be simpler, while it will deliver slightly slower responses.
+
+For more details, see the [Enabling sticky sessions](https://www.keycloak.org/server/reverseproxy#_enable_sticky_sessions) section in the Keycloak reverse proxy guide.
+
 Keycloak creates an `AUTH_SESSION_ID` cookie with the format `<session-id>.<node-name>`.
-HAProxy uses this cookie to route subsequent requests to the Keycloak node that owns the session:
+HAProxy can use this cookie to route subsequent requests to the Keycloak node that owns the session:
 
 ```
 use-server keycloak1 if { req.cook(AUTH_SESSION_ID) -m end keycloak1 }
@@ -180,8 +187,6 @@ To verify sticky sessions are working, check the HAProxy access logs.
 The log format includes the backend server name, so you can confirm that all requests within an authentication flow (e.g., `/realms/master/protocol/openid-connect/`) are routed to the same server.
 
 The HAProxy stats page is also available at `http://localhost:8404/stats` and shows per-server request counts and session information.
-
-For more details, see the [Enabling sticky sessions](https://www.keycloak.org/server/reverseproxy#_enable_sticky_sessions) section in the Keycloak reverse proxy guide.
 
 **Server lines:**
 
