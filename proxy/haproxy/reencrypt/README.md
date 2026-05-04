@@ -122,7 +122,7 @@ http-request del-header x-forwarded-port
 http-request del-header x-forwarded-server
 ```
 
-THis configuration will drop `Forwarded` and `X-Forwarded-` HTTP headers on the proxy, preventing the client from providing misleading information to the backend server.
+This configuration will drop `Forwarded` and `X-Forwarded-` HTTP headers on the proxy, preventing the client from providing misleading information to the backend server.
 
 Note: If the `KC_PROXY_HEADERS` setting is set to `forwarded` (see below) Keycloak will only accept the standard `Forwarded` header and ignore any `X-Forwarded-` headers. In this case it is not strictly necessary to filter them on the proxy.
 
