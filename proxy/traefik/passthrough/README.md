@@ -189,6 +189,30 @@ This approach has known trade-offs:
 
 > **Note:** Traefik does not yet support native HTTP health checks for TCP services. Track upstream support at [traefik/traefik#12606](https://github.com/traefik/traefik/pull/12606). Once that feature is available, the send/expect workaround can be replaced with a cleaner HTTP check.
 
+## Observability
+
+Traefik exposes metrics that can be scraped by Prometheus and visualized in Grafana.
+
+**Prometheus Metrics:**
+
+```yaml
+metrics:
+  prometheus:
+    addEntryPointsLabels: true
+    addRoutersLabels: true
+    addServicesLabels: true
+```
+- `addEntryPointsLabels: true` ensures that metrics include the name of the entry point (e.g., websecure), which is vital for the "Connections per Entrypoint" dashboard panel.
+
+- `addRoutersLabels: true `and `addServicesLabels: true ` add specific labels for your TCP routers and backend services. This allows you to track traffic flow specifically to keycloak nodes.
+
+Traefik exposes metrics from at `http://127.0.0.1:8080/metrics`.
+
+The official Traefik Grafana dashboard (ID `17346`) can be imported from Grafana.com.
+
+Note that most panels show HTTP-level metrics which are not available in TLS passthrough mode —
+the **Connections per Entrypoint** panel is the most relevant for this setup.
+
 ## Resources
 
 - [Traefik TCP Health Check Documentation](https://doc.traefik.io/traefik/routing/services/#health-check_1)
