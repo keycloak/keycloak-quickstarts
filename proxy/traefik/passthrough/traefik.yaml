@@ -9,6 +9,12 @@ api:
 log:
   level: INFO
 
+metrics:
+  prometheus:
+    addEntryPointsLabels: true
+    addRoutersLabels: true
+    addServicesLabels: true
+
 providers:
   file:
     directory: "/mnt"
