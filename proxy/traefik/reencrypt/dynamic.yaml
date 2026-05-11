@@ -1,0 +1,48 @@
+tls:
+  certificates:
+    - certFile: /certs/traefik-external/cert.pem
+      keyFile: /certs/traefik-external/key.pem
+
+http:
+  middlewares:
+    keycloak-headers:
+      headers:
+        customRequestHeaders:
+          X-Forwarded-Proto: "https"
+
+
+  serversTransports:
+    keycloak-transport:
+      rootCAs:
+        - /certs/traefik/cert.pem
+
+  routers:
+    keycloak:
+      entryPoints:
+        - websecure
+      rule: "HostRegexp(`^.+$`)"
+      tls: {}
+      service: keycloak
+      middlewares:
+        - keycloak-headers
+
+  services:
+    keycloak:
+      loadBalancer:
+        sticky:
+          cookie:
+            name: AUTH_SESSION_ID
+
+        serversTransport: keycloak-transport
+
+        healthCheck:
+          path: /health/ready
+          # Ensure Keycloak is listening for health on this port/scheme
+          port: 9000
+          scheme: https
+          interval: "5s"
+          timeout: "3s"
+
+        servers:
+          - url: "https://keycloak1:8443"
+          - url: "https://keycloak2:8443"
