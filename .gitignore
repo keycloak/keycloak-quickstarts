@@ -3,6 +3,8 @@
 **/WEB-INF/keycloak.json
 *.orig
 
+.DS_Store
+
 # Intellij
 ###################
 .idea

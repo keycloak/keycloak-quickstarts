@@ -92,6 +92,7 @@ elif [ "$1" = "js" ]; then
   fi
 elif [ "$1" = "spring" ]; then
   run_tests spring
+elif [ "$1" = "device" ]; then
+  run_tests device
 fi
-
 print_failed_tests
