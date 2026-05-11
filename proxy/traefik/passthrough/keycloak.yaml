@@ -1,0 +1,31 @@
+tcp:
+  routers:
+    keycloak-router:
+      rule: "HostSNI(`*`)"
+      service: "keycloak-service"
+      priority: 100
+      entryPoints:
+        - "websecure"
+      tls:
+        passthrough: true  # Forward encrypted traffic as-is
+
+  serversTransports:
+    kc-passthrough:
+      proxyProtocol:
+        version: 2
+
+  services:
+    keycloak-service:
+      loadBalancer:
+        serversTransport: kc-passthrough
+        # Use the JSON syntax to have explicit CR/LF encoding for send/expect.
+        healthCheck: {
+          interval: "5s",
+          timeout: "3s",
+          port: 9000,
+          send: "HEAD /health/ready HTTP/1.0\r\n\r\n",
+          expect: "HTTP/1.0 200 OK\r\ncontent-type: application/json; charset=UTF-8\r\ncache-control: no-store\r\n\r\n"
+        }
+        servers:
+          - address: "keycloak1:8443"
+          - address: "keycloak2:8443"

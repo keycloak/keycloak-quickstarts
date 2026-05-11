@@ -1,0 +1,20 @@
+
+entryPoints:
+  websecure:
+    address: ":8443"
+api:
+  dashboard: true
+  insecure: true
+
+log:
+  level: INFO
+
+metrics:
+  prometheus:
+    addEntryPointsLabels: true
+    addRoutersLabels: true
+    addServicesLabels: true
+
+providers:
+  file:
+    directory: "/mnt"

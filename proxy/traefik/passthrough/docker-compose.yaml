@@ -1,0 +1,128 @@
+services:
+  postgres:
+    image: mirror.gcr.io/postgres:18
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: keycloak
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U keycloak"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  keycloak1:
+    image: quay.io/keycloak/keycloak:26.6
+    command: start
+    environment:
+      # DB
+      KC_DB: postgres
+      KC_DB_URL_HOST: postgres
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
+      # Metrics / Health
+      KC_METRICS_ENABLED: "true"
+      KC_EVENT_METRICS_USER_ENABLED: "true"
+      KC_EVENT_METRICS_USER_TAGS: "realm,idp,clientId"
+      KC_HEALTH_ENABLED: "true"
+      # Hostname / HTTPS
+      KC_PROXY_PROTOCOL_ENABLED: "true"
+      # Traefik can't run an HTTPS health check, so we downgrade to HTTP to do a TCP check
+      KC_HTTP_MANAGEMENT_SCHEME: http
+      KC_HOSTNAME: "${KC_HOST}"
+      KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/certs/cert.pem
+      KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/certs/key.pem
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      # Enable the access log to see as requests arrive on at Keycloak
+      KC_HTTP_ACCESS_LOG_ENABLED: "true"
+      # Misc
+      KC_SHUTDOWN_DELAY: 30s
+      KC_SHUTDOWN_TIMEOUT: 30s
+      KC_SPI_CACHE_EMBEDDED__DEFAULT__NODE_NAME: keycloak1
+    volumes:
+      - source: ./certs
+        target: /opt/keycloak/certs
+        type: bind
+        read_only: true
+        bind:
+          selinux: z
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - backend
+
+  keycloak2:
+    image: quay.io/keycloak/keycloak:26.6
+    command: start
+    environment:
+      # DB
+      KC_DB: postgres
+      KC_DB_URL_HOST: postgres
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
+      # Metrics / Health
+      KC_METRICS_ENABLED: "true"
+      KC_EVENT_METRICS_USER_ENABLED: "true"
+      KC_EVENT_METRICS_USER_TAGS: "realm,idp,clientId"
+      KC_HEALTH_ENABLED: "true"
+      # Hostname / HTTPS
+      KC_PROXY_PROTOCOL_ENABLED: "true"
+      # Traefik can't run an HTTPS health check, so we downgrade to HTTP to do a TCP check
+      KC_HTTP_MANAGEMENT_SCHEME: http
+      KC_HOSTNAME: "${KC_HOST}"
+      KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/certs/cert.pem
+      KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/certs/key.pem
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      # Enable the access log to see as requests arrive on at Keycloak
+      KC_HTTP_ACCESS_LOG_ENABLED: "true"
+      # Misc
+      KC_SHUTDOWN_DELAY: 30s
+      KC_SHUTDOWN_TIMEOUT: 30s
+      KC_SPI_CACHE_EMBEDDED__DEFAULT__NODE_NAME: keycloak2
+    volumes:
+      - source: ./certs
+        target: /opt/keycloak/certs
+        type: bind
+        read_only: true
+        bind:
+          selinux: z
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - backend
+
+  traefik:
+    image: mirror.gcr.io/traefik:v3.6
+    volumes:
+      - source: ./traefik.yaml
+        target: /etc/traefik/traefik.yaml
+        type: bind
+        read_only: true
+        bind:
+          selinux: z
+      - source: ./keycloak.yaml
+        target: /mnt/keycloak.yaml
+        type: bind
+        read_only: true
+        bind:
+          selinux: z
+    ports:
+      - "8443:8443"
+      - "8080:8080"
+    depends_on:
+      - keycloak1
+      - keycloak2
+    networks:
+      - frontend
+      - backend
+
+networks:
+  frontend:
+  backend:
+    internal: true

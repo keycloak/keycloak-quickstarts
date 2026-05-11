@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" version="1.1" viewBox="0 0 520 460" xmlns="http://www.w3.org/2000/svg">
+ <rect x="30" y="60" width="460" height="160" rx="12" fill="#e8f4fd" stroke="#90caf9" stroke-dasharray="6 3" stroke-width="1.5"/>
+ <text x="50" y="82" fill="#1565c0" font-size="11" font-weight="600">frontend network</text>
+ <rect x="30" y="240" width="460" height="190" rx="12" fill="#fce4ec" stroke="#ef9a9a" stroke-dasharray="6 3" stroke-width="1.5"/>
+ <text x="50" y="262" fill="#c62828" font-size="11" font-weight="600">backend network (internal)</text>
+ <rect x="195" y="4" width="130" height="36" rx="6" fill="#fff" stroke="#616161" stroke-width="1.5"/>
+ <text x="260" y="27" font-weight="600" text-anchor="middle">Client</text>
+ <line x1="260" x2="260" y1="40" y2="90" marker-end="url(#arrow)" stroke="#616161" stroke-width="1.5"/>
+ <text x="272" y="70" fill="#616161" font-size="11">:8443</text>
+ <rect x="175" y="90" width="170" height="44" rx="6" fill="#1565c0" stroke="#0d47a1" stroke-width="1.5"/>
+ <text x="260" y="117" fill="#ffffff" font-weight="600" text-anchor="middle">Traefik</text>
+ <line x1="220" x2="145" y1="134" y2="280" marker-end="url(#arrow)" stroke="#616161" stroke-width="1.5"/>
+ <text x="148" y="210" fill="#616161" font-size="11">TCP</text>
+ <line x1="300" x2="375" y1="134" y2="280" marker-end="url(#arrow)" stroke="#616161" stroke-width="1.5"/>
+ <text x="358" y="210" fill="#616161" font-size="11">TCP</text>
+ <rect x="65" y="280" width="160" height="44" rx="6" fill="#2e7d32" stroke="#1b5e20" stroke-width="1.5"/>
+ <text x="145" y="307" fill="#fff" font-weight="600" text-anchor="middle">Keycloak 1</text>
+ <rect x="295" y="280" width="160" height="44" rx="6" fill="#2e7d32" stroke="#1b5e20" stroke-width="1.5"/>
+ <text x="375" y="307" fill="#fff" font-weight="600" text-anchor="middle">Keycloak 2</text>
+ <g stroke-width="1.5">
+  <line x1="145" x2="220" y1="324" y2="370" marker-end="url(#arrow)" stroke="#616161"/>
+  <line x1="375" x2="300" y1="324" y2="370" marker-end="url(#arrow)" stroke="#616161"/>
+  <rect x="185" y="370" width="150" height="44" rx="6" fill="#ef6c00" stroke="#e65100"/>
+ </g>
+ <text x="260" y="397" fill="#fff" font-weight="600" text-anchor="middle">PostgreSQL</text>
+ <defs>
+  <marker id="arrow" markerHeight="7" markerWidth="7" orient="auto-start-reverse" refX="9" refY="5" viewBox="0 0 10 10">
+   <path d="m0 0 10 5-10 5z" fill="#616161"/>
+  </marker>
+ </defs>
+</svg>
