@@ -78,7 +78,6 @@
 
     <modules>
         <module>misc</module>
-        <module>device</module>
     </modules>
 
     <dependencyManagement>

@@ -178,3 +178,27 @@ jobs:
         if: always()
         working-directory: proxy/haproxy/passthrough
         run: KC_HOST="$(hostname)" docker compose down
+
+  tests-device:
+    name: Device
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: ${{ env.DEFAULT_JDK_DIST }}
+          java-version: ${{ env.DEFAULT_JDK_VERSION }}
+      - name: Update maven settings
+        run: mkdir -p ~/.m2 ; cp .github/maven-settings.xml ~/.m2/
+
+      - name: Cache Maven repo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.m2/repository
+            !~/.m2/repository/org/keycloak
+          key: cache-1-${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: cache-1-${{ runner.os }}-m2
+
+      - name: Run unit tests
+        run: .github/scripts/run-tests.sh device
