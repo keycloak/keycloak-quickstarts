@@ -170,6 +170,17 @@
             </modules>
         </profile>
         <profile>
+            <id>device</id>
+            <activation>
+                <property>
+                    <name>device</name>
+                </property>
+            </activation>
+            <modules>
+                <module>device</module>
+            </modules>
+        </profile>
+        <profile>
             <id>jakarta</id>
             <activation>
                 <property>
