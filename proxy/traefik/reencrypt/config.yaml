@@ -9,12 +9,16 @@ http:
       headers:
         customRequestHeaders:
           X-Forwarded-Proto: "https"
-
+          X-Forwarded-Port: "8443"
 
   serversTransports:
     keycloak-transport:
+      certificates:
+        - certFile: /certs/traefik-internal/cert.pem
+          keyFile: /certs/traefik-internal/key.pem
       rootCAs:
-        - /certs/traefik/cert.pem
+        - /certs/keycloak1-cert.pem
+        - /certs/keycloak2-cert.pem
 
   routers:
     keycloak:
@@ -29,20 +33,13 @@ http:
   services:
     keycloak:
       loadBalancer:
-        sticky:
-          cookie:
-            name: AUTH_SESSION_ID
-
         serversTransport: keycloak-transport
-
         healthCheck:
           path: /health/ready
-          # Ensure Keycloak is listening for health on this port/scheme
           port: 9000
           scheme: https
           interval: "5s"
           timeout: "3s"
-
         servers:
           - url: "https://keycloak1:8443"
           - url: "https://keycloak2:8443"

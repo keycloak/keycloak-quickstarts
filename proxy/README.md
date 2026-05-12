@@ -7,3 +7,4 @@ Examples about how to deploy Keycloak behind a reverse proxy.
 | HAProxy | [TLS Passthrough](haproxy/passthrough)  | Two clustered Keycloak instances behind HAProxy with TLS passthrough. |
 | HAProxy | [TLS Re-encrypt](haproxy/reencrypt)     | Two clustered Keycloak instances behind HAProxy with TLS re-encrypt.  |
 | Traefik | [TLS Passthrough](traefik/passthrough)  | Two clustered Keycloak instances behind Traefik with TLS passthrough. |
+| Traefik | [TLS Re-encrypt](traefik/reencrypt)     | Two clustered Keycloak instances behind Traefik with TLS re-encrypt.  |

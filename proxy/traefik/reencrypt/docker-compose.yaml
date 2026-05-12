@@ -55,14 +55,6 @@ services:
         read_only: true
         bind:
           selinux: z
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.keycloak.rule=Host(`${KC_HOST}`)"
-      - "traefik.http.routers.keycloak.entrypoints=websecure"
-      - "traefik.http.routers.keycloak.tls=true"
-      - "traefik.http.services.keycloak.loadbalancer.server.port=8443"
-      - "traefik.http.services.keycloak.loadbalancer.server.scheme=https"
-      - "traefik.http.services.keycloak.loadbalancer.serversTransport=keycloak-transport"
     depends_on:
       postgres:
         condition: service_healthy
@@ -111,14 +103,6 @@ services:
         read_only: true
         bind:
           selinux: z
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.keycloak.rule=Host(`${KC_HOST}`)"
-      - "traefik.http.routers.keycloak.entrypoints=websecure"
-      - "traefik.http.routers.keycloak.tls=true"
-      - "traefik.http.services.keycloak.loadbalancer.server.port=8443"
-      - "traefik.http.services.keycloak.loadbalancer.server.scheme=https"
-      - "traefik.http.services.keycloak.loadbalancer.serversTransport=keycloak-transport"
     depends_on:
       postgres:
         condition: service_healthy
@@ -126,7 +110,7 @@ services:
       - backend
 
   traefik:
-    image: mirror.gcr.io/traefik:v2.11
+    image: mirror.gcr.io/traefik:v3.6
     environment:
       - DOCKER_API_VERSION=1.54
     command:
@@ -135,7 +119,7 @@ services:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--providers.docker.endpoint=unix:///var/run/docker.sock"
-      - "--providers.file.filename=/etc/traefik/dynamic.yaml"
+      - "--providers.file.filename=/etc/traefik/config.yaml"
       - "--entrypoints.websecure.address=:8443"
     volumes:
       - source: /var/run/docker.sock
@@ -178,8 +162,8 @@ services:
         read_only: true
         bind:
           selinux: z
-      - source: ./dynamic.yaml
-        target: /etc/traefik/dynamic.yaml
+      - source: ./config.yaml
+        target: /etc/traefik/config.yaml
         type: bind
         read_only: true
         bind:

@@ -15,7 +15,7 @@ Traefik operates at the HTTP layer (Layer 7) and has a direct access to the HTTP
 
 ## Architecture
 
-![Architecture diagram](architecture.svg)
+![Architecture diagram](architech.svg)
 
 - **Traefik** listens on port 8443, terminates the incoming HTTPS connections and reencrypts the requests before forwarding them to Keycloak instances.
   It uses the `X-Forwarded-*` HTTP headers to pass the original client IP address to Keycloak.
@@ -92,7 +92,9 @@ docker compose down
 
 ## Traefik configuration
 
-The key parts of `dynamic.yaml` are explained below.
+The key parts of `config.yaml` are explained below. The `config.yaml` file contains the
+dynamic configuration — routing rules, TLS certificates, middlewares and
+backend transport settings.
 
 **Certificate for external access:**
 
@@ -139,42 +141,6 @@ healthCheck:
 Traefik performs health checks against Keycloak's management endpoint `/health/ready`, expecting an HTTP 200 response.
 This endpoint is only available when Keycloak is configured with `KC_HEALTH_ENABLED=true` and `KC_METRICS_ENABLED=true`.
 
-**Sticky Sessions:**
-
-When using Keycloak with embedded caches, each authentication session and user session has a primary owner to store that information.
-To reduce the traffic between Keycloak nodes and to provide faster responses, route an incoming request for a session to a Keycloak node that is the primary owner of that session.
-This works for all browser based login flows, but not for requests of confidential clients for requests like a code-to-token or token refresh.
-If you do not configure this part, your setup will still work functionally correct and your setup will be simpler, while it will deliver slightly slower responses.
-
-For more details, see the [Enabling sticky sessions](https://www.keycloak.org/server/reverseproxy#_enable_sticky_sessions) section in the Keycloak reverse proxy guide.
-
-Keycloak creates an `AUTH_SESSION_ID` cookie with the format `<session-id>.<node-name>`.
-Traefik can use this cookie to route subsequent requests to the Keycloak node that owns the session:
-
-```yaml
-sticky:
-  cookie:
-    name: AUTH_SESSION_ID
-```
-
-For this to work, each Keycloak instance must have a stable and predictable node name that matches the sticky cookie value.
-By default, Keycloak generates a random node identifier on startup, which would not match.
-Setting `KC_SPI_CACHE_EMBEDDED__DEFAULT__NODE_NAME` overrides this with a fixed value:
-
-```yaml
-# In docker-compose.yaml
-# keycloak1 service
-KC_SPI_CACHE_EMBEDDED__DEFAULT__NODE_NAME: keycloak1
-# keycloak2 service
-KC_SPI_CACHE_EMBEDDED__DEFAULT__NODE_NAME: keycloak2
-```
-
-Now all requests with the `AUTH_SESSION_ID` cookie have the node name as a suffix.
-For requests without it — such as the initial request before authentication starts, static resource loads, or API calls — the sticky cookie condition does not match and Traefik falls back to round-robin load balancing.
-
-Unlike HAProxy, Traefik's sticky session implementation does not require a separate directive per Keycloak node.
-Adding a new node only requires adding a new server entry in `dynamic.yaml` — no additional sticky session configuration is needed.
-
 **mTLS to Keycloak (serversTransport):**
 
 ```yaml
@@ -204,7 +170,7 @@ For this reason, Keycloak is configured with `KC_SHUTDOWN_DELAY=30s` and
 **Configure accepted proxy headers:**
 
 ```
-KC_PROXY_HEADERS: forwarded
+KC_PROXY_HEADERS: xforwarded
 ```
 
 Keycloak will accept the `X-Forwarded-*` HTTP headers that Traefik adds automatically
@@ -222,10 +188,13 @@ In this case the only provided certificate is for authenticating Traefik on the 
 **Configure mTLS:**
 
 ```
+KC_HTTPS_TRUST_STORE_FILE: /opt/keycloak/conf/https-truststore/traefik-internal-cert.pem
 KC_HTTPS_MANAGEMENT_CLIENT_AUTH: none
 ```
 
-Keycloak will require client authentication via certificates provided in the truststore. In this case the only provided certificate is for authenticating HAProxy on the internal network.
+This setting disables the client authentication requirement for the management endpoint.
+Health checks from Traefik reach Keycloak on the management port (9000) without needing
+to present a client certificate.
 
 ```
 KC_HTTPS_MANAGEMENT_CLIENT_AUTH: none
