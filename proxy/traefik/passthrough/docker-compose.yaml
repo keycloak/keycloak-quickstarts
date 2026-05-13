@@ -100,8 +100,8 @@ services:
   traefik:
     image: mirror.gcr.io/traefik:v3.6
     volumes:
-      - source: ./config.yaml
-        target: /etc/traefik/config.yaml
+      - source: ./traefik.yaml
+        target: /etc/traefik/traefik.yaml
         type: bind
         read_only: true
         bind:

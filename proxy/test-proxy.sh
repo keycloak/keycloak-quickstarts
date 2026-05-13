@@ -11,13 +11,13 @@ HOSTNAME="$1"
 CACERT="$2"
 BASE_URL="https://${HOSTNAME}:8443"
 
-# Poll until Keycloak admin console is ready (timeout after 120s)
+# Poll until Keycloak admin console is ready (timeout after 60s)
 echo "Waiting for Keycloak at ${BASE_URL}/admin/master/console/ ..."
 ELAPSED=0
 until curl --silent --cacert "$CACERT" --output /dev/null --write-out '%{http_code}' \
     "${BASE_URL}/admin/master/console/" | grep -q '^200$'; do
-    if [ "$ELAPSED" -ge 120 ]; then
-        echo "Timed out waiting for Keycloak after 120s."
+    if [ "$ELAPSED" -ge 60 ]; then
+        echo "Timed out waiting for Keycloak after 60s."
         exit 1
     fi
     echo "  not ready, retrying in 5s..."
