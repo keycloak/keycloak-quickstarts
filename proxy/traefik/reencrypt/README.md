@@ -15,7 +15,7 @@ Traefik operates at the HTTP layer (Layer 7) and has a direct access to the HTTP
 
 ## Architecture
 
-![Architecture diagram](architech.svg)
+![Architecture diagram](architecture.svg)
 
 - **Traefik** listens on port 8443, terminates the incoming HTTPS connections and reencrypts the requests before forwarding them to Keycloak instances.
   It uses the `X-Forwarded-*` HTTP headers to pass the original client IP address to Keycloak.
@@ -93,8 +93,7 @@ docker compose down
 ## Traefik configuration
 
 The key parts of `keycloak.yaml` are explained below. The `keycloak.yaml` file contains the
-dynamic configuration — routing rules, TLS certificates, middlewares and
-backend transport settings.
+dynamic configuration — routing rules, TLS certificates and backend transport settings.
 
 **Certificate for external access:**
 
@@ -105,29 +104,9 @@ tls:
       keyFile: /certs/traefik-external/key.pem
 ```
 
-Traefik will use this certificate to authenticate itself to the browser .
+Traefik will use this certificate to authenticate itself to the browser.
 This is the certificate the client sees when connecting to Traefik on port 8443.
 It is separate from the internal certificate used for mTLS between Traefik and Keycloak.
-
-**Strip the `Forwarded` and `X-Forwarded-` headers:**
-
-```yaml
-middlewares:
-  keycloak-headers:
-    headers:
-      customRequestHeaders:
-        Forwarded: ""
-        X-Forwarded-For: ""
-        X-Forwarded-Proto: ""
-        X-Forwarded-Host: ""
-        X-Forwarded-Port: ""
-        X-Forwarded-Server: ""
-```
-
-This configuration drops all incoming `Forwarded` and `X-Forwarded-*` HTTP headers,
-preventing the client from providing misleading information to the backend server.
-After stripping, Traefik automatically adds its own `X-Forwarded-For`, `X-Forwarded-Proto`
-and `X-Forwarded-Host` headers with the actual connection information.
 
 **HTTP health check on the management port:**
 
@@ -135,13 +114,16 @@ and `X-Forwarded-Host` headers with the actual connection information.
 healthCheck:
   path: /health/ready
   port: 9000
-  scheme: https
+  scheme: http
   interval: "5s"
   timeout: "3s"
 ```
 
 Traefik performs health checks against Keycloak's management endpoint `/health/ready`, expecting an HTTP 200 response.
 This endpoint is only available when Keycloak is configured with `KC_HEALTH_ENABLED=true` and `KC_METRICS_ENABLED=true`.
+
+Note: The management port uses HTTP (`KC_HTTP_MANAGEMENT_SCHEME: http`) so that Traefik can
+perform health checks without needing to present a client certificate on port 9000.
 
 **mTLS to Keycloak (serversTransport):**
 
@@ -154,18 +136,20 @@ serversTransports:
     rootCAs:
       - /certs/keycloak1-cert.pem
       - /certs/keycloak2-cert.pem
-    dialTimeout: "5s"
 ```
 
 - `certificates` configures the certificate Traefik presents to Keycloak during the mTLS handshake.
 - `rootCAs` configures the certificates used to verify Keycloak's identity.
-- `dialTimeout` sets the connection timeout to Keycloak.
 
 **Graceful shutdown timing:**
 
 Health checks poll every 5 seconds. It may take up to 5 seconds for Traefik to detect that a Keycloak instance is down.
 For this reason, Keycloak is configured with `KC_SHUTDOWN_DELAY=30s` and
 `KC_SHUTDOWN_TIMEOUT=30s`, giving Traefik enough time to detect the shutdown and allowing existing client connections to drain gracefully.
+
+Note: Although a longer shutdown delay is typically associated with TLS passthrough setups,
+it is also recommended for TLS re-encrypt to ensure in-flight requests complete before the
+Keycloak instance stops accepting new connections.
 
 ## Keycloak configuration
 
@@ -174,18 +158,15 @@ For this reason, Keycloak is configured with `KC_SHUTDOWN_DELAY=30s` and
 ```
 KC_PROXY_HEADERS: xforwarded
 ```
-
-Keycloak will accept the `X-Forwarded-*` HTTP headers that Traefik adds automatically
-after stripping the incoming forwarding headers.
+Keycloak will accept the `X-Forwarded-*` HTTP headers that Traefik adds automatically.
 
 **Configure the certificate and private key for HTTPS:**
 
 ```
-KC_HTTPS_CLIENT_AUTH: required
-KC_HTTPS_TRUST_STORE_FILE: /opt/keycloak/conf/https-truststore/traefik-internal-cert.pem    
+KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/certs/cert.pem
+KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/certs/key.pem  
 ```
-Keycloak will require client authentication via certificates provided in the truststore.
-In this case the only provided certificate is for authenticating Traefik on the internal network.
+The certificate is used by Traefik to verify Keycloak's identity during the TLS handshake.
 
 **Configure mTLS:**
 
@@ -194,9 +175,20 @@ KC_HTTPS_CLIENT_AUTH: required
 KC_HTTPS_TRUST_STORE_FILE: /opt/keycloak/conf/https-truststore/traefik-internal-cert.pem
 ```
 
-Mutual TLS (mtls) is enabled by requiring Keycloak to authenticate the connecting clients.
-`KC_HTTPS_CLIENT_AUTH: required` enforces that any client connecting to Keycloak on port 8443 must present a valid certificate.
-`KC_HTTPS_TRUST_STORE_FILE` specifies the truststore containing the  only certificate that Keycloak will accept for client authentication, which is the certificate used by Traefik on the internal network.
+Mutual TLS (mTLS) is enabled by requiring Keycloak to authenticate the connecting client.
+`KC_HTTPS_CLIENT_AUTH: required` enforces that any client connecting to Keycloak on port 8443
+must present a valid certificate. `KC_HTTPS_TRUST_STORE_FILE` specifies the truststore
+containing the only accepted certificate — Traefik's internal certificate — ensuring that
+only Traefik can establish a connection to Keycloak on the backend network.
+
+```
+KC_HTTPS_MANAGEMENT_CLIENT_AUTH: none
+```
+This setting disables the mTLS requirement for the management endpoint (port 9000).
+While the main HTTPS port (8443) requires Traefik to present its `traefik-internal` certificate,
+the management port is used exclusively for health checks and does not need mutual authentication.
+This allows Traefik to perform health checks against `/health/ready` without needing to present
+a client certificate on every poll.
 
 ## Resources
 

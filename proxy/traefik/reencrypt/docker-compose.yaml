@@ -29,21 +29,20 @@ services:
       KC_HEALTH_ENABLED: "true"
       # Hostname / HTTPS
       KC_PROXY_HEADERS: xforwarded
-      KC_HOSTNAME: "${KC_HOST}"
+      KC_HOSTNAME: "https://${KC_HOST}:8443"
+      KC_HOSTNAME_ADMIN: "https://${KC_HOST}:8443"
       KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/certs/cert.pem
       KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/certs/key.pem
       KC_HTTPS_CLIENT_AUTH: required
       KC_HTTPS_TRUST_STORE_FILE: /opt/keycloak/conf/https-truststore/traefik-internal-cert.pem
       KC_HTTPS_MANAGEMENT_CLIENT_AUTH: none
+      KC_HTTP_MANAGEMENT_SCHEME: http
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
       KC_HTTP_ACCESS_LOG_ENABLED: "true"
-      KC_HTTP_MANAGEMENT_SCHEME: http
-
       # Misc
       KC_SHUTDOWN_DELAY: 30s
       KC_SHUTDOWN_TIMEOUT: 30s
-      KC_SPI_CACHE_EMBEDDED__DEFAULT__NODE_NAME: keycloak1
     volumes:
       - source: ./certs/keycloak1
         target: /opt/keycloak/certs
@@ -79,21 +78,20 @@ services:
       KC_HEALTH_ENABLED: "true"
       # Hostname / HTTPS
       KC_PROXY_HEADERS: xforwarded
-      KC_HOSTNAME: "${KC_HOST}"
+      KC_HOSTNAME: "https://${KC_HOST}:8443"
+      KC_HOSTNAME_ADMIN: "https://${KC_HOST}:8443"
       KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/certs/cert.pem
       KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/certs/key.pem
       KC_HTTPS_CLIENT_AUTH: required
       KC_HTTPS_TRUST_STORE_FILE: /opt/keycloak/conf/https-truststore/traefik-internal-cert.pem
       KC_HTTPS_MANAGEMENT_CLIENT_AUTH: none
+      KC_HTTP_MANAGEMENT_SCHEME: http
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
       KC_HTTP_ACCESS_LOG_ENABLED: "true"
-      KC_HTTP_MANAGEMENT_SCHEME: http
-
       # Misc
       KC_SHUTDOWN_DELAY: 30s
       KC_SHUTDOWN_TIMEOUT: 30s
-      KC_SPI_CACHE_EMBEDDED__DEFAULT__NODE_NAME: keycloak2
     volumes:
       - source: ./certs/keycloak2
         target: /opt/keycloak/certs
