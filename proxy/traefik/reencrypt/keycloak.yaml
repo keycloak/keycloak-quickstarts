@@ -4,13 +4,6 @@ tls:
       keyFile: /certs/traefik-external/key.pem
 
 http:
-  middlewares:
-    keycloak-headers:
-      headers:
-        customRequestHeaders:
-          X-Forwarded-Proto: "https"
-          X-Forwarded-Port: "8443"
-
   serversTransports:
     keycloak-transport:
       certificates:
@@ -24,11 +17,9 @@ http:
     keycloak:
       entryPoints:
         - websecure
-      rule: "HostRegexp(`^.+$`)"
+      rule: "PathPrefix(`/`)"
       tls: {}
       service: keycloak
-      middlewares:
-        - keycloak-headers
 
   services:
     keycloak:
@@ -37,7 +28,7 @@ http:
         healthCheck:
           path: /health/ready
           port: 9000
-          scheme: https
+          scheme: http
           interval: "5s"
           timeout: "3s"
         servers:

@@ -38,6 +38,8 @@ services:
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
       KC_HTTP_ACCESS_LOG_ENABLED: "true"
+      KC_HTTP_MANAGEMENT_SCHEME: http
+
       # Misc
       KC_SHUTDOWN_DELAY: 30s
       KC_SHUTDOWN_TIMEOUT: 30s
@@ -86,6 +88,8 @@ services:
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
       KC_HTTP_ACCESS_LOG_ENABLED: "true"
+      KC_HTTP_MANAGEMENT_SCHEME: http
+
       # Misc
       KC_SHUTDOWN_DELAY: 30s
       KC_SHUTDOWN_TIMEOUT: 30s
@@ -111,21 +115,19 @@ services:
 
   traefik:
     image: mirror.gcr.io/traefik:v3.6
-    environment:
-      - DOCKER_API_VERSION=1.54
-    command:
-      - "--api.dashboard=true"
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--providers.docker.endpoint=unix:///var/run/docker.sock"
-      - "--providers.file.filename=/etc/traefik/config.yaml"
-      - "--entrypoints.websecure.address=:8443"
     volumes:
-      - source: /var/run/docker.sock
-        target: /var/run/docker.sock
+      - source: ./traefik.yaml
+        target: /etc/traefik/traefik.yaml
         type: bind
         read_only: true
+        bind:
+          selinux: z
+      - source: ./keycloak.yaml
+        target: /mnt/keycloak.yaml
+        type: bind
+        read_only: true
+        bind:
+          selinux: z
       - source: ./certs/traefik-external/cert.pem
         target: /certs/traefik-external/cert.pem
         type: bind
@@ -158,12 +160,6 @@ services:
           selinux: z
       - source: ./certs/keycloak2/cert.pem
         target: /certs/keycloak2-cert.pem
-        type: bind
-        read_only: true
-        bind:
-          selinux: z
-      - source: ./config.yaml
-        target: /etc/traefik/config.yaml
         type: bind
         read_only: true
         bind:

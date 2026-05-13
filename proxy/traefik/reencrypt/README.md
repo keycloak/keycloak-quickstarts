@@ -92,7 +92,7 @@ docker compose down
 
 ## Traefik configuration
 
-The key parts of `config.yaml` are explained below. The `config.yaml` file contains the
+The key parts of `keycloak.yaml` are explained below. The `keycloak.yaml` file contains the
 dynamic configuration — routing rules, TLS certificates, middlewares and
 backend transport settings.
 
@@ -105,7 +105,9 @@ tls:
       keyFile: /certs/traefik-external/key.pem
 ```
 
-Traefik will use this certificate to authenticate itself to the client.
+Traefik will use this certificate to authenticate itself to the browser .
+This is the certificate the client sees when connecting to Traefik on port 8443.
+It is separate from the internal certificate used for mTLS between Traefik and Keycloak.
 
 **Strip the `Forwarded` and `X-Forwarded-` headers:**
 
@@ -188,19 +190,13 @@ In this case the only provided certificate is for authenticating Traefik on the 
 **Configure mTLS:**
 
 ```
+KC_HTTPS_CLIENT_AUTH: required
 KC_HTTPS_TRUST_STORE_FILE: /opt/keycloak/conf/https-truststore/traefik-internal-cert.pem
-KC_HTTPS_MANAGEMENT_CLIENT_AUTH: none
 ```
 
-This setting disables the client authentication requirement for the management endpoint.
-Health checks from Traefik reach Keycloak on the management port (9000) without needing
-to present a client certificate.
-
-```
-KC_HTTPS_MANAGEMENT_CLIENT_AUTH: none
-```
-
-This setting disables the client authentication requirement for the management endpoint.
+Mutual TLS (mtls) is enabled by requiring Keycloak to authenticate the connecting clients.
+`KC_HTTPS_CLIENT_AUTH: required` enforces that any client connecting to Keycloak on port 8443 must present a valid certificate.
+`KC_HTTPS_TRUST_STORE_FILE` specifies the truststore containing the  only certificate that Keycloak will accept for client authentication, which is the certificate used by Traefik on the internal network.
 
 ## Resources
 
