@@ -6,7 +6,7 @@ It demonstrates how to configure Traefik as a TLS re-encrypt load balancer in fr
 ## What is TLS re-encrypt?
 
 In TLS re-encrypt mode, the load balancer decrypts the incoming HTTPS connection and establishes a new HTTPS connection to the backend service.
-Traefik operates at the HTTP layer (Layer 7) and has a direct access to the HTTP content.
+Traefik operates at the HTTP layer (Layer 7) and has direct access to the HTTP content.
 
 - Traefik can inspect, modify, and cache HTTP headers and the request body. The end-to-end encryption between the client and Keycloak is _not preserved._
 - Traefik holds a TLS certificate and a private key used to authenticate itself to the client.
@@ -76,8 +76,10 @@ This is a walkthrough through a graceful shutdown of one of the Keycloak instanc
 ```bash
    docker compose stop keycloak1 -t 60
 ```
+
 3. Observe that after 5 seconds the `keycloak1` backend is marked as unhealthy in the Traefik dashboard.
-   Requests are still served by the node until it shuts down gracefully after 30 seconds.
+   New requests are routed to `keycloak2`, while `keycloak1` continues serving existing connections during its 30-second graceful shutdown.
+
 4. Start the Keycloak container again:
 ```bash
    docker compose start keycloak1
@@ -93,8 +95,7 @@ docker compose down
 ## Traefik configuration
 
 The key parts of `keycloak.yaml` are explained below. The `keycloak.yaml` file contains the
-dynamic configuration — routing rules, TLS certificates and backend transport settings.
-
+dynamic configuration — routing rules, TLS certificates, and backend transport settings.
 **Certificate for external access:**
 
 ```yaml
@@ -114,16 +115,13 @@ It is separate from the internal certificate used for mTLS between Traefik and K
 healthCheck:
   path: /health/ready
   port: 9000
-  scheme: http
+  scheme: https
   interval: "5s"
   timeout: "3s"
 ```
 
-Traefik performs health checks against Keycloak's management endpoint `/health/ready`, expecting an HTTP 200 response.
-This endpoint is only available when Keycloak is configured with `KC_HEALTH_ENABLED=true` and `KC_METRICS_ENABLED=true`.
-
-Note: The management port uses HTTP (`KC_HTTP_MANAGEMENT_SCHEME: http`) so that Traefik can
-perform health checks without needing to present a client certificate on port 9000.
+Traefik performs health checks against Keycloak's management endpoint `/health/ready` on port 9000, expecting an HTTP 200 response.
+This endpoint is available when Keycloak is configured with `KC_HEALTH_ENABLED=true`.
 
 **mTLS to Keycloak (serversTransport):**
 
@@ -166,7 +164,7 @@ Keycloak will accept the `X-Forwarded-*` HTTP headers that Traefik adds automati
 KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/certs/cert.pem
 KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/certs/key.pem  
 ```
-The certificate is used by Traefik to verify Keycloak's identity during the TLS handshake.
+Keycloak uses this certificate to identify itself to Traefik during the TLS handshake.
 
 **Configure mTLS:**
 
@@ -175,20 +173,16 @@ KC_HTTPS_CLIENT_AUTH: required
 KC_HTTPS_TRUST_STORE_FILE: /opt/keycloak/conf/https-truststore/traefik-internal-cert.pem
 ```
 
-Mutual TLS (mTLS) is enabled by requiring Keycloak to authenticate the connecting client.
-`KC_HTTPS_CLIENT_AUTH: required` enforces that any client connecting to Keycloak on port 8443
-must present a valid certificate. `KC_HTTPS_TRUST_STORE_FILE` specifies the truststore
-containing the only accepted certificate — Traefik's internal certificate — ensuring that
-only Traefik can establish a connection to Keycloak on the backend network.
+Mutual TLS (mTLS) requires Keycloak to authenticate the connecting client.
+`KC_HTTPS_CLIENT_AUTH: required` enforces that any client connecting to Keycloak on port 8443 must present a valid certificate.
+`KC_HTTPS_TRUST_STORE_FILE` specifies the truststore containing the only accepted certificate, ensuring that only Traefik can connect to Keycloak on the backend network.
 
 ```
 KC_HTTPS_MANAGEMENT_CLIENT_AUTH: none
 ```
-This setting disables the mTLS requirement for the management endpoint (port 9000).
+This setting disables client certificate authentication on the management endpoint (port 9000).
 While the main HTTPS port (8443) requires Traefik to present its `traefik-internal` certificate,
 the management port is used exclusively for health checks and does not need mutual authentication.
-This allows Traefik to perform health checks against `/health/ready` without needing to present
-a client certificate on every poll.
 
 ## Resources
 

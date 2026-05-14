@@ -28,7 +28,7 @@ http:
         healthCheck:
           path: /health/ready
           port: 9000
-          scheme: http
+          scheme: https
           interval: "5s"
           timeout: "3s"
         servers:
