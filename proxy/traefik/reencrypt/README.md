@@ -96,6 +96,7 @@ docker compose down
 
 The key parts of `keycloak.yaml` are explained below. The `keycloak.yaml` file contains the
 dynamic configuration — routing rules, TLS certificates, and backend transport settings.
+
 **Certificate for external access:**
 
 ```yaml
