@@ -115,22 +115,59 @@ HAProxy operates in HTTP mode (Layer 7), decrypting and reencrypting HTTP traffi
 
 ```
 http-request del-header Forwarded
-http-request del-header x-forwarded-for
-http-request del-header x-forwarded-proto
-http-request del-header x-forwarded-host
-http-request del-header x-forwarded-port
-http-request del-header x-forwarded-server
+http-request del-header x-forwarded-.* -m reg
+http-request del-header x-original-.* -m reg
+http-request del-header x-real-ip
 ```
 
-This configuration will drop `Forwarded` and `X-Forwarded-` HTTP headers on the proxy, preventing the client from providing misleading information to the backend server.
+This configuration drops several categories of headers that an external client could use to mislead the backend server:
 
-Note: If the `KC_PROXY_HEADERS` setting is set to `forwarded` (see below) Keycloak will only accept the standard `Forwarded` header and ignore any `X-Forwarded-` headers. In this case it is not strictly necessary to filter them on the proxy.
+- `Forwarded` and `X-Forwarded-*` carry information about the original client connection (IP address, protocol, host).
+If not stripped, a client can forge them to spoof its identity.
+The `-m reg` flag enables regex matching, so a single rule removes all `X-Forwarded-*` variants, including `X-Forwarded-For`, `X-Forwarded-Proto`, `X-Forwarded-Host`, `X-Forwarded-Port`, `X-Forwarded-Server`, `X-Forwarded-Prefix`, and `X-Forwarded-Access-Token` (injected by some OAuth2 proxies to pass a token to the backend).
+`X-Forwarded-Prefix` is particularly important to filter because an attacker can use it to manipulate URL generation and redirect targets, potentially enabling path-based attacks such as open redirects or cache poisoning.
+- `X-Original-*` includes headers like `X-Original-Forwarded-For` (a variant of `X-Forwarded-For` set by some proxies), `X-Original-URL`, and `X-Original-Method` (used by authentication proxies such as Traefik ForwardAuth and NGINX `auth_request`).
+If a backend extension inspects these headers, an attacker could forge the originating IP, request path, or method seen by the authorization layer.
+- `X-Real-IP` is commonly trusted by applications for rate limiting and audit logging, making it a spoofing target.
+
+Note: When `KC_PROXY_HEADERS` is set to `forwarded` (see below), Keycloak only reads the standard
+`Forwarded` header and ignores any
+`X-Forwarded-` headers. Filtering them at the proxy is still a good practice for defense in depth.
 
 ```
 option forwarded host by by_port for
 ```
 
 The above configuration will make HAProxy add a standard `Forwarded` HTTP header with the actual information from the incoming connection.
+
+**Filter distributed tracing headers:**
+
+```
+http-request del-header traceparent
+http-request del-header tracestate
+http-request del-header baggage
+http-request del-header b3
+http-request del-header x-b3-.* -m reg
+http-request del-header uber-trace-id
+http-request del-header x-ot-span-context
+```
+
+When Keycloak has [OpenTelemetry](https://opentelemetry.io/) tracing enabled, it automatically adopts the trace context received in incoming requests. 
+If an external client injects tracing headers, Keycloak will treat the request as part of that client-supplied trace. This has two consequences:
+
+- **Increased observability costs**: externally initiated traces inflate storage and processing in the tracing backend (e.g., Jaeger, Tempo, or a commercial provider).
+- **Cross-service correlation**: an attacker who controls the trace ID can search the tracing backend for that ID to map out internal service dependencies and call patterns.
+
+The headers above cover the main propagation formats:
+
+- `traceparent`, `tracestate` — [W3C Trace Context](https://www.w3.org/TR/trace-context/)
+- `baggage` — [W3C Baggage](https://www.w3.org/TR/baggage/)
+- `b3`, `x-b3-*` — [Zipkin B3 Propagation](https://github.com/openzipkin/b3-propagation)
+- `uber-trace-id` — [Jaeger](https://www.jaegertracing.io/sdk-migration/#propagation-format) (deprecated in favor of W3C Trace Context)
+- `x-ot-span-context` — OpenTracing (deprecated in favor of W3C Trace Context)
+
+Dropping these headers at the proxy ensures that only internally generated trace contexts reach Keycloak.
+The full list of propagation formats maintained by OpenTelemetry is documented in the [Propagators Distribution](https://opentelemetry.io/docs/specs/otel/context/api-propagators/#propagators-distribution) specification.
 
 **HTTP health check on the management port:**
 
