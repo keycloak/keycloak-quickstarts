@@ -1,5 +1,5 @@
 entryPoints:
-  websecure:
+  keycloak:
     address: ":8443"
 api:
   dashboard: true

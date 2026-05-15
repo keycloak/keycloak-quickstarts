@@ -16,7 +16,7 @@ http:
   routers:
     keycloak:
       entryPoints:
-        - websecure
+        - keycloak
       rule: "PathPrefix(`/`)"
       tls: {}
       service: keycloak
