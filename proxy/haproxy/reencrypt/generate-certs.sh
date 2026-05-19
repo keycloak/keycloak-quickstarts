@@ -70,4 +70,39 @@ cat "$CERTS_DIR/haproxy-internal/cert.pem" "$CERTS_DIR/haproxy-internal/key.pem"
 # Not safe! Everybody in the PC can read the private key data.
 chmod 644 "$CERTS_DIR/haproxy-internal/key.pem" "$CERTS_DIR/haproxy-internal/cert.pem"
 
+mkdir -p "$CERTS_DIR/client-ca"
+
+openssl req -x509 \
+    -newkey rsa:2048 \
+    -nodes \
+    -days 365 \
+    -subj "/CN=Client CA" \
+    -keyout "$CERTS_DIR/client-ca/key.pem" \
+    -out "$CERTS_DIR/client-ca/cert.pem"
+
+# Not safe! Everybody in the PC can read the private key data.
+chmod 644 "$CERTS_DIR/client-ca/key.pem" "$CERTS_DIR/client-ca/cert.pem"
+
+mkdir -p "$CERTS_DIR/client"
+
+openssl req \
+    -newkey rsa:2048 \
+    -nodes \
+    -subj "/CN=test-client" \
+    -keyout "$CERTS_DIR/client/key.pem" \
+    -out "$CERTS_DIR/client/csr.pem"
+
+openssl x509 -req \
+    -in "$CERTS_DIR/client/csr.pem" \
+    -CA "$CERTS_DIR/client-ca/cert.pem" \
+    -CAkey "$CERTS_DIR/client-ca/key.pem" \
+    -CAcreateserial \
+    -days 365 \
+    -out "$CERTS_DIR/client/cert.pem"
+
+rm -f "$CERTS_DIR/client/csr.pem" "$CERTS_DIR/client-ca/cert.srl"
+
+# Not safe! Everybody in the PC can read the private key data.
+chmod 644 "$CERTS_DIR/client/key.pem" "$CERTS_DIR/client/cert.pem"
+
 echo "Certificates generated in $CERTS_DIR"

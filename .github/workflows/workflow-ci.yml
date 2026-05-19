@@ -227,6 +227,9 @@ jobs:
       - name: Run proxy tests
         run: proxy/test-proxy.sh "$(hostname)" proxy/haproxy/reencrypt/certs/haproxy-external/cert.pem
 
+      - name: Test client-cert lookup
+        run: proxy/haproxy/reenctypt/test-client-cert-lookup.sh "$(hostname)" ./certs/client/key.pem ./certs/client/cert.pem 'CN=test-client'
+
       - name: Stop services
         if: always()
         working-directory: proxy/haproxy/reencrypt
