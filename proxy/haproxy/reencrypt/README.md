@@ -169,6 +169,39 @@ The headers above cover the main propagation formats:
 Dropping these headers at the proxy ensures that only internally generated trace contexts reach Keycloak.
 The full list of propagation formats maintained by OpenTelemetry is documented in the [Propagators Distribution](https://opentelemetry.io/docs/specs/otel/context/api-propagators/#propagators-distribution) specification.
 
+**Path-based access control:**
+
+Keycloak exposes several paths, but not all of them should be publicly accessible.
+The [exposed path recommendations](https://www.keycloak.org/server/reverseproxy#_exposed_path_recommendations) section in the Keycloak reverse proxy guide provides the following guidance:
+
+| Path            | Exposed | Reason                                                                            |
+|-----------------|---------|-----------------------------------------------------------------------------------|
+| `/admin/`       | No      | Exposed admin paths lead to an unnecessary attack vector.                         |
+| `/realms/`      | Yes     | This path is needed to work correctly, for example, for OIDC endpoints.           |
+| `/resources/`   | Yes     | Needed for serving assets correctly; may optionally be served from a CDN instead. |
+| `/.well-known/` | Yes     | Needed to resolve Authorization Server Metadata and other info per RFC 8414.      |
+| `/metrics`      | No      | Exposed metrics lead to an unnecessary attack vector.                             |
+| `/health`       | No      | Exposed health checks lead to an unnecessary attack vector.                       |
+
+HAProxy can enforce this by combining path-based ACLs with source IP filtering:
+
+```
+acl is_public_path path_beg /realms/
+acl is_public_path path_beg /resources/
+acl is_public_path path_beg /.well-known/
+
+acl is_allowed_src src 192.168.0.0/16
+acl is_allowed_src src 10.0.0.0/16
+acl is_allowed_src src 127.0.0.0/8
+
+http-request deny unless is_public_path or is_allowed_src
+```
+
+The
+`is_public_path` ACL matches the three paths that must be publicly accessible for Keycloak to function correctly.
+All other paths are restricted to requests originating from the private IP ranges defined in `is_allowed_src` (`192.168.0.0/16`, `10.0.0.0/16`, and `127.0.0.0/8`).
+Any request that does not match a public path and does not come from an allowed source IP is denied with an HTTP 403 response.
+
 **HTTP health check on the management port:**
 
 ```
