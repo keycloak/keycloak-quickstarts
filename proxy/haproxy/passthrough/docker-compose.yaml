@@ -4,7 +4,7 @@ services:
     environment:
       POSTGRES_DB: keycloak
       POSTGRES_USER: keycloak
-      POSTGRES_PASSWORD: keycloak    
+      POSTGRES_PASSWORD: keycloak
     networks:
       - backend
     healthcheck:
@@ -31,15 +31,18 @@ services:
       KC_PROXY_PROTOCOL_ENABLED: "true"
       KC_HOSTNAME: "${KC_HOST}"
       KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/certs/cert.pem
-      KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/certs/key.pem      
+      KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/certs/key.pem
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
       # Enable the access log to see as requests arrive on at Keycloak
       KC_HTTP_ACCESS_LOG_ENABLED: "true"
+      # Not recommended in production
+      # HTTP headers can contain sensitive information (falls under the purview of the GDPR or similar)
+      KC_HTTP_ACCESS_LOG_PATTERN: "long"
       # Misc
       KC_SHUTDOWN_DELAY: 30s
       KC_SHUTDOWN_TIMEOUT: 30s
-      KC_SPI_CACHE_EMBEDDED__DEFAULT__NODE_NAME: keycloak1      
+      KC_SPI_CACHE_EMBEDDED__DEFAULT__NODE_NAME: keycloak1
     volumes:
       - source: ./certs
         target: /opt/keycloak/certs
@@ -47,7 +50,6 @@ services:
         read_only: true
         bind:
           selinux: z
-
     depends_on:
       postgres:
         condition: service_healthy
@@ -77,6 +79,9 @@ services:
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
       # Enable the access log to see as requests arrive on at Keycloak
       KC_HTTP_ACCESS_LOG_ENABLED: "true"
+      # Not recommended in production
+      # HTTP headers can contain sensitive information (falls under the purview of the GDPR or similar)
+      KC_HTTP_ACCESS_LOG_PATTERN: "long"
       # Misc
       KC_SHUTDOWN_DELAY: 30s
       KC_SHUTDOWN_TIMEOUT: 30s

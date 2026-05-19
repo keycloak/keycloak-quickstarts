@@ -37,7 +37,11 @@ services:
       KC_HTTPS_MANAGEMENT_CLIENT_AUTH: none
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      # Enable the access log to see as requests arrive on at Keycloak
       KC_HTTP_ACCESS_LOG_ENABLED: "true"
+      # Not recommended in production
+      # HTTP headers can contain sensitive information (falls under the purview of the GDPR or similar)
+      KC_HTTP_ACCESS_LOG_PATTERN: "long"
       # Misc
       KC_SHUTDOWN_DELAY: 30s
       KC_SHUTDOWN_TIMEOUT: 30s
@@ -85,7 +89,11 @@ services:
       KC_HTTPS_MANAGEMENT_CLIENT_AUTH: none
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      # Enable the access log to see as requests arrive on at Keycloak
       KC_HTTP_ACCESS_LOG_ENABLED: "true"
+      # Not recommended in production
+      # HTTP headers can contain sensitive information (falls under the purview of the GDPR or similar)
+      KC_HTTP_ACCESS_LOG_PATTERN: "long"
       # Misc
       KC_SHUTDOWN_DELAY: 30s
       KC_SHUTDOWN_TIMEOUT: 30s
