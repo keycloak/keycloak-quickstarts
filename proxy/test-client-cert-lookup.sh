@@ -1,27 +1,26 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [ $# -lt 4 ]; then
-    echo "Usage: $0 <hostname> <client-key> <client-cert> <subject-dn>"
+if [ $# -lt 5 ]; then
+    echo "Usage: $0 <hostname> <cacert> <client-key> <client-cert> <subject-dn>"
     echo ""
     echo "Arguments:"
     echo "  hostname     Hostname of the Keycloak cluster"
+    echo "  cacert       Path to the CA certificate (PEM)"
     echo "  client-key   Path to the client private key (PEM)"
     echo "  client-cert  Path to the client certificate (PEM)"
     echo "  subject-dn   Expected subject DN for the X.509 client authenticator"
     echo ""
     echo "Example:"
-    echo "  $0 127.0.0.1.nip.io ./certs/client/key.pem ./certs/client/cert.pem 'CN=test-client'"
+    echo "  $0 127.0.0.1.nip.io ./certs/haproxy-external/cert.pem ./certs/client/key.pem ./certs/client/cert.pem 'CN=test-client'"
     exit 1
 fi
 
 HOSTNAME="$1"
-CLIENT_KEY="$2"
-CLIENT_CERT="$3"
-SUBJECT_DN="$4"
-
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-CACERT="${SCRIPT_DIR}/certs/haproxy-external/cert.pem"
+CACERT="$2"
+CLIENT_KEY="$3"
+CLIENT_CERT="$4"
+SUBJECT_DN="$5"
 BASE_URL="https://${HOSTNAME}:8443"
 MTLS_CLIENT_ID="mtls-client"
 
