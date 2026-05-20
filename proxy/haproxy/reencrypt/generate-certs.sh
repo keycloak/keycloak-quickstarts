@@ -77,11 +77,38 @@ openssl req -x509 \
     -nodes \
     -days 365 \
     -subj "/CN=Client CA" \
+    -addext "basicConstraints=critical,CA:TRUE" \
+    -addext "keyUsage=critical,keyCertSign,cRLSign" \
     -keyout "$CERTS_DIR/client-ca/key.pem" \
     -out "$CERTS_DIR/client-ca/cert.pem"
 
 # Not safe! Everybody in the PC can read the private key data.
 chmod 644 "$CERTS_DIR/client-ca/key.pem" "$CERTS_DIR/client-ca/cert.pem"
+
+mkdir -p "$CERTS_DIR/client-intermediate-ca"
+
+openssl req \
+    -newkey rsa:2048 \
+    -nodes \
+    -subj "/CN=Client Intermediate CA" \
+    -keyout "$CERTS_DIR/client-intermediate-ca/key.pem" \
+    -out "$CERTS_DIR/client-intermediate-ca/csr.pem"
+
+openssl x509 -req \
+    -in "$CERTS_DIR/client-intermediate-ca/csr.pem" \
+    -CA "$CERTS_DIR/client-ca/cert.pem" \
+    -CAkey "$CERTS_DIR/client-ca/key.pem" \
+    -CAcreateserial \
+    -days 365 \
+    -extfile <(printf "basicConstraints=critical,CA:TRUE,pathlen:0\nkeyUsage=critical,keyCertSign,cRLSign") \
+    -out "$CERTS_DIR/client-intermediate-ca/cert.pem"
+
+rm -f "$CERTS_DIR/client-intermediate-ca/csr.pem" "$CERTS_DIR/client-ca/cert.srl"
+
+cat "$CERTS_DIR/client-intermediate-ca/cert.pem" "$CERTS_DIR/client-ca/cert.pem" > "$CERTS_DIR/client-ca/chain.pem"
+
+# Not safe! Everybody in the PC can read the private key data.
+chmod 644 "$CERTS_DIR/client-intermediate-ca/key.pem" "$CERTS_DIR/client-intermediate-ca/cert.pem"
 
 mkdir -p "$CERTS_DIR/client"
 
@@ -94,13 +121,15 @@ openssl req \
 
 openssl x509 -req \
     -in "$CERTS_DIR/client/csr.pem" \
-    -CA "$CERTS_DIR/client-ca/cert.pem" \
-    -CAkey "$CERTS_DIR/client-ca/key.pem" \
+    -CA "$CERTS_DIR/client-intermediate-ca/cert.pem" \
+    -CAkey "$CERTS_DIR/client-intermediate-ca/key.pem" \
     -CAcreateserial \
     -days 365 \
     -out "$CERTS_DIR/client/cert.pem"
 
-rm -f "$CERTS_DIR/client/csr.pem" "$CERTS_DIR/client-ca/cert.srl"
+rm -f "$CERTS_DIR/client/csr.pem" "$CERTS_DIR/client-intermediate-ca/cert.srl"
+
+cat "$CERTS_DIR/client/cert.pem" "$CERTS_DIR/client-intermediate-ca/cert.pem" > "$CERTS_DIR/client/fullchain.pem"
 
 # Not safe! Everybody in the PC can read the private key data.
 chmod 644 "$CERTS_DIR/client/key.pem" "$CERTS_DIR/client/cert.pem"
