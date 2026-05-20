@@ -5,7 +5,7 @@ tcp:
       service: "keycloak-service"
       priority: 100
       entryPoints:
-        - "websecure"
+        - "keycloak"
       tls:
         passthrough: true  # Forward encrypted traffic as-is
 

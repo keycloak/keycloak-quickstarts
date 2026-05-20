@@ -6,6 +6,13 @@ api:
   insecure: true
 log:
   level: INFO
+accessLog:
+  format: json
+  fields:
+    # Not recommended in production
+    # HTTP headers can contain sensitive information (falls under the purview of the GDPR or similar)
+    headers:
+      defaultMode: keep
 providers:
   file:
     directory: "/mnt"
