@@ -43,8 +43,7 @@ services:
       # HTTP headers can contain sensitive information (falls under the purview of the GDPR or similar)
       KC_HTTP_ACCESS_LOG_PATTERN: "long"
       # Misc
-      KC_SHUTDOWN_DELAY: 30s
-      KC_SHUTDOWN_TIMEOUT: 30s
+      KC_SHUTDOWN_DELAY: 15s
       KC_SPI_CACHE_EMBEDDED__DEFAULT__NODE_NAME: keycloak1
     volumes:
       - source: ./certs/keycloak1
@@ -95,8 +94,7 @@ services:
       # HTTP headers can contain sensitive information (falls under the purview of the GDPR or similar)
       KC_HTTP_ACCESS_LOG_PATTERN: "long"
       # Misc
-      KC_SHUTDOWN_DELAY: 30s
-      KC_SHUTDOWN_TIMEOUT: 30s
+      KC_SHUTDOWN_DELAY: 15s
       KC_SPI_CACHE_EMBEDDED__DEFAULT__NODE_NAME: keycloak2
     volumes:
       - source: ./certs/keycloak2

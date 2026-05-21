@@ -142,13 +142,8 @@ serversTransports:
 
 **Graceful shutdown timing:**
 
-Health checks poll every 5 seconds. It may take up to 5 seconds for Traefik to detect that a Keycloak instance is down.
-For this reason, Keycloak is configured with `KC_SHUTDOWN_DELAY=30s` and
-`KC_SHUTDOWN_TIMEOUT=30s`, giving Traefik enough time to detect the shutdown and allowing existing client connections to drain gracefully.
-
-Note: Although a longer shutdown delay is typically associated with TLS passthrough setups,
-it is also recommended for TLS re-encrypt to ensure in-flight requests complete before the
-Keycloak instance stops accepting new connections.
+Health checks poll every 5 seconds with a 3 seconds timeout. It takes up to 8 seconds (`interval + timeout`) for Traefik to detect that a keycloak instance is down.
+For this reason, Keycloak is configured with `KC_SHUTDOWN_DELAY=8s` to give Traefik enough time to detect the shutdown and stop routing traffic to the instance.
 
 ## Keycloak configuration
 
