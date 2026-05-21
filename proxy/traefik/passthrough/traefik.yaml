@@ -1,6 +1,6 @@
 
 entryPoints:
-  websecure:
+  keycloak:
     address: ":8443"
 api:
   dashboard: true
@@ -8,6 +8,12 @@ api:
 
 log:
   level: INFO
+
+metrics:
+  prometheus:
+    addEntryPointsLabels: true
+    addRoutersLabels: true
+    addServicesLabels: true
 
 providers:
   file:
