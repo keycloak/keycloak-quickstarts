@@ -68,7 +68,6 @@ services:
       postgres:
         condition: service_healthy
     networks:
-      - frontend
       - backend
 
   keycloak2:
