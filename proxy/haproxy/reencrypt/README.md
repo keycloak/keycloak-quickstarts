@@ -207,8 +207,7 @@ server keycloak1 keycloak1:8443 ssl verify required crt /mnt/certs/haproxy-inter
 **Graceful shutdown timing:**
 
 With the values above, it may take up to 15 seconds (3 failures x 5s interval) for HAProxy to detect that a Keycloak instance is down.
-For this reason, Keycloak is configured with `KC_SHUTDOWN_DELAY=30s` and
-`KC_SHUTDOWN_TIMEOUT=30s`, giving HAProxy enough time to detect the shutdown and allowing existing client connections to drain gracefully.
+For this reason, Keycloak is configured with `KC_SHUTDOWN_DELAY=15s`to detect the shutdown and allowing existing client connections to drain gracefully.
 
 ## Keycloak configuration
 
