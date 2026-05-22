@@ -15,7 +15,7 @@ services:
 
   keycloak1:
 #    image: quay.io/keycloak/keycloak:26.6
-    image: quay.io/remerson/keycloak:0.0.1-d99e9f
+    image: quay.io/remerson/keycloak:0.0.1-58047e
     command: start
     environment:
       # DB
@@ -45,8 +45,8 @@ services:
       KC_HTTP_ACCESS_LOG_PATTERN: "long"
       # Client certificate lookup via haproxy provider with Client-Cert* headers
       KC_SPI_X509CERT_LOOKUP__PROVIDER: haproxy
-      KC_SPI_X509CERT_LOOKUP__HAPROXY_SSL_CLIENT_CERT: Client-Cert
-      KC_SPI_X509CERT_LOOKUP__HAPROXY_SSL_CERT_CHAIN: Client-Cert-Chain
+      KC_SPI_X509CERT_LOOKUP__HAPROXY__SSL_CLIENT_CERT: Client-Cert
+      KC_SPI_X509CERT_LOOKUP__HAPROXY__SSL_CERT_CHAIN: Client-Cert-Chain
       # Misc
       KC_SHUTDOWN_DELAY: 15s
       KC_SPI_CACHE_EMBEDDED__DEFAULT__NODE_NAME: keycloak1
@@ -72,7 +72,7 @@ services:
 
   keycloak2:
 #    image: quay.io/keycloak/keycloak:26.6
-    image: quay.io/remerson/keycloak:0.0.1-d99e9f
+    image: quay.io/remerson/keycloak:0.0.1-58047e
     command: start
     environment:
       # DB
@@ -99,8 +99,8 @@ services:
       KC_HTTP_ACCESS_LOG_ENABLED: "true"
       # Client certificate lookup via haproxy provider with Client-Cert* headers
       KC_SPI_X509CERT_LOOKUP__PROVIDER: haproxy
-      KC_SPI_X509CERT_LOOKUP__SSL_CLIENT_CERT: Client-Cert
-      KC_SPI_X509CERT_LOOKUP__SSL_CERT_CHAIN: Client-Cert-Chain
+      KC_SPI_X509CERT_LOOKUP__HAPROXY__SSL_CLIENT_CERT: Client-Cert
+      KC_SPI_X509CERT_LOOKUP__HAPROXY__SSL_CERT_CHAIN: Client-Cert-Chain
       # Misc
       KC_SHUTDOWN_DELAY: 15s
       KC_SPI_CACHE_EMBEDDED__DEFAULT__NODE_NAME: keycloak2
