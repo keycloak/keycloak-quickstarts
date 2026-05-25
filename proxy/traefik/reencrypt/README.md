@@ -110,6 +110,55 @@ Traefik will use this certificate to authenticate itself to the browser.
 This is the certificate the client sees when connecting to Traefik on port 8443.
 It is separate from the internal certificate used for mTLS between Traefik and Keycloak.
 
+**Filter header from external clients:**
+
+A headers middleware drops headers that a client could use to mislead or overwhelm the backend.
+In Traefik, a `customRequestHeaders` entry with an empty string ("") value removes that header from the request before it is forwarded to Keycloak:
+
+```yaml
+  middlewares:
+    filter-headers:
+      headers:
+        customRequestHeaders:
+          Forwarded: ""
+          X-Forwarded-For: ""
+          X-Forwarded-Proto: ""
+          X-Forwarded-Host: ""
+          X-Forwarded-Port: ""
+          X-Forwarded-Server: ""
+          X-Forwarded-Prefix: ""
+          X-Forwarded-Access-Token: ""
+          X-Original-Forwarded-For: ""
+          X-Original-URL: ""
+          X-Original-Method: ""
+          X-Real-IP: ""
+          Traceparent: ""
+          Tracestate: ""
+          Baggage: ""
+          B3: ""
+          X-B3-Traceid: ""
+          X-B3-Spanid: ""
+          X-B3-Parentspanid: ""
+          X-B3-Sampled: ""
+          X-B3-Flags: ""
+          Uber-Trace-Id: ""
+          X-Ot-Span-Context: ""
+```
+
+This configuration drops several categories of headers that an external client could use to mislead the backend server:
+
+Note: If the `KC_PROXY_HEADERS` setting is set to forwarded (see below), Keycloak will only accept the standard Forwarded header and ignore any `X-Forwarded-` headers. In this case, it is not strictly necessary to filter them on the proxy. Filtering them at the proxy is still a good practice for defense in depth.
+
+- `Forwarded` and `X-Forwarded-*` carry information about the original client connection (IP address, protocol, host). If not stripped, a client can forge them to spoof its identity. Since Traefik handles explicit key/value matching rather than wildcard regex blocks, defining each variant with an empty string ensures comprehensive removal of `X-Forwarded-For`, `X-Forwarded-Proto`, `X-Forwarded-Host`, `X-Forwarded-Port`, `X-Forwarded-Server`, `X-Forwarded-Prefix`, and `X-Forwarded-Access-Token` (injected by some OAuth2 proxies to pass a token to the backend).
+
+`X-Forwarded-Prefix` is particularly important to filter because an attacker can use it to manipulate URL generation and redirect targets, potentially enabling path-based attacks such as open redirects or cache poisoning.
+
+`X-Original-*` includes headers like `X-Original-Forwarded-For` (a variant of `X-Forwarded-For` set by some proxies), `X-Original-URL`, and `X-Original-Method` (used by authentication proxies such as Traefik ForwardAuth and NGINX auth_request). If a backend extension inspects these headers, an attacker could forge the originating IP, request path, or method seen by the authorization layer.
+
+`X-Real-IP` is commonly trusted by applications for rate limiting and audit logging, making it a spoofing target.
+
+Once stripped, Traefik will append its own verified connection metadata back to the backend request using its default proxy behavior.
+
 **HTTP health check on the management port:**
 
 ```yaml

@@ -13,11 +13,44 @@ http:
         - /certs/keycloak1-cert.pem
         - /certs/keycloak2-cert.pem
 
+  middlewares:
+    filter-headers:
+      headers:
+        customRequestHeaders:
+          # Strip the forwarding headers to prevent spoofing and ensure that Keycloak receives the correct client information.
+          Forwarded: ""
+          X-Forwarded-For: ""
+          X-Forwarded-Proto: ""
+          X-Forwarded-Host: ""
+          X-Forwarded-Port: ""
+          X-Forwarded-Server: ""
+          X-Forwarded-Prefix: ""
+          X-Forwarded-Access-Token: ""
+          # Strip reverse proxy metadata headers to prevent URL/method/IP forgery
+          X-Original-Forwarded-For: ""
+          X-Original-URL: ""
+          X-Original-Method: ""
+          X-Real-IP: ""
+          # Strip distributed tracing headers to prevent trace context injection.
+          Traceparent: ""
+          Tracestate: ""
+          Baggage: ""
+          B3: ""
+          X-B3-Traceid: ""
+          X-B3-Spanid: ""
+          X-B3-Parentspanid: ""
+          X-B3-Sampled: ""
+          X-B3-Flags: ""
+          Uber-Trace-Id: ""
+          X-Ot-Span-Context: ""
+
   routers:
     keycloak:
       entryPoints:
         - keycloak
       rule: "PathPrefix(`/`)"
+      middlewares:
+        - filter-headers
       tls: {}
       service: keycloak
 
