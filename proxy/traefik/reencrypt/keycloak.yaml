@@ -17,18 +17,21 @@ http:
     filter-headers:
       headers:
         customRequestHeaders:
+          # Strip the forwarding headers to prevent spoofing and ensure that Keycloak receives the correct client information.
           Forwarded: ""
           X-Forwarded-For: ""
           X-Forwarded-Proto: ""
           X-Forwarded-Host: ""
           X-Forwarded-Port: ""
           X-Forwarded-Server: ""
-          x-Forwarded-Prefix: ""
+          X-Forwarded-Prefix: ""
           X-Forwarded-Access-Token: ""
+          # Strip reverse proxy metadata headers to prevent URL/method/IP forgery
           X-Original-Forwarded-For: ""
           X-Original-URL: ""
           X-Original-Method: ""
-          X-Real-Ip: ""
+          X-Real-IP: ""
+          # Strip distributed tracing headers to prevent trace context injection.
           Traceparent: ""
           Tracestate: ""
           Baggage: ""
