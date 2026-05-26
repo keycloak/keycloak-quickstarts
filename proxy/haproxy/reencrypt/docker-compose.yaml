@@ -63,7 +63,6 @@ services:
         read_only: true
         bind:
           selinux: z
-
     depends_on:
       postgres:
         condition: service_healthy
@@ -97,6 +96,9 @@ services:
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
       # Enable the access log to see as requests arrive on at Keycloak
       KC_HTTP_ACCESS_LOG_ENABLED: "true"
+      # Not recommended in production
+      # HTTP headers can contain sensitive information (falls under the purview of the GDPR or similar)
+      KC_HTTP_ACCESS_LOG_PATTERN: "long"
       # Client certificate lookup via haproxy provider with Client-Cert* headers
       KC_SPI_X509CERT_LOOKUP__PROVIDER: haproxy
       KC_SPI_X509CERT_LOOKUP__HAPROXY__SSL_CLIENT_CERT: Client-Cert
