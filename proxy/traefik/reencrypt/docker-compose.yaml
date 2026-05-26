@@ -42,6 +42,8 @@ services:
       # Not recommended in production
       # HTTP headers can contain sensitive information (falls under the purview of the GDPR or similar)
       KC_HTTP_ACCESS_LOG_PATTERN: "long"
+      # Client certificate lookup via the dedicated Traefik provider
+      KC_SPI_X509CERT_LOOKUP__PROVIDER: traefik
       # Misc
       KC_SHUTDOWN_DELAY: 8s
       KC_SPI_CACHE_EMBEDDED__DEFAULT__NODE_NAME: keycloak1
@@ -93,6 +95,8 @@ services:
       # Not recommended in production
       # HTTP headers can contain sensitive information (falls under the purview of the GDPR or similar)
       KC_HTTP_ACCESS_LOG_PATTERN: "long"
+      # Client certificate lookup via the dedicated Traefik provider
+      KC_SPI_X509CERT_LOOKUP__PROVIDER: traefik
       # Misc
       KC_SHUTDOWN_DELAY: 8s
       KC_SPI_CACHE_EMBEDDED__DEFAULT__NODE_NAME: keycloak2
@@ -162,6 +166,12 @@ services:
           selinux: z
       - source: ./certs/keycloak2/cert.pem
         target: /certs/keycloak2-cert.pem
+        type: bind
+        read_only: true
+        bind:
+          selinux: z
+      - source: ./certs/client-ca/chain.pem
+        target: /certs/client-ca-chain.pem
         type: bind
         read_only: true
         bind:
