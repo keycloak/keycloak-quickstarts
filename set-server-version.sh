@@ -20,6 +20,8 @@ sed -i 's/ image:\(.*keycloak\):.*/ image:\1:'"$NEW_VERSION"'/g' kubernetes/keyc
 sed -i 's/ version: .*/ version: '"$NEW_VERSION"'/g' openshift/keycloak.yaml
 sed -i 's/ image:\(.*keycloak\):.*/ image:\1:'"$NEW_VERSION"'/g' openshift/keycloak.yaml
 
+find . -name "docker-compose.y*ml" -exec sed -i 's| image:\(.*keycloak/keycloak\):.*| image:\1:'"$NEW_VERSION"'|g' {} +
+
 if [[ $NEW_VERSION == "999.0.0-SNAPSHOT" ]]; then
   # Use the nightly versions of adapters
   NPM_ADMIN_CLIENT="https://github.com/keycloak/keycloak/releases/download/nightly/keycloak-admin-client-999.0.0-SNAPSHOT.tgz"
