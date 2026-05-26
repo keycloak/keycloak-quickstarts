@@ -383,6 +383,9 @@ This prevents direct clients from injecting a `Client-Cert` header to impersonat
 Combined with the network isolation (Keycloak is only reachable via the internal backend network)
 and header stripping at HAProxy, this provides defense in depth against certificate spoofing.
 
+**IMPORTANT:** HAProxy support for `KC_SPI_X509CERT_LOOKUP__HAPROXY__SSL_CERT_CHAIN` is only available from Keycloak 26.7
+see [#49180](https://github.com/keycloak/keycloak/issues/49180).
+
 ## Resources
 
 - [HAProxy Configuration Manual](https://www.haproxy.com/documentation/haproxy-configuration-manual/latest/)
