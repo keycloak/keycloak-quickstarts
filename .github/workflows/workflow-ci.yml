@@ -227,6 +227,14 @@ jobs:
       - name: Run proxy tests
         run: proxy/test-proxy.sh "$(hostname)" proxy/haproxy/reencrypt/certs/haproxy-external/cert.pem
 
+      - name: Test Client mTLS Authentication
+        run: |
+          proxy/test-client-cert-lookup.sh "$(hostname)" \
+            ./proxy/haproxy/reencrypt/certs/haproxy-external/cert.pem \
+            ./proxy/haproxy/reencrypt/certs/client/key.pem \
+            ./proxy/haproxy/reencrypt/certs/client/fullchain.pem \
+            'CN=test-client'
+
       - name: Stop services
         if: always()
         working-directory: proxy/haproxy/reencrypt
