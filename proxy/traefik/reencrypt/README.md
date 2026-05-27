@@ -169,9 +169,6 @@ In Traefik, a `customRequestHeaders` entry with an empty string ("") value remov
 
 `X-Forwarded-Tls-Client-Cert` and `X-Forwarded-Tls-Client-Cert-Info` is stripped to prevent an external client from injecting a forged client certificate.
 Traefik is the only component that should set this header, after verifying the certificate presented during the TLS handshake.
-Without this filtering, an attacker could bypass X.509 client certificate authentication by sending a crafted header directly.
-
-NOTE: The `X-Forwarded-Tls-Client-Cert` header is hardcoded in the `TraefikProxySslClientCertificateLookup` provider and must match the header set by Traefik's `passTLSClientCert` middleware.
 
 This configuration drops several categories of headers that an external client could use to mislead the backend server:
 
