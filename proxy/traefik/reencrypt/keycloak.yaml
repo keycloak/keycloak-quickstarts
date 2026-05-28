@@ -2,6 +2,12 @@ tls:
   certificates:
     - certFile: /certs/traefik-external/cert.pem
       keyFile: /certs/traefik-external/key.pem
+  options:
+    default:
+      clientAuth:
+        caFiles:
+          - /certs/client-ca-chain.pem
+        clientAuthType: VerifyClientCertIfGiven
 
 http:
   serversTransports:
@@ -31,6 +37,9 @@ http:
           X-Original-URL: ""
           X-Original-Method: ""
           X-Real-IP: ""
+          # Strip client certificate header to prevent spoofing (RFC 9440)
+          X-Forwarded-Tls-Client-Cert: ""
+          X-Forwarded-Tls-Client-Cert-Info: ""
           # Strip distributed tracing headers to prevent trace context injection.
           Traceparent: ""
           Tracestate: ""
@@ -43,6 +52,9 @@ http:
           X-B3-Flags: ""
           Uber-Trace-Id: ""
           X-Ot-Span-Context: ""
+    pass-client-cert:
+      passTLSClientCert:
+        pem: true
 
   routers:
     keycloak:
@@ -51,6 +63,7 @@ http:
       rule: "PathPrefix(`/`)"
       middlewares:
         - filter-headers
+        - pass-client-cert
       tls: {}
       service: keycloak
 
