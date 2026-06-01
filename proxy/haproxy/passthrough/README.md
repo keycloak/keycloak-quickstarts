@@ -117,7 +117,7 @@ This endpoint is only available when Keycloak is configured with `KC_HEALTH_ENAB
 **Server lines:**
 
 ```
-server keycloak1 keycloak1:8443 send-proxy-v2 check port 9000 check-ssl verify none inter 5s fall 3 rise 2
+server keycloak1 keycloak1:8443 send-proxy-v2 check port 9000 check-ssl verify none inter 5s fall 3 rise 2 slowstart 60s
 ```
 
 - `send-proxy-v2` enables the PROXY protocol v2, which prepends the original client IP address to the TCP connection so Keycloak sees the real source IP instead of HAProxy's.
@@ -127,6 +127,9 @@ This requires Keycloak to be configured with `KC_PROXY_PROTOCOL_ENABLED=true`.
 - `check port 9000 check-ssl verify none` directs health checks to the management port (9000) over HTTPS, skipping certificate verification for the health check connection.
 
 - `inter 5s fall 3 rise 2` configures the health check frequency: poll every 5 seconds, mark a server as down after 3 consecutive failures, and mark it as up again after 2 consecutive successes.
+
+- `slowstart 60s` gradually increases the server's weight from 0 to its full value over 60 seconds after the server becomes available.
+This gives Keycloak and the JVM time to warm up (JIT compilation, class loading, cache population) before receiving full traffic, preventing performance degradation and timeouts during the warmup phase.
 
 **Graceful shutdown timing:**
 

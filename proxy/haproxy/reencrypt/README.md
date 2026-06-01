@@ -313,7 +313,7 @@ The HAProxy stats page is also available at `http://localhost:8404/stats` and sh
 **Server lines:**
 
 ```
-server keycloak1 keycloak1:8443 ssl verify required crt /mnt/certs/haproxy-internal.pem ca-file /mnt/certs/keycloak1-cert.pem check port 9000 check-ssl verify none inter 5s fall 3 rise 2
+server keycloak1 keycloak1:8443 ssl verify required crt /mnt/certs/haproxy-internal.pem ca-file /mnt/certs/keycloak1-cert.pem check port 9000 check-ssl verify none inter 5s fall 3 rise 2 slowstart 60s
 ```
 
 - `ssl verify required` enables a secured connection to Keycloak.
@@ -325,6 +325,9 @@ server keycloak1 keycloak1:8443 ssl verify required crt /mnt/certs/haproxy-inter
 - `check port 9000 check-ssl verify none` directs health checks to the management port (9000) over HTTPS, skipping certificate verification for the health check connection.
 
 - `inter 5s fall 3 rise 2` configures the health check frequency: poll every 5 seconds, mark a server as down after 3 consecutive failures, and mark it as up again after 2 consecutive successes.
+
+- `slowstart 60s` gradually increases the server's weight from 0 to its full value over 60 seconds after the server becomes available.
+This gives Keycloak and the JVM time to warm up (JIT compilation, class loading, cache population) before receiving full traffic, preventing performance degradation and timeouts during the warmup phase.
 
 **Graceful shutdown timing:**
 
