@@ -1,9 +1,15 @@
 package org.keycloak.quickstart;
 
 import org.jboss.arquillian.drone.api.annotation.Drone;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.jboss.arquillian.graphene.Graphene;
+import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import java.time.Duration;
 
 import static org.keycloak.quickstart.ExtendedAdminPage.ADMIN_CONSOLE;
 
@@ -57,11 +63,28 @@ public class RealmSettingsAttributePage {
         return logoInput.getAttribute("value");
     }
 
-    public void clickRevert() {
-        revertButton.click();
+    private static final By REVERT_BUTTON = By.xpath("//button[@data-testid='cancel']");
+
+    public void clickRevertButton() {
+        // Click the visible revert button; bind to the visible match rather than the
+        // @FindBy proxy's first match, which may be a not-yet-visible element.
+        WebElement button = new WebDriverWait(webDriver, Duration.ofSeconds(15))
+                .until(d -> d.findElements(REVERT_BUTTON).stream()
+                        .filter(WebElement::isDisplayed).findFirst().orElse(null));
+        button.click();
     }
 
     public boolean isRevertButtonPresent() {
-        return revertButton.isDisplayed();
+        try {
+            // Wait until at least one matching button is actually visible (not merely
+            // present in the DOM). This is resilient to slow SPA rendering under CI load.
+            new WebDriverWait(webDriver, Duration.ofSeconds(15))
+                    .until(d -> d.findElements(REVERT_BUTTON).stream()
+                            .anyMatch(WebElement::isDisplayed));
+            return true;
+        } catch (Exception e) {
+            // Element not found or timeout - the button is not present in this build.
+            return false;
+        }
     }
 }

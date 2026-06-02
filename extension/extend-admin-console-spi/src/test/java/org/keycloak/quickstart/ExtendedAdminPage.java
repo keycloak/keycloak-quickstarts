@@ -25,6 +25,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.jboss.arquillian.graphene.Graphene;
+import java.util.concurrent.TimeUnit;
 
 public class ExtendedAdminPage {
 
@@ -34,7 +36,7 @@ public class ExtendedAdminPage {
     private WebElement todoMenuItem;
 
     @FindBy(
-            xpath = "//button[@data-testid='there-are-no-items-empty-action']"
+            xpath = "//*[text()='Create item' or @data-testid='there-are-no-items-empty-action']"
     )
     private WebElement addButton;
 
@@ -54,7 +56,7 @@ public class ExtendedAdminPage {
     private WebElement saveButton;
 
     @FindBy(
-            xpath = "//button[@data-testid='cancel']"
+            xpath = "//*[@data-testid='cancel']"
     )
     private WebElement cancelButton;
 
@@ -62,6 +64,11 @@ public class ExtendedAdminPage {
             css = ".pf-m-success"
     )
     private WebElement alert;
+
+    @FindBy(
+            xpath = "//a[text()='Create item']"
+    )
+    private WebElement createButton;
 
     @Drone
     private WebDriver webDriver;
@@ -88,6 +95,10 @@ public class ExtendedAdminPage {
         addButton.click();
     }
 
+    public void clickCreateButton() {
+        createButton.click();
+    }
+
     public void fillTodoForm(String name, String description) {
         nameInput.sendKeys(name);
         descriptionInput.sendKeys(description);
@@ -97,12 +108,31 @@ public class ExtendedAdminPage {
         saveButton.click();
     }
 
+    private static final By CANCEL_BUTTON = By.xpath("//*[@data-testid='cancel']");
+
     public void clickCancel() {
-        cancelButton.click();
+        // Click the visible cancel button; the form may render more than one match
+        // and the @FindBy proxy would otherwise bind to the first (possibly hidden) one.
+        WebElement button = new WebDriverWait(webDriver, Duration.ofSeconds(15))
+                .until(d -> d.findElements(CANCEL_BUTTON).stream()
+                        .filter(WebElement::isDisplayed).findFirst().orElse(null));
+        button.click();
     }
+
     public boolean isCancelButtonPresent() {
-        return cancelButton.isDisplayed();
+        try {
+            // Wait until at least one matching button is actually visible (not merely
+            // present in the DOM). This is resilient to slow SPA rendering under CI load.
+            new WebDriverWait(webDriver, Duration.ofSeconds(15))
+                    .until(d -> d.findElements(CANCEL_BUTTON).stream()
+                            .anyMatch(WebElement::isDisplayed));
+            return true;
+        } catch (Exception e) {
+            // Element not found or timeout - the button is not present in this build.
+            return false;
+        }
     }
+
     public String getCurrentUrl() {
         return webDriver.getCurrentUrl();
     }
