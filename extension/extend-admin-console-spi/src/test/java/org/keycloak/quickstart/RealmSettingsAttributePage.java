@@ -4,6 +4,11 @@ import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.jboss.arquillian.graphene.Graphene;
+import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import java.time.Duration;
 
 import static org.keycloak.quickstart.ExtendedAdminPage.ADMIN_CONSOLE;
 
@@ -57,11 +62,25 @@ public class RealmSettingsAttributePage {
         return logoInput.getAttribute("value");
     }
 
-    public void clickRevert() {
+    public void clickRevertButton() {
+        // 1. Wait until the button is fully interactive and ready for input
+        new WebDriverWait(webDriver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.elementToBeClickable(revertButton));
+
+        // 2. Perform the click
         revertButton.click();
     }
 
+    // Example for RealmSettingsAttributePage
     public boolean isRevertButtonPresent() {
-        return revertButton.isDisplayed();
+        try {
+            // Wait up to 5 or 10 seconds for the element to physically appear in the DOM
+            Graphene.waitModel().withTimeout(5, TimeUnit.SECONDS)
+                    .until().element(revertButton).is().present();
+            return revertButton.isDisplayed();
+        } catch (Exception e) {
+            // Element not found or timeout - this is expected when button is not present
+            return false;
+        }
     }
 }

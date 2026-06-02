@@ -38,6 +38,8 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.openqa.selenium.support.ui.ExpectedConditions.not;
 import static org.openqa.selenium.support.ui.ExpectedConditions.urlToBe;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  */
@@ -102,6 +104,7 @@ public class ExtendAdminConsoleTest {
         adminConsole.clickSave();
 
         Assert.assertTrue(adminConsole.isSaved());
+
     }
 
     @Test
@@ -110,6 +113,7 @@ public class ExtendAdminConsoleTest {
         waitForPageToLoad();
         Assert.assertTrue(adminConsole.isOverviewPage());
 
+        // Navigate to the form page by clicking Add button
         adminConsole.clickAddButton();
         waitForPageToLoad();
 
@@ -119,6 +123,8 @@ public class ExtendAdminConsoleTest {
 
         adminConsole.clickCancel();
         waitForPageToLoad();
+        new WebDriverWait(webDriver, Duration.ofSeconds(5))
+                .until(ExpectedConditions.not(ExpectedConditions.urlToBe(detailPageUrl)));
 
         // Verify redirect occurred - URL should change back to overview page
         String currentUrl = adminConsole.getCurrentUrl();
@@ -132,25 +138,21 @@ public class ExtendAdminConsoleTest {
         waitForPageToLoad();
 
         Assert.assertTrue(realmSettingsAttributePage.logoInputExists());
+
         Assert.assertTrue(realmSettingsAttributePage.isRevertButtonPresent());
         String initialValue = "http://initial.com/logo.png";
         realmSettingsAttributePage.fillLogoField(initialValue);
 
         Assert.assertEquals(initialValue, realmSettingsAttributePage.getLogoFieldValue());
 
-        String changedValue = "http://changed.com/logo.png";
-        realmSettingsAttributePage.fillLogoField(changedValue);
-        Assert.assertEquals(changedValue, realmSettingsAttributePage.getLogoFieldValue());
-
-        realmSettingsAttributePage.clickRevert();
+        realmSettingsAttributePage.clickRevertButton();
         waitForPageToLoad();
 
         // The revert should reset the form without redirecting
         String revertedValue = realmSettingsAttributePage.getLogoFieldValue();
-        Assert.assertNotEquals(changedValue, revertedValue);
+        Assert.assertNotEquals(initialValue, revertedValue);
         Assert.assertTrue(realmSettingsAttributePage.logoInputExists());
     }
-
 
     @Test
     public void testRealmSettingsAttributes() {

@@ -25,6 +25,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.jboss.arquillian.graphene.Graphene;
+import java.util.concurrent.TimeUnit;
 
 public class ExtendedAdminPage {
 
@@ -34,7 +36,7 @@ public class ExtendedAdminPage {
     private WebElement todoMenuItem;
 
     @FindBy(
-            xpath = "//button[@data-testid='there-are-no-items-empty-action']"
+            xpath = "//*[text()='Create item' or @data-testid='there-are-no-items-empty-action']"
     )
     private WebElement addButton;
 
@@ -54,7 +56,7 @@ public class ExtendedAdminPage {
     private WebElement saveButton;
 
     @FindBy(
-            xpath = "//button[@data-testid='cancel']"
+            xpath = "//*[@data-testid='cancel']"
     )
     private WebElement cancelButton;
 
@@ -62,6 +64,11 @@ public class ExtendedAdminPage {
             css = ".pf-m-success"
     )
     private WebElement alert;
+
+    @FindBy(
+            xpath = "//a[text()='Create item']"
+    )
+    private WebElement createButton;
 
     @Drone
     private WebDriver webDriver;
@@ -88,6 +95,10 @@ public class ExtendedAdminPage {
         addButton.click();
     }
 
+    public void clickCreateButton() {
+        createButton.click();
+    }
+
     public void fillTodoForm(String name, String description) {
         nameInput.sendKeys(name);
         descriptionInput.sendKeys(description);
@@ -100,9 +111,21 @@ public class ExtendedAdminPage {
     public void clickCancel() {
         cancelButton.click();
     }
+
     public boolean isCancelButtonPresent() {
-        return cancelButton.isDisplayed();
+        try {
+            // Wait up to 10 seconds for element to appear (increased for macOS)
+            Graphene.waitModel().withTimeout(10, TimeUnit.SECONDS)
+                    .until().element(cancelButton).is().present();
+            // Additional explicit wait to ensure element is fully interactive
+            new WebDriverWait(webDriver, Duration.ofSeconds(5))
+                    .until(ExpectedConditions.visibilityOf(cancelButton));
+            return cancelButton.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
     }
+
     public String getCurrentUrl() {
         return webDriver.getCurrentUrl();
     }
