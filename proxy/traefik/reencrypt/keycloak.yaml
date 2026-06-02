@@ -52,19 +52,43 @@ http:
           X-B3-Flags: ""
           Uber-Trace-Id: ""
           X-Ot-Span-Context: ""
+
     pass-client-cert:
       passTLSClientCert:
         pem: true
 
+    ip-allowlist:
+      ipAllowList:
+        sourceRange:
+          - "192.168.0.0/16"
+          - "10.0.0.0/8"
+          - "127.0.0.0/8"
+
   routers:
-    keycloak:
+    # Public router: exposes only the paths needed for external clients.
+    # Accessible from any source IP address.
+    keycloak-public:
       entryPoints:
         - keycloak
-      rule: "PathPrefix(`/`)"
+      rule: "PathPrefix(`/realms/`) || PathPrefix(`/resources/`) || PathPrefix(`/.well-known/`)"
       middlewares:
         - filter-headers
         - pass-client-cert
-      tls: {}
+      tls: { }
+      service: keycloak
+
+    # Internal router: all other paths are restricted to the allowed source IP ranges.
+    # This prevents external access to the Admin API and Admin Console.
+    keycloak-internal:
+      entryPoints:
+        - keycloak
+      rule: "PathPrefix(`/`)"
+      priority: 1
+      middlewares:
+        - filter-headers
+        - pass-client-cert
+        - ip-allowlist
+      tls: { }
       service: keycloak
 
   services:
