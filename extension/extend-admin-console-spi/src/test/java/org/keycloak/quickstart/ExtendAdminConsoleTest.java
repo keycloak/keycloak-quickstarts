@@ -105,6 +105,54 @@ public class ExtendAdminConsoleTest {
     }
 
     @Test
+    public void testPageProviderCancelButton() throws Exception {
+        adminConsole.clickTodoMenuItem();
+        waitForPageToLoad();
+        Assert.assertTrue(adminConsole.isOverviewPage());
+
+        adminConsole.clickAddButton();
+        waitForPageToLoad();
+
+        Assert.assertTrue(adminConsole.isCancelButtonPresent());
+        adminConsole.fillTodoForm("test task", "test description");
+        String detailPageUrl = adminConsole.getCurrentUrl();
+
+        adminConsole.clickCancel();
+        waitForPageToLoad();
+
+        // Verify redirect occurred - URL should change back to overview page
+        String currentUrl = adminConsole.getCurrentUrl();
+        Assert.assertNotEquals(detailPageUrl, currentUrl);
+        Assert.assertTrue(adminConsole.isOverviewPage());
+    }
+
+    @Test
+    public void testTabProviderRevertButton() throws Exception {
+        realmSettingsAttributePage.navigateTo();
+        waitForPageToLoad();
+
+        Assert.assertTrue(realmSettingsAttributePage.logoInputExists());
+        Assert.assertTrue(realmSettingsAttributePage.isRevertButtonPresent());
+        String initialValue = "http://initial.com/logo.png";
+        realmSettingsAttributePage.fillLogoField(initialValue);
+
+        Assert.assertEquals(initialValue, realmSettingsAttributePage.getLogoFieldValue());
+
+        String changedValue = "http://changed.com/logo.png";
+        realmSettingsAttributePage.fillLogoField(changedValue);
+        Assert.assertEquals(changedValue, realmSettingsAttributePage.getLogoFieldValue());
+
+        realmSettingsAttributePage.clickRevert();
+        waitForPageToLoad();
+
+        // The revert should reset the form without redirecting
+        String revertedValue = realmSettingsAttributePage.getLogoFieldValue();
+        Assert.assertNotEquals(changedValue, revertedValue);
+        Assert.assertTrue(realmSettingsAttributePage.logoInputExists());
+    }
+
+
+    @Test
     public void testRealmSettingsAttributes() {
         realmSettingsAttributePage.navigateTo();
         waitForPageToLoad();

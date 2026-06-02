@@ -54,6 +54,11 @@ public class ExtendedAdminPage {
     private WebElement saveButton;
 
     @FindBy(
+            xpath = "//button[@data-testid='cancel']"
+    )
+    private WebElement cancelButton;
+
+    @FindBy(
             css = ".pf-m-success"
     )
     private WebElement alert;
@@ -91,6 +96,17 @@ public class ExtendedAdminPage {
     public void clickSave() {
         saveButton.click();
     }
+
+    public void clickCancel() {
+        cancelButton.click();
+    }
+    public boolean isCancelButtonPresent() {
+        return cancelButton.isDisplayed();
+    }
+    public String getCurrentUrl() {
+        return webDriver.getCurrentUrl();
+    }
+
 
     public boolean isSaved() {
         return alert.isEnabled();

@@ -20,6 +20,11 @@ public class RealmSettingsAttributePage {
     private WebElement saveButton;
 
     @FindBy(
+            xpath = "//button[@data-testid='cancel']"
+    )
+    private WebElement revertButton;
+
+    @FindBy(
             css = ".pf-m-success"
     )
     private WebElement alert;
@@ -41,5 +46,22 @@ public class RealmSettingsAttributePage {
 
     public boolean isSaved() {
         return alert.isEnabled();
+    }
+
+    public void fillLogoField(String logo) {
+        logoInput.clear();
+        logoInput.sendKeys(logo);
+    }
+
+    public String getLogoFieldValue() {
+        return logoInput.getAttribute("value");
+    }
+
+    public void clickRevert() {
+        revertButton.click();
+    }
+
+    public boolean isRevertButtonPresent() {
+        return revertButton.isDisplayed();
     }
 }
