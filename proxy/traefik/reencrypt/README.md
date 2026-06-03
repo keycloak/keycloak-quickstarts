@@ -184,12 +184,66 @@ Note: If the `KC_PROXY_HEADERS` setting is set to forwarded (see below), Keycloa
 
 Once stripped, Traefik will append its own verified connection metadata back to the backend request using its default proxy behavior.
 
+**Path-based access control:**
+
+Keycloak exposes several paths, but not all of them should be reachable from external networks.
+The [exposed path recommendations](https://www.keycloak.org/server/reverseproxy#_exposed_path_recommendations) section in the Keycloak reverse proxy guide describes which paths should be publicly exposed and which should be restricted.
+Because TLS re-encrypt lets Traefik inspect the request path, it can enforce this by combining path-based routers with an IP allowlist middleware. (This filtering is not possible with TLS passthrough, where the proxy cannot read the URL.)
+
+```yaml
+  middlewares:
+    # Allowed source IP ranges. Replace with your internal IP address ranges.
+    ip-allowlist:
+      ipAllowList:
+        sourceRange:
+          - "192.168.0.0/16"
+          - "10.0.0.0/8"
+          - "127.0.0.0/8"
+          - "172.16.0.0/12"
+
+  routers:
+    # Public router: accessible from any source IP address.
+    keycloak-public:
+      entryPoints:
+        - keycloak
+      rule: "PathPrefix(`/realms/`) || PathPrefix(`/resources/`) || PathPrefix(`/.well-known/`)"
+      middlewares:
+        - filter-headers
+        - pass-client-cert
+      tls: {}
+      service: keycloak
+
+    # Internal router: all other paths are restricted to the allowed source IP ranges.
+    keycloak-internal:
+      entryPoints:
+        - keycloak
+      rule: "PathPrefix(`/`)"
+      priority: 1
+      middlewares:
+        - filter-headers
+        - pass-client-cert
+        - ip-allowlist
+      tls: {}
+      service: keycloak
+```
+
+The `keycloak-public` router matches only the paths that must be publicly accessible for Keycloak to function correctly: `/realms/` (login, tokens, and other OIDC endpoints), `/resources/` (themes and static assets), and `/.well-known/` (OIDC discovery).
+These paths are reachable from any source IP address.
+
+All other paths — including the Admin API (`/admin/`) and Admin Console — are handled by the `keycloak-internal` router, which applies the `ip-allowlist` middleware. Requests to these paths are only allowed from the internal IP ranges defined in `sourceRange`; any other source IP is denied with an HTTP 403 response.
+
+The `priority: 1` on `keycloak-internal` is set deliberately low so that Traefik always evaluates the more specific `keycloak-public` router first. This ensures public paths are served without the IP restriction, while everything else falls through to the restricted router.
+
+> **Note:** With these settings, the redirect to the welcome screen or Admin UI will not work from external IP addresses, and this is expected. Replace the example CIDR ranges with your actual internal network ranges.
+
+To explore this quickstart, you can edit the configuration file at runtime and for example remove items from the IP allow list. 
+
 **Client certificate verification (TLS options):**
 
 ```yaml
 tls:
   options:
-    keycloak-tls:
+    default:
       clientAuth:
         caFiles:
           - /certs/client-ca-chain.pem
@@ -199,14 +253,7 @@ tls:
 The `caFiles` directive specifies the CA chain used to verify client certificates during the TLS handshake.
 `VerifyClientCertIfGiven` requests a client certificate but does not require one, so clients without certificates can still connect.
 
-The TLS options are referenced in the router configuration:
-
-```yaml
-routers:
-  keycloak:
-    tls:
-      options: keycloak-tls
-```
+These TLS options are defined under the `default` name, which Traefik applies automatically to every router that does not reference an explicit TLS option. Both the `keycloak-public` and `keycloak-internal` routers therefore use this client certificate verification.
 
 **Forward client certificates:**
 
@@ -224,16 +271,24 @@ header before setting the verified value, providing an additional layer of defen
 The middleware only sets the header when the client presented a valid certificate during the TLS handshake.
 If no certificate was presented, the header is removed entirely.
 
-The middleware ordering in the router is important:
+The middleware ordering in the routers is important:
 
 ```yaml
+# keycloak-public router
 middlewares:
   - filter-headers
   - pass-client-cert
+
+# keycloak-internal router
+middlewares:
+  - filter-headers
+  - pass-client-cert
+  - ip-allowlist
 ```
 
 The `filter-headers` middleware runs first to strip any spoofed headers from the external client, then `pass-client-cert`
 adds the verified certificate from the TLS handshake.
+On the `keycloak-internal` router, `ip-allowlist` runs last so that the source IP is checked only after the request has been sanitized, denying external callers before they can reach a non-public path.
 
 **HTTP health check on the management port:**
 
