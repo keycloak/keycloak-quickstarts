@@ -199,6 +199,7 @@ Because TLS re-encrypt lets Traefik inspect the request path, it can enforce thi
           - "192.168.0.0/16"
           - "10.0.0.0/8"
           - "127.0.0.0/8"
+          - "172.16.0.0/12"
 
   routers:
     # Public router: accessible from any source IP address.
@@ -234,6 +235,8 @@ All other paths — including the Admin API (`/admin/`) and Admin Console — ar
 The `priority: 1` on `keycloak-internal` is set deliberately low so that Traefik always evaluates the more specific `keycloak-public` router first. This ensures public paths are served without the IP restriction, while everything else falls through to the restricted router.
 
 > **Note:** With these settings, the redirect to the welcome screen or Admin UI will not work from external IP addresses, and this is expected. Replace the example CIDR ranges with your actual internal network ranges.
+
+To explore this quickstart, you can edit the configuration file at runtime and for example remove items from the IP allow list. 
 
 **Client certificate verification (TLS options):**
 
