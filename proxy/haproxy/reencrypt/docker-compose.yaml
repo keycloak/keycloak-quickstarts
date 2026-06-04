@@ -14,7 +14,7 @@ services:
       retries: 5
 
   keycloak1:
-    image: quay.io/keycloak/keycloak:nightly
+    image: quay.io/keycloak/keycloak:26.6.3
     command: start
     environment:
       # DB
@@ -69,7 +69,7 @@ services:
       - backend
 
   keycloak2:
-    image: quay.io/keycloak/keycloak:nightly
+    image: quay.io/keycloak/keycloak:26.6.3
     command: start
     environment:
       # DB
