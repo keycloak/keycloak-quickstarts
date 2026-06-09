@@ -24,10 +24,8 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
 import org.keycloak.quickstart.test.FluentTestsHelper;
 import org.keycloak.quickstart.test.page.LoginPage;
 import java.time.Duration;
@@ -46,9 +44,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 /**
  */
 @RunWith(Arquillian.class)
-// Tests share a single browser session and only testAdminUiTodoApp logs in; pin the
-// order so that login-establishing test runs first (it sorts before the others).
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ExtendAdminConsoleTest {
 
     public static final String KEYCLOAK_URL = "http://localhost:8180";
@@ -88,14 +83,20 @@ public class ExtendAdminConsoleTest {
     public void setup() throws Exception {
         webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
         webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+
+        // The tests share a single browser session, so authenticate here rather than
+        // depending on another test method having logged in first. The login form is
+        // only shown when the session is not yet authenticated.
+        adminConsole.navigateTo();
+        waitForPageToLoad();
+        if (webDriver.getTitle().contains("Sign in")) {
+            loginPage.login("admin", "admin");
+            waitForPageToLoad();
+        }
     }
 
     @Test
     public void testAdminUiTodoApp() throws Exception {
-        adminConsole.navigateTo();
-        waitForPageToLoad();
-        loginPage.login("admin", "admin");
-        waitForPageToLoad();
         assertThat(webDriver.getTitle(), containsString("Keycloak Administration Console"));
 
         Assert.assertTrue(adminConsole.isTodoMenuPresent());
