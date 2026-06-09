@@ -379,6 +379,27 @@ This prevents direct clients from injecting a `X-Forwarded-Tls-Client-Cert` head
 Combined with the network isolation (Keycloak is only reachable via the internal backend network)
 and header stripping at Traefik, this provides defense in depth against certificate spoofing.
 
+## Optional: Admin UI and Admin API on a dedicated hostname and port
+
+By default, the Admin UI and Admin API are served on the same port (8443) as the public endpoints,
+protected only by the `ip-allowlist` middleware. For stricter network-level isolation, you can move
+them to a dedicated hostname and port (8444) so they can be independently firewalled.
+
+To enable this, uncomment the marked lines in the following files:
+
+**`docker-compose.yaml`**
+- `KC_HOSTNAME_ADMIN` on both `keycloak1` and `keycloak2` — tells each Keycloak node to serve the Admin UI and Admin API on the admin hostname.
+- Port `8444:8444` under the `traefik` service — exposes the admin port on the host.
+
+**`traefik.yaml`**
+- The `keycloak-admin` entrypoint — adds a second Traefik entrypoint listening on port 8444.
+
+**`keycloak.yaml`**
+- The `keycloak-admin` router — routes all traffic coming on the `keycloak-admin` entrypoint to the Keycloak service, restricted to the `ip-allowlist`.
+- Comment out the `keycloak-internal` router — it is no longer needed, as the admin paths are now handled exclusively by the dedicated `keycloak-admin` router on port 8444. Leaving both enabled would cause the `keycloak-internal` router to match admin paths on port 8443 as well.
+
+> **Note:** With this setup, any request to an admin path on port 8443 will fall through to the `keycloak-public` router, which only matches `/realms/`, `/resources/`, and `/.well-known/`. Admin paths on port 8443 will return a 404.
+
 ## Resources
 
 - [Traefik Documentation](https://doc.traefik.io/traefik/)
