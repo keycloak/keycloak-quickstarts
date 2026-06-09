@@ -1,3 +1,8 @@
+# =========================================================================
+# NOTE: ADMIN UI hostname and port ISOLATION
+#   - Uncomment Admin router section (keycloak-admin)(lines 103-112)
+#   - Comment keycloak-internal section (lines 88-98)
+# =========================================================================
 tls:
   certificates:
     - certFile: /certs/traefik-external/cert.pem
@@ -91,6 +96,20 @@ http:
         - ip-allowlist
       tls: { }
       service: keycloak
+
+# Uncomment this Admin router section if you have the admin UI and admin API on a separate hostname and port
+#    # Admin router: routes traffic from the admin hostname.
+#    # Restricted to the allowed source IP ranges.
+#    keycloak-admin:
+#      entryPoints:
+#        - keycloak-admin
+#      rule: "PathPrefix(`/`)"
+#      middlewares:
+#        - filter-headers
+#        - pass-client-cert
+#        - ip-allowlist
+#      tls: { }
+#      service: keycloak
 
   services:
     keycloak:

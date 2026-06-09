@@ -1,6 +1,13 @@
+# =========================================================================
+# NOTE: ADMIN UI hostname and port ISOLATION
+#   - Uncomment keycloak-admin entry point (keycloak-admin)(lines 8-9)
+# =========================================================================
 entryPoints:
   keycloak:
     address: ":8443"
+# Uncomment if you want to have the admin UI and admin API on a separate hostname and port.
+#  keycloak-admin:
+#    address: ":8444"
 api:
   dashboard: true
   insecure: true
