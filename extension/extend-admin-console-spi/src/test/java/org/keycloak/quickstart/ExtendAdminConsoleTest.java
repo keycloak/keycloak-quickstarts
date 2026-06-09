@@ -24,8 +24,10 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.keycloak.quickstart.test.FluentTestsHelper;
 import org.keycloak.quickstart.test.page.LoginPage;
 import java.time.Duration;
@@ -44,6 +46,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 /**
  */
 @RunWith(Arquillian.class)
+// Tests share a single browser session and only testAdminUiTodoApp logs in; pin the
+// order so that login-establishing test runs first (it sorts before the others).
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ExtendAdminConsoleTest {
 
     public static final String KEYCLOAK_URL = "http://localhost:8180";
