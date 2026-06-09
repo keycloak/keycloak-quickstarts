@@ -1,7 +1,7 @@
 # =========================================================================
 # NOTE: ADMIN UI hostname and port ISOLATION
-#   - Uncomment 'KC_HOSTNAME_ADMIN' in keycloak1 and keycloak2 (line 39 and 94)
-#   - Uncomment port '8444:8444' under the traefik service (line 191)
+#   - Uncomment 'KC_HOSTNAME_ADMIN' in keycloak1 and keycloak2
+#   - Uncomment port '8444:8444' under the traefik service
 # =========================================================================
 services:
   postgres:
@@ -35,8 +35,9 @@ services:
       # Hostname / HTTPS
       KC_PROXY_HEADERS: xforwarded
       KC_HOSTNAME: "https://${KC_HOST}:8443"
-    # Uncomment if you want to have the admin UI and admin API on a separate hostname and port.
-    # KC_HOSTNAME_ADMIN: "https://${KC_HOST}:8444"
+      # ADMIN UI hostname and port ISOLATION
+      # Uncomment if you want to have the admin UI and admin API on a separate hostname and port.
+      # KC_HOSTNAME_ADMIN: "https://${KC_HOST}:8444"
       KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/certs/cert.pem
       KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/certs/key.pem
       KC_HTTPS_CLIENT_AUTH: required
@@ -90,6 +91,7 @@ services:
       # Hostname / HTTPS
       KC_PROXY_HEADERS: xforwarded
       KC_HOSTNAME: "https://${KC_HOST}:8443"
+      # ADMIN UI hostname and port ISOLATION
       # Uncomment if you want to have the admin UI and admin API on a separate hostname and port.
       # KC_HOSTNAME_ADMIN: "https://${KC_HOST}:8444"
       KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/certs/cert.pem
@@ -187,8 +189,9 @@ services:
           selinux: z
     ports:
       - "8443:8443"
-     #  Uncomment if you want to have the admin UI and admin API on a separate hostname and port.
-     # - "8444:8444"
+      # ADMIN UI hostname and port ISOLATION
+      # Uncomment if you want to have the admin UI and admin API on a separate hostname and port.
+      # - "8444:8444"
       - "8080:8080"
     networks:
       - frontend
