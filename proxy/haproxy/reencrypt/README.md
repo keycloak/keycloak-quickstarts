@@ -389,6 +389,46 @@ and header stripping at HAProxy, this provides defense in depth against certific
 **IMPORTANT:** HAProxy support for `KC_SPI_X509CERT_LOOKUP__HAPROXY__SSL_CERT_CHAIN` is only available from Keycloak 26.7
 see [#49180](https://github.com/keycloak/keycloak/issues/49180).
 
+## Optional: Admin UI and Admin API on a dedicated port
+
+By default, the Admin UI and Admin API are served on the same port (8443) as the public endpoints,
+protected only by the source IP filtering (`is_allowed_src`). For stricter network-level isolation, you can move
+them to a dedicated port (8444) so they can be independently firewalled.
+
+The dedicated admin port uses the **same hostname** as the public port, so the existing external certificate
+already covers it and no additional Subject Alternative Name is required. Because the admin port and the public
+port share the same HAProxy frontend, the header filtering and client certificate forwarding described above
+apply to both automatically.
+
+> **Note:** Setting `hostname-admin` only changes the URLs Keycloak generates for the Admin Console and Admin API.
+> It does not stop the Admin API from also answering on the public frontend URL — restricting administration access
+> to the dedicated port must be enforced at the reverse proxy, which is what the rules below do.
+> See the [hostname guide](https://www.keycloak.org/server/hostname).
+
+To enable this, uncomment the marked lines in the following files:
+
+**`docker-compose.yaml`**
+- `KC_HOSTNAME_ADMIN` on both `keycloak1` and `keycloak2` — tells each Keycloak node to serve the Admin UI and Admin API on the admin port. (`KC_HOSTNAME` is already set to the required `https://${KC_HOST}:8443` URL form.)
+- Port `8444:8444` under the `haproxy` service — exposes the admin port on the host.
+
+**`haproxy.cfg`**
+- The second `bind *:8444 ...` line — makes the frontend also listen on the admin port.
+- Comment the default `http-request deny unless is_public_path or is_allowed_src` rule and uncomment the three isolation rules below it:
+  ```
+  acl is_admin_port dst_port 8444
+  http-request deny if !is_admin_port !is_public_path
+  http-request deny if is_admin_port !is_allowed_src
+  ```
+
+These rules route by destination port:
+
+- **Public port (8443):** only the public paths (`/realms/`, `/resources/`, `/.well-known/`) are served; any other path, including the Admin Console and Admin API, is denied.
+- **Admin port (8444):** all paths are served, but only to the allowed source IP ranges.
+
+> **Note:** With this setup, any request to an admin path on port 8443 is denied with an HTTP 403 response. Because the admin port shares the hostname with the public port, In production, restrict the admin port (8444) to an internal/management network at the firewall.
+
+
+
 ## Resources
 
 - [HAProxy Configuration Manual](https://www.haproxy.com/documentation/haproxy-configuration-manual/latest/)
