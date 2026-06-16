@@ -37,9 +37,9 @@ services:
       # Hostname / HTTPS
       KC_PROXY_HEADERS: forwarded
       KC_HOSTNAME: "https://${KC_HOST}:8443"
-    # ADMIN UI hostname and port ISOLATION
-    # Uncomment if you want the admin UI and admin API on a separate port.
-    # KC_HOSTNAME_ADMIN: "https://${KC_HOST}:8444"
+      # ADMIN UI hostname and port ISOLATION
+      # Uncomment if you want the admin UI and admin API on a separate port.
+      # KC_HOSTNAME_ADMIN: "https://${KC_HOST}:8444"
       KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/certs/cert.pem
       KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/certs/key.pem
       KC_HTTPS_CLIENT_AUTH: required
@@ -95,9 +95,9 @@ services:
       # Hostname / HTTPS
       KC_PROXY_HEADERS: forwarded
       KC_HOSTNAME: "https://${KC_HOST}:8443"
-    # ADMIN UI hostname and port ISOLATION
-    # Uncomment if you want the admin UI and admin API on a separate port.
-    # KC_HOSTNAME_ADMIN: "https://${KC_HOST}:8444"
+      # ADMIN UI hostname and port ISOLATION
+      # Uncomment if you want the admin UI and admin API on a separate port.
+      # KC_HOSTNAME_ADMIN: "https://${KC_HOST}:8444"
       KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/certs/cert.pem
       KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/certs/key.pem
       KC_HTTPS_CLIENT_AUTH: required
@@ -178,9 +178,9 @@ services:
     ports:
       - "8443:8443"
       - "8404:8404"
-       # ADMIN UI hostname and port ISOLATION
-       # Uncomment if you want the admin UI and admin API on a separate port.
-      #- "8444:8444"
+      # ADMIN UI hostname and port ISOLATION
+      # Uncomment if you want the admin UI and admin API on a separate port.
+      # - "8444:8444"
     depends_on:
       - keycloak1
       - keycloak2

@@ -395,8 +395,10 @@ By default, the Admin UI and Admin API are served on the same port (8443) as the
 protected only by the source IP filtering (`is_allowed_src`). For stricter network-level isolation, you can move
 them to a dedicated port (8444) so they can be independently firewalled.
 
-The dedicated admin port uses the **same hostname** as the public port, so the existing external certificate
-already covers it and no additional Subject Alternative Name is required. Because the admin port and the public
+In this example, the dedicated admin port uses the same hostname as the public port, so the existing external certificate
+already covers it and no additional Subject Alternative Name is required. In your environment, you are free to configure this differently. 
+
+Because the admin port and the public
 port share the same HAProxy frontend, the header filtering and client certificate forwarding described above
 apply to both automatically.
 
