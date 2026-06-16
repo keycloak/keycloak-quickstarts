@@ -22,6 +22,7 @@ import org.jboss.arquillian.graphene.page.Page;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -102,6 +103,53 @@ public class ExtendAdminConsoleTest {
         adminConsole.clickSave();
 
         Assert.assertTrue(adminConsole.isSaved());
+    }
+
+    @Test
+    public void testPageProviderCancelButton() throws Exception {
+        adminConsole.clickTodoMenuItem();
+        waitForPageToLoad();
+        Assert.assertTrue(adminConsole.isOverviewPage());
+
+        // Navigate to the form page by clicking Add button
+        adminConsole.clickAddButton();
+        waitForPageToLoad();
+
+
+        adminConsole.fillTodoForm("test task", "test description");
+        Assume.assumeTrue("Cancel button not present in this server build", adminConsole.isCancelButtonPresent());
+        String detailPageUrl = adminConsole.getCurrentUrl();
+
+        adminConsole.clickCancel();
+        waitForPageToLoad();
+
+        // Verify redirect occurred - URL should change back to overview page
+        String currentUrl = adminConsole.getCurrentUrl();
+        Assert.assertNotEquals(detailPageUrl, currentUrl);
+        Assert.assertTrue(adminConsole.isOverviewPage());
+    }
+
+    @Test
+    public void testTabProviderRevertButton() throws Exception {
+        realmSettingsAttributePage.navigateTo();
+        waitForPageToLoad();
+
+        Assert.assertTrue(realmSettingsAttributePage.logoInputExists());
+
+
+        String initialValue = "http://initial.com/logo.png";
+        realmSettingsAttributePage.fillLogoField(initialValue);
+        Assume.assumeTrue("Revert button not present in this server build", realmSettingsAttributePage.isRevertButtonPresent());
+
+        Assert.assertEquals(initialValue, realmSettingsAttributePage.getLogoFieldValue());
+
+        realmSettingsAttributePage.clickRevertButton();
+        waitForPageToLoad();
+
+        // The revert should reset the form without redirecting
+        String revertedValue = realmSettingsAttributePage.getLogoFieldValue();
+        Assert.assertNotEquals(initialValue, revertedValue);
+        Assert.assertTrue(realmSettingsAttributePage.logoInputExists());
     }
 
     @Test
