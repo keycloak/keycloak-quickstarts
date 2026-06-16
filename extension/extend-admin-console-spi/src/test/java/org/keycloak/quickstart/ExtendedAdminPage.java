@@ -34,7 +34,7 @@ public class ExtendedAdminPage {
     private WebElement todoMenuItem;
 
     @FindBy(
-            xpath = "//button[@data-testid='there-are-no-items-empty-action']"
+            xpath = "//*[text()='Create item' or @data-testid='there-are-no-items-empty-action']"
     )
     private WebElement addButton;
 
