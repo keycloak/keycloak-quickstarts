@@ -88,7 +88,7 @@ public class ArquillianSysoutEventListenerProviderTest {
     }
 
     @Before
-    public void setup() throws IOException, InterruptedException {
+    public void setup() throws IOException {
         webDriver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
         webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
