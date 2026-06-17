@@ -102,7 +102,6 @@ public class ArquillianSysoutEventListenerProviderTest {
         logReader.start();
 
         registerEventListener();
-        TimeUnit.SECONDS.sleep(2);
     }
 
     @After
