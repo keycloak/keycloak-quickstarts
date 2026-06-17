@@ -2,21 +2,14 @@ package org.keycloak.quickstart.event.listener;
 
 import java.io.BufferedReader;
 import java.io.Closeable;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.ClosedWatchServiceException;
-import java.nio.file.FileSystems;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.WatchEvent;
-import java.nio.file.WatchKey;
-import java.nio.file.WatchService;
 import java.util.LinkedList;
 import java.util.concurrent.TimeUnit;
 
 import org.jboss.logging.Logger;
-
-import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 
 /**
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
@@ -28,8 +21,8 @@ public class LogReaderHelper implements Closeable {
     private static final Logger logger = Logger.getLogger(LogReaderHelper.class);
 
     private final BufferedReader reader;
-    private final WatchService watchService;
-    private final String filePath;
+    private final File file;
+    private long length;
 
     private boolean closed = false;
 
@@ -37,20 +30,19 @@ public class LogReaderHelper implements Closeable {
 
     public LogReaderHelper(String filePath) {
         try {
-            this.filePath = filePath;
-            this.reader = new BufferedReader(new FileReader(filePath));
-            this.watchService = FileSystems.getDefault().newWatchService();
+            this.file = new File(filePath);
+            this.reader = new BufferedReader(new FileReader(this.file));
         } catch (IOException ioe) {
             throw new IllegalArgumentException("Exception during initialization of FileReaderHelper", ioe);
         }
     }
 
     private Path getDirPath() {
-        return Paths.get(filePath).getParent();
+        return file.toPath().getParent();
     }
 
     private String getFileName() {
-        return Paths.get(filePath).getFileName().toString();
+        return file.getName();
     }
 
     public void start() {
@@ -58,11 +50,7 @@ public class LogReaderHelper implements Closeable {
         readLines();
         this.lines.clear();
 
-        try {
-            getDirPath().register(watchService, ENTRY_MODIFY);
-        } catch (IOException ioe) {
-            throw new RuntimeException("Exception when register watchService", ioe);
-        }
+        length = file.length();
     }
 
     private void readLines() {
@@ -86,6 +74,21 @@ public class LogReaderHelper implements Closeable {
         }
     }
 
+    private boolean waitUtilModified(boolean wait) throws InterruptedException {
+        long newLength = file.length();
+        int i = 0;
+        int steps = 4;
+        while (wait && this.length == newLength && i < steps) {
+            TimeUnit.MILLISECONDS.sleep(INTERVAL_MS / steps);
+            newLength = file.length();
+            i++;
+        }
+        if (newLength > this.length) {
+            this.length = newLength;
+            return true;
+        }
+        return false;
+    }
 
     /**
      * Read the first line, which was added to the file since last read and removes this line from the "stack" of read lines.
@@ -125,27 +128,10 @@ public class LogReaderHelper implements Closeable {
         }
 
         try {
-            WatchKey key;
-            if (wait) {
-                key = watchService.poll(INTERVAL_MS, TimeUnit.MILLISECONDS);
-            } else {
-                // Just check if something is present - without waiting
-                key = watchService.poll();
+            if (waitUtilModified(wait)) {
+                readLines();
+                return true;
             }
-            if (key == null) return false;
-
-            for (WatchEvent<?> event : key.pollEvents()) {
-                if (getFileName().equals(event.context().toString())) {
-                    readLines();
-                } else {
-                    logger.infof("Detected change in different file. Our fileName: %s, event context: %s", getFileName(), event.context().toString());
-                }
-            }
-
-            key.reset();
-            return true;
-        } catch (ClosedWatchServiceException cwse) {
-            logger.error("Closed watch service when trying to reading file", cwse);
             return false;
         } catch (InterruptedException ie) {
             logger.error("Interrupted", ie);
@@ -158,7 +144,6 @@ public class LogReaderHelper implements Closeable {
         try {
             closed = true;
             reader.close();
-            watchService.close();
         } catch (IOException ioe) {
             throw new RuntimeException(ioe);
         }
