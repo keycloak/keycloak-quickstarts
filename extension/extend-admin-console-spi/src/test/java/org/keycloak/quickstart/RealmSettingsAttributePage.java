@@ -1,9 +1,15 @@
 package org.keycloak.quickstart;
 
 import org.jboss.arquillian.drone.api.annotation.Drone;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.jboss.arquillian.graphene.Graphene;
+import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import java.time.Duration;
 
 import static org.keycloak.quickstart.ExtendedAdminPage.ADMIN_CONSOLE;
 
@@ -18,6 +24,11 @@ public class RealmSettingsAttributePage {
             xpath = "//button[@data-testid='save']"
     )
     private WebElement saveButton;
+
+    @FindBy(
+            xpath = "//button[@data-testid='cancel']"
+    )
+    private WebElement revertButton;
 
     @FindBy(
             css = ".pf-m-success"
@@ -37,6 +48,31 @@ public class RealmSettingsAttributePage {
     public void saveLogoField(String logo) {
         logoInput.sendKeys(logo);
         saveButton.click();
+    }
+
+    public void fillLogoField(String logo) {
+        logoInput.clear();
+        logoInput.sendKeys(logo);
+    }
+
+    public String getLogoFieldValue() {
+        return logoInput.getAttribute("value");
+    }
+
+    public void clickRevertButton() {
+        WebElement button = new WebDriverWait(webDriver, Duration.ofSeconds(15))
+                .until( ExpectedConditions.elementToBeClickable(revertButton));
+        button.click();
+    }
+
+    public boolean isRevertButtonPresent() {
+        try {
+            new WebDriverWait(webDriver, Duration.ofSeconds(15))
+                    .until(ExpectedConditions.elementToBeClickable(revertButton));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public boolean isSaved() {

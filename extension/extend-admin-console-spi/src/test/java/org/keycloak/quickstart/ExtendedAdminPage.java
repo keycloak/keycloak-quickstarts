@@ -25,6 +25,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.jboss.arquillian.graphene.Graphene;
+import java.util.concurrent.TimeUnit;
 
 public class ExtendedAdminPage {
 
@@ -52,6 +54,11 @@ public class ExtendedAdminPage {
             xpath = "//button[@data-testid='save']"
     )
     private WebElement saveButton;
+
+    @FindBy(
+            xpath = "//*[@data-testid='cancel']"
+    )
+    private WebElement cancelButton;
 
     @FindBy(
             css = ".pf-m-success"
@@ -90,6 +97,26 @@ public class ExtendedAdminPage {
 
     public void clickSave() {
         saveButton.click();
+    }
+
+    public void clickCancel() {
+        WebElement button = new WebDriverWait(webDriver, Duration.ofSeconds(15))
+                .until(ExpectedConditions.elementToBeClickable(cancelButton));
+        button.click();
+    }
+
+    public boolean isCancelButtonPresent() {
+        try {
+            new WebDriverWait(webDriver, Duration.ofSeconds(15))
+                    .until(ExpectedConditions.elementToBeClickable(cancelButton));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public String getCurrentUrl() {
+        return webDriver.getCurrentUrl();
     }
 
     public boolean isSaved() {
