@@ -379,6 +379,30 @@ This prevents direct clients from injecting a `X-Forwarded-Tls-Client-Cert` head
 Combined with the network isolation (Keycloak is only reachable via the internal backend network)
 and header stripping at Traefik, this provides defense in depth against certificate spoofing.
 
+## Master realm and public router priority constraints:**
+
+The commented `keycloak-master` router provides an explicit administrative isolation layer for Keycloak's core configuration boundary by separating the default management realm from custom application realms.
+
+```yaml
+  routers:
+#    keycloak-master:
+#      entryPoints:
+#        - keycloak
+#      rule: "PathRegexp(`^/realms/master(/|$)`)"
+#      priority: 100
+#      middlewares:
+#        - filter-headers
+#        - pass-client-cert
+#        - ip-allowlist
+#      tls: { }
+#      service: keycloak
+```
+When activated, the router targets requests matching the regular expression ^/realms/master(/|$). This rule matches core management traffic (such as token requests or console lookups inside the master realm) while letting other user realm paths pass through unhindered.
+
+Rule Overlap Resolution: Because the path /realms/master/ matches both the explicit master regex rule and the broad PathPrefix(\/realms/`)` string in the public router, a priority conflict occurs. Traefik handles overlapping matching metrics by executing the router with the highest numeric priority value first.
+
+The explicit use of priority: 100 on the master router and priority: 50 on the public router defines a strict evaluation pipeline.
+
 ## Optional: Admin UI and Admin API on a dedicated hostname and port
 
 By default, the Admin UI and Admin API are served on the same port (8443) as the public endpoints,
