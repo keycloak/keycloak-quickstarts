@@ -71,7 +71,7 @@ http:
           - "172.16.0.0/12"
 
   routers:
-#  Allow access to the master realm for administrative purposes.
+    # Allow access to the master realm for administrative purposes only from allowed IP addresses
     keycloak-master:
       entryPoints:
         - keycloak
@@ -90,7 +90,7 @@ http:
       entryPoints:
         - keycloak
       rule: "PathPrefix(`/realms/`) || PathPrefix(`/resources/`) || PathPrefix(`/.well-known/`)"
-      #This ensures that the keycloak-master router takes precedence over the keycloak-public router.
+      # This ensures that the keycloak-master router takes precedence over the keycloak-public router.
       priority: 50
       middlewares:
         - filter-headers
