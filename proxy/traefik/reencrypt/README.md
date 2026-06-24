@@ -381,23 +381,23 @@ and header stripping at Traefik, this provides defense in depth against certific
 
 ## Master realm and public router priority constraints:**
 
-The commented `keycloak-master` router provides an explicit administrative isolation layer for Keycloak's core configuration boundary by separating the default management realm from custom application realms.
+The `keycloak-master` router provides an explicit administrative isolation layer for Keycloak's core configuration boundary by separating the default management realm from custom application realms.
 
 ```yaml
   routers:
-#    keycloak-master:
-#      entryPoints:
-#        - keycloak
-#      rule: "PathRegexp(`^/realms/master(/|$)`)"
-#      priority: 100
-#      middlewares:
-#        - filter-headers
-#        - pass-client-cert
-#        - ip-allowlist
-#      tls: { }
-#      service: keycloak
+    keycloak-master:
+      entryPoints:
+        - keycloak
+      rule: "PathRegexp(`^/realms/master(/|$)`)"
+      priority: 100
+      middlewares:
+        - filter-headers
+        - pass-client-cert
+        - ip-allowlist
+      tls: { }
+      service: keycloak
 ```
-When activated, the router targets requests matching the regular expression ^/realms/master(/|$). This rule matches core management traffic (such as token requests or console lookups inside the master realm) while letting other user realm paths pass through unhindered.
+This router targets requests matching the regular expression ^/realms/master(/|$). This rule matches core management traffic (such as token requests or console lookups inside the master realm) while letting other user realm paths pass through unhindered.
 
 Rule Overlap Resolution: Because the path /realms/master/ matches both the explicit master regex rule and the broad PathPrefix(\/realms/`)` string in the public router, a priority conflict occurs. Traefik handles overlapping matching metrics by executing the router with the highest numeric priority value first.
 

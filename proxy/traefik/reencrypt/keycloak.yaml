@@ -71,18 +71,18 @@ http:
           - "172.16.0.0/12"
 
   routers:
-# Uncomment this router if you want to allow access to the master realm for administrative purposes.
-#    keycloak-master:
-#      entryPoints:
-#        - keycloak
-#      rule: "PathRegexp(`^/realms/master(/|$)`)"
-#      priority: 100
-#      middlewares:
-#        - filter-headers
-#        - pass-client-cert
-#        - ip-allowlist
-#      tls: { }
-#      service: keycloak
+#  Allow access to the master realm for administrative purposes.
+    keycloak-master:
+      entryPoints:
+        - keycloak
+      rule: "PathRegexp(`^/realms/master(/|$)`)"
+      priority: 100
+      middlewares:
+        - filter-headers
+        - pass-client-cert
+        - ip-allowlist
+      tls: { }
+      service: keycloak
 
     # Public router: exposes only the paths needed for external clients.
     # Accessible from any source IP address.
@@ -90,8 +90,8 @@ http:
       entryPoints:
         - keycloak
       rule: "PathPrefix(`/realms/`) || PathPrefix(`/resources/`) || PathPrefix(`/.well-known/`)"
-      # Uncomment if  keycloak-master router is enabled.  This ensures that the keycloak-master router takes precedence over the keycloak-public router.
-#      priority: 50
+      #This ensures that the keycloak-master router takes precedence over the keycloak-public router.
+      priority: 50
       middlewares:
         - filter-headers
         - pass-client-cert
