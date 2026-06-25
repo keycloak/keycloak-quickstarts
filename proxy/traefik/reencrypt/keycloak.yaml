@@ -28,7 +28,7 @@ http:
     filter-headers:
       headers:
         customRequestHeaders:
-          # Strip the forwarding headers to prevent spoofing and ensure that Keycloak receives the correct client information.
+          # Strip forwarding headers to prevent spoofing
           Forwarded: ""
           X-Forwarded-For: ""
           X-Forwarded-Proto: ""
@@ -71,20 +71,35 @@ http:
           - "172.16.0.0/12"
 
   routers:
+    # Allow access to the master realm for administrative purposes only from allowed IP addresses
+    keycloak-master:
+      entryPoints:
+        - keycloak
+      rule: "PathRegexp(`^/realms/master(/|$)`)"
+      priority: 100
+      middlewares:
+        - filter-headers
+        - pass-client-cert
+        - ip-allowlist
+      tls: { }
+      service: keycloak
+
     # Public router: exposes only the paths needed for external clients.
     # Accessible from any source IP address.
     keycloak-public:
       entryPoints:
         - keycloak
       rule: "PathPrefix(`/realms/`) || PathPrefix(`/resources/`) || PathPrefix(`/.well-known/`)"
+      # This ensures that the keycloak-master router takes precedence over the keycloak-public router.
+      priority: 50
       middlewares:
         - filter-headers
         - pass-client-cert
       tls: { }
       service: keycloak
 
-    # Internal router: all other paths are restricted to the allowed source IP ranges.
-    # This prevents external access to the Admin API and Admin Console.
+    # Internal router: all other paths (like /admin/) fall through to here.
+    # Restricted strictly to the allowed source IP ranges.
     keycloak-internal:
       entryPoints:
         - keycloak
