@@ -389,6 +389,22 @@ and header stripping at HAProxy, this provides defense in depth against certific
 **IMPORTANT:** HAProxy support for `KC_SPI_X509CERT_LOOKUP__HAPROXY__SSL_CERT_CHAIN` is only available from Keycloak 26.7
 see [#49180](https://github.com/keycloak/keycloak/issues/49180).
 
+## Restrict access to the master realm to internal IP addresses
+
+As a security best practice, restrict access to the administrative `master` realm endpoints from public IP addresses.
+Use the following steps to allow access to these URLs only from allowed internal IP addresses.
+
+```
+acl is_master_realm path /realms/master
+acl is_master_realm path_beg /realms/master/
+http-request deny if is_master_realm !is_allowed_src
+```
+This configuration targets requests matching the administrative paths `/realms/master` or starting with `/realms/master/`. This rule matches core management traffic (such as token requests, logins, or console lookups inside the master realm) while letting other user realm paths pass through unhindered.
+
+Because the quickstart treats `/realms/` as a public path, this explicit deny is required to keep the administrative realm from being reachable from the public internet.
+
+The explicit placement of the `is_master_realm` denial rule at the very top of the request processing block defines a strict evaluation pipeline. This acts as a higher priority filter, ensuring malicious external traffic hitting the master path is rejected instantly before any broader, public routing logic is evaluated.
+
 ## Optional: Admin UI and Admin API on a dedicated port
 
 By default, the Admin UI and Admin API are served on the same port (8443) as the public endpoints,
