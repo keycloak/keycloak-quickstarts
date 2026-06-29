@@ -389,10 +389,10 @@ and header stripping at HAProxy, this provides defense in depth against certific
 **IMPORTANT:** HAProxy support for `KC_SPI_X509CERT_LOOKUP__HAPROXY__SSL_CERT_CHAIN` is only available from Keycloak 26.7
 see [#49180](https://github.com/keycloak/keycloak/issues/49180).
 
-## Restrict login to the master realm to internal IP addresses
+## Restrict access to the master realm to internal IP addresses
 
-As a security best practice, prevent logins to the administrative `master` realm from public IP addresses.
-Use the following steps to allow accessing the respective URLs only from allowed internal IP addresses.
+As a security best practice, restrict access to the administrative `master` realm endpoints from public IP addresses.
+Use the following steps to allow access to these URLs only from allowed internal IP addresses.
 ```
 acl is_master_realm path /realms/master
 acl is_master_realm path_beg /realms/master/
