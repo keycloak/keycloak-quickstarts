@@ -1,0 +1,7 @@
+# Sets the cn=config admin password so cn=config can be managed via simple
+# bind over ldap:// (not just SASL EXTERNAL via ldapi:// socket).
+# In production, use a hashed password instead: slappasswd -s <password>
+dn: olcDatabase={0}config,cn=config
+changetype: modify
+replace: olcRootPW
+olcRootPW: config

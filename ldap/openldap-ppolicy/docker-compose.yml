@@ -1,0 +1,6 @@
+services:
+  openldap:
+    build: .
+    container_name: openldap-ppolicy
+    ports:
+      - "389:389"

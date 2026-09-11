@@ -1,0 +1,7 @@
+services:
+  389ds:
+    build: .
+    container_name: 389ds-ppolicy
+    ports:
+      # Different port than the openldap quickstart to avoid conflicts
+      - "3389:3389"
