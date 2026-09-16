@@ -6,12 +6,14 @@ By implementing either:
 
   * `org.keycloak.services.ui.extend.UiPageProvider` for a complete section
   * `org.keycloak.services.ui.extend.UiTabProvider` for a tab
+  * `org.keycloak.services.ui.extend.UiScriptProvider` for a page backed by a JavaScript custom element
 
 For both options you need to describe the fields you want on the page by using the `org.keycloak.provider.ProviderConfigProperty`
 To specify where the tab will appear in the ui, you can add a path valid paths can be found in the `routes.ts` files in the admin-ui module of Keycloak project.
 
-This example contains an implementation of both these. `AdminUiPage` is a todo section that is added.
-And `ThemeUiTab` is an extra tab in the realm setting that let's you edit the realm attributes.
+This example contains an implementation of all three. `AdminUiPage` is a todo section that is added.
+`ThemeUiTab` is an extra tab in the realm setting that let's you edit the realm attributes.
+`RealmSummaryUiScript` adds a custom page that loads a bundled JavaScript file registering a web component.
 
 ### Running
 
@@ -39,6 +41,15 @@ The `AdminUiPage` class illustrates how to introduce a new section into the main
 
 After you created an item you can view the details by clicking on it in the list:
 ![todo detail screen](images/img_2.png "Todo item details")
+
+The `RealmSummaryUiScript` class illustrates how to add a page that mounts a custom element. Implement
+`getTagName()` and `getScriptPath()` to point at a JavaScript file on the provider classpath. The script is
+served from `/admin/realms/{realm}/ui-scripts/{providerId}/script.js` and receives a `context` property with
+realm details when mounted. Open the _realm-summary_ item in the Configure section to see the widget.
+
+NOTE: `UiScriptProvider` requires a Keycloak build that includes this SPI. When building against a local
+Keycloak checkout, install `server-spi-private` and compile this quickstart with
+`-Dversion.keycloak=999.0.0-SNAPSHOT`.
 
 ### Integration test of the Quickstart
 Make sure you have a Keycloak server running with an admin user in the master realm and copy the generated jar file into the providers folder.
