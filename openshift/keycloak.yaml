@@ -22,7 +22,7 @@ objects:
         - port: 8080
           targetPort: 8080
       selector:
-        deploymentConfig: '${APPLICATION_NAME}'
+        deployment: '${APPLICATION_NAME}'
   - apiVersion: v1
     id: '${APPLICATION_NAME}'
     kind: Route
@@ -38,8 +38,8 @@ objects:
         termination: edge
       to:
         name: '${APPLICATION_NAME}'
-  - apiVersion: v1
-    kind: DeploymentConfig
+  - apiVersion: apps/v1
+    kind: Deployment
     metadata:
       labels:
         application: '${APPLICATION_NAME}'
@@ -47,14 +47,15 @@ objects:
     spec:
       replicas: 1
       selector:
-        deploymentConfig: '${APPLICATION_NAME}'
+        matchLabels:
+          deployment: '${APPLICATION_NAME}'
       strategy:
         type: Recreate
       template:
         metadata:
           labels:
             application: '${APPLICATION_NAME}'
-            deploymentConfig: '${APPLICATION_NAME}'
+            deployment: '${APPLICATION_NAME}'
           name: '${APPLICATION_NAME}'
         spec:
           containers:
