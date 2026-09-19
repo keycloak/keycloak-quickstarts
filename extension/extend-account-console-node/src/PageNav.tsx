@@ -9,11 +9,16 @@ import {
 import { PropsWithChildren, MouseEvent as ReactMouseEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHref, useLinkClickHandler } from "react-router-dom";
+import { environment } from "./environment";
 import { routes } from "./routes";
 
 type NavLinkProps = NavItemProps & {
   path?: string;
 };
+
+function getFullUrl(path: string) {
+  return `${new URL(environment.baseUrl).pathname}${path}`;
+}
 
 const NavLink = ({
   path,
@@ -21,7 +26,7 @@ const NavLink = ({
   children,
   onClick,
 }: PropsWithChildren<NavLinkProps>) => {
-  const menuItemPath = path!;
+  const menuItemPath = getFullUrl(path!) + location.search;
   const href = useHref(menuItemPath);
   const handleClick = useLinkClickHandler(menuItemPath);
 
