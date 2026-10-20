@@ -30,6 +30,7 @@ if [ "$1" = "extension" ]; then
     cp extension/event-listener-sysout/target/event-listener-sysout.jar $dist/providers
     cp extension/event-store-mem/target/event-store-mem.jar $dist/providers
     cp extension/extend-account-console/target/keycloak-man-theme.jar $dist/providers
+    cp extension/extend-account-console-node/target/my-account-ui.jar $dist/providers
     cp extension/user-storage-simple/target/user-storage-properties-example.jar $dist/providers
     cp extension/user-storage-jpa/conf/keycloak.conf $dist/conf
     cp extension/user-storage-jpa/target/user-storage-jpa-example.jar $dist/providers
