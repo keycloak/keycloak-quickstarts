@@ -39,7 +39,6 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.urlToBe;
  * @author <a href="mailto:aboullos@redhat.com">Alfredo Moises Boullosa</a>
  */
 @RunWith(Arquillian.class)
-@Ignore
 public class ExtendAccountConsoleTest {
 
     public static final String KEYCLOAK_URL = "http://localhost:8180";
