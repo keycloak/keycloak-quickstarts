@@ -6,8 +6,9 @@ import fs from "node:fs";
 import path from "node:path";
 import { pipeline } from "node:stream/promises";
 import { fileURLToPath } from "node:url";
-import { extract } from "tar-fs";
 import { parseArgs } from "node:util";
+import { extract } from "tar-fs";
+import { ProxyAgent, setGlobalDispatcher } from "undici";
 
 const DIR_NAME = path.dirname(fileURLToPath(import.meta.url));
 const SERVER_DIR = path.resolve(DIR_NAME, "./server");
@@ -36,8 +37,6 @@ await startServer();
 async function startServer() {
   let { scriptArgs, keycloakArgs } = handleArgs(process.argv.slice(2));
 
-  await downloadServer(scriptArgs.local);
-
   const env = {
     KC_BOOTSTRAP_ADMIN_USERNAME: ADMIN_USERNAME,
     KC_BOOTSTRAP_ADMIN_PASSWORD: ADMIN_PASSWORD,
@@ -46,6 +45,11 @@ async function startServer() {
     ...process.env,
   };
 
+  if (env.HTTPS_PROXY) {
+    const dispatcher = new ProxyAgent({ uri: new URL(env.HTTPS_PROXY).toString() });
+    setGlobalDispatcher(dispatcher);
+  }
+
   if (scriptArgs["account-dev"]) {
     env.KC_ACCOUNT_VITE_URL = "http://localhost:5173";
   }
@@ -53,6 +57,8 @@ async function startServer() {
   if (scriptArgs["admin-dev"]) {
     env.KC_ADMIN_VITE_URL = "http://localhost:5174";
   }
+
+  await downloadServer(scriptArgs.local);
 
   console.info("Starting server…");
 
