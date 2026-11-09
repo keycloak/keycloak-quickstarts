@@ -106,6 +106,19 @@ public class ExtendAdminConsoleTest {
     }
 
     @Test
+    public void testAdminUiScriptPage() throws Exception {
+        adminConsole.navigateTo();
+        waitForPageToLoad();
+        loginPage.login("admin", "admin");
+        waitForPageToLoad();
+
+        Assert.assertTrue(adminConsole.isHelloMenuPresent());
+        adminConsole.clickHelloMenuItem();
+        waitForPageToLoad();
+        Assert.assertTrue(adminConsole.isHelloScriptPage());
+    }
+
+    @Test
     public void testPageProviderCancelButton() throws Exception {
         adminConsole.clickTodoMenuItem();
         waitForPageToLoad();

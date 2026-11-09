@@ -36,6 +36,11 @@ public class ExtendedAdminPage {
     private WebElement todoMenuItem;
 
     @FindBy(
+            id = "nav-item-ui-script/Hello"
+    )
+    private WebElement helloMenuItem;
+
+    @FindBy(
             xpath = "//*[text()='Create item' or @data-testid='there-are-no-items-empty-action']"
     )
     private WebElement addButton;
@@ -74,12 +79,26 @@ public class ExtendedAdminPage {
         this.todoMenuItem.click();
     }
 
+    public void clickHelloMenuItem() {
+        this.helloMenuItem.click();
+    }
+
     public void navigateTo() {
         webDriver.navigate().to(ExtendAdminConsoleTest.KEYCLOAK_URL + ADMIN_CONSOLE);
     }
 
     public boolean isTodoMenuPresent() {
         return this.todoMenuItem.isEnabled();
+    }
+
+    public boolean isHelloMenuPresent() {
+        return this.helloMenuItem.isEnabled();
+    }
+
+    public boolean isHelloScriptPage() {
+        return new WebDriverWait(webDriver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[data-testid='hello-realm-script']")))
+                .isDisplayed();
     }
 
     public boolean isOverviewPage() {
