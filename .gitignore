@@ -63,6 +63,7 @@ target
 node_modules
 **/package-lock.json
 node/
+# node build folder
 dist/
 
 # Keycloak distribution

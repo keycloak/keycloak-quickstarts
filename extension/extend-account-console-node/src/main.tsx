@@ -1,4 +1,3 @@
-import "@patternfly/patternfly/patternfly-addons.css";
 import "@patternfly/react-core/dist/styles/base.css";
 
 import { KeycloakProvider } from "@keycloak/keycloak-account-ui";
@@ -17,6 +16,6 @@ i18n.init().then(() => {
       <KeycloakProvider environment={environment}>
         <RouterProvider router={router} />
       </KeycloakProvider>
-    </React.StrictMode>
+    </React.StrictMode>,
   );
 });
